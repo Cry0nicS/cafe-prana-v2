@@ -41,6 +41,27 @@ const createMenuLabelSchema = () => z.enum([
   'organic'
 ])
 
+const createEventCategorySchema = () => z.enum([
+  'breakfast',
+  'brunch',
+  'dinner',
+  'workshop',
+  'community',
+  'seasonal'
+])
+
+const createEventTagSchema = () => z.enum([
+  'vegan',
+  'gluten-free',
+  'organic',
+  'seasonal',
+  'community',
+  'limited-seats',
+  'reservation-required',
+  'special-guests',
+  'workshop'
+])
+
 const createAuthorSchema = () => z.object({
   name: z.string(),
   description: z.string().optional(),
@@ -156,6 +177,77 @@ export default defineContentConfig({
         image: createImageSchema(),
         labels: z.array(createMenuLabelSchema()).optional(),
         order: z.number()
+      })
+    }),
+    eventsPage: defineCollection({
+      type: 'page',
+      source: 'events.yml',
+      schema: z.object({
+        seo: createSeoSchema(),
+        hero: createBaseSchema().extend({
+          headline: z.string(),
+          image: createImageSchema(),
+          links: z.array(createButtonSchema())
+        }),
+        sections: z.object({
+          upcomingTitle: z.string(),
+          pastTitle: z.string(),
+          emptyUpcomingTitle: z.string(),
+          emptyUpcomingDescription: z.string()
+        }),
+        labels: z.object({
+          date: z.string(),
+          time: z.string(),
+          location: z.string(),
+          price: z.string(),
+          booking: z.string()
+        })
+      })
+    }),
+    events: defineCollection({
+      type: 'page',
+      source: 'events/*.md',
+      schema: z.object({
+        title: z.string().nonempty(),
+        description: z.string().nonempty(),
+        badge: z.string().optional(),
+        category: createEventCategorySchema(),
+        startDate: z.date(),
+        endDate: z.date().optional(),
+        time: z.string().optional(),
+        timezone: z.string().optional(),
+        image: createImageSchema(),
+        heroImage: createImageSchema(),
+        location: z.object({
+          name: z.string().nonempty(),
+          address: z.string().optional(),
+          city: z.string().optional(),
+          country: z.string().optional(),
+          mapsUrl: z.string().optional()
+        }),
+        price: z.object({
+          label: z.string().nonempty(),
+          amount: z.number().optional(),
+          currency: z.string().optional(),
+          isFree: z.boolean().optional()
+        }),
+        booking: z.object({
+          enabled: z.boolean(),
+          required: z.boolean().optional(),
+          label: z.string(),
+          url: z.string().optional(),
+          note: z.string().optional()
+        }),
+        details: z.object({
+          concept: z.string().nonempty(),
+          menuNote: z.string().optional(),
+          expectations: z.array(z.string().nonempty()),
+          forWho: z.string().optional(),
+          reservation: z.string().optional()
+        }),
+        tags: z.array(createEventTagSchema()),
+        featured: z.boolean().optional(),
+        seo: createSeoSchema().optional()
       })
     }),
     projects: defineCollection({

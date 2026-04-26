@@ -1,0 +1,389 @@
+<script setup lang="ts">
+import {
+  compareEventsDesc,
+  formatEventDate,
+  getEventCategoryLabel,
+  getEventDateIso,
+  getEventTime,
+  isUpcomingEvent
+} from '~/utils/events'
+
+const route = useRoute()
+const siteUrl = 'https://www.cafeprana.de'
+
+const [{ data: event }, { data: eventsIndex }, { data: events }] = await Promise.all([
+  useAsyncData(`event-${route.path}`, () => queryCollection('events').path(route.path).first()),
+  useAsyncData('events-page-for-detail', () => queryCollection('eventsPage').first()),
+  useAsyncData('events-related', () => queryCollection('events').order('startDate', 'DESC').all())
+])
+
+if (!event.value) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Event not found',
+    fatal: true
+  })
+}
+
+const labels = computed(() => eventsIndex.value?.labels || {
+  date: 'Date',
+  time: 'Time',
+  location: 'Location',
+  price: 'Price',
+  booking: 'Booking'
+})
+
+const title = computed(() => event.value?.seo?.title || event.value?.title)
+const description = computed(() => event.value?.seo?.description || event.value?.description)
+const image = computed(() => event.value?.seo?.ogImage || event.value?.heroImage.src || event.value?.image.src)
+const eventIsUpcoming = computed(() => event.value ? isUpcomingEvent(event.value) : false)
+const bookingLabel = computed(() => {
+  if (!event.value?.booking.enabled) {
+    return 'No booking needed'
+  }
+
+  return event.value.booking.required ? 'Reservation required' : 'Reservation recommended'
+})
+
+const relatedEvents = computed(() => {
+  if (!event.value) {
+    return []
+  }
+
+  return (events.value || [])
+    .filter(item => item.path !== event.value?.path)
+    .sort(compareEventsDesc)
+    .slice(0, 3)
+})
+
+const toAbsoluteUrl = (value?: string) => {
+  if (!value) {
+    return undefined
+  }
+
+  if (/^https?:\/\//.test(value)) {
+    return value
+  }
+
+  if (value.startsWith('mailto:')) {
+    return undefined
+  }
+
+  return `${siteUrl}${value.startsWith('/') ? value : `/${value}`}`
+}
+
+const eventJsonLd = computed(() => {
+  const currentEvent = event.value
+
+  if (!currentEvent) {
+    return {}
+  }
+
+  const location: Record<string, unknown> = {
+    '@type': 'Place',
+    'name': currentEvent.location.name
+  }
+
+  if (currentEvent.location.address || currentEvent.location.city || currentEvent.location.country) {
+    location.address = {
+      '@type': 'PostalAddress',
+      'streetAddress': currentEvent.location.address,
+      'addressLocality': currentEvent.location.city,
+      'addressCountry': currentEvent.location.country
+    }
+  }
+
+  const structuredEvent: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    'name': currentEvent.title,
+    'description': currentEvent.description,
+    'startDate': getEventDateIso(currentEvent.startDate),
+    'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
+    'eventStatus': 'https://schema.org/EventScheduled',
+    'location': location,
+    'organizer': {
+      '@type': 'Organization',
+      'name': 'Café Prana',
+      'url': siteUrl
+    },
+    'url': toAbsoluteUrl(currentEvent.path)
+  }
+
+  if (currentEvent.endDate) {
+    structuredEvent.endDate = getEventDateIso(currentEvent.endDate)
+  }
+
+  if (image.value) {
+    structuredEvent.image = [toAbsoluteUrl(image.value)]
+  }
+
+  if (currentEvent.price.amount !== undefined && currentEvent.price.currency) {
+    structuredEvent.offers = {
+      '@type': 'Offer',
+      'price': currentEvent.price.amount,
+      'priceCurrency': currentEvent.price.currency,
+      'availability': 'https://schema.org/InStock',
+      'url': toAbsoluteUrl(currentEvent.booking.url || currentEvent.path)
+    }
+  }
+
+  return structuredEvent
+})
+
+useSeoMeta({
+  title,
+  ogTitle: title,
+  description,
+  ogDescription: description,
+  ogImage: image
+})
+
+if (image.value) {
+  defineOgImage({ url: image.value })
+}
+
+useHead(() => ({
+  script: [{
+    type: 'application/ld+json',
+    innerHTML: JSON.stringify(eventJsonLd.value)
+  }]
+}))
+</script>
+
+<template>
+  <UPage v-if="event">
+    <UContainer class="pt-8">
+      <ULink
+        to="/events"
+        class="inline-flex items-center gap-1 text-sm text-muted transition hover:text-highlighted"
+      >
+        <UIcon
+          name="i-lucide-chevron-left"
+          class="size-4"
+        />
+        Events
+      </ULink>
+    </UContainer>
+
+    <UPageSection
+      :ui="{
+        container: 'pt-8!'
+      }"
+    >
+      <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
+        <div class="space-y-6">
+          <div class="flex flex-wrap items-center gap-2">
+            <UBadge
+              :label="eventIsUpcoming ? 'Upcoming' : 'Past event'"
+              :color="eventIsUpcoming ? 'primary' : 'neutral'"
+              variant="soft"
+            />
+            <UBadge
+              :label="event.badge || getEventCategoryLabel(event.category)"
+              color="neutral"
+              variant="outline"
+            />
+            <UBadge
+              :label="getEventCategoryLabel(event.category)"
+              color="neutral"
+              variant="soft"
+            />
+          </div>
+
+          <div class="max-w-3xl space-y-4">
+            <h1 class="text-4xl font-semibold tracking-normal text-highlighted sm:text-5xl">
+              {{ event.title }}
+            </h1>
+            <p class="text-lg leading-8 text-muted">
+              {{ event.description }}
+            </p>
+          </div>
+
+          <NuxtImg
+            :src="event.heroImage.src"
+            :alt="event.heroImage.alt"
+            class="aspect-[16/10] w-full rounded-lg object-cover shadow-lg ring-1 ring-default"
+            sizes="sm:100vw lg:760px"
+            format="webp"
+            placeholder
+          />
+        </div>
+
+        <aside class="rounded-lg border border-default bg-muted/30 p-5 lg:sticky lg:top-24">
+          <dl class="grid gap-4 text-sm">
+            <div class="flex gap-3">
+              <UIcon
+                name="i-lucide-calendar-days"
+                class="mt-0.5 size-5 shrink-0 text-primary"
+              />
+              <div>
+                <dt class="font-medium text-highlighted">
+                  {{ labels.date }}
+                </dt>
+                <dd class="mt-1 text-muted">
+                  {{ formatEventDate(event) }}
+                </dd>
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <UIcon
+                name="i-lucide-clock"
+                class="mt-0.5 size-5 shrink-0 text-primary"
+              />
+              <div>
+                <dt class="font-medium text-highlighted">
+                  {{ labels.time }}
+                </dt>
+                <dd class="mt-1 text-muted">
+                  {{ getEventTime(event) }}
+                </dd>
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <UIcon
+                name="i-lucide-map-pin"
+                class="mt-0.5 size-5 shrink-0 text-primary"
+              />
+              <div>
+                <dt class="font-medium text-highlighted">
+                  {{ labels.location }}
+                </dt>
+                <dd class="mt-1 text-muted">
+                  {{ event.location.name }}
+                </dd>
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <UIcon
+                name="i-lucide-ticket"
+                class="mt-0.5 size-5 shrink-0 text-primary"
+              />
+              <div>
+                <dt class="font-medium text-highlighted">
+                  {{ labels.price }}
+                </dt>
+                <dd class="mt-1 text-muted">
+                  {{ event.price.label }}
+                </dd>
+              </div>
+            </div>
+          </dl>
+
+          <div class="mt-5 border-t border-default pt-5">
+            <p class="text-sm font-medium text-highlighted">
+              {{ labels.booking }}
+            </p>
+            <p
+              v-if="event.booking.note"
+              class="mt-2 text-sm leading-6 text-muted"
+            >
+              {{ event.booking.note }}
+            </p>
+            <UButton
+              v-if="event.booking.enabled"
+              :to="event.booking.url || '/reservations'"
+              :label="event.booking.label"
+              icon="i-lucide-calendar-check"
+              color="primary"
+              block
+              class="mt-4"
+            />
+            <p class="mt-3 text-xs text-muted">
+              {{ bookingLabel }}
+            </p>
+          </div>
+        </aside>
+      </div>
+    </UPageSection>
+
+    <UPageSection
+      title="About this event"
+      :description="event.details.menuNote"
+      :ui="{
+        container: 'pt-0!'
+      }"
+    >
+      <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+        <div class="space-y-6">
+          <section class="rounded-lg border border-default bg-default p-6">
+            <h2 class="text-2xl font-semibold text-highlighted">
+              Concept
+            </h2>
+            <p class="mt-3 leading-7 text-muted">
+              {{ event.details.concept }}
+            </p>
+          </section>
+
+          <section
+            v-if="event.details.forWho"
+            class="rounded-lg border border-default bg-default p-6"
+          >
+            <h2 class="text-2xl font-semibold text-highlighted">
+              Who this is for
+            </h2>
+            <p class="mt-3 leading-7 text-muted">
+              {{ event.details.forWho }}
+            </p>
+          </section>
+        </div>
+
+        <div class="space-y-6">
+          <section class="rounded-lg border border-default bg-muted/30 p-6">
+            <h2 class="text-xl font-semibold text-highlighted">
+              What to expect
+            </h2>
+            <ul class="mt-4 space-y-3">
+              <li
+                v-for="item in event.details.expectations"
+                :key="item"
+                class="flex gap-3 text-sm leading-6 text-muted"
+              >
+                <UIcon
+                  name="i-lucide-check"
+                  class="mt-1 size-4 shrink-0 text-primary"
+                />
+                <span>{{ item }}</span>
+              </li>
+            </ul>
+          </section>
+
+          <section
+            v-if="event.tags.length"
+            class="rounded-lg border border-default bg-muted/30 p-6"
+          >
+            <h2 class="text-xl font-semibold text-highlighted">
+              Event tags
+            </h2>
+            <div class="mt-4 flex flex-wrap gap-2">
+              <UBadge
+                v-for="tag in event.tags"
+                :key="tag"
+                :label="tag"
+                color="neutral"
+                variant="soft"
+              />
+            </div>
+          </section>
+        </div>
+      </div>
+    </UPageSection>
+
+    <UPageSection
+      v-if="relatedEvents.length"
+      title="More events"
+      description="Browse other gatherings from Café Prana."
+      :ui="{
+        container: 'pt-0!'
+      }"
+    >
+      <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <EventsEventCard
+          v-for="relatedEvent in relatedEvents"
+          :key="relatedEvent.path"
+          :event="relatedEvent"
+        />
+      </div>
+    </UPageSection>
+  </UPage>
+</template>

@@ -1,0 +1,32 @@
+seo:
+  title: Events
+  description: Discover upcoming gatherings, dinners, and celebrations at Café Prana.
+  ogImage: /images/events/index.png
+hero:
+  headline: Latest events
+  title: Events at Café Prana
+  description: Seasonal dinners, community celebrations, and mindful gatherings.
+  image:
+    src: /images/events/index.png
+    alt: A warm Café Prana table setting for community events
+  links:
+    - label: Reserve your seat
+      icon: i-lucide-calendar-check
+      to: /reservations
+      color: primary
+    - label: Ask about private events
+      icon: i-lucide-mail
+      to: mailto:info@cafeprana.de
+      color: neutral
+      variant: outline
+sections:
+  upcomingTitle: Upcoming events
+  pastTitle: Past events
+  emptyUpcomingTitle: No upcoming events announced yet
+  emptyUpcomingDescription: New gatherings will appear here as soon as they are scheduled. You can still reserve a table or ask Café Prana about private gatherings.
+labels:
+  date: Date
+  time: Time
+  location: Location
+  price: Price
+  booking: Booking
