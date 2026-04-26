@@ -1,0 +1,12 @@
+title: Melted Hot Chocolate
+category: drinksHot
+description: Melted date-sweetened chocolate with mylk.
+ingredients: Date chocolate, mylk of choice
+price: 4,9€
+image:
+  src: /images/menu/hot-chocolate.png
+  alt: Melted hot chocolate with plant milk
+labels:
+  - gluten-free
+  - vegan
+order: 150

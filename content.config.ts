@@ -32,6 +32,15 @@ const createFeatureSchema = () => z.object({
   icon: z.string().editor({ input: 'icon' }).optional()
 })
 
+const createMenuLabelSchema = () => z.enum([
+  'gluten-free',
+  'vegan',
+  'vegetarian',
+  'spicy',
+  'seasonal',
+  'organic'
+])
+
 const createAuthorSchema = () => z.object({
   name: z.string(),
   description: z.string().optional(),
@@ -109,6 +118,44 @@ export default defineContentConfig({
             }))
           })
         })
+      })
+    }),
+    menuPage: defineCollection({
+      type: 'page',
+      source: 'menu.yml',
+      schema: z.object({
+        seo: createSeoSchema(),
+        hero: createBaseSchema().extend({
+          headline: z.string(),
+          image: createImageSchema(),
+          links: z.array(createButtonSchema())
+        }),
+        categories: z.array(z.object({
+          id: z.string(),
+          title: z.string(),
+          description: z.string().optional(),
+          options: z.string().optional(),
+          icon: z.string().editor({ input: 'icon' }).optional()
+        })),
+        labels: z.array(z.object({
+          id: createMenuLabelSchema(),
+          label: z.string(),
+          icon: z.string().editor({ input: 'icon' }).optional()
+        })).optional()
+      })
+    }),
+    menuItems: defineCollection({
+      type: 'data',
+      source: 'menu/*.yml',
+      schema: z.object({
+        title: z.string().nonempty(),
+        category: z.string().nonempty(),
+        description: z.string().nonempty(),
+        ingredients: z.string().nonempty(),
+        price: z.string().nonempty(),
+        image: createImageSchema(),
+        labels: z.array(createMenuLabelSchema()).optional(),
+        order: z.number()
       })
     }),
     projects: defineCollection({
