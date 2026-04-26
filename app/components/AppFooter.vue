@@ -11,6 +11,12 @@ const { footer, global } = useAppConfig()
       <div class="flex flex-col gap-1">
         <span>{{ footer.credits }}</span>
         <span>{{ global.description }}</span>
+        <ULink
+          to="/cookies"
+          class="text-xs text-muted underline-offset-4 hover:text-highlighted hover:underline"
+        >
+          Cookie policy
+        </ULink>
       </div>
     </template>
 
