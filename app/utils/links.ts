@@ -5,19 +5,19 @@ export const navLinks: NavigationMenuItem[] = [{
   icon: 'i-lucide-home',
   to: '/'
 }, {
-  label: 'Projects',
-  icon: 'i-lucide-folder',
-  to: '/projects'
+  label: 'Menu',
+  icon: 'i-lucide-utensils',
+  to: '/menu'
 }, {
-  label: 'Blog',
-  icon: 'i-lucide-file-text',
-  to: '/blog'
+  label: 'Events',
+  icon: 'i-lucide-party-popper',
+  to: '/events'
 }, {
-  label: 'Speaking',
-  icon: 'i-lucide-mic',
-  to: '/speaking'
+  label: 'Reservations',
+  icon: 'i-lucide-calendar-check',
+  to: '/reservations'
 }, {
-  label: 'About',
-  icon: 'i-lucide-user',
-  to: '/about'
+  label: 'Contact',
+  icon: 'i-lucide-mail',
+  to: 'mailto:info@cafeprana.de'
 }]

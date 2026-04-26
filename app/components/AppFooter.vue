@@ -1,24 +1,25 @@
 <script setup lang="ts">
-const { footer } = useAppConfig()
+const { footer, global } = useAppConfig()
 </script>
 
 <template>
   <UFooter
-    class="z-10 bg-default"
-    :ui="{ left: 'text-muted text-xs' }"
+    class="z-10 border-t border-default bg-default"
+    :ui="{ left: 'text-muted text-xs', right: 'gap-1' }"
   >
     <template #left>
-      {{ footer.credits }}
+      <div class="flex flex-col gap-1">
+        <span>{{ footer.credits }}</span>
+        <span>{{ global.description }}</span>
+      </div>
     </template>
 
     <template #right>
-      <template v-if="footer?.links">
-        <UButton
-          v-for="(link, index) of footer?.links"
-          :key="index"
-          v-bind="{ size: 'xs', color: 'neutral', variant: 'ghost', ...link }"
-        />
-      </template>
+      <UButton
+        v-for="(link, index) of footer.links"
+        :key="index"
+        v-bind="{ size: 'xs', color: 'neutral', variant: 'ghost', ...link }"
+      />
     </template>
   </UFooter>
 </template>

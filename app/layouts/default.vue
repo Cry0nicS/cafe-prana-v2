@@ -2,8 +2,8 @@
 </script>
 
 <template>
-  <div>
-    <UContainer class="sm:border-x border-default pt-10">
+  <div class="min-h-svh bg-default">
+    <UContainer class="min-h-svh border-default sm:border-x">
       <AppHeader :links="navLinks" />
       <slot />
       <AppFooter />

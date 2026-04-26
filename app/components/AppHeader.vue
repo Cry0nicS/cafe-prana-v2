@@ -1,26 +1,66 @@
 <script setup lang="ts">
-import type { NavigationMenuItem } from '@nuxt/ui'
+import type { DropdownMenuItem, NavigationMenuItem } from '@nuxt/ui'
 
-defineProps<{
+const props = defineProps<{
   links: NavigationMenuItem[]
 }>()
+
+const { global } = useAppConfig()
+
+const dropdownLinks = computed<DropdownMenuItem[]>(() =>
+  props.links.map(link => ({
+    label: link.label,
+    icon: link.icon,
+    to: link.to,
+    target: link.target
+  }))
+)
 </script>
 
 <template>
-  <div class="fixed top-2 sm:top-4 mx-auto left-1/2 transform -translate-x-1/2 z-10">
-    <UNavigationMenu
-      :items="links"
-      variant="link"
-      color="neutral"
-      class="bg-muted/80 backdrop-blur-sm rounded-full px-2 sm:px-4 border border-muted/50 shadow-lg shadow-neutral-950/5"
-      :ui="{
-        link: 'px-2 py-1',
-        linkLeadingIcon: 'hidden'
-      }"
-    >
-      <template #list-trailing>
+  <header class="sticky top-0 z-20 -mx-4 border-b border-default bg-default/85 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+    <div class="flex items-center justify-between gap-4">
+      <NuxtLink
+        to="/"
+        class="flex min-w-0 items-center gap-3"
+        :aria-label="`${global.name} home`"
+      >
+        <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-white shadow-sm dark:text-prana-warm-950">
+          <UIcon
+            name="i-lucide-sprout"
+            class="size-5"
+          />
+        </span>
+        <span class="min-w-0">
+          <span class="block truncate font-semibold text-highlighted">{{ global.name }}</span>
+          <span class="block truncate text-xs text-muted">{{ global.address }}</span>
+        </span>
+      </NuxtLink>
+
+      <div class="hidden items-center gap-2 md:flex">
+        <UNavigationMenu
+          :items="links"
+          variant="link"
+          color="neutral"
+          :ui="{
+            link: 'px-3 py-2',
+            linkLeadingIcon: 'size-4'
+          }"
+        />
         <ColorModeButton />
-      </template>
-    </UNavigationMenu>
-  </div>
+      </div>
+
+      <div class="flex items-center gap-1 md:hidden">
+        <ColorModeButton />
+        <UDropdownMenu :items="dropdownLinks">
+          <UButton
+            icon="i-lucide-menu"
+            color="neutral"
+            variant="ghost"
+            aria-label="Open navigation"
+          />
+        </UDropdownMenu>
+      </div>
+    </div>
+  </header>
 </template>

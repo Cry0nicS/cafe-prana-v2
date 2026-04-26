@@ -6,20 +6,80 @@
 @theme static {
   --font-sans: 'Public Sans', sans-serif;
   --font-serif: 'Instrument Serif', serif;
+
+  --color-sage-50: #f3f8f5;
+  --color-sage-100: #dfece5;
+  --color-sage-200: #c1d9cc;
+  --color-sage-300: #98c0b4;
+  --color-sage-400: #6fa294;
+  --color-sage-500: #518779;
+  --color-sage-600: #3f6b60;
+  --color-sage-700: #35574f;
+  --color-sage-800: #2d4741;
+  --color-sage-900: #263b36;
+  --color-sage-950: #14211e;
+
+  --color-prana-warm-50: #fffaf5;
+  --color-prana-warm-100: #f6ebdd;
+  --color-prana-warm-200: #ead5bc;
+  --color-prana-warm-300: #dfbd98;
+  --color-prana-warm-400: #cfa171;
+  --color-prana-warm-500: #b98554;
+  --color-prana-warm-600: #9b6a40;
+  --color-prana-warm-700: #7d5234;
+  --color-prana-warm-800: #5f3f2b;
+  --color-prana-warm-900: #3f2a1d;
+  --color-prana-warm-950: #21150e;
 }
 
 :root {
   --ui-container: var(--container-4xl);
+  --ui-bg: var(--color-prana-warm-50);
+  --ui-bg-muted: #f8f0e7;
+  --ui-bg-elevated: #fffdf9;
+  --ui-bg-accented: var(--color-prana-warm-100);
+  --ui-border: var(--color-prana-warm-200);
+  --ui-border-muted: var(--color-prana-warm-100);
+  --ui-text: var(--color-prana-warm-900);
+  --ui-text-muted: #755f4b;
+  --ui-text-toned: #5f4b39;
+  --ui-text-highlighted: #241912;
+  --ui-primary: var(--color-sage-600);
+  --ui-secondary: var(--color-prana-warm-500);
+  --ui-success: var(--color-sage-600);
+  --ui-info: var(--color-sage-500);
+  --ui-warning: var(--color-prana-warm-500);
+  --ui-radius: 0.5rem;
 
   ::selection {
-    color: #282a30;
-    background-color: #c8c8c8;
+    color: var(--color-prana-warm-950);
+    background-color: var(--color-sage-200);
   }
 }
 
 .dark {
+  --ui-bg: var(--color-prana-warm-950);
+  --ui-bg-muted: #2b1d15;
+  --ui-bg-elevated: #352419;
+  --ui-bg-accented: #473121;
+  --ui-border: #473121;
+  --ui-border-muted: #352419;
+  --ui-text: var(--color-prana-warm-100);
+  --ui-text-muted: #d6c1aa;
+  --ui-text-toned: #ead5bc;
+  --ui-text-highlighted: #fffaf5;
+  --ui-primary: var(--color-sage-300);
+  --ui-secondary: var(--color-prana-warm-300);
+  --ui-success: var(--color-sage-300);
+  --ui-info: var(--color-sage-300);
+  --ui-warning: var(--color-prana-warm-300);
+
   ::selection {
-    color: #ffffff;
-    background-color: #474747;
+    color: var(--color-prana-warm-950);
+    background-color: var(--color-sage-300);
   }
+}
+
+html {
+  scroll-behavior: smooth;
 }

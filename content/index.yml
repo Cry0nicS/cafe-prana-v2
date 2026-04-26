@@ -1,120 +1,207 @@
-title: Hey, I'm Emma Thompson UX/UI Designer
-about:
-  title: About Me info
-  description: |
-    As a UX/UI designer and front-end developer with 6 years of experience, I leverage my Boston University Interactive Design degree to craft user-centered digital experiences.
-    My approach blends creative strategy with technical expertise, transforming concepts into functional, purposeful digital products that seamlessly integrate design and technology.
-blog:
-  title: Latest Articles
-  description: Some of my recent thoughts
-description: I craft intuitive digital experiences where design meets functionality. Based in Boston, bringing ideas to life through code and creativity.
-experience:
-  title: Work Experience
-  items:
-    - position: Brand Designer at
-      date: 2023 - Present
-      company:
-        name: Nuxt
-        logo: i-simple-icons-nuxtdotjs
-        url: https://nuxt.com
-        color: "#00DC82"
-    - position: Assets Designer at
-      date: 2022 - 2023
-      company:
-        name: Raycast
-        logo: i-simple-icons-raycast
-        url: https://raycast.com
-        color: "#FF6363"
-    - position: Senior UX/UI Designer at
-      date: 2020 - 2021
-      company:
-        name: Linear
-        logo: i-simple-icons-linear
-        url: https://linear.app
-        color: "#5E6AD2"
-faq:
-  title: Frequently Asked Questions
-  description: Answers to common questions about my process and services.
-  categories:
-    - title: Services & Process
-      questions:
-        - label: What services do you offer?
-          content: |
-            I specialize in UX/UI design and front-end development. This includes user research, wireframing, interactive prototyping, creating intuitive user interfaces, building responsive websites and web applications (especially with Vue.js/Nuxt.js), and developing design systems. My goal is to create seamless digital experiences from concept to deployment.
-        - label: What is your design process like?
-          content: |
-            My process is collaborative and iterative, typically involving stages like Discovery & Research, Ideation & Prototyping, User Testing, Visual Design, and close collaboration with development teams during implementation. I tailor the process based on project needs, always focusing on user-centered solutions.
-        - label: Do you work with startups?
-          content: |
-            Absolutely! I enjoy working with startups to help shape their product vision and create user-friendly interfaces from the ground up. I can adapt my process to fit the fast-paced startup environment.
-    - title: Pricing & Timelines
-      questions:
-        - label: How much does a project typically cost?
-          content: |
-            Project costs vary based on scope, complexity, features, and timeline. For comprehensive UX/UI design and front-end development projects, my engagements typically start around $5,000, with average projects ranging between $8,000 and $25,000. For consulting or specific design tasks, my day rate is $700.
-        - label: What are your payment terms?
-          content: |
-            I generally require a 40% deposit to schedule the project and begin work, with the remaining 60% due upon successful project completion and delivery. I accept payments via bank transfer and Stripe.
-        - label: How long does a typical project take?
-          content: |
-            Timelines depend heavily on the project's scope and complexity. Smaller projects might take 3-4 weeks, while larger, more involved projects can range from 2 to 4 months. I always provide a detailed timeline estimate after the initial discovery phase.
-        - label: Do you offer retainers or ongoing support?
-          content: |
-            Yes, for clients needing ongoing design support, feature development, or maintenance, I offer monthly retainer options tailored to specific needs. Let's discuss if this is something you're interested in.
-    - title: About Me
-      questions:
-        - label: What do you enjoy most about your work?
-          content: |
-            I love the challenge of solving complex problems through design and technology. It's incredibly rewarding to see people interact with something I've created and find it genuinely useful and easy to navigate. Bridging the gap between user needs and technical possibilities is what truly excites me.
-        - label: What are your hobbies outside of work?
-          content: |
-            When I'm not designing or coding, I enjoy exploring Boston's neighborhoods, trying out new coffee shops, and hiking in the nearby reservations. I'm also passionate about photography and occasionally contribute to open-source projects.
-hero:
-  links:
-    - label: Use this template
-      to: https://github.com/nuxt-ui-templates/portfolio
-      color: neutral
-  images:
-    - src: /hero/random-1.avif
-      alt: Random Image 1
-    - src: /hero/random-2.avif
-      alt: Random Image 2
-    - src: /hero/random-3.avif
-      alt: Random Image 3
-    - src: /hero/random-4.avif
-      alt: Random Image 4
-    - src: /hero/random-5.avif
-      alt: Random Image 5
-    - src: /hero/random-6.avif
-      alt: Random Image 6
-    - src: /hero/random-7.avif
-      alt: Random Image 7
-    - src: /hero/random-8.avif
-      alt: Random Image 8
-    - src: /hero/random-9.avif
-      alt: Random Image 9
+title: Café Prana
+description: A gluten-free and vegan haven in the heart of Berlin
 seo:
-  title: Emma Thompson - UX/UI Designer
-  description: Welcome to my portfolio! I'm Emma Thompson, a UX/UI designer and front-end developer based in Boston. I specialize in creating user-centered digital experiences that are both beautiful and functional.
+  title: Café Prana
+  description: Café Prana in Berlin offers a 100% gluten-free, vegan, organic menu in a cozy community space. Enjoy nourishing brunches, warm drinks, and a welcoming atmosphere.
+  ogImage: /images/hero.png
+hero:
+  headline: Newly opened!
+  title: Welcome to Café Prana
+  description: A gluten-free and vegan haven in the heart of Berlin
+  image:
+    src: /images/hero.png
+    alt: Café Prana table with nourishing gluten-free and vegan food
+  links:
+    - label: Menu Highlights
+      to: "#menu"
+      icon: i-lucide-sparkles
+      color: primary
+      size: xl
+    - label: Get Directions
+      to: "#directions"
+      icon: i-lucide-map
+      color: neutral
+      variant: outline
+      size: xl
+philosophy:
+  icon: i-lucide-leaf
+  title: My Philosophy
+  description: "I believe in nourishing food that delights your taste buds and fuels your body. Here's what makes Café Prana special:"
+  features:
+    - title: 100% Gluten-Free
+      description: Everything on my menu is gluten-free, safe for coeliacs and those with sensitivities.
+      icon: i-lucide-wheat-off
+    - title: Plant-Based & Organic
+      description: I use plant-based, organic ingredients sourced locally whenever possible.
+      icon: i-lucide-sprout
+    - title: Nourishing Lunch & Brunch
+      description: My homemade dishes are created to fuel your body with a wide array of macro- and micronutrients.
+      icon: i-lucide-salad
+    - title: Cozy Community Space
+      description: Experience a warm atmosphere where you can relax, work or catch up with friends.
+      icon: i-lucide-hand-heart
+    - title: Heartwarming Drinks
+      description: Whether you opt for a latte with homemade cashew mylk or a seasonal hottie, your heart and mind will thank you.
+      icon: i-lucide-coffee
+    - title: Immersive Experience
+      description: At Prana, various spots will pop up where you can express yourself. Workshops are welcome!
+      icon: i-lucide-users-round
+menu:
+  icon: i-lucide-utensils
+  title: Menu Highlights
+  description: Here are a few of my favourite dishes and drinks you can enjoy every day.
+  items:
+    - title: Savoury Waffle
+      description: Sweet potato waffle with Prana's savoury toppings of the day.
+      image:
+        src: /images/menu/herzhafte-waffel.png
+        alt: Savoury waffle with colourful plant-based toppings
+    - title: Chai Latte
+      description: A warming, homemade chai spice blend crafted with care and served with your choice of plant-based milk.
+      image:
+        src: /images/menu/chai-latte.png
+        alt: Chai latte in a ceramic cup
+    - title: Ceremonial Cacao
+      description: Yes, I believe in mindfulness and the power of pure, raw cacao to uplift your spirit.
+      image:
+        src: /images/menu/cacao.png
+        alt: Ceremonial cacao drink
+    - title: Prana's Banana Bread
+      description: Very nourishing and sweetened banana bread, served with seasonal toppings like nut butter or compote.
+      image:
+        src: /images/menu/banana-bread.png
+        alt: Slice of Prana banana bread with toppings
+  links:
+    - label: Explore the full menu
+      to: /menu
+      icon: i-lucide-utensils
+      color: primary
+      size: xl
+    - label: Book a table
+      to: /reservations
+      icon: i-lucide-calendar-check
+      color: neutral
+      variant: outline
+      size: xl
+events:
+  headline: Celebratory Events
+  icon: i-lucide-party-popper
+  title: Community gatherings
+  description: At Prana, I bring people together around nourishing food, shared tables, and mindful moments. From regular community meals to special occasions, my space is designed for connection, celebration, and ease.
+  image:
+    src: /images/events/index.png
+    alt: Community event at Café Prana
+  features:
+    - title: Regular community events
+      description: Regular gatherings like breakfast, brunch, and dinner, created to enjoy nourishing food and relaxed moments together.
+      icon: i-lucide-utensils
+    - title: Special events and celebrations
+      description: Seasonal dinners, themed evenings, and unique community gatherings that mark special moments throughout the year.
+      icon: i-lucide-calendar-days
+    - title: Private bookings and custom events
+      description: Book my space for your own celebration, workshop, or gathering, with optional catering from my plant based kitchen.
+      icon: i-lucide-party-popper
+  links:
+    - label: Explore all events
+      to: /events
+      icon: i-lucide-party-popper
+      color: primary
+      size: xl
+    - label: Reserve your seat
+      to: /reservations
+      icon: i-lucide-calendar-check
+      color: neutral
+      variant: outline
+      size: xl
+gallery:
+  icon: i-lucide-camera
+  title: Gallery
+  description: Get a glimpse of the ambience, dishes and drinks that convey Café Prana's philosophy.
+  images:
+    - src: /images/home/gallery/gallery-1.png
+      alt: Café Prana interior and food detail 1
+    - src: /images/home/gallery/gallery-2.png
+      alt: Café Prana interior and food detail 2
+    - src: /images/home/gallery/gallery-3.png
+      alt: Café Prana interior and food detail 3
+    - src: /images/home/gallery/gallery-4.png
+      alt: Café Prana interior and food detail 4
+    - src: /images/home/gallery/gallery-5.png
+      alt: Café Prana interior and food detail 5
+story:
+  icon: i-lucide-book-open
+  title: My Story
+  description: Founded by a yogini, nutritionist, foodie, nature lover, fitness trainer, health cook, and barista (...you get the persona...) who wanted to bring the holistic aspects of health and energy under one roof, Café Prana is a one-woman show that combines a welcoming atmosphere with high-quality sourcing. Regional, seasonal vegetables meet nutritious pseudocereals and natural superfoods under the creative touch of the kitchen fairy. Whether you're grabbing a specialty coffee to go or settling into the cushions for brunch, it is a safe and open space awaiting you. Prana's long-term goal is to implement even more sustainable practices and foster a sense of community and profound respect.
+  image:
+    src: /images/home/my-story.png
+    alt: Founder story image for Café Prana
 testimonials:
-  - quote: Emma's approach to UX design completely transformed our product. She has a rare ability to balance beautiful aesthetics with functional simplicity. The redesign not only looked better, but it reduced our customer support tickets by 40% and increased conversion rates across all key metrics.
-    author:
-      name: Sarah Chen
-      description: Product Director at Bloom Finance
-      avatar:
-        src: https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=40&h=40&q=80
-        srcset: https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=80&h=80&q=80 2x
-  - quote: Working with Emma was the best decision we made for our startup. She didn't just deliver designs—she challenged our assumptions, conducted thorough user research, and created an experience that truly resonated with our audience. Her technical knowledge of front-end development meant the handoff to our engineering team was seamless.
-    author:
-      name: Michael Rodriguez
-      description: Co-founder of Wavelength Music
-      avatar:
-        src: https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=40&h=40&q=80
-        srcset: https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=80&h=80&q=80 2x
-  - quote: Emma stands out in her ability to translate complex sustainability data into intuitive interfaces. Her work on EcoTrack wasn't just visually stunning—it fundamentally changed how our users interact with environmental information. She approaches each problem with both creativity and analytical rigor, which is exactly what we needed.
-    author:
-      name: Dr. Aisha Johnson
-      description: Chief Innovation Officer at GreenTech Solutions
-      avatar:
-        src: https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=40&h=40&q=80
-        srcset: https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=80&h=80&q=80 2x
+  icon: i-lucide-star
+  title: What My Guests Say
+  description: Don't just take my word for it, hear from people who love Café Prana.
+  cta:
+    label: Review me on Google
+    to: https://search.google.com/local/writereview?placeid=ChIJqaIrmrRPqEcR3uE53IvR5qI
+    icon: i-lucide-map
+    color: primary
+    target: _blank
+  items:
+    - rating: 5
+      quote: Excellent service and friendly staff. Highly recommended!
+      author: Alice Smith
+      relativeTime: 2 days ago
+    - rating: 4
+      quote: Great experience overall, but the wait time was a bit long.
+      author: Bob Johnson
+      relativeTime: 3 days ago
+    - rating: 5
+      quote: Absolutely loved it! Will come back for sure.
+      author: Charlie Lee
+      relativeTime: 4 days ago
+faq:
+  icon: i-lucide-circle-help
+  title: Frequently Asked Questions
+  description: Have a question? I've got answers.
+  items:
+    - label: Is everything on the menu gluten-free?
+      content: Yes! I am entirely gluten-free. All of my dishes are prepared without gluten so you can enjoy your meal worry-free.
+    - label: Do you take reservations?
+      content: At the moment I accept reservations only via Instagram or email. Feel free to drop by. There's usually a seat waiting for you!
+    - label: Are pets allowed?
+      content: I currently do not allow animals indoors to ensure the comfort and safety of all my guests, including those with allergies or fears. Additionally, my shared space and open kitchen setup are not compatible with animals for hygiene reasons. Thank you for understanding!
+    - label: Do you offer take-away?
+      content: Yes, I offer take-away for most of my menu items. Stop by and ask me for details.
+directions:
+  id: directions
+  title: Come taste the difference
+  description: Visit Café Prana and discover your new favourite spot. I'm open Tuesday to Sunday for coffee, breakfast, brunch and lunch.
+  mapEmbedUrl: https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2426.9518671037786!2d13.428888413148465!3d52.53430503505275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47a84fb49a2ba2a9%3A0xa2e6d18bdc39e1de!2sCaf%C3%A9%20Prana!5e0!3m2!1sen!2sde!4v1762693543237!5m2!1sen!2sde
+  links:
+    - label: Get Directions
+      to: https://maps.app.goo.gl/MToiG3VyXv7PB8kw9
+      icon: i-lucide-map
+      color: primary
+      target: _blank
+    - label: Reservations
+      to: /reservations
+      icon: i-lucide-calendar-check
+      color: neutral
+      variant: outline
+  hours:
+    heading: Opening Hours
+    items:
+      - day: Monday
+        time: Closed
+        closed: true
+      - day: Tuesday
+        time: 07:30 - 15:00
+      - day: Wednesday
+        time: 07:30 - 15:00
+      - day: Thursday
+        time: 07:30 - 15:00
+      - day: Friday
+        time: 07:30 - 15:00
+      - day: Saturday
+        time: 09:00 - 17:00
+      - day: Sunday
+        time: 09:00 - 17:00

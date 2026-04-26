@@ -20,6 +20,18 @@ const createImageSchema = () => z.object({
   alt: z.string()
 })
 
+const createSeoSchema = () => z.object({
+  title: z.string(),
+  description: z.string(),
+  ogImage: z.string().editor({ input: 'media' }).optional()
+})
+
+const createFeatureSchema = () => z.object({
+  title: z.string(),
+  description: z.string(),
+  icon: z.string().editor({ input: 'icon' }).optional()
+})
+
 const createAuthorSchema = () => z.object({
   name: z.string(),
   description: z.string().optional(),
@@ -29,47 +41,73 @@ const createAuthorSchema = () => z.object({
   avatar: createImageSchema().optional()
 })
 
-const createTestimonialSchema = () => z.object({
-  quote: z.string(),
-  author: createAuthorSchema()
-})
-
 export default defineContentConfig({
   collections: {
     index: defineCollection({
       type: 'page',
       source: 'index.yml',
       schema: z.object({
-        hero: z.object({
-          links: z.array(createButtonSchema()),
+        seo: createSeoSchema(),
+        hero: createBaseSchema().extend({
+          headline: z.string(),
+          image: createImageSchema(),
+          links: z.array(createButtonSchema())
+        }),
+        philosophy: createBaseSchema().extend({
+          icon: z.string().editor({ input: 'icon' }),
+          features: z.array(createFeatureSchema())
+        }),
+        menu: createBaseSchema().extend({
+          icon: z.string().editor({ input: 'icon' }),
+          items: z.array(createBaseSchema().extend({
+            image: createImageSchema()
+          })),
+          links: z.array(createButtonSchema())
+        }),
+        events: createBaseSchema().extend({
+          headline: z.string(),
+          icon: z.string().editor({ input: 'icon' }),
+          image: createImageSchema(),
+          features: z.array(createFeatureSchema()),
+          links: z.array(createButtonSchema())
+        }),
+        gallery: createBaseSchema().extend({
+          icon: z.string().editor({ input: 'icon' }),
           images: z.array(createImageSchema())
         }),
-        about: createBaseSchema(),
-        experience: createBaseSchema().extend({
+        story: createBaseSchema().extend({
+          icon: z.string().editor({ input: 'icon' }),
+          image: createImageSchema()
+        }),
+        testimonials: createBaseSchema().extend({
+          icon: z.string().editor({ input: 'icon' }),
+          cta: createButtonSchema(),
           items: z.array(z.object({
-            date: z.date(),
-            position: z.string(),
-            company: z.object({
-              name: z.string(),
-              url: z.string(),
-              logo: z.string().editor({ input: 'icon' }),
-              color: z.string()
-            })
+            rating: z.number(),
+            quote: z.string(),
+            author: z.string(),
+            relativeTime: z.string().optional()
           }))
         }),
-        testimonials: z.array(createTestimonialSchema()),
-        blog: createBaseSchema(),
         faq: createBaseSchema().extend({
-          categories: z.array(
-            z.object({
-              title: z.string().nonempty(),
-              questions: z.array(
-                z.object({
-                  label: z.string().nonempty(),
-                  content: z.string().nonempty()
-                })
-              )
+          icon: z.string().editor({ input: 'icon' }),
+          items: z.array(z.object({
+            label: z.string().nonempty(),
+            content: z.string().nonempty()
+          }))
+        }),
+        directions: createBaseSchema().extend({
+          id: z.string(),
+          mapEmbedUrl: z.string(),
+          links: z.array(createButtonSchema()),
+          hours: z.object({
+            heading: z.string(),
+            items: z.array(z.object({
+              day: z.string(),
+              time: z.string(),
+              closed: z.boolean().optional()
             }))
+          })
         })
       })
     }),

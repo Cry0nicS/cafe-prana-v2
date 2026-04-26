@@ -38,7 +38,10 @@ export default defineNuxtConfig({
   },
   studio: {
     repository: {
-      provider: 'github'
+      provider: 'github',
+      owner: 'Cry0nicS',
+      repo: 'cafe-prana-v2',
+      branch: 'main'
     }
   }
 })

@@ -1,45 +1,49 @@
 export default defineAppConfig({
   global: {
+    name: 'Café Prana',
+    description: 'A gluten-free and vegan haven in the heart of Berlin',
+    address: 'Pasteurstraße 2, 10407 Berlin',
+    email: 'info@cafeprana.de',
+    phone: '+49 152 36848480',
+    instagram: 'https://instagram.com/pranacafe',
+    maps: 'https://maps.app.goo.gl/MToiG3VyXv7PB8kw9',
+    meetingLink: '/reservations',
+    available: true,
     picture: {
-      dark: 'https://images.unsplash.com/photo-1701615004837-40d8573b6652?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      light: 'https://images.unsplash.com/photo-1701615004837-40d8573b6652?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      alt: 'My profile picture'
-    },
-    meetingLink: 'https://cal.com/',
-    email: 'ui-pro@nuxt.com',
-    available: true
+      dark: '/images/hero.png',
+      light: '/images/hero.png',
+      alt: 'Café Prana'
+    }
   },
   ui: {
     colors: {
-      primary: 'blue',
-      neutral: 'neutral'
+      primary: 'sage',
+      neutral: 'stone'
     },
     pageHero: {
       slots: {
-        container: 'py-18 sm:py-24 lg:py-32',
-        title: 'mx-auto max-w-xl text-pretty text-3xl sm:text-4xl lg:text-5xl',
-        description: 'mt-2 text-md mx-auto max-w-2xl text-pretty sm:text-md text-muted'
+        container: 'py-16 sm:py-20 lg:py-28',
+        title: 'tracking-normal',
+        description: 'text-muted'
       }
     }
   },
   footer: {
-    credits: `Built with Nuxt UI • © ${new Date().getFullYear()}`,
-    colorMode: false,
+    credits: `Café Prana · Pasteurstraße 2 · © ${new Date().getFullYear()}`,
     links: [{
-      'icon': 'i-simple-icons-discord',
-      'to': 'https://go.nuxt.com/discord',
+      'icon': 'i-simple-icons-instagram',
+      'to': 'https://instagram.com/pranacafe',
       'target': '_blank',
-      'aria-label': 'Nuxt on Discord'
+      'aria-label': 'Café Prana on Instagram'
     }, {
-      'icon': 'i-simple-icons-x',
-      'to': 'https://go.nuxt.com/x',
+      'icon': 'i-lucide-map-pin',
+      'to': 'https://maps.app.goo.gl/MToiG3VyXv7PB8kw9',
       'target': '_blank',
-      'aria-label': 'Nuxt on X'
+      'aria-label': 'Café Prana on Google Maps'
     }, {
-      'icon': 'i-simple-icons-github',
-      'to': 'https://github.com/nuxt/ui',
-      'target': '_blank',
-      'aria-label': 'Nuxt UI on GitHub'
+      'icon': 'i-lucide-mail',
+      'to': 'mailto:info@cafeprana.de',
+      'aria-label': 'Email Café Prana'
     }]
   }
 })
