@@ -1,22 +1,37 @@
 <script setup lang="ts">
 import type { NuxtError } from '#app'
 
-defineProps({
-  error: {
-    type: Object as PropType<NuxtError>,
-    required: true
+const props = defineProps<{
+  error: NuxtError
+}>()
+
+const { locale, t } = useI18n()
+const htmlLang = computed(() => locale.value === 'de' ? 'de-DE' : 'en-US')
+
+const localizedError = computed(() => {
+  if (props.error.statusCode !== 404) {
+    return props.error
+  }
+
+  return {
+    ...props.error,
+    message: t('error.notFoundMessage'),
+    statusMessage: t('error.notFoundTitle')
   }
 })
 
-useHead({
+const seoTitle = computed(() => props.error.statusCode === 404 ? t('error.notFoundTitle') : t('error.genericTitle'))
+const seoDescription = computed(() => props.error.statusCode === 404 ? t('error.notFoundDescription') : t('error.genericDescription'))
+
+useHead(() => ({
   htmlAttrs: {
-    lang: 'en'
+    lang: htmlLang.value
   }
-})
+}))
 
 useSeoMeta({
-  title: 'Page not found',
-  description: 'We are sorry but this page could not be found.'
+  title: seoTitle,
+  description: seoDescription
 })
 
 const navigationLinks = useNavigationLinks()
@@ -29,7 +44,7 @@ const navigationLinks = useNavigationLinks()
     <UMain>
       <UContainer>
         <UPage>
-          <UError :error="error" />
+          <UError :error="localizedError" />
         </UPage>
       </UContainer>
     </UMain>

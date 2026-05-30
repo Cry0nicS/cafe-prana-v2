@@ -15,6 +15,13 @@ export default defineI18nConfig(() => ({
         label: 'Language',
         switch: 'Switch language'
       },
+      error: {
+        notFoundTitle: 'Page not found',
+        notFoundMessage: 'This page could not be found.',
+        notFoundDescription: 'We are sorry, but this page could not be found.',
+        genericTitle: 'Something went wrong',
+        genericDescription: 'An unexpected error occurred.'
+      },
       footer: {
         description: 'A gluten-free and vegan haven in the heart of Berlin',
         cookiePolicy: 'Cookie policy'
@@ -188,6 +195,13 @@ export default defineI18nConfig(() => ({
       language: {
         label: 'Sprache',
         switch: 'Sprache wechseln'
+      },
+      error: {
+        notFoundTitle: 'Seite nicht gefunden',
+        notFoundMessage: 'Diese Seite konnte nicht gefunden werden.',
+        notFoundDescription: 'Entschuldigung, diese Seite konnte nicht gefunden werden.',
+        genericTitle: 'Etwas ist schiefgelaufen',
+        genericDescription: 'Es ist ein unerwarteter Fehler aufgetreten.'
       },
       footer: {
         description: 'Ein glutenfreies und veganes Café im Herzen von Berlin',
