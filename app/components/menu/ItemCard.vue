@@ -28,18 +28,18 @@ const visibleLabels = computed(() =>
 </script>
 
 <template>
-  <article class="overflow-hidden rounded-lg border border-default bg-elevated/80 shadow-sm">
-    <div class="grid sm:grid-cols-[180px_1fr]">
+  <article class="min-w-0 overflow-hidden rounded-lg border border-default bg-elevated/80 shadow-sm">
+    <div class="grid min-w-0 sm:grid-cols-[160px_minmax(0,1fr)] xl:grid-cols-[170px_minmax(0,1fr)]">
       <NuxtImg
         v-bind="item.image"
         format="webp"
-        sizes="sm:100vw md:180px lg:220px"
+        sizes="sm:100vw md:50vw lg:170px"
         class="aspect-[4/3] h-full w-full object-cover sm:aspect-auto"
         placeholder
       />
 
       <div class="flex min-w-0 flex-col gap-4 p-4 sm:p-5">
-        <div class="flex items-start justify-between gap-4">
+        <div class="flex min-w-0 items-start justify-between gap-4">
           <div class="min-w-0">
             <h3 class="text-lg font-semibold leading-tight text-highlighted">
               {{ item.title }}

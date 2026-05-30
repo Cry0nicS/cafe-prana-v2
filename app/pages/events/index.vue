@@ -43,6 +43,7 @@ if (page.value.seo.ogImage) {
       :links="page.hero.links"
       orientation="horizontal"
       :ui="{
+        container: 'max-w-6xl!',
         title: 'mx-0! text-left',
         description: 'mx-0! text-left',
         links: 'justify-start'
@@ -62,7 +63,7 @@ if (page.value.seo.ogImage) {
 
     <UPageSection
       :ui="{
-        container: 'pt-0!'
+        container: 'max-w-6xl! pt-0!'
       }"
     >
       <div class="grid gap-3 sm:grid-cols-3">
@@ -94,29 +95,51 @@ if (page.value.seo.ogImage) {
     </UPageSection>
 
     <UPageSection
+      v-if="upcomingEvents.length"
       :title="page.sections.upcomingTitle"
       :ui="{
-        container: 'pt-0!'
+        container: 'max-w-6xl! pt-0!'
       }"
     >
-      <div
-        v-if="upcomingEvents.length"
-        class="grid gap-6 md:grid-cols-2 xl:grid-cols-3"
-      >
-        <Motion
-          v-for="(event, index) in upcomingEvents"
-          :key="event.path"
-          :initial="{ opacity: 0, transform: 'translateY(10px)' }"
-          :while-in-view="{ opacity: 1, transform: 'translateY(0)' }"
-          :transition="{ delay: 0.12 * index }"
-          :in-view-options="{ once: true }"
-        >
-          <EventsEventCard :event="event" />
-        </Motion>
-      </div>
+      <div class="space-y-6 lg:space-y-14">
+        <div class="grid gap-6 md:grid-cols-2 lg:hidden">
+          <Motion
+            v-for="(event, index) in upcomingEvents"
+            :key="event.path"
+            :initial="{ opacity: 0, transform: 'translateY(10px)' }"
+            :while-in-view="{ opacity: 1, transform: 'translateY(0)' }"
+            :transition="{ delay: 0.12 * index }"
+            :in-view-options="{ once: true }"
+          >
+            <EventsEventCard :event="event" />
+          </Motion>
+        </div>
 
+        <div class="hidden space-y-16 lg:block">
+          <Motion
+            v-for="(event, index) in upcomingEvents"
+            :key="event.path"
+            :initial="{ opacity: 0, transform: 'translateY(10px)' }"
+            :while-in-view="{ opacity: 1, transform: 'translateY(0)' }"
+            :transition="{ delay: 0.12 * index }"
+            :in-view-options="{ once: true }"
+          >
+            <EventsEventFeature
+              :event="event"
+              :reverse="index % 2 === 1"
+            />
+          </Motion>
+        </div>
+      </div>
+    </UPageSection>
+
+    <UPageSection
+      v-else
+      :ui="{
+        container: 'max-w-6xl! pt-0!'
+      }"
+    >
       <UPageCard
-        v-else
         icon="i-lucide-calendar-plus"
         :title="page.sections.emptyUpcomingTitle"
         :description="page.sections.emptyUpcomingDescription"
@@ -150,20 +173,38 @@ if (page.value.seo.ogImage) {
       :title="page.sections.pastTitle"
       :description="upcomingEvents.length ? 'A look back at recent community meals, workshops, and seasonal gatherings.' : 'All migrated legacy events are currently in the past. New events will automatically move into the upcoming section when dated in the future.'"
       :ui="{
-        container: 'pt-0!'
+        container: 'max-w-6xl! pt-0!'
       }"
     >
-      <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        <Motion
-          v-for="(event, index) in pastEvents"
-          :key="event.path"
-          :initial="{ opacity: 0, transform: 'translateY(10px)' }"
-          :while-in-view="{ opacity: 1, transform: 'translateY(0)' }"
-          :transition="{ delay: 0.08 * index }"
-          :in-view-options="{ once: true }"
-        >
-          <EventsEventCard :event="event" />
-        </Motion>
+      <div class="space-y-6 lg:space-y-14">
+        <div class="grid gap-6 md:grid-cols-2 lg:hidden">
+          <Motion
+            v-for="(event, index) in pastEvents"
+            :key="event.path"
+            :initial="{ opacity: 0, transform: 'translateY(10px)' }"
+            :while-in-view="{ opacity: 1, transform: 'translateY(0)' }"
+            :transition="{ delay: 0.08 * index }"
+            :in-view-options="{ once: true }"
+          >
+            <EventsEventCard :event="event" />
+          </Motion>
+        </div>
+
+        <div class="hidden space-y-16 lg:block">
+          <Motion
+            v-for="(event, index) in pastEvents"
+            :key="event.path"
+            :initial="{ opacity: 0, transform: 'translateY(10px)' }"
+            :while-in-view="{ opacity: 1, transform: 'translateY(0)' }"
+            :transition="{ delay: 0.08 * index }"
+            :in-view-options="{ once: true }"
+          >
+            <EventsEventFeature
+              :event="event"
+              :reverse="index % 2 === 1"
+            />
+          </Motion>
+        </div>
       </div>
     </UPageSection>
   </UPage>

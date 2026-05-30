@@ -63,7 +63,7 @@ function scrollToCategory(id: string) {
       :links="page.hero.links"
       orientation="horizontal"
       :ui="{
-        container: 'py-12 sm:py-16 lg:py-20',
+        container: 'max-w-6xl! py-12 sm:py-16 lg:py-20',
         title: 'max-w-2xl text-left text-4xl font-semibold tracking-normal sm:text-5xl',
         description: 'max-w-xl text-left text-lg text-muted',
         links: 'justify-start'
@@ -97,7 +97,7 @@ function scrollToCategory(id: string) {
 
     <UPageSection
       :ui="{
-        container: 'pt-8 sm:pt-10 lg:grid lg:grid-cols-[240px_1fr] lg:gap-10'
+        container: 'max-w-6xl! pt-8 sm:pt-10 lg:grid lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-12'
       }"
     >
       <aside class="hidden lg:block">
@@ -124,7 +124,7 @@ function scrollToCategory(id: string) {
         </div>
       </aside>
 
-      <div class="space-y-14">
+      <div class="min-w-0 space-y-14">
         <section
           v-for="category in categoriesWithItems"
           :id="category.id"
@@ -158,7 +158,7 @@ function scrollToCategory(id: string) {
             />
           </div>
 
-          <div class="grid gap-4 xl:grid-cols-2">
+          <div class="grid min-w-0 gap-5 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
             <MenuItemCard
               v-for="item in category.items"
               :key="item.id"
