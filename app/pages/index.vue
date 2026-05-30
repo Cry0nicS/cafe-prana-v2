@@ -1,5 +1,12 @@
 <script setup lang="ts">
-const { data: page } = await useAsyncData('index', () => queryCollection('index').first())
+const { locale } = useI18n()
+const localizeLinks = useLocalizedLinks()
+
+const { data: page } = await useAsyncData(
+  `index-${locale.value}`,
+  () => queryCollection('index').where('locale', '=', locale.value).first(),
+  { watch: [locale] }
+)
 
 if (!page.value) {
   throw createError({
@@ -16,6 +23,12 @@ useSeoMeta({
   ogDescription: page.value.seo.description,
   ogImage: page.value.seo.ogImage
 })
+
+const heroLinks = computed(() => localizeLinks(page.value?.hero.links))
+const menuLinks = computed(() => localizeLinks(page.value?.menu.links))
+const eventLinks = computed(() => localizeLinks(page.value?.events.links))
+const testimonialCta = computed(() => localizeLinks(page.value?.testimonials.cta ? [page.value.testimonials.cta] : [])[0])
+const directionsLinks = computed(() => localizeLinks(page.value?.directions.links))
 </script>
 
 <template>
@@ -24,7 +37,7 @@ useSeoMeta({
       :headline="page.hero.headline"
       :title="page.hero.title"
       :description="page.hero.description"
-      :links="page.hero.links"
+      :links="heroLinks"
       orientation="horizontal"
       :ui="{
         container: 'py-12 sm:py-16 lg:py-24',
@@ -87,7 +100,7 @@ useSeoMeta({
 
       <div class="flex flex-col justify-center gap-3 sm:flex-row">
         <UButton
-          v-for="link in page.menu.links"
+          v-for="link in menuLinks"
           :key="link.label"
           v-bind="link"
           class="justify-center"
@@ -101,7 +114,7 @@ useSeoMeta({
       :description="page.events.description"
       :icon="page.events.icon"
       :features="page.events.features"
-      :links="page.events.links"
+      :links="eventLinks"
       orientation="horizontal"
     >
       <NuxtImg
@@ -195,7 +208,7 @@ useSeoMeta({
 
       <div class="flex justify-center">
         <UButton
-          v-bind="page.testimonials.cta"
+          v-bind="testimonialCta"
           class="justify-center"
         />
       </div>
@@ -216,7 +229,7 @@ useSeoMeta({
     <UPageCTA
       :id="page.directions.id"
       :title="page.directions.title"
-      :links="page.directions.links"
+      :links="directionsLinks"
       orientation="horizontal"
       variant="outline"
       class="mb-24 overflow-hidden"

@@ -32,6 +32,8 @@ const createFeatureSchema = () => z.object({
   icon: z.string().editor({ input: 'icon' }).optional()
 })
 
+const createLocaleSchema = () => z.enum(['en', 'de'])
+
 const createMenuLabelSchema = () => z.enum([
   'gluten-free',
   'vegan',
@@ -66,8 +68,12 @@ export default defineContentConfig({
   collections: {
     index: defineCollection({
       type: 'page',
-      source: 'index.yml',
+      source: [
+        { include: 'index.yml', prefix: '' },
+        { include: 'index.de.yml', prefix: '' }
+      ],
       schema: z.object({
+        locale: createLocaleSchema(),
         seo: createSeoSchema(),
         hero: createBaseSchema().extend({
           headline: z.string(),
@@ -134,8 +140,12 @@ export default defineContentConfig({
     }),
     menuPage: defineCollection({
       type: 'page',
-      source: 'menu.yml',
+      source: [
+        { include: 'menu.yml', prefix: '' },
+        { include: 'menu.de.yml', prefix: '' }
+      ],
       schema: z.object({
+        locale: createLocaleSchema(),
         seo: createSeoSchema(),
         hero: createBaseSchema().extend({
           headline: z.string(),
@@ -160,6 +170,7 @@ export default defineContentConfig({
       type: 'data',
       source: 'menu/*.yml',
       schema: z.object({
+        locale: createLocaleSchema(),
         title: z.string().nonempty(),
         category: z.string().nonempty(),
         description: z.string().nonempty(),
@@ -172,8 +183,12 @@ export default defineContentConfig({
     }),
     eventsPage: defineCollection({
       type: 'page',
-      source: 'events.yml',
+      source: [
+        { include: 'events.yml', prefix: '' },
+        { include: 'events.de.yml', prefix: '' }
+      ],
       schema: z.object({
+        locale: createLocaleSchema(),
         seo: createSeoSchema(),
         hero: createBaseSchema().extend({
           headline: z.string(),
@@ -183,6 +198,8 @@ export default defineContentConfig({
         sections: z.object({
           upcomingTitle: z.string(),
           pastTitle: z.string(),
+          pastDescription: z.string(),
+          pastOnlyDescription: z.string(),
           emptyUpcomingTitle: z.string(),
           emptyUpcomingDescription: z.string()
         }),
@@ -199,6 +216,8 @@ export default defineContentConfig({
       type: 'page',
       source: 'events/*.md',
       schema: z.object({
+        locale: createLocaleSchema(),
+        slug: z.string().nonempty(),
         title: z.string().nonempty(),
         description: z.string().nonempty(),
         badge: z.string().optional(),

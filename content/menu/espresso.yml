@@ -1,12 +1,13 @@
-title: Organic fair trade Espresso / Americano
-category: drinksCoffee
-description: Classic espresso or lungo pulled from my special blend.
-ingredients: Low acidity blend, short pull
-price: 2,5 / 3,3€
+﻿locale: "en"
+title: "Organic fair trade Espresso / Americano"
+category: "drinksCoffee"
+description: "Classic espresso or lungo pulled from my special blend."
+ingredients: "Low acidity blend, short pull"
+price: "2,5 / 3,3â‚¬"
 image:
-  src: /images/menu/espresso.png
-  alt: Organic fair trade espresso or Americano
+  src: "/images/menu/espresso.png"
+  alt: "Organic fair trade espresso or Americano"
 labels:
-  - gluten-free
-  - vegan
+  - "gluten-free"
+  - "vegan"
 order: 20

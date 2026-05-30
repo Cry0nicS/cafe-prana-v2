@@ -1,0 +1,14 @@
+﻿locale: "de"
+title: "Porridge"
+category: "food"
+description: "Warm serviert, pur oder mit saisonalen Toppings."
+ingredients: "Frisch gekochter Hafer- und Erdmandel-Porridge mit Kokos-Mylk und optionalen Toppings"
+price: "6,5 / 11,8â‚¬"
+image:
+  src: "/images/menu/porridge.png"
+  alt: "Warmer Porridge mit optionalen saisonalen Toppings"
+labels:
+  - "gluten-free"
+  - "vegan"
+  - "seasonal"
+order: 210

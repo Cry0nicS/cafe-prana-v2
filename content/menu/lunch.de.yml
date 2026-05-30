@@ -1,0 +1,14 @@
+﻿locale: "de"
+title: "Pranas Lunch"
+category: "food"
+description: "Ausgewogener, nÃ¤hrender Lunch fÃ¼r deinen Nachmittag."
+ingredients: "Meine Lunch-Optionen richten sich nach Saison und VerfÃ¼gbarkeit frischer Zutaten."
+price: "14.90â‚¬"
+image:
+  src: "/images/menu/lunch.png"
+  alt: "Ausgewogener und nÃ¤hrender Pranas Lunch"
+labels:
+  - "gluten-free"
+  - "vegan"
+  - "seasonal"
+order: 250

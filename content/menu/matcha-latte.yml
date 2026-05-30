@@ -1,12 +1,13 @@
-title: Matcha Latte
-category: drinksHot
-description: First-grade matcha with mylk of choice and optional extra shot.
-ingredients: Matcha powder, steamed milk
-price: 5,9€
+﻿locale: "en"
+title: "Matcha Latte"
+category: "drinksHot"
+description: "First-grade matcha with mylk of choice and optional extra shot."
+ingredients: "Matcha powder, steamed milk"
+price: "5,9â‚¬"
 image:
-  src: /images/menu/matcha-latte.png
-  alt: Matcha latte with plant milk
+  src: "/images/menu/matcha-latte.png"
+  alt: "Matcha latte with plant milk"
 labels:
-  - gluten-free
-  - vegan
+  - "gluten-free"
+  - "vegan"
 order: 160

@@ -6,6 +6,7 @@ const {
   acknowledgeNotice,
   resetNotice
 } = useCookieConsent()
+const { t } = useI18n()
 
 onMounted(() => {
   initConsent()
@@ -13,16 +14,16 @@ onMounted(() => {
 
 const currentPreference = computed(() => {
   if (!initialized.value) {
-    return 'Loading notice status...'
+    return t('cookies.loading')
   }
 
-  return acknowledged.value ? 'Notice acknowledged' : 'Notice not yet acknowledged'
+  return acknowledged.value ? t('cookies.acknowledged') : t('cookies.notAcknowledged')
 })
 </script>
 
 <template>
   <UPageCard
-    title="Cookie notice status"
+    :title="t('cookies.statusTitle')"
     :description="currentPreference"
     icon="i-lucide-info"
     variant="subtle"
@@ -33,13 +34,13 @@ const currentPreference = computed(() => {
     <template #footer>
       <div class="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
         <UButton
-          label="I understand"
+          :label="t('cookies.understand')"
           icon="i-lucide-check"
           color="primary"
           @click="acknowledgeNotice"
         />
         <UButton
-          label="Show notice again"
+          :label="t('cookies.showAgain')"
           icon="i-lucide-rotate-ccw"
           color="neutral"
           variant="ghost"

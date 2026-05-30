@@ -7,9 +7,20 @@ type Category = {
   icon?: string
 }
 
+const { locale, t } = useI18n()
+const localizeLinks = useLocalizedLinks()
+
 const [{ data: page }, { data: items }] = await Promise.all([
-  useAsyncData('menu-page', () => queryCollection('menuPage').first()),
-  useAsyncData('menu-items', () => queryCollection('menuItems').order('order', 'ASC').all())
+  useAsyncData(
+    `menu-page-${locale.value}`,
+    () => queryCollection('menuPage').where('locale', '=', locale.value).first(),
+    { watch: [locale] }
+  ),
+  useAsyncData(
+    `menu-items-${locale.value}`,
+    () => queryCollection('menuItems').where('locale', '=', locale.value).order('order', 'ASC').all(),
+    { watch: [locale] }
+  )
 ])
 
 if (!page.value) {
@@ -48,6 +59,7 @@ const categoriesWithItems = computed(() =>
 )
 
 const totalItems = computed(() => items.value?.length ?? 0)
+const heroLinks = computed(() => localizeLinks(page.value?.hero.links))
 
 function scrollToCategory(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -60,7 +72,7 @@ function scrollToCategory(id: string) {
       :headline="page.hero.headline"
       :title="page.hero.title"
       :description="page.hero.description"
-      :links="page.hero.links"
+      :links="heroLinks"
       orientation="horizontal"
       :ui="{
         container: 'max-w-6xl! py-12 sm:py-16 lg:py-20',
@@ -103,7 +115,7 @@ function scrollToCategory(id: string) {
       <aside class="hidden lg:block">
         <div class="sticky top-24 rounded-lg border border-default bg-elevated/70 p-4">
           <p class="text-xs font-medium uppercase tracking-wide text-muted">
-            {{ totalItems }} items
+            {{ t('menu.itemCount', totalItems) }}
           </p>
           <ul class="mt-4 space-y-1">
             <li

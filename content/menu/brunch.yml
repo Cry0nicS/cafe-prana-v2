@@ -1,12 +1,13 @@
-title: Pranas Brunch
-category: food
-description: Enjoy a healthy-rich brunch with my with a gourmet touch.
-ingredients: Tofu-based "egg" salad, dips, carrot facon, homemade gluten-free bread, and soup or dessert
-price: 18€
+﻿locale: "en"
+title: "Pranas Brunch"
+category: "food"
+description: "Enjoy a healthy-rich brunch with my with a gourmet touch."
+ingredients: "Tofu-based \"egg\" salad, dips, carrot facon, homemade gluten-free bread, and soup or dessert"
+price: "18â‚¬"
 image:
-  src: /images/menu/brunch.png
-  alt: Pranas brunch plate with dips and homemade gluten-free bread
+  src: "/images/menu/brunch.png"
+  alt: "Pranas brunch plate with dips and homemade gluten-free bread"
 labels:
-  - gluten-free
-  - vegan
+  - "gluten-free"
+  - "vegan"
 order: 240

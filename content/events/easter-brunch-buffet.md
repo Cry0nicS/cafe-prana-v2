@@ -1,4 +1,6 @@
 ---
+locale: en
+slug: easter-brunch-buffet
 title: Easter Brunch Buffet
 description: Enjoy the Easter weekend with a festive Easter Brunch Buffet at Café Prana. A relaxed late morning filled with nourishing dishes, warm drinks, and spring comfort.
 badge: Easter Weekend

@@ -9,15 +9,34 @@ import {
 } from '~/utils/events'
 
 const route = useRoute()
+const { locale, t } = useI18n()
+const localePath = useLocalePath()
+const localizePath = useLocalizedPath()
 const siteUrl = 'https://www.cafeprana.de'
+const slug = computed(() => String(route.params.slug))
 
-const [{ data: event }, { data: eventsIndex }, { data: events }] = await Promise.all([
-  useAsyncData(`event-${route.path}`, () => queryCollection('events').path(route.path).first()),
-  useAsyncData('events-page-for-detail', () => queryCollection('eventsPage').first()),
-  useAsyncData('events-related', () => queryCollection('events').order('startDate', 'DESC').all())
+const [{ data: rawEvent }, { data: eventsIndex }, { data: events }] = await Promise.all([
+  useAsyncData(
+    `event-${locale.value}-${slug.value}`,
+    () => queryCollection('events')
+      .where('locale', '=', locale.value)
+      .where('slug', '=', slug.value)
+      .first(),
+    { watch: [locale, slug] }
+  ),
+  useAsyncData(
+    `events-page-for-detail-${locale.value}`,
+    () => queryCollection('eventsPage').where('locale', '=', locale.value).first(),
+    { watch: [locale] }
+  ),
+  useAsyncData(
+    `events-related-${locale.value}`,
+    () => queryCollection('events').where('locale', '=', locale.value).order('startDate', 'DESC').all(),
+    { watch: [locale] }
+  )
 ])
 
-if (!event.value) {
+if (!rawEvent.value) {
   throw createError({
     statusCode: 404,
     statusMessage: 'Event not found',
@@ -25,11 +44,19 @@ if (!event.value) {
   })
 }
 
+const event = computed(() => rawEvent.value
+  ? {
+      ...rawEvent.value,
+      path: localePath(`/events/${rawEvent.value.slug}`)
+    }
+  : null
+)
+
 const labels = computed(() => eventsIndex.value?.labels || {
-  date: 'Date',
-  time: 'Time',
+  date: t('event.date'),
+  time: t('event.time'),
   location: 'Location',
-  price: 'Price',
+  price: t('event.price'),
   booking: 'Booking'
 })
 
@@ -39,10 +66,10 @@ const image = computed(() => event.value?.seo?.ogImage || event.value?.heroImage
 const eventIsUpcoming = computed(() => event.value ? isUpcomingEvent(event.value) : false)
 const bookingLabel = computed(() => {
   if (!event.value?.booking.enabled) {
-    return 'No booking needed'
+    return t('event.noBookingNeeded')
   }
 
-  return event.value.booking.required ? 'Reservation required' : 'Reservation recommended'
+  return event.value.booking.required ? t('event.reservationRequired') : t('event.reservationRecommended')
 })
 
 const relatedEvents = computed(() => {
@@ -51,7 +78,11 @@ const relatedEvents = computed(() => {
   }
 
   return (events.value || [])
-    .filter(item => item.path !== event.value?.path)
+    .filter(item => item.slug !== event.value?.slug)
+    .map(item => ({
+      ...item,
+      path: localePath(`/events/${item.slug}`)
+    }))
     .sort(compareEventsDesc)
     .slice(0, 3)
 })
@@ -104,7 +135,7 @@ const eventJsonLd = computed(() => {
     'location': location,
     'organizer': {
       '@type': 'Organization',
-      'name': 'Café Prana',
+      'name': 'Cafe Prana',
       'url': siteUrl
     },
     'url': toAbsoluteUrl(currentEvent.path)
@@ -124,12 +155,14 @@ const eventJsonLd = computed(() => {
       'price': currentEvent.price.amount,
       'priceCurrency': currentEvent.price.currency,
       'availability': 'https://schema.org/InStock',
-      'url': toAbsoluteUrl(currentEvent.booking.url || currentEvent.path)
+      'url': toAbsoluteUrl(localizePath(currentEvent.booking.url || currentEvent.path))
     }
   }
 
   return structuredEvent
 })
+
+const getTagLabel = (tag: string) => t(`event.tagLabels.${tag}`)
 
 useSeoMeta({
   title,
@@ -155,14 +188,14 @@ useHead(() => ({
   <UPage v-if="event">
     <UContainer class="pt-8">
       <ULink
-        to="/events"
+        :to="localePath('/events')"
         class="inline-flex items-center gap-1 text-sm text-muted transition hover:text-highlighted"
       >
         <UIcon
           name="i-lucide-chevron-left"
           class="size-4"
         />
-        Events
+        {{ t('event.backToEvents') }}
       </ULink>
     </UContainer>
 
@@ -175,17 +208,17 @@ useHead(() => ({
         <div class="space-y-6">
           <div class="flex flex-wrap items-center gap-2">
             <UBadge
-              :label="eventIsUpcoming ? 'Upcoming' : 'Past event'"
+              :label="eventIsUpcoming ? t('event.upcoming') : t('event.pastEvent')"
               :color="eventIsUpcoming ? 'primary' : 'neutral'"
               variant="soft"
             />
             <UBadge
-              :label="event.badge || getEventCategoryLabel(event.category)"
+              :label="event.badge || getEventCategoryLabel(event.category, locale)"
               color="neutral"
               variant="outline"
             />
             <UBadge
-              :label="getEventCategoryLabel(event.category)"
+              :label="getEventCategoryLabel(event.category, locale)"
               color="neutral"
               variant="soft"
             />
@@ -222,7 +255,7 @@ useHead(() => ({
                   {{ labels.date }}
                 </dt>
                 <dd class="mt-1 text-muted">
-                  {{ formatEventDate(event) }}
+                  {{ formatEventDate(event, locale) }}
                 </dd>
               </div>
             </div>
@@ -236,7 +269,7 @@ useHead(() => ({
                   {{ labels.time }}
                 </dt>
                 <dd class="mt-1 text-muted">
-                  {{ getEventTime(event) }}
+                  {{ getEventTime(event, t('event.noTime')) }}
                 </dd>
               </div>
             </div>
@@ -282,7 +315,7 @@ useHead(() => ({
             </p>
             <UButton
               v-if="event.booking.enabled"
-              :to="event.booking.url || '/reservations'"
+              :to="localizePath(event.booking.url || '/reservations')"
               :label="event.booking.label"
               icon="i-lucide-calendar-check"
               color="primary"
@@ -298,7 +331,7 @@ useHead(() => ({
     </UPageSection>
 
     <UPageSection
-      title="About this event"
+      :title="t('event.about')"
       :description="event.details.menuNote"
       :ui="{
         container: 'pt-0!'
@@ -308,7 +341,7 @@ useHead(() => ({
         <div class="space-y-6">
           <section class="rounded-lg border border-default bg-default p-6">
             <h2 class="text-2xl font-semibold text-highlighted">
-              Concept
+              {{ t('event.concept') }}
             </h2>
             <p class="mt-3 leading-7 text-muted">
               {{ event.details.concept }}
@@ -320,7 +353,7 @@ useHead(() => ({
             class="rounded-lg border border-default bg-default p-6"
           >
             <h2 class="text-2xl font-semibold text-highlighted">
-              Who this is for
+              {{ t('event.forWho') }}
             </h2>
             <p class="mt-3 leading-7 text-muted">
               {{ event.details.forWho }}
@@ -331,7 +364,7 @@ useHead(() => ({
         <div class="space-y-6">
           <section class="rounded-lg border border-default bg-muted/30 p-6">
             <h2 class="text-xl font-semibold text-highlighted">
-              What to expect
+              {{ t('event.expectations') }}
             </h2>
             <ul class="mt-4 space-y-3">
               <li
@@ -353,13 +386,13 @@ useHead(() => ({
             class="rounded-lg border border-default bg-muted/30 p-6"
           >
             <h2 class="text-xl font-semibold text-highlighted">
-              Event tags
+              {{ t('event.tags') }}
             </h2>
             <div class="mt-4 flex flex-wrap gap-2">
               <UBadge
                 v-for="tag in event.tags"
                 :key="tag"
-                :label="tag"
+                :label="getTagLabel(tag)"
                 color="neutral"
                 variant="soft"
               />
@@ -371,8 +404,8 @@ useHead(() => ({
 
     <UPageSection
       v-if="relatedEvents.length"
-      title="More events"
-      description="Browse other gatherings from Café Prana."
+      :title="t('event.more')"
+      :description="t('event.moreDescription')"
       :ui="{
         container: 'pt-0!'
       }"

@@ -1,0 +1,13 @@
+﻿locale: "de"
+title: "Bio Fairtrade Espresso / Americano"
+category: "drinksCoffee"
+description: "Klassischer Espresso oder Lungo aus meiner besonderen Mischung."
+ingredients: "SÃ¤urearme Mischung, kurzer Bezug"
+price: "2,5 / 3,3â‚¬"
+image:
+  src: "/images/menu/espresso.png"
+  alt: "Bio Fairtrade Espresso oder Americano"
+labels:
+  - "gluten-free"
+  - "vegan"
+order: 20

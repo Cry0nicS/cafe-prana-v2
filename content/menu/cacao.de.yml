@@ -1,0 +1,13 @@
+﻿locale: "de"
+title: "Zeremonieller Kakao"
+category: "drinksHot"
+description: "Reiner, roher Kakao fÃ¼r Achtsamkeit, WÃ¤rme und ein geÃ¶ffnetes Herz."
+ingredients: "Roher Kakao, heiÃŸes Wasser oder Mylk"
+price: "6â‚¬"
+image:
+  src: "/images/menu/cacao.png"
+  alt: "Zeremonieller Kakao"
+labels:
+  - "gluten-free"
+  - "vegan"
+order: 110

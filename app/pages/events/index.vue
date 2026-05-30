@@ -1,9 +1,21 @@
 <script setup lang="ts">
 import { compareEventsAsc, compareEventsDesc, isUpcomingEvent } from '~/utils/events'
 
+const { locale, t } = useI18n()
+const localePath = useLocalePath()
+const localizeLinks = useLocalizedLinks()
+
 const [{ data: page }, { data: events }] = await Promise.all([
-  useAsyncData('events-page', () => queryCollection('eventsPage').first()),
-  useAsyncData('events-list', () => queryCollection('events').order('startDate', 'ASC').all())
+  useAsyncData(
+    `events-page-${locale.value}`,
+    () => queryCollection('eventsPage').where('locale', '=', locale.value).first(),
+    { watch: [locale] }
+  ),
+  useAsyncData(
+    `events-list-${locale.value}`,
+    () => queryCollection('events').where('locale', '=', locale.value).order('startDate', 'ASC').all(),
+    { watch: [locale] }
+  )
 ])
 
 if (!page.value) {
@@ -14,12 +26,18 @@ if (!page.value) {
   })
 }
 
-const allEvents = computed(() => events.value || [])
+const allEvents = computed(() =>
+  (events.value || []).map(event => ({
+    ...event,
+    path: localePath(`/events/${event.slug}`)
+  }))
+)
 const upcomingEvents = computed(() => allEvents.value.filter(event => isUpcomingEvent(event)).sort(compareEventsAsc))
 const pastEvents = computed(() => allEvents.value.filter(event => !isUpcomingEvent(event)).sort(compareEventsDesc))
 
 const title = computed(() => page.value?.seo.title || page.value?.hero.title)
 const description = computed(() => page.value?.seo.description || page.value?.hero.description)
+const heroLinks = computed(() => localizeLinks(page.value?.hero.links))
 
 useSeoMeta({
   title,
@@ -40,7 +58,7 @@ if (page.value.seo.ogImage) {
       :title="page.hero.title"
       :description="page.hero.description"
       :headline="page.hero.headline"
-      :links="page.hero.links"
+      :links="heroLinks"
       orientation="horizontal"
       :ui="{
         container: 'max-w-6xl!',
@@ -69,7 +87,7 @@ if (page.value.seo.ogImage) {
       <div class="grid gap-3 sm:grid-cols-3">
         <div class="rounded-lg border border-default bg-muted/40 p-4">
           <p class="text-sm text-muted">
-            Upcoming
+            {{ t('event.upcoming') }}
           </p>
           <p class="mt-1 text-2xl font-semibold text-highlighted">
             {{ upcomingEvents.length }}
@@ -77,7 +95,7 @@ if (page.value.seo.ogImage) {
         </div>
         <div class="rounded-lg border border-default bg-muted/40 p-4">
           <p class="text-sm text-muted">
-            Past
+            {{ t('event.past') }}
           </p>
           <p class="mt-1 text-2xl font-semibold text-highlighted">
             {{ pastEvents.length }}
@@ -85,10 +103,10 @@ if (page.value.seo.ogImage) {
         </div>
         <div class="rounded-lg border border-default bg-muted/40 p-4">
           <p class="text-sm text-muted">
-            Format
+            {{ t('event.format') }}
           </p>
           <p class="mt-1 text-2xl font-semibold text-highlighted">
-            Café gatherings
+            {{ t('event.cafeGatherings') }}
           </p>
         </div>
       </div>
@@ -151,13 +169,13 @@ if (page.value.seo.ogImage) {
         <template #footer>
           <div class="flex flex-wrap gap-2">
             <UButton
-              label="Reserve a table"
-              to="/reservations"
+              :label="t('nav.reservations')"
+              :to="localePath('/reservations')"
               icon="i-lucide-calendar-check"
               color="primary"
             />
             <UButton
-              label="Email Café Prana"
+              :label="t('reservations.email')"
               to="mailto:info@cafeprana.de"
               icon="i-lucide-mail"
               color="neutral"
@@ -171,7 +189,7 @@ if (page.value.seo.ogImage) {
     <UPageSection
       v-if="pastEvents.length"
       :title="page.sections.pastTitle"
-      :description="upcomingEvents.length ? 'A look back at recent community meals, workshops, and seasonal gatherings.' : 'All migrated legacy events are currently in the past. New events will automatically move into the upcoming section when dated in the future.'"
+      :description="upcomingEvents.length ? page.sections.pastDescription : page.sections.pastOnlyDescription"
       :ui="{
         container: 'max-w-6xl! pt-0!'
       }"

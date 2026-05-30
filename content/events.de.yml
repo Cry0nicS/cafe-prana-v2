@@ -1,0 +1,35 @@
+locale: "de"
+seo:
+  title: "Events"
+  description: "Entdecke kommende Gatherings, Dinner und Feiern im Cafe Prana."
+  ogImage: "/images/events/index.png"
+hero:
+  headline: "Aktuelle Events"
+  title: "Events im Cafe Prana"
+  description: "Saisonale Dinner, Community-Feiern und achtsame Gatherings."
+  image:
+    src: "/images/events/index.png"
+    alt: "Warmer Cafe-Prana-Tisch für Community-Events"
+  links:
+    - label: "Platz reservieren"
+      icon: "i-lucide-calendar-check"
+      to: "/reservations"
+      color: "primary"
+    - label: "Private Events anfragen"
+      icon: "i-lucide-mail"
+      to: "mailto:info@cafeprana.de"
+      color: "neutral"
+      variant: "outline"
+sections:
+  upcomingTitle: "Kommende Events"
+  pastTitle: "Vergangene Events"
+  pastDescription: "Ein Rückblick auf Community Meals, Workshops und saisonale Gatherings."
+  pastOnlyDescription: "Alle migrierten Legacy-Events liegen aktuell in der Vergangenheit. Neue Events erscheinen automatisch im Bereich für kommende Termine, sobald sie datiert sind."
+  emptyUpcomingTitle: "Noch keine kommenden Events angekündigt"
+  emptyUpcomingDescription: "Neue Gatherings erscheinen hier, sobald sie geplant sind. Du kannst trotzdem einen Tisch reservieren oder Cafe Prana wegen privater Events kontaktieren."
+labels:
+  date: "Datum"
+  time: "Uhrzeit"
+  location: "Ort"
+  price: "Preis"
+  booking: "Reservierung"

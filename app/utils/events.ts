@@ -7,21 +7,23 @@ export type EventLike = {
   category?: string
 }
 
-const dateFormatter = new Intl.DateTimeFormat('en-GB', {
-  day: 'numeric',
-  month: 'long',
-  year: 'numeric'
-})
+const getDateFormatter = (locale = 'en') =>
+  new Intl.DateTimeFormat(locale === 'de' ? 'de-DE' : 'en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  })
 
 export const toEventDate = (value: EventDateValue) => {
   return value instanceof Date ? value : new Date(value)
 }
 
-export const getEventTime = (event: EventLike) => {
-  return event.time || 'Time to be announced'
+export const getEventTime = (event: EventLike, fallback = 'Time to be announced') => {
+  return event.time || fallback
 }
 
-export const formatEventDate = (event: EventLike) => {
+export const formatEventDate = (event: EventLike, locale = 'en') => {
+  const dateFormatter = getDateFormatter(locale)
   const start = toEventDate(event.startDate)
 
   if (!event.endDate) {
@@ -55,17 +57,28 @@ export const compareEventsDesc = (a: EventLike, b: EventLike) => {
   return toEventDate(b.startDate).getTime() - toEventDate(a.startDate).getTime()
 }
 
-export const getEventCategoryLabel = (category?: string) => {
-  const labels: Record<string, string> = {
-    breakfast: 'Breakfast',
-    brunch: 'Brunch',
-    dinner: 'Dinner',
-    workshop: 'Workshop',
-    community: 'Community',
-    seasonal: 'Seasonal'
+export const getEventCategoryLabel = (category?: string, locale = 'en') => {
+  const labels: { en: Record<string, string>, de: Record<string, string> } = {
+    en: {
+      breakfast: 'Breakfast',
+      brunch: 'Brunch',
+      dinner: 'Dinner',
+      workshop: 'Workshop',
+      community: 'Community',
+      seasonal: 'Seasonal'
+    },
+    de: {
+      breakfast: 'Frühstück',
+      brunch: 'Brunch',
+      dinner: 'Dinner',
+      workshop: 'Workshop',
+      community: 'Community',
+      seasonal: 'Saisonal'
+    }
   }
+  const activeLabels = locale === 'de' ? labels.de : labels.en
 
-  return category ? labels[category] || category : 'Event'
+  return category ? activeLabels[category] || labels.en[category] || category : 'Event'
 }
 
 export const getEventDateIso = (value: EventDateValue) => {

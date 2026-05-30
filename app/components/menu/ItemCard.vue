@@ -22,6 +22,8 @@ const props = defineProps<{
   labels: Record<string, MenuLabel>
 }>()
 
+const { t } = useI18n()
+
 const visibleLabels = computed(() =>
   props.item.labels?.map(label => props.labels[label]).filter((label): label is MenuLabel => Boolean(label)) ?? []
 )
@@ -79,7 +81,7 @@ const visibleLabels = computed(() =>
 
         <details class="group rounded-md bg-muted/60 px-3 py-2">
           <summary class="flex cursor-pointer list-none items-center justify-between gap-3 text-sm font-medium text-highlighted">
-            Ingredients
+            {{ t('menu.ingredients') }}
             <UIcon
               name="i-lucide-chevron-down"
               class="size-4 shrink-0 transition-transform group-open:rotate-180"

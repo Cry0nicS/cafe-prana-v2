@@ -1,13 +1,14 @@
-title: Waffles
-category: food
-description: À la carte and daily offer, sweet or savory.
-ingredients: Gluten-free oat flour, sweet potato and almonds, toppings of the day
-price: 9-15€
+﻿locale: "en"
+title: "Waffles"
+category: "food"
+description: "Ã€ la carte and daily offer, sweet or savory."
+ingredients: "Gluten-free oat flour, sweet potato and almonds, toppings of the day"
+price: "9-15â‚¬"
 image:
-  src: /images/menu/waffle.png
-  alt: Gluten-free waffle with toppings of the day
+  src: "/images/menu/waffle.png"
+  alt: "Gluten-free waffle with toppings of the day"
 labels:
-  - gluten-free
-  - vegan
-  - seasonal
+  - "gluten-free"
+  - "vegan"
+  - "seasonal"
 order: 230

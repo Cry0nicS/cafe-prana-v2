@@ -1,0 +1,14 @@
+﻿locale: "de"
+title: "Suppe des Tages"
+category: "food"
+description: "WÃ¤rmende Suppe mit Toppings."
+ingredients: "Meine Suppen entstehen aus saisonalem GemÃ¼se, GewÃ¼rzen und KrÃ¤utern."
+price: "4â‚¬ / 8â‚¬"
+image:
+  src: "/images/menu/soup.png"
+  alt: "Suppe des Tages mit Toppings"
+labels:
+  - "gluten-free"
+  - "vegan"
+  - "seasonal"
+order: 260

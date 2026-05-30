@@ -18,11 +18,13 @@ useSeoMeta({
   title: 'Page not found',
   description: 'We are sorry but this page could not be found.'
 })
+
+const navigationLinks = useNavigationLinks()
 </script>
 
 <template>
   <div>
-    <AppHeader :links="navLinks" />
+    <AppHeader :links="navigationLinks" />
 
     <UMain>
       <UContainer>

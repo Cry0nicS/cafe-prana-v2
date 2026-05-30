@@ -30,16 +30,19 @@ const props = defineProps<{
   event: EventCard
 }>()
 
+const { locale, t } = useI18n()
+
 const upcoming = computed(() => isUpcomingEvent(props.event))
 const bookingLabel = computed(() => {
   if (!props.event.booking.enabled) {
-    return 'No booking needed'
+    return t('event.noBookingNeeded')
   }
 
-  return props.event.booking.required ? 'Reservation required' : 'Reservation recommended'
+  return props.event.booking.required ? t('event.reservationRequired') : t('event.reservationRecommended')
 })
 
 const visibleTags = computed(() => props.event.tags?.slice(0, 3) || [])
+const getTagLabel = (tag: string) => t(`event.tagLabels.${tag}`)
 </script>
 
 <template>
@@ -47,7 +50,7 @@ const visibleTags = computed(() => props.event.tags?.slice(0, 3) || [])
     <NuxtLink
       :to="event.path"
       class="block overflow-hidden"
-      :aria-label="`View details for ${event.title}`"
+      :aria-label="`${t('event.viewDetails')} ${event.title}`"
     >
       <NuxtImg
         :src="event.image.src"
@@ -62,12 +65,12 @@ const visibleTags = computed(() => props.event.tags?.slice(0, 3) || [])
     <div class="flex flex-1 flex-col gap-4 p-5">
       <div class="flex flex-wrap items-center gap-2">
         <UBadge
-          :label="upcoming ? 'Upcoming' : 'Past'"
+          :label="upcoming ? t('event.upcoming') : t('event.past')"
           :color="upcoming ? 'primary' : 'neutral'"
           variant="soft"
         />
         <UBadge
-          :label="event.badge || getEventCategoryLabel(event.category)"
+          :label="event.badge || getEventCategoryLabel(event.category, locale)"
           color="neutral"
           variant="outline"
         />
@@ -92,10 +95,10 @@ const visibleTags = computed(() => props.event.tags?.slice(0, 3) || [])
           />
           <div>
             <dt class="sr-only">
-              Date
+              {{ t('event.date') }}
             </dt>
             <dd class="font-medium text-highlighted">
-              {{ formatEventDate(event) }}
+              {{ formatEventDate(event, locale) }}
             </dd>
           </div>
         </div>
@@ -106,9 +109,9 @@ const visibleTags = computed(() => props.event.tags?.slice(0, 3) || [])
           />
           <div>
             <dt class="sr-only">
-              Time
+              {{ t('event.time') }}
             </dt>
-            <dd>{{ getEventTime(event) }}</dd>
+            <dd>{{ getEventTime(event, t('event.noTime')) }}</dd>
           </div>
         </div>
         <div class="flex items-start gap-3">
@@ -118,7 +121,7 @@ const visibleTags = computed(() => props.event.tags?.slice(0, 3) || [])
           />
           <div>
             <dt class="sr-only">
-              Price
+              {{ t('event.price') }}
             </dt>
             <dd>{{ event.price.label }}</dd>
           </div>
@@ -132,7 +135,7 @@ const visibleTags = computed(() => props.event.tags?.slice(0, 3) || [])
         <UBadge
           v-for="tag in visibleTags"
           :key="tag"
-          :label="tag"
+          :label="getTagLabel(tag)"
           color="neutral"
           variant="soft"
           size="sm"
@@ -145,7 +148,7 @@ const visibleTags = computed(() => props.event.tags?.slice(0, 3) || [])
         </span>
         <UButton
           :to="event.path"
-          label="View details"
+          :label="t('event.viewDetails')"
           icon="i-lucide-arrow-right"
           trailing
           size="sm"

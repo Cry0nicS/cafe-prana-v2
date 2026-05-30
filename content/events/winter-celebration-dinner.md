@@ -1,4 +1,6 @@
 ---
+locale: en
+slug: winter-celebration-dinner
 title: Winter Celebration Dinner
 description: Let me celebrate the New Year with my Winter Celebration Dinner. Prana's annual five course dinner brings together seasonal highlights and beloved classics in one special evening.
 badge: Christmas week

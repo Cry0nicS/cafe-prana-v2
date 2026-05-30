@@ -1,12 +1,13 @@
-title: Chai Latte
-category: drinksHot
-description: Homemade chai spice blend with mylk of choice
-ingredients: Chai spices, mylk of choice
-price: 4,6€
+﻿locale: "en"
+title: "Chai Latte"
+category: "drinksHot"
+description: "Homemade chai spice blend with mylk of choice"
+ingredients: "Chai spices, mylk of choice"
+price: "4,6â‚¬"
 image:
-  src: /images/menu/chai-latte.png
-  alt: Chai latte in a ceramic cup
+  src: "/images/menu/chai-latte.png"
+  alt: "Chai latte in a ceramic cup"
 labels:
-  - gluten-free
-  - vegan
+  - "gluten-free"
+  - "vegan"
 order: 130

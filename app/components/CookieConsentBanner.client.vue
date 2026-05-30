@@ -4,6 +4,8 @@ const {
   initConsent,
   acknowledgeNotice
 } = useCookieConsent()
+const { t } = useI18n()
+const localePath = useLocalePath()
 
 onMounted(() => {
   initConsent()
@@ -22,7 +24,7 @@ onMounted(() => {
     >
       <aside
         v-if="bannerVisible"
-        aria-label="Cookie notice"
+        :aria-label="t('cookies.bannerTitle')"
         class="fixed inset-x-0 bottom-0 z-50 p-3 sm:p-5"
       >
         <div class="mx-auto max-w-4xl rounded-lg border border-default bg-default/95 p-4 shadow-xl ring-1 ring-default backdrop-blur sm:p-5">
@@ -34,17 +36,17 @@ onMounted(() => {
                   class="size-5 text-primary"
                 />
                 <h2 class="text-base font-semibold text-highlighted">
-                  Cookie notice
+                  {{ t('cookies.bannerTitle') }}
                 </h2>
               </div>
               <p class="text-sm leading-6 text-muted">
-                We use Vercel Web Analytics for anonymous, aggregated visitor statistics. It does not use analytics cookies or identify individual visitors, supporting a GDPR-conscious setup.
+                {{ t('cookies.bannerDescription') }}
               </p>
               <ULink
-                to="/cookies"
+                :to="localePath('/cookies')"
                 class="inline-flex items-center gap-1 text-sm font-medium text-primary"
               >
-                Read the cookie policy
+                {{ t('cookies.readPolicy') }}
                 <UIcon
                   name="i-lucide-arrow-right"
                   class="size-4"
@@ -54,9 +56,9 @@ onMounted(() => {
 
             <div class="grid gap-2 sm:flex md:flex-col lg:flex-row">
               <UButton
-                label="I understand"
+                :label="t('cookies.understand')"
                 color="primary"
-                aria-label="Acknowledge cookie and analytics notice"
+                :aria-label="t('cookies.acknowledgeLabel')"
                 @click="acknowledgeNotice"
               />
             </div>

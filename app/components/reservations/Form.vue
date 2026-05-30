@@ -24,6 +24,8 @@ type ServerError = {
 }
 
 const toast = useToast()
+const { t } = useI18n()
+const localePath = useLocalePath()
 
 const isSubmitting = ref(false)
 const showModal = ref(false)
@@ -115,18 +117,26 @@ const resetFormData = () => {
   Object.assign(formState, defaultState())
 }
 
+const translateReservationMessage = (message?: string) => {
+  if (message?.startsWith('reservations.form.errors.')) {
+    return t(message)
+  }
+
+  return getReservationValidationMessage(message)
+}
+
 const getErrorDescription = (error: unknown) => {
   const serverError = error as ServerError
   const issueMessage = serverError.data?.data?.[0]?.message
   const fallbackMessage = serverError.data?.message || serverError.data?.statusMessage || serverError.statusMessage || serverError.message
 
-  return getReservationValidationMessage(issueMessage || fallbackMessage)
+  return translateReservationMessage(issueMessage || fallbackMessage)
 }
 
 const showValidationError = (message?: string) => {
   toast.add({
-    title: 'Form error',
-    description: getReservationValidationMessage(message),
+    title: t('reservations.form.validationTitle'),
+    description: translateReservationMessage(message),
     color: 'error',
     icon: 'i-lucide-shield-alert'
   })
@@ -136,7 +146,7 @@ const sendReservation = async () => {
   if (isSubmitting.value) return
 
   if (dateUnavailable.value) {
-    showValidationError('Reservations are not available on Mondays. Please choose another date.')
+    showValidationError(t('reservations.form.mondayUnavailable'))
     return
   }
 
@@ -157,8 +167,8 @@ const sendReservation = async () => {
     })
 
     toast.add({
-      title: 'Reservation sent successfully',
-      description: 'I will get back to you as soon as I processed your request.',
+      title: t('reservations.form.successTitle'),
+      description: t('reservations.form.successDescription'),
       color: 'success',
       icon: 'i-lucide-thumbs-up'
     })
@@ -167,8 +177,8 @@ const sendReservation = async () => {
     resetFormData()
   } catch (error) {
     toast.add({
-      title: 'Error sending request',
-      description: getErrorDescription(error) || 'Please try again later.',
+      title: t('reservations.form.errorTitle'),
+      description: getErrorDescription(error) || t('reservations.form.errorDescription'),
       color: 'error',
       icon: 'i-lucide-shield-alert'
     })
@@ -193,7 +203,7 @@ const sendReservation = async () => {
             :for="fieldIds.firstName"
             class="block text-sm font-medium text-highlighted"
           >
-            First name
+            {{ t('reservations.form.firstName') }}
           </label>
           <input
             :id="fieldIds.firstName"
@@ -201,7 +211,7 @@ const sendReservation = async () => {
             class="mt-2 w-full rounded-md border border-default bg-default px-3 py-2.5 text-sm text-highlighted outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
             type="text"
             autocomplete="given-name"
-            placeholder="First name"
+            :placeholder="t('reservations.form.firstName')"
             required
           >
         </div>
@@ -211,7 +221,7 @@ const sendReservation = async () => {
             :for="fieldIds.lastName"
             class="block text-sm font-medium text-highlighted"
           >
-            Last name
+            {{ t('reservations.form.lastName') }}
           </label>
           <input
             :id="fieldIds.lastName"
@@ -219,7 +229,7 @@ const sendReservation = async () => {
             class="mt-2 w-full rounded-md border border-default bg-default px-3 py-2.5 text-sm text-highlighted outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
             type="text"
             autocomplete="family-name"
-            placeholder="Last name"
+            :placeholder="t('reservations.form.lastName')"
             required
           >
         </div>
@@ -231,7 +241,7 @@ const sendReservation = async () => {
             :for="fieldIds.email"
             class="block text-sm font-medium text-highlighted"
           >
-            Email
+            {{ t('reservations.form.email') }}
           </label>
           <input
             :id="fieldIds.email"
@@ -249,7 +259,7 @@ const sendReservation = async () => {
             :for="fieldIds.phone"
             class="block text-sm font-medium text-highlighted"
           >
-            Phone Number (with country code)
+            {{ t('reservations.form.phone') }}
           </label>
           <input
             :id="fieldIds.phone"
@@ -268,7 +278,7 @@ const sendReservation = async () => {
             :for="fieldIds.date"
             class="block text-sm font-medium text-highlighted"
           >
-            Reservation Date
+            {{ t('reservations.form.date') }}
           </label>
           <input
             :id="fieldIds.date"
@@ -282,7 +292,7 @@ const sendReservation = async () => {
             v-if="dateUnavailable"
             class="mt-2 text-sm text-error"
           >
-            Reservations are not available on Mondays. Please choose another date.
+            {{ t('reservations.form.mondayUnavailable') }}
           </p>
         </div>
 
@@ -291,7 +301,7 @@ const sendReservation = async () => {
             :for="fieldIds.time"
             class="block text-sm font-medium text-highlighted"
           >
-            Time
+            {{ t('reservations.form.time') }}
           </label>
           <input
             :id="fieldIds.time"
@@ -310,7 +320,7 @@ const sendReservation = async () => {
             :for="fieldIds.guests"
             class="block text-sm font-medium text-highlighted"
           >
-            Guests
+            {{ t('reservations.form.guests') }}
           </label>
           <input
             :id="fieldIds.guests"
@@ -330,14 +340,14 @@ const sendReservation = async () => {
           :for="fieldIds.message"
           class="block text-sm font-medium text-highlighted"
         >
-          Message (optional)
+          {{ t('reservations.form.message') }}
         </label>
         <textarea
           :id="fieldIds.message"
           v-model="formState.message"
           class="mt-2 min-h-28 w-full rounded-md border border-default bg-default px-3 py-2.5 text-sm text-highlighted outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
           maxlength="1000"
-          placeholder="Allergies, accessibility needs, or anything else I should know."
+          :placeholder="t('reservations.form.messagePlaceholder')"
         />
       </div>
 
@@ -350,16 +360,15 @@ const sendReservation = async () => {
           required
         >
         <span>
-          I have read and accept the
+          {{ t('reservations.form.privacyPrefix') }}
           <NuxtLink
-            to="/cookies"
+            :to="localePath('/cookies')"
             class="font-medium text-primary underline-offset-4 hover:underline"
             target="_blank"
           >
-            privacy and cookie policy
+            {{ t('reservations.form.privacyLink') }}
           </NuxtLink>.
-          It is agreed that the voluntarily provided data may be stored and used to contact you.
-          Processing can be revoked at any time.
+          {{ t('reservations.form.privacySuffix') }}
         </span>
       </label>
     </fieldset>
@@ -369,12 +378,12 @@ const sendReservation = async () => {
       color="primary"
       variant="soft"
       class="mt-5"
-      description="Reservations are requests first. Cafe Prana confirms availability by email, usually within 24 hours."
+      :description="t('reservations.form.info')"
     />
 
     <div class="mt-5 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
       <p class="text-sm text-muted">
-        For urgent changes, please email info@cafeprana.de.
+        {{ t('reservations.form.urgent') }}
       </p>
       <UButton
         type="submit"
@@ -384,20 +393,20 @@ const sendReservation = async () => {
         size="lg"
         class="justify-center"
       >
-        Submit
+        {{ t('reservations.form.submit') }}
       </UButton>
     </div>
 
     <UModal
       v-model:open="showModal"
-      title="Reservation request received"
-      description="Thank you! I've received your reservation request."
+      :title="t('reservations.form.modalTitle')"
+      :description="t('reservations.form.modalDescription')"
       :ui="{ content: 'max-w-lg' }"
     >
       <template #body>
         <div class="space-y-4 text-sm leading-6 text-muted">
           <p>
-            I will check availability and send a confirmation email within 24 hours. If you do not receive a confirmation, please check your spam folder or contact me.
+            {{ t('reservations.form.modalBody') }}
           </p>
         </div>
       </template>
@@ -407,7 +416,7 @@ const sendReservation = async () => {
           icon="i-lucide-thumbs-up"
           @click="showModal = false"
         >
-          Okay
+          {{ t('reservations.form.modalClose') }}
         </UButton>
       </template>
     </UModal>

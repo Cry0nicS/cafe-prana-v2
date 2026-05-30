@@ -1,13 +1,14 @@
-title: Soup of the Day
-category: food
-description: Heartwarming soup with toppings.
-ingredients: My soups are made with seasonal vegetables, spices, and herbs.
-price: 4€ / 8€
+﻿locale: "en"
+title: "Soup of the Day"
+category: "food"
+description: "Heartwarming soup with toppings."
+ingredients: "My soups are made with seasonal vegetables, spices, and herbs."
+price: "4â‚¬ / 8â‚¬"
 image:
-  src: /images/menu/soup.png
-  alt: Soup of the day with toppings
+  src: "/images/menu/soup.png"
+  alt: "Soup of the day with toppings"
 labels:
-  - gluten-free
-  - vegan
-  - seasonal
+  - "gluten-free"
+  - "vegan"
+  - "seasonal"
 order: 260

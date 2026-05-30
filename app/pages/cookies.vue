@@ -1,18 +1,20 @@
 <script setup lang="ts">
+const { t } = useI18n()
+
 useSeoMeta({
-  title: 'Cookie Policy',
-  description: 'Learn how Cafe Prana uses necessary local storage and privacy-friendly Vercel Web Analytics.'
+  title: () => t('cookies.seoTitle'),
+  description: () => t('cookies.seoDescription')
 })
 </script>
 
 <template>
   <UPage>
     <UPageHero
-      title="Cookie Policy"
-      description="How this website uses necessary local storage and anonymous analytics."
-      headline="Privacy notice"
+      :title="t('cookies.title')"
+      :description="t('cookies.description')"
+      :headline="t('cookies.headline')"
       :links="[{
-        label: 'Contact us',
+        label: t('cookies.contact'),
         to: 'mailto:info@cafeprana.de',
         icon: 'i-lucide-mail',
         color: 'neutral',
@@ -33,46 +35,38 @@ useSeoMeta({
       <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
         <div class="space-y-6">
           <UPageCard
-            title="Summary"
+            :title="t('cookies.summaryTitle')"
             icon="i-lucide-shield-check"
             variant="subtle"
             :ui="{ root: 'rounded-lg' }"
           >
             <div class="space-y-4 text-sm leading-7 text-muted">
-              <p>
-                Cafe Prana keeps tracking intentionally small. This website uses Vercel Web Analytics to understand anonymous, aggregated website usage such as visited pages, referrers, browser type, device type, and approximate region.
-              </p>
-              <p>
-                Vercel states that Web Analytics does not use cookies and does not collect or store information that identifies or re-identifies individual visitors. We use it as a privacy-friendly, GDPR-conscious analytics setup.
-              </p>
-              <p>
-                This page is provided for transparency and is not formal legal advice.
-              </p>
+              <p>{{ t('cookies.summaryP1') }}</p>
+              <p>{{ t('cookies.summaryP2') }}</p>
+              <p>{{ t('cookies.summaryP3') }}</p>
             </div>
           </UPageCard>
 
           <UPageCard
-            title="Necessary local storage"
+            :title="t('cookies.storageTitle')"
             icon="i-lucide-lock"
             variant="naked"
             :ui="{ root: 'rounded-lg border border-default bg-default p-6' }"
           >
             <div class="space-y-4 text-sm leading-7 text-muted">
-              <p>
-                The site uses browser localStorage only to remember that you acknowledged the cookie and analytics notice, so the notice does not keep appearing on every visit.
-              </p>
+              <p>{{ t('cookies.storageP1') }}</p>
               <div class="overflow-hidden rounded-lg border border-default">
                 <table class="w-full text-left text-sm">
                   <thead class="bg-muted/50 text-highlighted">
                     <tr>
                       <th class="p-3 font-medium">
-                        Name
+                        {{ t('cookies.tableName') }}
                       </th>
                       <th class="p-3 font-medium">
-                        Purpose
+                        {{ t('cookies.tablePurpose') }}
                       </th>
                       <th class="p-3 font-medium">
-                        Type
+                        {{ t('cookies.tableType') }}
                       </th>
                     </tr>
                   </thead>
@@ -82,10 +76,10 @@ useSeoMeta({
                         cafe-prana-cookie-notice-v1
                       </td>
                       <td class="p-3 align-top">
-                        Stores that the cookie and analytics notice has been acknowledged.
+                        {{ t('cookies.storagePurpose') }}
                       </td>
                       <td class="p-3 align-top">
-                        Browser localStorage
+                        {{ t('cookies.storageType') }}
                       </td>
                     </tr>
                   </tbody>
@@ -95,34 +89,26 @@ useSeoMeta({
           </UPageCard>
 
           <UPageCard
-            title="Anonymous analytics"
+            :title="t('cookies.analyticsTitle')"
             icon="i-lucide-chart-no-axes-column"
             variant="naked"
             :ui="{ root: 'rounded-lg border border-default bg-default p-6' }"
           >
             <div class="space-y-4 text-sm leading-7 text-muted">
-              <p>
-                Vercel Web Analytics helps Cafe Prana understand whether the website is useful and working well. It records aggregated statistics for page views and basic technical context.
-              </p>
-              <p>
-                According to Vercel, visitors are identified by a request-based hash instead of cookies, and that hash resets automatically. Analytics data is used for aggregated statistics, not individual visitor profiles.
-              </p>
-              <p>
-                The analytics integration is limited to Vercel Web Analytics. No advertising pixels, profiling tools, or cross-site tracking cookies are added here.
-              </p>
+              <p>{{ t('cookies.analyticsP1') }}</p>
+              <p>{{ t('cookies.analyticsP2') }}</p>
+              <p>{{ t('cookies.analyticsP3') }}</p>
             </div>
           </UPageCard>
 
           <UPageCard
-            title="Show the notice again"
+            :title="t('cookies.resetTitle')"
             icon="i-lucide-refresh-cw"
             variant="naked"
             :ui="{ root: 'rounded-lg border border-default bg-default p-6' }"
           >
             <div class="space-y-4 text-sm leading-7 text-muted">
-              <p>
-                You can reset the saved acknowledgement on this page. Resetting it does not disable analytics; it only makes the notice appear again so you can review the information.
-              </p>
+              <p>{{ t('cookies.resetP1') }}</p>
             </div>
           </UPageCard>
         </div>

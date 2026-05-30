@@ -1,16 +1,17 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+
   modules: [
     '@nuxt/eslint',
     '@nuxt/image',
     '@nuxt/ui',
     '@nuxt/content',
+    '@nuxtjs/i18n',
     '@vueuse/nuxt',
     'nuxt-og-image',
     'motion-v/nuxt',
     'nuxt-studio'
   ],
-
   devtools: {
     enabled: true
   },
@@ -46,6 +47,22 @@ export default defineNuxtConfig({
         braceStyle: '1tbs'
       }
     }
+  },
+
+  i18n: {
+    defaultLocale: 'en',
+    strategy: 'prefix_except_default',
+    detectBrowserLanguage: false,
+    locales: [{
+      code: 'en',
+      name: 'English',
+      language: 'en-US'
+    }, {
+      code: 'de',
+      name: 'Deutsch',
+      language: 'de-DE'
+    }],
+    vueI18n: './i18n.config.ts'
   },
   studio: {
     repository: {

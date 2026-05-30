@@ -1,13 +1,14 @@
-title: Porridge
-category: food
-description: Served warm, pure or with seasonal toppings.
-ingredients: Oat and tigernut porridge freshly made with coconut mylk, and optional toppings
-price: 6,5 / 11,8€
+﻿locale: "en"
+title: "Porridge"
+category: "food"
+description: "Served warm, pure or with seasonal toppings."
+ingredients: "Oat and tigernut porridge freshly made with coconut mylk, and optional toppings"
+price: "6,5 / 11,8â‚¬"
 image:
-  src: /images/menu/porridge.png
-  alt: Warm porridge with optional seasonal toppings
+  src: "/images/menu/porridge.png"
+  alt: "Warm porridge with optional seasonal toppings"
 labels:
-  - gluten-free
-  - vegan
-  - seasonal
+  - "gluten-free"
+  - "vegan"
+  - "seasonal"
 order: 210

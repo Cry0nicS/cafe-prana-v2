@@ -1,54 +1,55 @@
-title: Menu
-description: Discover Café Prana's gluten-free and vegan menu, featuring nourishing brunches, wholesome lunches, and heartwarming drinks made from organic, plant-based ingredients.
+locale: "en"
+title: "Menu"
+description: "Discover Café Prana's gluten-free and vegan menu, featuring nourishing brunches, wholesome lunches, and heartwarming drinks made from organic, plant-based ingredients."
 seo:
-  title: Menu
-  description: Discover Café Prana's gluten-free and vegan menu, featuring nourishing brunches, wholesome lunches, and heartwarming drinks made from organic, plant-based ingredients.
-  ogImage: /images/hero.png
+  title: "Menu"
+  description: "Discover Café Prana's gluten-free and vegan menu, featuring nourishing brunches, wholesome lunches, and heartwarming drinks made from organic, plant-based ingredients."
+  ogImage: "/images/hero.png"
 hero:
-  headline: Fresh, nourishing, plant based
-  title: Menu
-  description: Gluten-free coffee, brunch, lunch, and warming drinks prepared with care in Berlin.
+  headline: "Fresh, nourishing, plant based"
+  title: "Menu"
+  description: "Gluten-free coffee, brunch, lunch, and warming drinks prepared with care in Berlin."
   image:
-    src: /images/menu/brunch.png
-    alt: Plant-based brunch plate at Café Prana
+    src: "/images/menu/brunch.png"
+    alt: "Plant-based brunch plate at Café Prana"
   links:
-    - label: Coffee Specials
+    - label: "Coffee Specials"
       to: "#drinksCoffee"
-      icon: i-lucide-coffee
-      color: primary
-    - label: Hot Drinks
+      icon: "i-lucide-coffee"
+      color: "primary"
+    - label: "Hot Drinks"
       to: "#drinksHot"
-      icon: i-lucide-cup-soda
-      color: neutral
-      variant: outline
-    - label: Food & Brunch
+      icon: "i-lucide-cup-soda"
+      color: "neutral"
+      variant: "outline"
+    - label: "Food & Brunch"
       to: "#food"
-      icon: i-lucide-utensils
-      color: neutral
-      variant: outline
+      icon: "i-lucide-utensils"
+      color: "neutral"
+      variant: "outline"
 categories:
   - id: drinksCoffee
-    title: Coffee Specials
-    description: Specialty coffee prepared with plant-based milk options.
+    title: "Coffee Specials"
+    description: "Specialty coffee prepared with plant-based milk options."
     options: "Choose your favorite: oat-almond blend, oat-coconut blend, homemade cashew-coconut mylk, soy, almond"
-    icon: i-lucide-coffee
+    icon: "i-lucide-coffee"
   - id: drinksHot
-    title: Hot Drinks
-    description: Heartwarming non-coffee drinks, cacao, chai, matcha, and golden milk.
+    title: "Hot Drinks"
+    description: "Heartwarming non-coffee drinks, cacao, chai, matcha, and golden milk."
     options: "Choose your favorite: oat-almond blend, oat-coconut blend, homemade cashew-coconut mylk, soy, rice-coconut, hazelnut, almond"
-    icon: i-lucide-cup-soda
+    icon: "i-lucide-cup-soda"
   - id: food
-    title: Food & Brunch
-    description: Nourishing sweet and savory dishes with gluten-free bases and seasonal toppings.
-    options: Toppings of the day are chosen with care to complement each other.
-    icon: i-lucide-utensils
+    title: "Food & Brunch"
+    description: "Nourishing sweet and savory dishes with gluten-free bases and seasonal toppings."
+    options: "Toppings of the day are chosen with care to complement each other."
+    icon: "i-lucide-utensils"
 labels:
   - id: gluten-free
-    label: Gluten-free
-    icon: i-lucide-wheat-off
+    label: "Gluten-free"
+    icon: "i-lucide-wheat-off"
   - id: vegan
-    label: Vegan
-    icon: i-lucide-leaf
+    label: "Vegan"
+    icon: "i-lucide-leaf"
   - id: seasonal
-    label: Seasonal
-    icon: i-lucide-sprout
+    label: "Seasonal"
+    icon: "i-lucide-sprout"

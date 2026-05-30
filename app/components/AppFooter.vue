@@ -1,5 +1,7 @@
 <script setup lang="ts">
 const { footer, global } = useAppConfig()
+const { t } = useI18n()
+const localePath = useLocalePath()
 </script>
 
 <template>
@@ -10,12 +12,12 @@ const { footer, global } = useAppConfig()
     <template #left>
       <div class="flex flex-col gap-1">
         <span>{{ footer.credits }}</span>
-        <span>{{ global.description }}</span>
+        <span>{{ t('footer.description') || global.description }}</span>
         <ULink
-          to="/cookies"
+          :to="localePath('/cookies')"
           class="text-xs text-muted underline-offset-4 hover:text-highlighted hover:underline"
         >
-          Cookie policy
+          {{ t('footer.cookiePolicy') }}
         </ULink>
       </div>
     </template>

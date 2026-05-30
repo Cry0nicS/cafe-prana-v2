@@ -1,31 +1,34 @@
 <script setup lang="ts">
-const features = [{
-  title: 'Request a Table',
-  description: 'Choose date, time and party size to request a reservation. I try to accommodate all requests.',
+const { t } = useI18n()
+const localePath = useLocalePath()
+
+const features = computed(() => [{
+  title: t('reservations.features.request.title'),
+  description: t('reservations.features.request.description'),
   icon: 'i-lucide-calendar-plus'
 }, {
-  title: 'Confirmation within 24 hours',
-  description: 'Reservations are confirmed within 24 hours. Please allow up to a day for final confirmation.',
+  title: t('reservations.features.confirmation.title'),
+  description: t('reservations.features.confirmation.description'),
   icon: 'i-lucide-clock-3'
 }, {
-  title: 'Email Confirmation',
-  description: 'You will receive an email to confirm the reservation with all details and any follow-up instructions.',
+  title: t('reservations.features.email.title'),
+  description: t('reservations.features.email.description'),
   icon: 'i-lucide-mail-check'
 }, {
-  title: 'Special Requests & Allergies',
-  description: 'Use the message section to tell me about allergies, accessibility needs, or other special requests.',
+  title: t('reservations.features.special.title'),
+  description: t('reservations.features.special.description'),
   icon: 'i-lucide-leaf'
 }, {
-  title: 'Changes & Cancellation',
-  description: 'Need to change or cancel? Please notify me as soon as possible so I can free the table for others.',
+  title: t('reservations.features.changes.title'),
+  description: t('reservations.features.changes.description'),
   icon: 'i-lucide-refresh-cw'
-}]
+}])
 
 useSeoMeta({
-  title: 'Reservations | Cafe Prana',
-  ogTitle: 'Reservations | Cafe Prana',
-  description: 'Plan your visit to Cafe Prana in Berlin and request a table for a special moment, relaxed gathering, or quiet date.',
-  ogDescription: 'Plan your visit to Cafe Prana in Berlin and request a table for a special moment, relaxed gathering, or quiet date.',
+  title: () => t('reservations.seoTitle'),
+  ogTitle: () => t('reservations.seoTitle'),
+  description: () => t('reservations.seoDescription'),
+  ogDescription: () => t('reservations.seoDescription'),
   ogImage: '/images/hero.png'
 })
 </script>
@@ -33,18 +36,18 @@ useSeoMeta({
 <template>
   <UPage>
     <UPageHero
-      headline="Reservations"
-      title="Plan Your Visit to Cafe Prana"
-      description="Whether you're planning a special moment, a relaxed gathering, or a quiet date, reserving your table helps me prepare a comfortable setting just for you."
+      :headline="t('reservations.headline')"
+      :title="t('reservations.title')"
+      :description="t('reservations.description')"
       :links="[{
-        label: 'Email Cafe Prana',
+        label: t('reservations.email'),
         to: 'mailto:info@cafeprana.de',
         icon: 'i-lucide-mail',
         color: 'neutral',
         variant: 'outline'
       }, {
-        label: 'Back home',
-        to: '/',
+        label: t('reservations.backHome'),
+        to: localePath('/'),
         icon: 'i-lucide-arrow-left',
         color: 'neutral',
         variant: 'outline'

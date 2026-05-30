@@ -1,12 +1,13 @@
-title: Ceremonial Matcha
-category: drinksHot
-description: First-grade matcha served hot.
-ingredients: Matcha powder served with hot water
-price: 3,6€
+﻿locale: "en"
+title: "Ceremonial Matcha"
+category: "drinksHot"
+description: "First-grade matcha served hot."
+ingredients: "Matcha powder served with hot water"
+price: "3,6â‚¬"
 image:
-  src: /images/menu/matcha.png
-  alt: Ceremonial matcha served hot
+  src: "/images/menu/matcha.png"
+  alt: "Ceremonial matcha served hot"
 labels:
-  - gluten-free
-  - vegan
+  - "gluten-free"
+  - "vegan"
 order: 140
