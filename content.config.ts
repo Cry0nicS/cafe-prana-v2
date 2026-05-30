@@ -62,15 +62,6 @@ const createEventTagSchema = () => z.enum([
   'workshop'
 ])
 
-const createAuthorSchema = () => z.object({
-  name: z.string(),
-  description: z.string().optional(),
-  username: z.string().optional(),
-  twitter: z.string().optional(),
-  to: z.string().optional(),
-  avatar: createImageSchema().optional()
-})
-
 export default defineContentConfig({
   collections: {
     index: defineCollection({
@@ -248,60 +239,6 @@ export default defineContentConfig({
         tags: z.array(createEventTagSchema()),
         featured: z.boolean().optional(),
         seo: createSeoSchema().optional()
-      })
-    }),
-    projects: defineCollection({
-      type: 'data',
-      source: 'projects/*.yml',
-      schema: z.object({
-        title: z.string().nonempty(),
-        description: z.string().nonempty(),
-        image: z.string().nonempty().editor({ input: 'media' }),
-        url: z.string().nonempty(),
-        tags: z.array(z.string()),
-        date: z.date()
-      })
-    }),
-    blog: defineCollection({
-      type: 'page',
-      source: 'blog/*.md',
-      schema: z.object({
-        minRead: z.number(),
-        date: z.date(),
-        image: z.string().nonempty().editor({ input: 'media' }),
-        author: createAuthorSchema()
-      })
-    }),
-    pages: defineCollection({
-      type: 'page',
-      source: [
-        { include: 'projects.yml' },
-        { include: 'blog.yml' }
-      ],
-      schema: z.object({
-        links: z.array(createButtonSchema())
-      })
-    }),
-    speaking: defineCollection({
-      type: 'page',
-      source: 'speaking.yml',
-      schema: z.object({
-        links: z.array(createButtonSchema()),
-        events: z.array(z.object({
-          category: z.enum(['Live talk', 'Podcast', 'Conference']),
-          title: z.string(),
-          date: z.date(),
-          location: z.string(),
-          url: z.string().optional()
-        }))
-      })
-    }),
-    about: defineCollection({
-      type: 'page',
-      source: 'about.yml',
-      schema: z.object({
-        content: z.object({}),
-        images: z.array(createImageSchema())
       })
     })
   }

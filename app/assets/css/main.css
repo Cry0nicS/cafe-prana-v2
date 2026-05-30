@@ -33,7 +33,7 @@
 }
 
 :root {
-  --ui-container: var(--container-4xl);
+  --ui-container: var(--container-7xl);
   --ui-bg: var(--color-prana-warm-50);
   --ui-bg-muted: #f8f0e7;
   --ui-bg-elevated: #fffdf9;
