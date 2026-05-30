@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
+    "clean": "npx nuxi cleanup && rm -rf node_modules/ && rm -rf .nuxt/ && rm package-lock.json",
     "dev": "nuxt dev",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
