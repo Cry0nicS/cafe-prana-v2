@@ -39,12 +39,10 @@ if (!items.value) {
   })
 }
 
-useSeoMeta({
+useCafeSeo({
   title: page.value.seo.title,
-  ogTitle: page.value.seo.title,
   description: page.value.seo.description,
-  ogDescription: page.value.seo.description,
-  ogImage: page.value.seo.ogImage
+  image: page.value.seo.ogImage
 })
 
 const labelLookup = computed(() =>

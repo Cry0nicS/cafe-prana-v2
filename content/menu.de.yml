@@ -2,8 +2,8 @@ locale: "de"
 title: "Menü"
 description: "Entdecke das glutenfreie und vegane Menü von Cafe Prana mit nährendem Brunch, ausgewogenem Lunch und wärmenden Getränken aus biologischen, pflanzlichen Zutaten."
 seo:
-  title: "Menü"
-  description: "Entdecke das glutenfreie und vegane Menü von Cafe Prana mit nährendem Brunch, ausgewogenem Lunch und wärmenden Getränken aus biologischen, pflanzlichen Zutaten."
+  title: "Glutenfreies veganes Menue in Berlin"
+  description: "Entdecke das 100% glutenfreie vegane Menue von Cafe Prana in Berlin mit Bio-Brunch, naehrendem Lunch, Specialty Coffee, Kakao, Matcha und warmen Drinks."
   ogImage: "/images/hero.png"
 hero:
   headline: "Frisch, nährend, pflanzlich"

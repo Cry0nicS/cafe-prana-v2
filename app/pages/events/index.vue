@@ -40,12 +40,10 @@ const title = computed(() => page.value?.seo.title || page.value?.hero.title)
 const description = computed(() => page.value?.seo.description || page.value?.hero.description)
 const heroLinks = computed(() => localizeLinks(page.value?.hero.links))
 
-useSeoMeta({
+useCafeSeo({
   title,
-  ogTitle: title,
   description,
-  ogDescription: description,
-  ogImage: () => page.value?.seo.ogImage || page.value?.hero.image.src
+  image: () => page.value?.seo.ogImage || page.value?.hero.image.src
 })
 
 if (page.value.seo.ogImage) {

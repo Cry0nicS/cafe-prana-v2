@@ -1,7 +1,7 @@
 locale: "en"
 seo:
-  title: "Events"
-  description: "Discover upcoming gatherings, dinners, and celebrations at Café Prana."
+  title: "Vegan Gluten-Free Events in Berlin"
+  description: "Discover upcoming Cafe Prana events in Berlin, including vegan gluten-free brunches, community dinners, cacao workshops, and seasonal gatherings."
   ogImage: "/images/events/index.png"
 hero:
   headline: "Latest events"

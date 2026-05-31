@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { CAFE_SITE_URL } from '#shared/utils/constants'
 import {
   compareEventsDesc,
   formatEventDate,
@@ -12,7 +13,6 @@ const route = useRoute()
 const { locale, t } = useI18n()
 const localePath = useLocalePath()
 const localizePath = useLocalizedPath()
-const siteUrl = 'https://www.cafeprana.de'
 const slug = computed(() => String(route.params.slug))
 
 const [{ data: rawEvent }, { data: eventsIndex }, { data: events }] = await Promise.all([
@@ -100,7 +100,7 @@ const toAbsoluteUrl = (value?: string) => {
     return undefined
   }
 
-  return `${siteUrl}${value.startsWith('/') ? value : `/${value}`}`
+  return `${CAFE_SITE_URL}${value.startsWith('/') ? value : `/${value}`}`
 }
 
 const eventJsonLd = computed(() => {
@@ -136,7 +136,7 @@ const eventJsonLd = computed(() => {
     'organizer': {
       '@type': 'Organization',
       'name': 'Cafe Prana',
-      'url': siteUrl
+      'url': CAFE_SITE_URL
     },
     'url': toAbsoluteUrl(currentEvent.path)
   }
@@ -164,12 +164,11 @@ const eventJsonLd = computed(() => {
 
 const getTagLabel = (tag: string) => t(`event.tagLabels.${tag}`)
 
-useSeoMeta({
+useCafeSeo({
   title,
-  ogTitle: title,
   description,
-  ogDescription: description,
-  ogImage: image
+  image,
+  type: 'article'
 })
 
 if (image.value) {

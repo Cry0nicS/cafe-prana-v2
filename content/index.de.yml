@@ -2,8 +2,8 @@ locale: "de"
 title: "Cafe Prana"
 description: "Ein glutenfreies und veganes Café im Herzen von Berlin"
 seo:
-  title: "Cafe Prana"
-  description: "Cafe Prana in Berlin bietet ein 100% glutenfreies, veganes und biologisches Menü in einem gemütlichen Community-Space. Genieße nährende Brunches, warme Getränke und eine einladende Atmosphäre."
+  title: "Cafe Prana Berlin | Glutenfreies veganes Cafe & Brunch"
+  description: "Besuche Cafe Prana in Berlin Prenzlauer Berg fuer 100% glutenfreien veganen Brunch, Bio-Lunch, Specialty Coffee, warme Drinks und Community-Events."
   ogImage: "/images/hero.png"
 hero:
   headline: "Neu eröffnet!"

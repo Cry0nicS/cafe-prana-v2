@@ -20,12 +20,10 @@ const directItems = computed(() => [{
   to: global.maps
 }])
 
-useSeoMeta({
+useCafeSeo({
   title: () => t('contact.seoTitle'),
-  ogTitle: () => t('contact.seoTitle'),
   description: () => t('contact.seoDescription'),
-  ogDescription: () => t('contact.seoDescription'),
-  ogImage: '/images/hero.png'
+  image: '/images/hero.png'
 })
 </script>
 

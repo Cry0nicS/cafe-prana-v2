@@ -3,9 +3,10 @@ import { CAFE_CONTACT_MAILTO } from '#shared/utils/constants'
 
 const { t } = useI18n()
 
-useSeoMeta({
+useCafeSeo({
   title: () => t('cookies.seoTitle'),
-  description: () => t('cookies.seoDescription')
+  description: () => t('cookies.seoDescription'),
+  noindex: true
 })
 </script>
 
