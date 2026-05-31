@@ -31,16 +31,16 @@ const visibleLabels = computed(() =>
 
 <template>
   <article class="min-w-0 overflow-hidden rounded-lg border border-default bg-elevated/80 shadow-sm">
-    <div class="grid min-w-0 sm:grid-cols-[160px_minmax(0,1fr)] xl:grid-cols-[170px_minmax(0,1fr)]">
+    <div class="grid min-w-0 sm:grid-cols-[160px_minmax(0,1fr)] md:grid-cols-1">
       <NuxtImg
         v-bind="item.image"
         format="webp"
-        sizes="sm:100vw md:50vw lg:170px"
-        class="aspect-[4/3] h-full w-full object-cover sm:aspect-auto"
+        sizes="sm:100vw md:50vw lg:640px xl:420px"
+        class="aspect-[4/3] h-full w-full object-cover sm:aspect-auto md:aspect-[3/2] md:h-auto"
         placeholder
       />
 
-      <div class="flex min-w-0 flex-col gap-4 p-4 sm:p-5">
+      <div class="flex min-w-0 flex-col gap-4 p-4 sm:p-5 md:gap-3">
         <div class="flex min-w-0 items-start justify-between gap-4">
           <div class="min-w-0">
             <h3 class="text-lg font-semibold leading-tight text-highlighted">
