@@ -6,9 +6,8 @@ const props = defineProps<{
 }>()
 
 const { global } = useAppConfig()
-const { locale, locales, t } = useI18n()
+const { locale, locales, setLocale, t } = useI18n()
 const localePath = useLocalePath()
-const switchLocalePath = useSwitchLocalePath()
 
 const dropdownLinks = computed<DropdownMenuItem[]>(() =>
   props.links.map(link => ({
@@ -21,14 +20,15 @@ const dropdownLinks = computed<DropdownMenuItem[]>(() =>
 
 const languageItems = computed<DropdownMenuItem[]>(() =>
   locales.value.map((item) => {
-    const to = switchLocalePath(item.code)
-
     return {
       label: item.name || item.code,
       icon: item.code === locale.value ? 'i-lucide-check' : undefined,
-      to,
       active: item.code === locale.value,
-      onSelect: () => navigateTo(to)
+      onSelect: () => {
+        if (item.code !== locale.value) {
+          void setLocale(item.code)
+        }
+      }
     }
   })
 )
