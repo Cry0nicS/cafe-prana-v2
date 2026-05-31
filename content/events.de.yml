@@ -17,7 +17,7 @@ hero:
       color: "primary"
     - label: "Private Events anfragen"
       icon: "i-lucide-mail"
-      to: "mailto:info@cafeprana.de"
+      to: "/contact"
       color: "neutral"
       variant: "outline"
 sections:

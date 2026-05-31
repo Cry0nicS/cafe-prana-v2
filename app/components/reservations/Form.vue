@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { CAFE_CONTACT_EMAIL } from '#shared/utils/constants'
 import { ReservationSchema, getReservationValidationMessage } from '#shared/utils/schemas'
 import type { ReservationPayload } from '#shared/utils/types'
 
@@ -383,7 +384,7 @@ const sendReservation = async () => {
 
     <div class="mt-5 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
       <p class="text-sm text-muted">
-        {{ t('reservations.form.urgent') }}
+        {{ t('reservations.form.urgent', { email: CAFE_CONTACT_EMAIL }) }}
       </p>
       <UButton
         type="submit"

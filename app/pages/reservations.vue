@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { CAFE_CONTACT_MAILTO } from '#shared/utils/constants'
+
 const { t } = useI18n()
 const localePath = useLocalePath()
 
@@ -41,7 +43,7 @@ useSeoMeta({
       :description="t('reservations.description')"
       :links="[{
         label: t('reservations.email'),
-        to: 'mailto:info@cafeprana.de',
+        to: CAFE_CONTACT_MAILTO,
         icon: 'i-lucide-mail',
         color: 'neutral',
         variant: 'outline'

@@ -3,7 +3,6 @@ export default defineAppConfig({
     name: 'Café Prana',
     description: 'A gluten-free and vegan haven in the heart of Berlin',
     address: 'Pasteurstraße 2, 10407 Berlin',
-    email: 'info@cafeprana.de',
     phone: '+49 152 36848480',
     instagram: 'https://instagram.com/pranacafe',
     maps: 'https://maps.app.goo.gl/MToiG3VyXv7PB8kw9',
@@ -40,10 +39,6 @@ export default defineAppConfig({
       'to': 'https://maps.app.goo.gl/MToiG3VyXv7PB8kw9',
       'target': '_blank',
       'aria-label': 'Café Prana on Google Maps'
-    }, {
-      'icon': 'i-lucide-mail',
-      'to': 'mailto:info@cafeprana.de',
-      'aria-label': 'Email Café Prana'
     }]
   }
 })

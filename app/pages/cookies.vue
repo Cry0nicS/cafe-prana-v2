@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { CAFE_CONTACT_MAILTO } from '#shared/utils/constants'
+
 const { t } = useI18n()
 
 useSeoMeta({
@@ -15,7 +17,7 @@ useSeoMeta({
       :headline="t('cookies.headline')"
       :links="[{
         label: t('cookies.contact'),
-        to: 'mailto:info@cafeprana.de',
+        to: CAFE_CONTACT_MAILTO,
         icon: 'i-lucide-mail',
         color: 'neutral',
         variant: 'outline'

@@ -23,6 +23,6 @@ export const useNavigationLinks = () => {
   }, {
     label: t('nav.contact'),
     icon: 'i-lucide-mail',
-    to: 'mailto:info@cafeprana.de'
+    to: localePath('/contact')
   }])
 }

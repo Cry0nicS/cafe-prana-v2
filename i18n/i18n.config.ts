@@ -119,7 +119,7 @@ export default defineI18nConfig(() => ({
           privacySuffix: 'It is agreed that the voluntarily provided data may be stored and used to contact you. Processing can be revoked at any time.',
           mondayUnavailable: 'Reservations are not available on Mondays. Please choose another date.',
           info: 'Reservations are requests first. Cafe Prana confirms availability by email, usually within 24 hours.',
-          urgent: 'For urgent changes, please email info{\'@\'}cafeprana.de.',
+          urgent: 'For urgent changes, please email {email}.',
           submit: 'Submit',
           validationTitle: 'Form error',
           successTitle: 'Reservation sent successfully',
@@ -145,6 +145,74 @@ export default defineI18nConfig(() => ({
             date: { invalid: 'Please choose a valid date today or later.' },
             time: { invalid: 'Please choose a valid time between 07:00 and 16:00.' },
             privacy: { required: 'Please confirm the privacy policy and consent to be contacted.' }
+          }
+        }
+      },
+      contact: {
+        seoTitle: 'Contact | Cafe Prana',
+        seoDescription: 'Contact Cafe Prana in Berlin for questions, private gatherings, reservations, menu details, or feedback.',
+        headline: 'Contact',
+        title: 'Get in touch',
+        description: 'Questions about our cafe, menu, events, or a special visit? Send a message and I will get back to you as soon as possible.',
+        directTitle: 'Direct contact',
+        directDescription: 'For quick questions, reservations, private events, or feedback.',
+        email: 'Email',
+        phone: 'Phone',
+        phoneValue: 'By appointment',
+        address: 'Address',
+        visit: 'Visit us',
+        formTitle: 'Send a message',
+        formDescription: 'Fill out the form and I will reply with the right next steps.',
+        form: {
+          firstName: 'First name',
+          firstNamePlaceholder: 'Your first name',
+          lastName: 'Last name',
+          lastNamePlaceholder: 'Your last name',
+          email: 'Email',
+          emailPlaceholder: 'you{\'@\'}example.com',
+          phone: 'Phone',
+          phonePlaceholder: 'Your phone number',
+          optional: 'Optional',
+          subject: 'Subject',
+          subjectPlaceholder: 'What is this about?',
+          message: 'Message',
+          messagePlaceholder: 'How can we help?',
+          messageHelp: 'Please write at least a few sentences.',
+          privacy: 'I agree to the processing of my details for contact purposes. The details will only be used to process this request.',
+          submit: 'Send message',
+          validationTitle: 'Form error',
+          successTitle: 'Message sent',
+          successDescription: 'Thank you! Your message has been sent.',
+          confirmationSent: 'A short confirmation was also sent to your email address.',
+          confirmationNotSent: 'The message was sent, but the confirmation email could not be sent.',
+          errorTitle: 'Could not send message',
+          errorDescription: 'Please try again later or email {email}.',
+          subjectOptions: {
+            general: 'General question',
+            reservation: 'Reservation',
+            events: 'Events',
+            menu: 'Menu',
+            feedback: 'Feedback',
+            other: 'Other'
+          },
+          errors: {
+            firstName: { required: 'First name is required.' },
+            lastName: { required: 'Last name is required.' },
+            email: {
+              required: 'Email is required.',
+              invalid: 'Please provide a valid email address.'
+            },
+            phone: { invalid: 'Please provide a valid phone number with country code.' },
+            subject: {
+              required: 'Please choose a subject.',
+              invalid: 'Please choose a valid subject.'
+            },
+            message: {
+              required: 'Message is required.',
+              min: 'Please write at least a few sentences.',
+              max: 'Please keep the message below 2000 characters.'
+            },
+            privacy: { required: 'Please agree to the processing of your details for contact purposes.' }
           }
         }
       },
@@ -300,7 +368,7 @@ export default defineI18nConfig(() => ({
           privacySuffix: 'gelesen und akzeptiere sie. Die freiwillig angegebenen Daten dürfen gespeichert und zur Kontaktaufnahme genutzt werden. Die Verarbeitung kann jederzeit widerrufen werden.',
           mondayUnavailable: 'Montags sind keine Reservierungen möglich. Bitte wähle ein anderes Datum.',
           info: 'Reservierungen sind zunächst Anfragen. Cafe Prana bestätigt die Verfügbarkeit in der Regel innerhalb von 24 Stunden per E-Mail.',
-          urgent: 'Für dringende Änderungen schreibe bitte an info{\'@\'}cafeprana.de.',
+          urgent: 'Für dringende Änderungen schreibe bitte an {email}.',
           submit: 'Absenden',
           validationTitle: 'Formularfehler',
           successTitle: 'Reservierungsanfrage gesendet',
@@ -326,6 +394,74 @@ export default defineI18nConfig(() => ({
             date: { invalid: 'Bitte wähle ein gültiges Datum ab heute.' },
             time: { invalid: 'Bitte wähle eine gültige Uhrzeit zwischen 07:00 und 16:00.' },
             privacy: { required: 'Bitte bestätige die Datenschutzrichtlinie und die Kontaktaufnahme.' }
+          }
+        }
+      },
+      contact: {
+        seoTitle: 'Kontakt | Cafe Prana',
+        seoDescription: 'Kontaktiere Cafe Prana in Berlin bei Fragen, privaten Gatherings, Reservierungen, Menüdetails oder Feedback.',
+        headline: 'Kontakt',
+        title: 'Schreib uns',
+        description: 'Du hast Fragen zum Cafe, zum Menü, zu Events oder zu einem besonderen Besuch? Sende eine Nachricht und ich melde mich so bald wie möglich.',
+        directTitle: 'Direkter Kontakt',
+        directDescription: 'Für kurze Fragen, Reservierungen, private Events oder Feedback.',
+        email: 'E-Mail',
+        phone: 'Telefon',
+        phoneValue: 'Nach Vereinbarung',
+        address: 'Adresse',
+        visit: 'Besuche uns',
+        formTitle: 'Nachricht senden',
+        formDescription: 'Fülle das Formular aus und ich melde mich mit den passenden nächsten Schritten.',
+        form: {
+          firstName: 'Vorname',
+          firstNamePlaceholder: 'Dein Vorname',
+          lastName: 'Nachname',
+          lastNamePlaceholder: 'Dein Nachname',
+          email: 'E-Mail',
+          emailPlaceholder: 'du{\'@\'}example.com',
+          phone: 'Telefon',
+          phonePlaceholder: 'Deine Telefonnummer',
+          optional: 'Optional',
+          subject: 'Thema',
+          subjectPlaceholder: 'Worum geht es?',
+          message: 'Nachricht',
+          messagePlaceholder: 'Wie können wir helfen?',
+          messageHelp: 'Bitte schreibe mindestens ein paar Sätze.',
+          privacy: 'Ich stimme der Verarbeitung meiner Angaben zum Zweck der Kontaktaufnahme zu. Die Angaben werden nur zur Bearbeitung dieser Anfrage genutzt.',
+          submit: 'Nachricht senden',
+          validationTitle: 'Formularfehler',
+          successTitle: 'Nachricht gesendet',
+          successDescription: 'Danke! Deine Nachricht wurde gesendet.',
+          confirmationSent: 'Eine kurze Bestätigung wurde zusätzlich an deine E-Mail-Adresse gesendet.',
+          confirmationNotSent: 'Die Nachricht wurde gesendet, aber die Bestätigungsmail konnte nicht verschickt werden.',
+          errorTitle: 'Nachricht konnte nicht gesendet werden',
+          errorDescription: 'Bitte versuche es später erneut oder schreibe an {email}.',
+          subjectOptions: {
+            general: 'Allgemeine Frage',
+            reservation: 'Reservierung',
+            events: 'Events',
+            menu: 'Menü',
+            feedback: 'Feedback',
+            other: 'Sonstiges'
+          },
+          errors: {
+            firstName: { required: 'Bitte gib deinen Vornamen ein.' },
+            lastName: { required: 'Bitte gib deinen Nachnamen ein.' },
+            email: {
+              required: 'Bitte gib deine E-Mail-Adresse ein.',
+              invalid: 'Bitte gib eine gültige E-Mail-Adresse ein.'
+            },
+            phone: { invalid: 'Bitte gib eine gültige Telefonnummer mit Ländervorwahl ein.' },
+            subject: {
+              required: 'Bitte wähle ein Thema aus.',
+              invalid: 'Bitte wähle ein gültiges Thema aus.'
+            },
+            message: {
+              required: 'Bitte schreibe eine Nachricht.',
+              min: 'Bitte schreibe mindestens ein paar Sätze.',
+              max: 'Bitte halte die Nachricht unter 2000 Zeichen.'
+            },
+            privacy: { required: 'Bitte stimme der Verarbeitung deiner Angaben zum Zweck der Kontaktaufnahme zu.' }
           }
         }
       },

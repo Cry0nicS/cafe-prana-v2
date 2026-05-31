@@ -1,4 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import { CAFE_CONTACT_EMAIL } from './shared/utils/constants'
+
 export default defineNuxtConfig({
 
   modules: [
@@ -26,7 +28,9 @@ export default defineNuxtConfig({
     mailgunDomain: process.env.NUXT_MAILGUN_DOMAIN || process.env.MAILGUN_DOMAIN || 'mail.cafeprana.de',
     reservationEmailFrom: process.env.NUXT_RESERVATION_EMAIL_FROM || process.env.RESERVATION_EMAIL_FROM || 'Cafe Prana <reservation@mail.cafeprana.de>',
     reservationEmailTo: process.env.NUXT_RESERVATION_EMAIL_TO || process.env.RESERVATION_EMAIL_TO || 'cafeprana.berlin@gmail.com',
-    reservationEmailBcc: process.env.NUXT_RESERVATION_EMAIL_BCC || process.env.RESERVATION_EMAIL_BCC || 'info@cafeprana.de'
+    reservationEmailBcc: process.env.NUXT_RESERVATION_EMAIL_BCC || process.env.RESERVATION_EMAIL_BCC || CAFE_CONTACT_EMAIL,
+    contactEmailFrom: process.env.NUXT_CONTACT_EMAIL_FROM || process.env.CONTACT_EMAIL_FROM || 'Cafe Prana <hello@mail.cafeprana.de>',
+    contactEmailTo: process.env.NUXT_CONTACT_EMAIL_TO || process.env.CONTACT_EMAIL_TO || CAFE_CONTACT_EMAIL
   },
 
   compatibilityDate: '2024-11-01',

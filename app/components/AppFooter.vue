@@ -1,7 +1,18 @@
 <script setup lang="ts">
+import { CAFE_CONTACT_MAILTO } from '#shared/utils/constants'
+
 const { footer, global } = useAppConfig()
 const { t } = useI18n()
 const localePath = useLocalePath()
+
+const footerLinks = computed(() => [
+  ...footer.links,
+  {
+    'icon': 'i-lucide-mail',
+    'to': CAFE_CONTACT_MAILTO,
+    'aria-label': 'Email Cafe Prana'
+  }
+])
 </script>
 
 <template>
@@ -24,7 +35,7 @@ const localePath = useLocalePath()
 
     <template #right>
       <UButton
-        v-for="(link, index) of footer.links"
+        v-for="(link, index) of footerLinks"
         :key="index"
         v-bind="{ size: 'xs', color: 'neutral', variant: 'ghost', ...link }"
       />
