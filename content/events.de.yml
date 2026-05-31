@@ -1,4 +1,7 @@
 locale: "de"
+sitemap:
+  priority: 0.8
+  changefreq: weekly
 seo:
   title: "Vegane glutenfreie Events in Berlin"
   description: "Entdecke kommende Cafe Prana Events in Berlin: vegan-glutenfreie Brunches, Community-Dinner, Kakao-Workshops und saisonale Gatherings."

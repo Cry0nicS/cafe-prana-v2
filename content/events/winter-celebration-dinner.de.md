@@ -1,6 +1,9 @@
 ---
 locale: de
 slug: winter-celebration-dinner
+sitemap:
+  priority: 0.7
+  changefreq: monthly
 title: Winter Celebration Dinner
 description: Feiere mit mir das neue Jahr beim Winter Celebration Dinner. Pranas jährliches Fünf-Gänge-Dinner verbindet saisonale Highlights und geliebte Klassiker an einem besonderen Abend.
 badge: Weihnachtswoche
