@@ -14,6 +14,11 @@ export default defineNuxtConfig({
     'motion-v/nuxt',
     'nuxt-studio'
   ],
+
+  components: [
+    { path: '~/components/content', global: true, pathPrefix: false },
+    '~/components'
+  ],
   devtools: {
     enabled: true
   },

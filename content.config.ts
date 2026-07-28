@@ -26,12 +26,6 @@ const createSeoSchema = () => z.object({
   ogImage: z.string().editor({ input: 'media' }).optional()
 })
 
-const createFeatureSchema = () => z.object({
-  title: z.string(),
-  description: z.string(),
-  icon: z.string().editor({ input: 'icon' }).optional()
-})
-
 const createLocaleSchema = () => z.enum(['en', 'de'])
 
 const createMenuLabelSchema = () => z.enum([
@@ -69,73 +63,12 @@ export default defineContentConfig({
     index: defineCollection({
       type: 'page',
       source: [
-        { include: 'index.yml', prefix: '' },
-        { include: 'index.de.yml', prefix: '' }
+        { include: 'index.md', prefix: '' },
+        { include: 'index.de.md', prefix: '' }
       ],
       schema: z.object({
         locale: createLocaleSchema(),
-        seo: createSeoSchema(),
-        hero: createBaseSchema().extend({
-          headline: z.string(),
-          image: createImageSchema(),
-          links: z.array(createButtonSchema())
-        }),
-        philosophy: createBaseSchema().extend({
-          icon: z.string().editor({ input: 'icon' }),
-          features: z.array(createFeatureSchema())
-        }),
-        menu: createBaseSchema().extend({
-          icon: z.string().editor({ input: 'icon' }),
-          items: z.array(createBaseSchema().extend({
-            image: createImageSchema()
-          })),
-          links: z.array(createButtonSchema())
-        }),
-        events: createBaseSchema().extend({
-          headline: z.string(),
-          icon: z.string().editor({ input: 'icon' }),
-          image: createImageSchema(),
-          features: z.array(createFeatureSchema()),
-          links: z.array(createButtonSchema())
-        }),
-        gallery: createBaseSchema().extend({
-          icon: z.string().editor({ input: 'icon' }),
-          images: z.array(createImageSchema())
-        }),
-        story: createBaseSchema().extend({
-          icon: z.string().editor({ input: 'icon' }),
-          image: createImageSchema()
-        }),
-        testimonials: createBaseSchema().extend({
-          icon: z.string().editor({ input: 'icon' }),
-          cta: createButtonSchema(),
-          items: z.array(z.object({
-            rating: z.number(),
-            quote: z.string(),
-            author: z.string(),
-            relativeTime: z.string().optional()
-          }))
-        }),
-        faq: createBaseSchema().extend({
-          icon: z.string().editor({ input: 'icon' }),
-          items: z.array(z.object({
-            label: z.string().nonempty(),
-            content: z.string().nonempty()
-          }))
-        }),
-        directions: createBaseSchema().extend({
-          id: z.string(),
-          mapEmbedUrl: z.string(),
-          links: z.array(createButtonSchema()),
-          hours: z.object({
-            heading: z.string(),
-            items: z.array(z.object({
-              day: z.string(),
-              time: z.string(),
-              closed: z.boolean().optional()
-            }))
-          })
-        })
+        seo: createSeoSchema()
       })
     }),
     menuPage: defineCollection({

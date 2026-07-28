@@ -11,6 +11,12 @@ export default defineI18nConfig(() => ({
         reservations: 'Reservations',
         contact: 'Contact'
       },
+      home: {
+        hero: { menu: 'Menu Highlights', directions: 'Get Directions' },
+        menu: { explore: 'Explore the full menu', book: 'Book a table' },
+        events: { explore: 'Explore all events', reserve: 'Reserve your seat' },
+        directions: { get: 'Get Directions' }
+      },
       language: {
         label: 'Language',
         switch: 'Switch language'
@@ -259,6 +265,12 @@ export default defineI18nConfig(() => ({
         events: 'Events',
         reservations: 'Reservieren',
         contact: 'Kontakt'
+      },
+      home: {
+        hero: { menu: 'Menü-Highlights', directions: 'Anfahrt' },
+        menu: { explore: 'Vollständiges Menü entdecken', book: 'Tisch reservieren' },
+        events: { explore: 'Alle Events entdecken', reserve: 'Platz reservieren' },
+        directions: { get: 'Anfahrt' }
       },
       language: {
         label: 'Sprache',
