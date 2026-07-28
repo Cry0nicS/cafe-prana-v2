@@ -37,6 +37,15 @@ const createMenuLabelSchema = () => z.enum([
   'organic'
 ])
 
+// The menu category slugs. Used for both a category's `slug` and a menu
+// item's `category`, so Studio renders a dropdown and the two can't drift.
+// Adding a new category means adding its slug here (a quick dev change).
+const createMenuCategorySchema = () => z.enum([
+  'drinksCoffee',
+  'drinksHot',
+  'food'
+])
+
 const createEventCategorySchema = () => z.enum([
   'breakfast',
   'brunch',
@@ -96,7 +105,7 @@ export default defineContentConfig({
       source: 'menu-categories/*.yml',
       schema: z.object({
         locale: createLocaleSchema(),
-        slug: z.string().nonempty(),
+        slug: createMenuCategorySchema(),
         title: z.string().nonempty(),
         description: z.string().optional(),
         options: z.string().optional(),
@@ -110,7 +119,7 @@ export default defineContentConfig({
       schema: z.object({
         locale: createLocaleSchema(),
         title: z.string().nonempty(),
-        category: z.string().nonempty(),
+        category: createMenuCategorySchema(),
         description: z.string().nonempty(),
         ingredients: z.string().nonempty(),
         price: z.string().nonempty(),
