@@ -45,10 +45,6 @@ useCafeSeo({
   description,
   image: () => page.value?.seo.ogImage || page.value?.hero.image.src
 })
-
-if (page.value.seo.ogImage) {
-  defineOgImage({ url: page.value.seo.ogImage })
-}
 </script>
 
 <template>

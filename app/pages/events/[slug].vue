@@ -171,10 +171,6 @@ useCafeSeo({
   type: 'article'
 })
 
-if (image.value) {
-  defineOgImage({ url: image.value })
-}
-
 useHead(() => ({
   script: [{
     type: 'application/ld+json',
