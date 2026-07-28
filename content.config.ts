@@ -186,13 +186,6 @@ export default defineContentConfig({
           url: z.string().optional(),
           note: z.string().optional()
         }),
-        details: z.object({
-          concept: z.string().nonempty(),
-          menuNote: z.string().optional(),
-          expectations: z.array(z.string().nonempty()),
-          forWho: z.string().optional(),
-          reservation: z.string().optional()
-        }),
         tags: z.array(createEventTagSchema()),
         featured: z.boolean().optional(),
         seo: createSeoSchema().optional()

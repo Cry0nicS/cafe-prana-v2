@@ -26,17 +26,6 @@ booking:
   label: Platz reservieren
   url: /reservations
   note: Reservierung wegen begrenzter Plätze empfohlen. Bitte reserviere über www.cafeprana.de.
-details:
-  concept: Ein großzügiges pflanzliches Brunch-Buffet mit saisonalen und festlichen Gerichten, das du in gemütlicher Atmosphäre in deinem Tempo genießen kannst.
-  menuNote: Das Buffet ist vollständig pflanzlich und glutenfrei, mit einer Auswahl süßer und herzhafter saisonaler Optionen.
-  expectations:
-    - Pflanzliches Brunch-Buffet
-    - Glutenfrei
-    - Vegan
-    - Entspannte Feiertagsatmosphäre
-    - Saisonale Bio-Zutaten
-  forWho: Ideal für alle, die den Weihnachtstag mit einem nährenden und stressfreien Brunch genießen möchten.
-  reservation: Reservierung wegen begrenzter Plätze empfohlen. Bitte reserviere über www.cafeprana.de.
 tags:
   - vegan
   - gluten-free
@@ -48,3 +37,21 @@ seo:
   description: Genieße ein festliches, pflanzliches und glutenfreies Weihnachts-Brunch-Buffet im Cafe Prana in Berlin.
   ogImage: /images/events/posts/christmas-brunch-buffet-hero.png
 ---
+
+Ein großzügiges pflanzliches Brunch-Buffet mit saisonalen und festlichen Gerichten, das du in gemütlicher Atmosphäre in deinem Tempo genießen kannst.
+
+::callout{icon="i-lucide-info"}
+Das Buffet ist vollständig pflanzlich und glutenfrei, mit einer Auswahl süßer und herzhafter saisonaler Optionen.
+::
+
+### Was dich erwartet
+
+- Pflanzliches Brunch-Buffet
+- Glutenfrei
+- Vegan
+- Entspannte Feiertagsatmosphäre
+- Saisonale Bio-Zutaten
+
+### Für wen ist das?
+
+Ideal für alle, die den Weihnachtstag mit einem nährenden und stressfreien Brunch genießen möchten.

@@ -31,8 +31,13 @@ The page is rendered by `app/pages/index.vue` with `<ContentRenderer :value="pag
 | `::faq` | `Faq` | `icon, title, description` | `::faq-item` children | — |
 | `::faq-item` | `FaqItem` | `label` | default slot = answer prose | ✅ reusable |
 | `::directions` | `Directions` | `title, description, hoursHeading, hours[]` | — (map + CTAs from code) | no |
+| `::callout` | `Callout` | `icon, title` | default slot = note text | ✅ reusable |
 
 Note `Feature` is shared by both `FeatureGrid` (Philosophy) and `EventsIntro` (Events) — reuse it wherever a feature card is needed.
+
+**These components are global**, so they work in *any* MDC document — not just the homepage.
+Event pages (`content/events/*.md`) use `::callout` and can use `::feature-grid`, `::gallery`,
+etc. in their freeform body.
 
 ## MDC nesting rule
 

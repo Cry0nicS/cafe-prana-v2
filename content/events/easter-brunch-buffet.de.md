@@ -26,17 +26,6 @@ booking:
   label: Platz reservieren
   url: /reservations
   note: Reservierung wegen begrenzter Plätze erforderlich. Bitte reserviere über www.cafeprana.de.
-details:
-  concept: Ein großzügiges pflanzliches Brunch-Buffet mit saisonalen und festlichen Gerichten, das du in gemütlicher Atmosphäre in deinem Tempo genießen kannst.
-  menuNote: Das Buffet ist vollständig pflanzlich und glutenfrei, mit süßen und herzhaften saisonalen Optionen.
-  expectations:
-    - Pflanzliches Brunch-Buffet
-    - Glutenfrei
-    - Vegan
-    - Entspannte Frühlingsatmosphäre
-    - Saisonale Bio-Zutaten
-  forWho: Ideal für alle, die Ostern mit einem nährenden und stressfreien Brunch genießen möchten.
-  reservation: Reservierung wegen begrenzter Plätze erforderlich. Bitte reserviere über www.cafeprana.de.
 tags:
   - vegan
   - gluten-free
@@ -49,3 +38,21 @@ seo:
   description: Genieße ein festliches pflanzliches und glutenfreies Oster-Brunch-Buffet im Cafe Prana in Berlin.
   ogImage: /images/events/posts/easter-brunch-buffet-hero.png
 ---
+
+Ein großzügiges pflanzliches Brunch-Buffet mit saisonalen und festlichen Gerichten, das du in gemütlicher Atmosphäre in deinem Tempo genießen kannst.
+
+::callout{icon="i-lucide-info"}
+Das Buffet ist vollständig pflanzlich und glutenfrei, mit süßen und herzhaften saisonalen Optionen.
+::
+
+### Was dich erwartet
+
+- Pflanzliches Brunch-Buffet
+- Glutenfrei
+- Vegan
+- Entspannte Frühlingsatmosphäre
+- Saisonale Bio-Zutaten
+
+### Für wen ist das?
+
+Ideal für alle, die Ostern mit einem nährenden und stressfreien Brunch genießen möchten.

@@ -26,16 +26,6 @@ booking:
   label: Platz reservieren
   url: /reservations
   note: Reservierung erforderlich. Dieses Event ist exklusiv für besondere Gäste. Bitte reserviere über www.cafeprana.de.
-details:
-  concept: Ein Frühstück im Buffet-Stil mit saisonalen pflanzlichen Gerichten, gedacht für Verbindung, Gespräche und einen ruhigen Start in den Tag.
-  menuNote: Alle Gerichte sind pflanzlich und glutenfrei und werden mit Bio-Zutaten zubereitet.
-  expectations:
-    - Pflanzliches Frühstücksbuffet
-    - Glutenfreie Optionen
-    - Gemütliche Morgenatmosphäre
-    - Begrenzte Plätze
-  forWho: Für eingeladene Gäste, die ein langsames und nährendes Community-Frühstück genießen möchten.
-  reservation: Reservierung erforderlich. Dieses Event ist exklusiv für besondere Gäste. Bitte reserviere über www.cafeprana.de.
 tags:
   - vegan
   - gluten-free
@@ -49,3 +39,20 @@ seo:
   description: Ein entspanntes pflanzliches und glutenfreies Community-Frühstück für besondere Gäste im Cafe Prana in Berlin.
   ogImage: /images/events/posts/community-breakfast-hero.png
 ---
+
+Ein Frühstück im Buffet-Stil mit saisonalen pflanzlichen Gerichten, gedacht für Verbindung, Gespräche und einen ruhigen Start in den Tag.
+
+::callout{icon="i-lucide-info"}
+Alle Gerichte sind pflanzlich und glutenfrei und werden mit Bio-Zutaten zubereitet.
+::
+
+### Was dich erwartet
+
+- Pflanzliches Frühstücksbuffet
+- Glutenfreie Optionen
+- Gemütliche Morgenatmosphäre
+- Begrenzte Plätze
+
+### Für wen ist das?
+
+Für eingeladene Gäste, die ein langsames und nährendes Community-Frühstück genießen möchten.

@@ -26,17 +26,6 @@ booking:
   label: Platz reservieren
   url: /reservations
   note: Reservierung erforderlich, da die Plätze begrenzt sind. Bitte buche über www.cafeprana.de oder direkt im Café.
-details:
-  concept: Ein Fünf-Gänge-Prana-Best-of-Dinner, inspiriert von winterlichen Aromen und saisonalen Zutaten, gedacht als langsames und intimes Dinner-Erlebnis.
-  menuNote: Zwischen Lebkuchen, Kürbis-Paté, veganer Gravy und Kastanienmousse erwartet dich ein sorgfältig kuratiertes Menü, das pflanzliche Küche feiert.
-  expectations:
-    - Fünf-Gänge-Dinner
-    - 100% pflanzlich und glutenfrei
-    - Saisonale, bewusst ausgewählte Zutaten
-    - Festliche und intime Atmosphäre
-    - Begrüßungsdrink inklusive
-  forWho: Perfekt für alle, die saisonale Küche, pflanzliches Kochen und einen bewussten Start ins neue Jahr lieben.
-  reservation: Reservierung erforderlich, da die Plätze begrenzt sind. Bitte buche über www.cafeprana.de oder direkt im Café.
 tags:
   - vegan
   - gluten-free
@@ -49,3 +38,21 @@ seo:
   description: Ein pflanzliches und glutenfreies Fünf-Gänge-Winter-Dinner im Cafe Prana in Berlin.
   ogImage: /images/events/posts/winter-celebration-dinner-hero.png
 ---
+
+Ein Fünf-Gänge-Prana-Best-of-Dinner, inspiriert von winterlichen Aromen und saisonalen Zutaten, gedacht als langsames und intimes Dinner-Erlebnis.
+
+::callout{icon="i-lucide-info"}
+Zwischen Lebkuchen, Kürbis-Paté, veganer Gravy und Kastanienmousse erwartet dich ein sorgfältig kuratiertes Menü, das pflanzliche Küche feiert.
+::
+
+### Was dich erwartet
+
+- Fünf-Gänge-Dinner
+- 100% pflanzlich und glutenfrei
+- Saisonale, bewusst ausgewählte Zutaten
+- Festliche und intime Atmosphäre
+- Begrüßungsdrink inklusive
+
+### Für wen ist das?
+
+Perfekt für alle, die saisonale Küche, pflanzliches Kochen und einen bewussten Start ins neue Jahr lieben.
