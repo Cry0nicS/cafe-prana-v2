@@ -74,7 +74,7 @@ export default defineNuxtConfig({
     vueI18n: './i18n.config.ts'
   },
   studio: {
-    route: '/admin',
+    route: '/pranas',
     repository: {
       provider: 'github',
       owner: 'Cry0nicS',
