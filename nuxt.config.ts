@@ -10,7 +10,6 @@ export default defineNuxtConfig({
     '@nuxt/content',
     '@nuxtjs/i18n',
     '@vueuse/nuxt',
-    'nuxt-og-image',
     'motion-v/nuxt',
     'nuxt-studio'
   ],
