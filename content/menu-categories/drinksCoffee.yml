@@ -1,0 +1,7 @@
+locale: "en"
+slug: "drinksCoffee"
+title: "Coffee Specials"
+description: "Specialty coffee prepared with plant-based milk options."
+options: "Choose your favorite: oat-almond blend, oat-coconut blend, homemade cashew-coconut mylk, soy, almond"
+icon: "i-lucide-coffee"
+order: 1

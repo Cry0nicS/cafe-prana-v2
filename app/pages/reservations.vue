@@ -26,12 +26,10 @@ const features = computed(() => [{
   icon: 'i-lucide-refresh-cw'
 }])
 
-useSeoMeta({
+useCafeSeo({
   title: () => t('reservations.seoTitle'),
-  ogTitle: () => t('reservations.seoTitle'),
   description: () => t('reservations.seoDescription'),
-  ogDescription: () => t('reservations.seoDescription'),
-  ogImage: '/images/hero.png'
+  image: '/images/hero.png'
 })
 </script>
 

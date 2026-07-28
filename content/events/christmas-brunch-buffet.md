@@ -26,17 +26,6 @@ booking:
   label: Reserve your seat
   url: /reservations
   note: Reservation recommended due to limited availability. Please reserve via www.cafeprana.de.
-details:
-  concept: A generous plant based brunch buffet featuring seasonal and festive dishes, inviting you to enjoy at your own pace in a cozy atmosphere.
-  menuNote: The buffet is fully plant based and gluten free, with a variety of sweet and savory seasonal options.
-  expectations:
-    - Plant based brunch buffet
-    - Gluten free
-    - Vegan
-    - Relaxed holiday atmosphere
-    - Seasonal and organic ingredients
-  forWho: Ideal for anyone who wants to enjoy Christmas Day with a nourishing and stress free brunch experience.
-  reservation: Reservation recommended due to limited availability. Please reserve via www.cafeprana.de.
 tags:
   - vegan
   - gluten-free
@@ -48,3 +37,21 @@ seo:
   description: Enjoy a festive plant based and gluten free Christmas brunch buffet at Café Prana in Berlin.
   ogImage: /images/events/posts/christmas-brunch-buffet-hero.png
 ---
+
+A generous plant based brunch buffet featuring seasonal and festive dishes, inviting you to enjoy at your own pace in a cozy atmosphere.
+
+::callout{icon="i-lucide-info"}
+The buffet is fully plant based and gluten free, with a variety of sweet and savory seasonal options.
+::
+
+### What to expect
+
+- Plant based brunch buffet
+- Gluten free
+- Vegan
+- Relaxed holiday atmosphere
+- Seasonal and organic ingredients
+
+### Who this is for
+
+Ideal for anyone who wants to enjoy Christmas Day with a nourishing and stress free brunch experience.

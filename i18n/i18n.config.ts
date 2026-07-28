@@ -11,6 +11,12 @@ export default defineI18nConfig(() => ({
         reservations: 'Reservations',
         contact: 'Contact'
       },
+      home: {
+        hero: { menu: 'Menu Highlights', directions: 'Get Directions' },
+        menu: { explore: 'Explore the full menu', book: 'Book a table' },
+        events: { explore: 'Explore all events', reserve: 'Reserve your seat' },
+        directions: { get: 'Get Directions' }
+      },
       language: {
         label: 'Language',
         switch: 'Switch language'
@@ -75,8 +81,8 @@ export default defineI18nConfig(() => ({
         }
       },
       reservations: {
-        seoTitle: 'Reservations | Cafe Prana',
-        seoDescription: 'Plan your visit to Cafe Prana in Berlin and request a table for a special moment, relaxed gathering, or quiet date.',
+        seoTitle: 'Reserve a Table at Cafe Prana Berlin',
+        seoDescription: 'Request a table at Cafe Prana in Berlin Prenzlauer Berg for gluten-free vegan brunch, coffee, lunch, gatherings, or a relaxed visit.',
         headline: 'Reservations',
         title: 'Plan Your Visit to Cafe Prana',
         description: 'Whether you are planning a special moment, a relaxed gathering, or a quiet date, reserving your table helps me prepare a comfortable setting just for you.',
@@ -149,8 +155,8 @@ export default defineI18nConfig(() => ({
         }
       },
       contact: {
-        seoTitle: 'Contact | Cafe Prana',
-        seoDescription: 'Contact Cafe Prana in Berlin for questions, private gatherings, reservations, menu details, or feedback.',
+        seoTitle: 'Contact Cafe Prana Berlin',
+        seoDescription: 'Contact Cafe Prana in Berlin Prenzlauer Berg for reservations, private gatherings, vegan gluten-free menu questions, events, or feedback.',
         headline: 'Contact',
         title: 'Get in touch',
         description: 'Questions about our cafe, menu, events, or a special visit? Send a message and I will get back to you as soon as possible.',
@@ -217,7 +223,7 @@ export default defineI18nConfig(() => ({
         }
       },
       cookies: {
-        seoTitle: 'Cookie Policy',
+        seoTitle: 'Cookie Policy | Cafe Prana',
         seoDescription: 'Learn how Cafe Prana uses necessary local storage and privacy-friendly Vercel Web Analytics.',
         headline: 'Privacy notice',
         title: 'Cookie Policy',
@@ -259,6 +265,12 @@ export default defineI18nConfig(() => ({
         events: 'Events',
         reservations: 'Reservieren',
         contact: 'Kontakt'
+      },
+      home: {
+        hero: { menu: 'Menü-Highlights', directions: 'Anfahrt' },
+        menu: { explore: 'Vollständiges Menü entdecken', book: 'Tisch reservieren' },
+        events: { explore: 'Alle Events entdecken', reserve: 'Platz reservieren' },
+        directions: { get: 'Anfahrt' }
       },
       language: {
         label: 'Sprache',
@@ -324,8 +336,8 @@ export default defineI18nConfig(() => ({
         }
       },
       reservations: {
-        seoTitle: 'Reservierungen | Cafe Prana',
-        seoDescription: 'Plane deinen Besuch im Cafe Prana in Berlin und frage einen Tisch für einen besonderen Moment, ein entspanntes Treffen oder ein ruhiges Date an.',
+        seoTitle: 'Tisch reservieren im Cafe Prana Berlin',
+        seoDescription: 'Frage einen Tisch im Cafe Prana in Berlin Prenzlauer Berg an fuer glutenfreien veganen Brunch, Kaffee, Lunch, Gatherings oder einen entspannten Besuch.',
         headline: 'Reservierungen',
         title: 'Plane deinen Besuch im Cafe Prana',
         description: 'Ob besonderer Moment, entspanntes Treffen oder ruhiges Date: Mit einer Reservierungsanfrage kann ich einen passenden Platz für dich vorbereiten.',
@@ -398,8 +410,8 @@ export default defineI18nConfig(() => ({
         }
       },
       contact: {
-        seoTitle: 'Kontakt | Cafe Prana',
-        seoDescription: 'Kontaktiere Cafe Prana in Berlin bei Fragen, privaten Gatherings, Reservierungen, Menüdetails oder Feedback.',
+        seoTitle: 'Kontakt Cafe Prana Berlin',
+        seoDescription: 'Kontaktiere Cafe Prana in Berlin Prenzlauer Berg fuer Reservierungen, private Gatherings, Fragen zum vegan-glutenfreien Menue, Events oder Feedback.',
         headline: 'Kontakt',
         title: 'Schreib uns',
         description: 'Du hast Fragen zum Cafe, zum Menü, zu Events oder zu einem besonderen Besuch? Sende eine Nachricht und ich melde mich so bald wie möglich.',
@@ -466,7 +478,7 @@ export default defineI18nConfig(() => ({
         }
       },
       cookies: {
-        seoTitle: 'Cookie-Richtlinie',
+        seoTitle: 'Cookie-Richtlinie | Cafe Prana',
         seoDescription: 'Erfahre, wie Cafe Prana notwendige lokale Speicherung und datenschutzfreundliche Vercel Web Analytics nutzt.',
         headline: 'Datenschutzhinweis',
         title: 'Cookie-Richtlinie',

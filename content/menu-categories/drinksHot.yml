@@ -1,0 +1,7 @@
+locale: "en"
+slug: "drinksHot"
+title: "Hot Drinks"
+description: "Heartwarming non-coffee drinks, cacao, chai, matcha, and golden milk."
+options: "Choose your favorite: oat-almond blend, oat-coconut blend, homemade cashew-coconut mylk, soy, rice-coconut, hazelnut, almond"
+icon: "i-lucide-cup-soda"
+order: 2

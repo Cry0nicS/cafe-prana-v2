@@ -26,16 +26,6 @@ booking:
   label: Platz reservieren
   url: /reservations
   note: Reservierung empfohlen. Bitte buche über www.cafeprana.de oder reserviere direkt im Café.
-details:
-  concept: Ein gemütliches pflanzliches Drei-Gänge-Dinner, das Weihnachten achtsam und herzlich feiert, mit Fokus auf saisonale Aromen und Zusammensein.
-  menuNote: Das Menü ist vollständig pflanzlich und glutenfrei und wird mit biologischen, saisonalen Zutaten zubereitet.
-  expectations:
-    - Drei-Gänge-Weihnachtsdinner
-    - 100% pflanzlich und glutenfrei
-    - Warme, gemeinschaftliche Atmosphäre
-    - Saisonale Bio-Zutaten
-  forWho: Perfekt für Freundinnen, Freunde, Familien und alle, die Heiligabend entspannt und achtsam verbringen möchten.
-  reservation: Reservierung empfohlen. Bitte buche über www.cafeprana.de oder reserviere direkt im Café.
 tags:
   - vegan
   - gluten-free
@@ -48,3 +38,20 @@ seo:
   description: Feiere Heiligabend mit einem pflanzlichen, glutenfreien Drei-Gänge-Community-Dinner im Cafe Prana in Berlin.
   ogImage: /images/events/posts/community-xmas-dinner-hero.png
 ---
+
+Ein gemütliches pflanzliches Drei-Gänge-Dinner, das Weihnachten achtsam und herzlich feiert, mit Fokus auf saisonale Aromen und Zusammensein.
+
+::callout{icon="i-lucide-info"}
+Das Menü ist vollständig pflanzlich und glutenfrei und wird mit biologischen, saisonalen Zutaten zubereitet.
+::
+
+### Was dich erwartet
+
+- Drei-Gänge-Weihnachtsdinner
+- 100% pflanzlich und glutenfrei
+- Warme, gemeinschaftliche Atmosphäre
+- Saisonale Bio-Zutaten
+
+### Für wen ist das?
+
+Perfekt für Freundinnen, Freunde, Familien und alle, die Heiligabend entspannt und achtsam verbringen möchten.

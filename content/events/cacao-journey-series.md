@@ -27,18 +27,6 @@ booking:
   label: Reserve your spot
   url: /reservations
   note: Reservation recommended. Book via www.cafeprana.de or reserve your spot in person at the café.
-details:
-  concept: The series begins with a Ritual Cacao Workshop with Lea from Nature Soul on 22 February to meet the plant, learn about its effects, prepare cacao together, and receive an introduction to mindful ritual use. Then follow five weekly sessions with intuitive movement, sharing circles, and inner work. The journey concludes on 29 March with a cacao ceremony to integrate and open into spring.
-  menuNote: Ceremonial cacao will be served - plant-based, non-alcoholic, and prepared with care. (Please inform us of any sensitivities.)
-  expectations:
-    - Ritual cacao
-    - Intuitive movement
-    - Sharing circles and inner work
-    - Moments of stillness
-    - Gentle guidance
-    - Community connection
-  forWho: For anyone curious to connect with heart, body, and soul - supported by a plant that tastes delicious and fosters deep connection.
-  reservation: Reservation recommended. Book via www.cafeprana.de or reserve your spot in person at the café.
 tags:
   - vegan
   - community
@@ -48,3 +36,22 @@ seo:
   description: A heartfelt ceremonial cacao workshop series with movement, sharing circles, stillness, and community at Café Prana in Berlin.
   ogImage: /images/events/posts/cacao-journey-series-hero.png
 ---
+
+The series begins with a Ritual Cacao Workshop with Lea from Nature Soul on 22 February to meet the plant, learn about its effects, prepare cacao together, and receive an introduction to mindful ritual use. Then follow five weekly sessions with intuitive movement, sharing circles, and inner work. The journey concludes on 29 March with a cacao ceremony to integrate and open into spring.
+
+::callout{icon="i-lucide-info"}
+Ceremonial cacao will be served - plant-based, non-alcoholic, and prepared with care. (Please inform us of any sensitivities.)
+::
+
+### What to expect
+
+- Ritual cacao
+- Intuitive movement
+- Sharing circles and inner work
+- Moments of stillness
+- Gentle guidance
+- Community connection
+
+### Who this is for
+
+For anyone curious to connect with heart, body, and soul - supported by a plant that tastes delicious and fosters deep connection.

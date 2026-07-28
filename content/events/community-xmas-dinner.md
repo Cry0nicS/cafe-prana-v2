@@ -26,16 +26,6 @@ booking:
   label: Reserve your seat
   url: /reservations
   note: Reservation recommended. Please book via www.cafeprana.de or reserve a spot at the café in person.
-details:
-  concept: A cozy three course plant based dinner created to celebrate Christmas in a mindful and welcoming way, focusing on seasonal flavors and togetherness.
-  menuNote: The menu is fully plant based and gluten free, prepared with organic and seasonal ingredients.
-  expectations:
-    - Three course Christmas dinner
-    - 100% plant based and gluten free
-    - Warm and communal atmosphere
-    - Seasonal, organic ingredients
-  forWho: Perfect for friends, families, and anyone who wants to spend Christmas Eve in a relaxed and mindful setting.
-  reservation: Reservation recommended. Please book via www.cafeprana.de or reserve a spot at the café in person.
 tags:
   - vegan
   - gluten-free
@@ -48,3 +38,20 @@ seo:
   description: Celebrate Christmas Eve with a three course plant based, gluten free community dinner at Café Prana in Berlin.
   ogImage: /images/events/posts/community-xmas-dinner-hero.png
 ---
+
+A cozy three course plant based dinner created to celebrate Christmas in a mindful and welcoming way, focusing on seasonal flavors and togetherness.
+
+::callout{icon="i-lucide-info"}
+The menu is fully plant based and gluten free, prepared with organic and seasonal ingredients.
+::
+
+### What to expect
+
+- Three course Christmas dinner
+- 100% plant based and gluten free
+- Warm and communal atmosphere
+- Seasonal, organic ingredients
+
+### Who this is for
+
+Perfect for friends, families, and anyone who wants to spend Christmas Eve in a relaxed and mindful setting.

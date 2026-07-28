@@ -34,32 +34,38 @@ export default defineEventHandler(async (event) => {
 
   const client = useServerSupabaseClient()
 
+  const reservationData: ReservationInsert = {
+    date: result.data.date.toString(),
+    email: result.data.email,
+    first_name: result.data.firstName,
+    guests: result.data.guests,
+    last_name: result.data.lastName,
+    message: result.data.message ?? null,
+    phone: result.data.phone,
+    // Record proof + time of consent (schema guarantees it was given).
+    privacy_consent: new Date().toISOString(),
+    time: result.data.time.toString()
+  }
+
+  // Store the reservation first. insertReservation throws a 500 on failure,
+  // so if this rejects nothing was saved and the guest sees a genuine error.
+  const reservation = await insertReservation(client, reservationData)
+
+  // The reservation is safely stored at this point. A failed notification
+  // email must NOT fail the request, or the guest would resubmit and create a
+  // duplicate. Report it via `emailSent` and log it instead.
+  let emailSent = true
+
   try {
-    const reservationData: ReservationInsert = {
-      date: result.data.date.toString(),
-      email: result.data.email,
-      first_name: result.data.firstName,
-      guests: result.data.guests,
-      last_name: result.data.lastName,
-      message: result.data.message ?? null,
-      phone: result.data.phone,
-      time: result.data.time.toString()
-    }
-
-    const reservation = await insertReservation(client, reservationData)
-
     await sendReservationEmail(reservation)
-
-    return {
-      message: 'Reservation updated successfully',
-      reservation
-    }
   } catch (error) {
-    throw createError({
-      statusCode: 500,
-      statusMessage: 'Error while creating reservation',
-      message: error instanceof Error ? error.message : String(error),
-      data: error
-    })
+    emailSent = false
+    console.error('Reservation stored but notification email failed', error)
+  }
+
+  return {
+    message: 'Reservation created successfully',
+    emailSent,
+    reservation
   }
 })

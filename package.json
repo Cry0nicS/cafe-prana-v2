@@ -10,7 +10,8 @@
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "typecheck": "nuxt typecheck"
+    "typecheck": "nuxt typecheck",
+    "check:content": "node scripts/check-content-parity.mjs"
   },
   "dependencies": {
     "@iconify-json/lucide": "^1.2.103",
@@ -28,13 +29,13 @@
     "mailgun.js": "^13.0.1",
     "motion-v": "^2.2.1",
     "nuxt": "^4.4.2",
-    "nuxt-og-image": "^5.1.13",
     "nuxt-studio": "^1.6.1",
     "tailwindcss": "^4.2.4",
     "zod": "^4.4.3"
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.15.2",
+    "@types/node": "^22.20.1",
     "eslint": "^10.2.1",
     "typescript": "^6.0.3",
     "vite": "^7.3.3",

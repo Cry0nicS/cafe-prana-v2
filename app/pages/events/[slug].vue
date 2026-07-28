@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { CAFE_SITE_URL } from '#shared/utils/constants'
 import {
   compareEventsDesc,
   formatEventDate,
@@ -12,7 +13,6 @@ const route = useRoute()
 const { locale, t } = useI18n()
 const localePath = useLocalePath()
 const localizePath = useLocalizedPath()
-const siteUrl = 'https://www.cafeprana.de'
 const slug = computed(() => String(route.params.slug))
 
 const [{ data: rawEvent }, { data: eventsIndex }, { data: events }] = await Promise.all([
@@ -100,7 +100,7 @@ const toAbsoluteUrl = (value?: string) => {
     return undefined
   }
 
-  return `${siteUrl}${value.startsWith('/') ? value : `/${value}`}`
+  return `${CAFE_SITE_URL}${value.startsWith('/') ? value : `/${value}`}`
 }
 
 const eventJsonLd = computed(() => {
@@ -136,7 +136,7 @@ const eventJsonLd = computed(() => {
     'organizer': {
       '@type': 'Organization',
       'name': 'Cafe Prana',
-      'url': siteUrl
+      'url': CAFE_SITE_URL
     },
     'url': toAbsoluteUrl(currentEvent.path)
   }
@@ -164,17 +164,12 @@ const eventJsonLd = computed(() => {
 
 const getTagLabel = (tag: string) => t(`event.tagLabels.${tag}`)
 
-useSeoMeta({
+useCafeSeo({
   title,
-  ogTitle: title,
   description,
-  ogDescription: description,
-  ogImage: image
+  image,
+  type: 'article'
 })
-
-if (image.value) {
-  defineOgImage({ url: image.value })
-}
 
 useHead(() => ({
   script: [{
@@ -332,59 +327,23 @@ useHead(() => ({
 
     <UPageSection
       :title="t('event.about')"
-      :description="event.details.menuNote"
       :ui="{
         container: 'pt-0!'
       }"
     >
-      <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
-        <div class="space-y-6">
-          <section class="rounded-lg border border-default bg-default p-6">
-            <h2 class="text-2xl font-semibold text-highlighted">
-              {{ t('event.concept') }}
-            </h2>
-            <p class="mt-3 leading-7 text-muted">
-              {{ event.details.concept }}
-            </p>
-          </section>
-
-          <section
-            v-if="event.details.forWho"
-            class="rounded-lg border border-default bg-default p-6"
-          >
-            <h2 class="text-2xl font-semibold text-highlighted">
-              {{ t('event.forWho') }}
-            </h2>
-            <p class="mt-3 leading-7 text-muted">
-              {{ event.details.forWho }}
-            </p>
-          </section>
+      <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start">
+        <div class="min-w-0">
+          <ContentRenderer
+            v-if="event.body"
+            :value="event"
+          />
         </div>
 
-        <div class="space-y-6">
-          <section class="rounded-lg border border-default bg-muted/30 p-6">
-            <h2 class="text-xl font-semibold text-highlighted">
-              {{ t('event.expectations') }}
-            </h2>
-            <ul class="mt-4 space-y-3">
-              <li
-                v-for="item in event.details.expectations"
-                :key="item"
-                class="flex gap-3 text-sm leading-6 text-muted"
-              >
-                <UIcon
-                  name="i-lucide-check"
-                  class="mt-1 size-4 shrink-0 text-primary"
-                />
-                <span>{{ item }}</span>
-              </li>
-            </ul>
-          </section>
-
-          <section
-            v-if="event.tags.length"
-            class="rounded-lg border border-default bg-muted/30 p-6"
-          >
+        <aside
+          v-if="event.tags.length"
+          class="lg:sticky lg:top-24"
+        >
+          <div class="rounded-lg border border-default bg-muted/30 p-6">
             <h2 class="text-xl font-semibold text-highlighted">
               {{ t('event.tags') }}
             </h2>
@@ -397,8 +356,8 @@ useHead(() => ({
                 variant="soft"
               />
             </div>
-          </section>
-        </div>
+          </div>
+        </aside>
       </div>
     </UPageSection>
 

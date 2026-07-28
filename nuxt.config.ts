@@ -10,9 +10,13 @@ export default defineNuxtConfig({
     '@nuxt/content',
     '@nuxtjs/i18n',
     '@vueuse/nuxt',
-    'nuxt-og-image',
     'motion-v/nuxt',
     'nuxt-studio'
+  ],
+
+  components: [
+    { path: '~/components/content', global: true, pathPrefix: false },
+    '~/components'
   ],
   devtools: {
     enabled: true
@@ -69,6 +73,7 @@ export default defineNuxtConfig({
     vueI18n: './i18n.config.ts'
   },
   studio: {
+    route: '/pranas',
     repository: {
       provider: 'github',
       owner: 'Cry0nicS',

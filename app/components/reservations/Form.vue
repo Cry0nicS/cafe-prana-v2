@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { CAFE_CONTACT_EMAIL } from '#shared/utils/constants'
+import { CAFE_CLOSED_WEEKDAYS, CAFE_CONTACT_EMAIL, CAFE_RESERVATION_TIME } from '#shared/utils/constants'
 import { ReservationSchema, getReservationValidationMessage } from '#shared/utils/schemas'
-import type { ReservationPayload } from '#shared/utils/types'
 
-type FieldKey
-  = | 'firstName'
-    | 'lastName'
-    | 'email'
-    | 'phone'
-    | 'date'
-    | 'time'
-    | 'guests'
-    | 'message'
-    | 'privacyConsent'
+type ReservationFormState = {
+  firstName: string
+  lastName: string
+  email: string
+  phone: string
+  date: string
+  time: string
+  guests: number
+  message: string
+  privacyConsent: boolean
+}
 
 type ServerError = {
   data?: {
@@ -31,8 +31,6 @@ const localePath = useLocalePath()
 const isSubmitting = ref(false)
 const showModal = ref(false)
 
-const formId = useId()
-
 const todayInput = () => {
   const now = new Date()
   const year = now.getFullYear()
@@ -42,7 +40,7 @@ const todayInput = () => {
   return `${year}-${month}-${day}`
 }
 
-const defaultState = () => ({
+const defaultState = (): ReservationFormState => ({
   firstName: '',
   lastName: '',
   email: '',
@@ -54,64 +52,34 @@ const defaultState = () => ({
   privacyConsent: false
 })
 
-const formState = reactive(defaultState())
+const formState = reactive<ReservationFormState>(defaultState())
 
-const fieldIds = computed<Record<FieldKey, string>>(() => ({
-  firstName: `${formId}-first-name`,
-  lastName: `${formId}-last-name`,
-  email: `${formId}-email`,
-  phone: `${formId}-phone`,
-  date: `${formId}-date`,
-  time: `${formId}-time`,
-  guests: `${formId}-guests`,
-  message: `${formId}-message`,
-  privacyConsent: `${formId}-privacy-consent`
-}))
-
-const parseDate = (date: string) => {
-  const [year, month, day] = date.split('-').map(Number)
-
-  return {
-    year: year ?? Number.NaN,
-    month: month ?? Number.NaN,
-    day: day ?? Number.NaN
-  }
-}
-
-const parseTime = (time: string) => {
-  const [hour, minute = 0] = time.split(':').map(Number)
-
-  return {
-    hour: hour ?? Number.NaN,
-    minute,
-    second: 0
-  }
-}
-
-const isDateUnavailable = (date: string) => {
-  if (!date) return false
-
-  const { year, month, day } = parseDate(date)
-
-  if (year === 2026 && month === 1 && day === 5) {
+const isClosedDay = (date: string) => {
+  if (!date) {
     return false
   }
 
-  return new Date(year, month - 1, day, 12).getDay() === 1
+  const [year, month, day] = date.split('-').map(Number)
+
+  if (!year || !month || !day) {
+    return false
+  }
+
+  return CAFE_CLOSED_WEEKDAYS.includes(new Date(year, month - 1, day).getDay())
 }
 
-const dateUnavailable = computed(() => isDateUnavailable(formState.date))
+const dateUnavailable = computed(() => isClosedDay(formState.date))
 
-const buildPayload = (): ReservationPayload => ({
-  firstName: formState.firstName,
-  lastName: formState.lastName,
-  email: formState.email,
-  phone: formState.phone,
-  date: parseDate(formState.date),
-  time: parseTime(formState.time),
-  guests: formState.guests,
-  message: formState.message,
-  privacyConsent: formState.privacyConsent
+const buildPayload = (state: ReservationFormState) => ({
+  firstName: state.firstName,
+  lastName: state.lastName,
+  email: state.email,
+  phone: state.phone,
+  date: state.date,
+  time: state.time,
+  guests: state.guests,
+  message: state.message,
+  privacyConsent: state.privacyConsent
 })
 
 const resetFormData = () => {
@@ -126,6 +94,23 @@ const translateReservationMessage = (message?: string) => {
   return getReservationValidationMessage(message)
 }
 
+const validateReservation = (state: ReservationFormState) => {
+  const result = ReservationSchema.safeParse(buildPayload(state))
+
+  const errors = result.success
+    ? []
+    : result.error.issues.map(issue => ({
+        name: issue.path.map(String).join('.'),
+        message: translateReservationMessage(issue.message)
+      }))
+
+  if (isClosedDay(state.date) && !errors.some(error => error.name === 'date')) {
+    errors.push({ name: 'date', message: t('reservations.form.mondayUnavailable') })
+  }
+
+  return errors
+}
+
 const getErrorDescription = (error: unknown) => {
   const serverError = error as ServerError
   const issueMessage = serverError.data?.data?.[0]?.message
@@ -134,37 +119,15 @@ const getErrorDescription = (error: unknown) => {
   return translateReservationMessage(issueMessage || fallbackMessage)
 }
 
-const showValidationError = (message?: string) => {
-  toast.add({
-    title: t('reservations.form.validationTitle'),
-    description: translateReservationMessage(message),
-    color: 'error',
-    icon: 'i-lucide-shield-alert'
-  })
-}
-
 const sendReservation = async () => {
   if (isSubmitting.value) return
-
-  if (dateUnavailable.value) {
-    showValidationError(t('reservations.form.mondayUnavailable'))
-    return
-  }
-
-  const payload = buildPayload()
-  const result = ReservationSchema.safeParse(payload)
-
-  if (!result.success) {
-    showValidationError(result.error.issues[0]?.message)
-    return
-  }
 
   isSubmitting.value = true
 
   try {
     await $fetch('/api/reservations', {
       method: 'POST',
-      body: payload
+      body: buildPayload(formState)
     })
 
     toast.add({
@@ -190,188 +153,149 @@ const sendReservation = async () => {
 </script>
 
 <template>
-  <form
+  <UForm
+    :state="formState"
+    :validate="validateReservation"
+    :disabled="isSubmitting"
     class="rounded-lg border border-default bg-elevated/80 p-4 shadow-sm sm:p-6"
-    @submit.prevent="sendReservation"
+    @submit="sendReservation"
   >
-    <fieldset
-      :disabled="isSubmitting"
-      class="space-y-5 disabled:opacity-70"
-    >
+    <fieldset class="space-y-5 disabled:opacity-70">
       <div class="grid gap-4 sm:grid-cols-2">
-        <div>
-          <label
-            :for="fieldIds.firstName"
-            class="block text-sm font-medium text-highlighted"
-          >
-            {{ t('reservations.form.firstName') }}
-          </label>
-          <input
-            :id="fieldIds.firstName"
+        <UFormField
+          name="firstName"
+          :label="t('reservations.form.firstName')"
+          required
+        >
+          <UInput
             v-model="formState.firstName"
-            class="mt-2 w-full rounded-md border border-default bg-default px-3 py-2.5 text-sm text-highlighted outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
-            type="text"
+            class="w-full"
             autocomplete="given-name"
             :placeholder="t('reservations.form.firstName')"
-            required
-          >
-        </div>
+          />
+        </UFormField>
 
-        <div>
-          <label
-            :for="fieldIds.lastName"
-            class="block text-sm font-medium text-highlighted"
-          >
-            {{ t('reservations.form.lastName') }}
-          </label>
-          <input
-            :id="fieldIds.lastName"
+        <UFormField
+          name="lastName"
+          :label="t('reservations.form.lastName')"
+          required
+        >
+          <UInput
             v-model="formState.lastName"
-            class="mt-2 w-full rounded-md border border-default bg-default px-3 py-2.5 text-sm text-highlighted outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
-            type="text"
+            class="w-full"
             autocomplete="family-name"
             :placeholder="t('reservations.form.lastName')"
-            required
-          >
-        </div>
+          />
+        </UFormField>
       </div>
 
       <div class="grid gap-4 sm:grid-cols-2">
-        <div>
-          <label
-            :for="fieldIds.email"
-            class="block text-sm font-medium text-highlighted"
-          >
-            {{ t('reservations.form.email') }}
-          </label>
-          <input
-            :id="fieldIds.email"
+        <UFormField
+          name="email"
+          :label="t('reservations.form.email')"
+          required
+        >
+          <UInput
             v-model="formState.email"
-            class="mt-2 w-full rounded-md border border-default bg-default px-3 py-2.5 text-sm text-highlighted outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+            class="w-full"
             type="email"
             autocomplete="email"
             placeholder="you@example.com"
-            required
-          >
-        </div>
+          />
+        </UFormField>
 
-        <div>
-          <label
-            :for="fieldIds.phone"
-            class="block text-sm font-medium text-highlighted"
-          >
-            {{ t('reservations.form.phone') }}
-          </label>
-          <input
-            :id="fieldIds.phone"
+        <UFormField
+          name="phone"
+          :label="t('reservations.form.phone')"
+        >
+          <UInput
             v-model="formState.phone"
-            class="mt-2 w-full rounded-md border border-default bg-default px-3 py-2.5 text-sm text-highlighted outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+            class="w-full"
             type="tel"
             autocomplete="tel"
             placeholder="+49 345 678 9012"
-          >
-        </div>
+          />
+        </UFormField>
       </div>
 
       <div class="grid gap-4 sm:grid-cols-[1fr_1fr_120px]">
-        <div>
-          <label
-            :for="fieldIds.date"
-            class="block text-sm font-medium text-highlighted"
-          >
-            {{ t('reservations.form.date') }}
-          </label>
-          <input
-            :id="fieldIds.date"
-            v-model="formState.date"
-            class="mt-2 w-full rounded-md border border-default bg-default px-3 py-2.5 text-sm text-highlighted outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
-            type="date"
-            :min="todayInput()"
-            required
-          >
-          <p
-            v-if="dateUnavailable"
-            class="mt-2 text-sm text-error"
-          >
-            {{ t('reservations.form.mondayUnavailable') }}
-          </p>
-        </div>
-
-        <div>
-          <label
-            :for="fieldIds.time"
-            class="block text-sm font-medium text-highlighted"
-          >
-            {{ t('reservations.form.time') }}
-          </label>
-          <input
-            :id="fieldIds.time"
-            v-model="formState.time"
-            class="mt-2 w-full rounded-md border border-default bg-default px-3 py-2.5 text-sm text-highlighted outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
-            type="time"
-            min="07:00"
-            max="16:00"
-            step="900"
-            required
-          >
-        </div>
-
-        <div>
-          <label
-            :for="fieldIds.guests"
-            class="block text-sm font-medium text-highlighted"
-          >
-            {{ t('reservations.form.guests') }}
-          </label>
-          <input
-            :id="fieldIds.guests"
-            v-model.number="formState.guests"
-            class="mt-2 w-full rounded-md border border-default bg-default px-3 py-2.5 text-sm text-highlighted outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
-            type="number"
-            min="1"
-            max="20"
-            inputmode="numeric"
-            required
-          >
-        </div>
-      </div>
-
-      <div>
-        <label
-          :for="fieldIds.message"
-          class="block text-sm font-medium text-highlighted"
-        >
-          {{ t('reservations.form.message') }}
-        </label>
-        <textarea
-          :id="fieldIds.message"
-          v-model="formState.message"
-          class="mt-2 min-h-28 w-full rounded-md border border-default bg-default px-3 py-2.5 text-sm text-highlighted outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
-          maxlength="1000"
-          :placeholder="t('reservations.form.messagePlaceholder')"
-        />
-      </div>
-
-      <label class="flex items-start gap-3 rounded-md bg-muted/50 p-3 text-sm leading-6 text-toned">
-        <input
-          :id="fieldIds.privacyConsent"
-          v-model="formState.privacyConsent"
-          class="mt-1 size-4 rounded border-default accent-primary"
-          type="checkbox"
+        <UFormField
+          name="date"
+          :label="t('reservations.form.date')"
+          :error="dateUnavailable ? t('reservations.form.mondayUnavailable') : undefined"
           required
         >
-        <span>
-          {{ t('reservations.form.privacyPrefix') }}
-          <NuxtLink
-            :to="localePath('/cookies')"
-            class="font-medium text-primary underline-offset-4 hover:underline"
-            target="_blank"
-          >
-            {{ t('reservations.form.privacyLink') }}
-          </NuxtLink>.
-          {{ t('reservations.form.privacySuffix') }}
-        </span>
-      </label>
+          <UInput
+            v-model="formState.date"
+            class="w-full"
+            type="date"
+            :min="todayInput()"
+          />
+        </UFormField>
+
+        <UFormField
+          name="time"
+          :label="t('reservations.form.time')"
+          required
+        >
+          <UInput
+            v-model="formState.time"
+            class="w-full"
+            type="time"
+            :min="CAFE_RESERVATION_TIME.min"
+            :max="CAFE_RESERVATION_TIME.max"
+            :step="CAFE_RESERVATION_TIME.step"
+          />
+        </UFormField>
+
+        <UFormField
+          name="guests"
+          :label="t('reservations.form.guests')"
+          required
+        >
+          <UInput
+            v-model.number="formState.guests"
+            class="w-full"
+            type="number"
+            :min="1"
+            :max="20"
+            inputmode="numeric"
+          />
+        </UFormField>
+      </div>
+
+      <UFormField
+        name="message"
+        :label="t('reservations.form.message')"
+      >
+        <UTextarea
+          v-model="formState.message"
+          class="w-full"
+          :rows="4"
+          :maxlength="1000"
+          :placeholder="t('reservations.form.messagePlaceholder')"
+        />
+      </UFormField>
+
+      <UFormField name="privacyConsent">
+        <label class="flex items-start gap-3 rounded-md bg-muted/50 p-3 text-sm leading-6 text-toned">
+          <UCheckbox
+            v-model="formState.privacyConsent"
+            class="mt-0.5"
+          />
+          <span>
+            {{ t('reservations.form.privacyPrefix') }}
+            <NuxtLink
+              :to="localePath('/cookies')"
+              class="font-medium text-primary underline-offset-4 hover:underline"
+              target="_blank"
+            >
+              {{ t('reservations.form.privacyLink') }}
+            </NuxtLink>.
+            {{ t('reservations.form.privacySuffix') }}
+          </span>
+        </label>
+      </UFormField>
     </fieldset>
 
     <UAlert
@@ -421,5 +345,5 @@ const sendReservation = async () => {
         </UButton>
       </template>
     </UModal>
-  </form>
+  </UForm>
 </template>

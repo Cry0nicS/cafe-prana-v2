@@ -27,18 +27,6 @@ booking:
   label: Platz reservieren
   url: /reservations
   note: Reservierung empfohlen. Buche über www.cafeprana.de oder reserviere deinen Platz direkt im Café.
-details:
-  concept: Die Reihe beginnt am 22. Februar mit einem Ritual Cacao Workshop mit Lea von Nature Soul. Du lernst die Pflanze kennen, erfährst mehr über ihre Wirkung, bereitest Kakao gemeinsam zu und bekommst eine Einführung in achtsame Ritualpraxis. Danach folgen fünf wöchentliche Sessions mit intuitiver Bewegung, Sharing Circles und innerer Arbeit. Am 29. März schließen wir mit einer Kakaozeremonie zur Integration und Öffnung in den Frühling.
-  menuNote: Es wird zeremonieller Kakao serviert, pflanzlich, alkoholfrei und liebevoll zubereitet. Bitte informiere uns über mögliche Sensitivitäten.
-  expectations:
-    - Ritual-Kakao
-    - Intuitive Bewegung
-    - Sharing Circles und innere Arbeit
-    - Momente der Stille
-    - Sanfte Begleitung
-    - Verbindung in der Community
-  forWho: Für alle, die sich mit Herz, Körper und Seele verbinden möchten, unterstützt von einer Pflanze, die köstlich schmeckt und tiefe Verbindung fördern kann.
-  reservation: Reservierung empfohlen. Buche über www.cafeprana.de oder reserviere deinen Platz direkt im Café.
 tags:
   - vegan
   - community
@@ -48,3 +36,22 @@ seo:
   description: Eine zeremonielle Kakao-Workshop-Reihe mit Bewegung, Sharing Circles, Stille und Community im Cafe Prana in Berlin.
   ogImage: /images/events/posts/cacao-journey-series-hero.png
 ---
+
+Die Reihe beginnt am 22. Februar mit einem Ritual Cacao Workshop mit Lea von Nature Soul. Du lernst die Pflanze kennen, erfährst mehr über ihre Wirkung, bereitest Kakao gemeinsam zu und bekommst eine Einführung in achtsame Ritualpraxis. Danach folgen fünf wöchentliche Sessions mit intuitiver Bewegung, Sharing Circles und innerer Arbeit. Am 29. März schließen wir mit einer Kakaozeremonie zur Integration und Öffnung in den Frühling.
+
+::callout{icon="i-lucide-info"}
+Es wird zeremonieller Kakao serviert, pflanzlich, alkoholfrei und liebevoll zubereitet. Bitte informiere uns über mögliche Sensitivitäten.
+::
+
+### Was dich erwartet
+
+- Ritual-Kakao
+- Intuitive Bewegung
+- Sharing Circles und innere Arbeit
+- Momente der Stille
+- Sanfte Begleitung
+- Verbindung in der Community
+
+### Für wen ist das?
+
+Für alle, die sich mit Herz, Körper und Seele verbinden möchten, unterstützt von einer Pflanze, die köstlich schmeckt und tiefe Verbindung fördern kann.

@@ -26,16 +26,6 @@ booking:
   label: Reserve your seat
   url: /reservations
   note: Reservation required. This event is available exclusively for my special guests. Please reserve via www.cafeprana.de.
-details:
-  concept: A morning buffet style breakfast with seasonal plant based dishes, designed for connection, conversation, and a calm start to the day.
-  menuNote: All dishes are plant based and gluten free, made with organic ingredients.
-  expectations:
-    - Plant based breakfast buffet
-    - Gluten free options
-    - Cozy morning atmosphere
-    - Limited availability
-  forWho: For invited guests who would like to enjoy a slow and nourishing community breakfast.
-  reservation: Reservation required. This event is available exclusively for my special guests. Please reserve via www.cafeprana.de.
 tags:
   - vegan
   - gluten-free
@@ -49,3 +39,20 @@ seo:
   description: A relaxed plant based and gluten free community breakfast for special guests at Café Prana in Berlin.
   ogImage: /images/events/posts/community-breakfast-hero.png
 ---
+
+A morning buffet style breakfast with seasonal plant based dishes, designed for connection, conversation, and a calm start to the day.
+
+::callout{icon="i-lucide-info"}
+All dishes are plant based and gluten free, made with organic ingredients.
+::
+
+### What to expect
+
+- Plant based breakfast buffet
+- Gluten free options
+- Cozy morning atmosphere
+- Limited availability
+
+### Who this is for
+
+For invited guests who would like to enjoy a slow and nourishing community breakfast.
