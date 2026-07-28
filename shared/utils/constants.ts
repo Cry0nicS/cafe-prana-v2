@@ -17,3 +17,8 @@ export const CAFE_GEO = {
   latitude: 52.53430503505275,
   longitude: 13.428888413148465
 }
+// Weekdays the cafe is closed for reservations (0 = Sunday, 1 = Monday, ...).
+// Keep in sync with the opening hours shown on the homepage.
+export const CAFE_CLOSED_WEEKDAYS = [1]
+// Reservation time window (matches the ReservationSchema validation).
+export const CAFE_RESERVATION_TIME = { min: '07:00', max: '16:00', step: 900 }
