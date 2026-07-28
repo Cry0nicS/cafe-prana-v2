@@ -1,0 +1,7 @@
+locale: "de"
+slug: "drinksHot"
+title: "Warme Getränke"
+description: "Wärmende Getränke ohne Kaffee, Kakao, Chai, Matcha und Golden Milk."
+options: "Wähle deinen Favoriten: Hafer-Mandel-Blend, Hafer-Kokos-Blend, hausgemachte Cashew-Kokos-Mylk, Soja, Reis-Kokos, Haselnuss, Mandel"
+icon: "i-lucide-cup-soda"
+order: 2

@@ -1,0 +1,7 @@
+locale: "de"
+slug: "drinksCoffee"
+title: "Coffee Specials"
+description: "Specialty Coffee mit pflanzlichen Milchalternativen."
+options: "Wähle deinen Favoriten: Hafer-Mandel-Blend, Hafer-Kokos-Blend, hausgemachte Cashew-Kokos-Mylk, Soja, Mandel"
+icon: "i-lucide-coffee"
+order: 1

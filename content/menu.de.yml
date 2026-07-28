@@ -12,37 +12,6 @@ hero:
   image:
     src: "/images/menu/brunch.png"
     alt: "Pflanzlicher Brunch-Teller im Cafe Prana"
-  links:
-    - label: "Coffee Specials"
-      to: "#drinksCoffee"
-      icon: "i-lucide-coffee"
-      color: "primary"
-    - label: "Warme Getränke"
-      to: "#drinksHot"
-      icon: "i-lucide-cup-soda"
-      color: "neutral"
-      variant: "outline"
-    - label: "Food & Brunch"
-      to: "#food"
-      icon: "i-lucide-utensils"
-      color: "neutral"
-      variant: "outline"
-categories:
-  - id: drinksCoffee
-    title: "Coffee Specials"
-    description: "Specialty Coffee mit pflanzlichen Milchalternativen."
-    options: "Wähle deinen Favoriten: Hafer-Mandel-Blend, Hafer-Kokos-Blend, hausgemachte Cashew-Kokos-Mylk, Soja, Mandel"
-    icon: "i-lucide-coffee"
-  - id: drinksHot
-    title: "Warme Getränke"
-    description: "Wärmende Getränke ohne Kaffee, Kakao, Chai, Matcha und Golden Milk."
-    options: "Wähle deinen Favoriten: Hafer-Mandel-Blend, Hafer-Kokos-Blend, hausgemachte Cashew-Kokos-Mylk, Soja, Reis-Kokos, Haselnuss, Mandel"
-    icon: "i-lucide-cup-soda"
-  - id: food
-    title: "Food & Brunch"
-    description: "Nährende süße und herzhafte Gerichte mit glutenfreien Grundlagen und saisonalen Toppings."
-    options: "Die Toppings des Tages werden sorgfältig aufeinander abgestimmt."
-    icon: "i-lucide-utensils"
 labels:
   - id: gluten-free
     label: "Glutenfrei"

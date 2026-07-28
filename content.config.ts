@@ -82,21 +82,26 @@ export default defineContentConfig({
         seo: createSeoSchema(),
         hero: createBaseSchema().extend({
           headline: z.string(),
-          image: createImageSchema(),
-          links: z.array(createButtonSchema())
+          image: createImageSchema()
         }),
-        categories: z.array(z.object({
-          id: z.string(),
-          title: z.string(),
-          description: z.string().optional(),
-          options: z.string().optional(),
-          icon: z.string().editor({ input: 'icon' }).optional()
-        })),
         labels: z.array(z.object({
           id: createMenuLabelSchema(),
           label: z.string(),
           icon: z.string().editor({ input: 'icon' }).optional()
         })).optional()
+      })
+    }),
+    menuCategories: defineCollection({
+      type: 'data',
+      source: 'menu-categories/*.yml',
+      schema: z.object({
+        locale: createLocaleSchema(),
+        slug: z.string().nonempty(),
+        title: z.string().nonempty(),
+        description: z.string().optional(),
+        options: z.string().optional(),
+        icon: z.string().editor({ input: 'icon' }).optional(),
+        order: z.number()
       })
     }),
     menuItems: defineCollection({

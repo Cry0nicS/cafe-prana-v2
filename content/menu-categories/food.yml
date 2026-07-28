@@ -1,0 +1,7 @@
+locale: "en"
+slug: "food"
+title: "Food & Brunch"
+description: "Nourishing sweet and savory dishes with gluten-free bases and seasonal toppings."
+options: "Toppings of the day are chosen with care to complement each other."
+icon: "i-lucide-utensils"
+order: 3

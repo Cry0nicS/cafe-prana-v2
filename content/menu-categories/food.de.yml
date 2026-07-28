@@ -1,0 +1,7 @@
+locale: "de"
+slug: "food"
+title: "Food & Brunch"
+description: "Nährende süße und herzhafte Gerichte mit glutenfreien Grundlagen und saisonalen Toppings."
+options: "Die Toppings des Tages werden sorgfältig aufeinander abgestimmt."
+icon: "i-lucide-utensils"
+order: 3

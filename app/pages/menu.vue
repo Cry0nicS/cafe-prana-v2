@@ -1,19 +1,15 @@
 <script setup lang="ts">
-type Category = {
-  id: string
-  title: string
-  description?: string
-  options?: string
-  icon?: string
-}
-
 const { locale, t } = useI18n()
-const localizeLinks = useLocalizedLinks()
 
-const [{ data: page }, { data: items }] = await Promise.all([
+const [{ data: page }, { data: categories }, { data: items }] = await Promise.all([
   useAsyncData(
     `menu-page-${locale.value}`,
     () => queryCollection('menuPage').where('locale', '=', locale.value).first(),
+    { watch: [locale] }
+  ),
+  useAsyncData(
+    `menu-categories-${locale.value}`,
+    () => queryCollection('menuCategories').where('locale', '=', locale.value).order('order', 'ASC').all(),
     { watch: [locale] }
   ),
   useAsyncData(
@@ -31,14 +27,6 @@ if (!page.value) {
   })
 }
 
-if (!items.value) {
-  throw createError({
-    statusCode: 404,
-    statusMessage: 'Menu items not found',
-    fatal: true
-  })
-}
-
 useCafeSeo({
   title: page.value.seo.title,
   description: page.value.seo.description,
@@ -50,14 +38,23 @@ const labelLookup = computed(() =>
 )
 
 const categoriesWithItems = computed(() =>
-  page.value!.categories.map((category: Category) => ({
+  (categories.value ?? []).map(category => ({
     ...category,
-    items: items.value!.filter(item => item.category === category.id)
+    items: (items.value ?? []).filter(item => item.category === category.slug)
   })).filter(category => category.items.length)
 )
 
 const totalItems = computed(() => items.value?.length ?? 0)
-const heroLinks = computed(() => localizeLinks(page.value?.hero.links))
+
+const heroLinks = computed(() =>
+  categoriesWithItems.value.map((category, index) => ({
+    label: category.title,
+    to: `#${category.slug}`,
+    icon: category.icon,
+    color: 'neutral' as const,
+    variant: index === 0 ? 'solid' as const : 'outline' as const
+  }))
+)
 
 function scrollToCategory(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -92,13 +89,13 @@ function scrollToCategory(id: string) {
       <div class="flex gap-2 overflow-x-auto">
         <UButton
           v-for="category in categoriesWithItems"
-          :key="category.id"
+          :key="category.slug"
           :icon="category.icon"
           color="neutral"
           variant="soft"
           size="sm"
           class="shrink-0"
-          @click="scrollToCategory(category.id)"
+          @click="scrollToCategory(category.slug)"
         >
           {{ category.title }}
         </UButton>
@@ -118,14 +115,14 @@ function scrollToCategory(id: string) {
           <ul class="mt-4 space-y-1">
             <li
               v-for="category in categoriesWithItems"
-              :key="category.id"
+              :key="category.slug"
             >
               <UButton
                 :icon="category.icon"
                 color="neutral"
                 variant="ghost"
                 class="w-full justify-start"
-                @click="scrollToCategory(category.id)"
+                @click="scrollToCategory(category.slug)"
               >
                 {{ category.title }}
               </UButton>
@@ -137,8 +134,8 @@ function scrollToCategory(id: string) {
       <div class="min-w-0 space-y-14">
         <section
           v-for="category in categoriesWithItems"
-          :id="category.id"
-          :key="category.id"
+          :id="category.slug"
+          :key="category.slug"
           class="scroll-mt-32"
         >
           <div class="mb-6">

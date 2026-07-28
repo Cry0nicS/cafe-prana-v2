@@ -12,37 +12,6 @@ hero:
   image:
     src: "/images/menu/brunch.png"
     alt: "Plant-based brunch plate at Café Prana"
-  links:
-    - label: "Coffee Specials"
-      to: "#drinksCoffee"
-      icon: "i-lucide-coffee"
-      color: "primary"
-    - label: "Hot Drinks"
-      to: "#drinksHot"
-      icon: "i-lucide-cup-soda"
-      color: "neutral"
-      variant: "outline"
-    - label: "Food & Brunch"
-      to: "#food"
-      icon: "i-lucide-utensils"
-      color: "neutral"
-      variant: "outline"
-categories:
-  - id: drinksCoffee
-    title: "Coffee Specials"
-    description: "Specialty coffee prepared with plant-based milk options."
-    options: "Choose your favorite: oat-almond blend, oat-coconut blend, homemade cashew-coconut mylk, soy, almond"
-    icon: "i-lucide-coffee"
-  - id: drinksHot
-    title: "Hot Drinks"
-    description: "Heartwarming non-coffee drinks, cacao, chai, matcha, and golden milk."
-    options: "Choose your favorite: oat-almond blend, oat-coconut blend, homemade cashew-coconut mylk, soy, rice-coconut, hazelnut, almond"
-    icon: "i-lucide-cup-soda"
-  - id: food
-    title: "Food & Brunch"
-    description: "Nourishing sweet and savory dishes with gluten-free bases and seasonal toppings."
-    options: "Toppings of the day are chosen with care to complement each other."
-    icon: "i-lucide-utensils"
 labels:
   - id: gluten-free
     label: "Gluten-free"
