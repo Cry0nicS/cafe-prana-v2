@@ -1,13 +1,6 @@
 locale: "en"
-sitemap:
-  priority: 0.9
-  changefreq: weekly
 title: "Menu"
 description: "Discover Café Prana's gluten-free and vegan menu, featuring nourishing brunches, wholesome lunches, and heartwarming drinks made from organic, plant-based ingredients."
-seo:
-  title: "Gluten-Free Vegan Menu in Berlin"
-  description: "Explore Cafe Prana's 100% gluten-free vegan menu in Berlin with organic brunch, nourishing lunch, specialty coffee, cacao, matcha, and warm drinks."
-  ogImage: "/images/hero.png"
 hero:
   headline: "Fresh, nourishing, plant based"
   title: "Menu"

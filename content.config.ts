@@ -22,13 +22,22 @@ const createImageSchema = () => z.object({
   alt: z.string()
 })
 
+// SEO is derived in code from each page's title/description/image, so the field
+// is hidden from the Studio editor on every collection that uses this helper.
 const createSeoSchema = () => z.object({
   title: z.string(),
   description: z.string(),
   ogImage: z.string().editor({ input: 'media' }).optional()
-})
+}).editor({ hidden: true })
 
-const createSitemapSchema = (options?: DefineSitemapSchemaOptions) => defineSitemapSchema({ z, ...options })
+// Standard hidden navigation field shared by the page collections.
+const createHiddenNavigation = () => z.boolean().default(false).editor({ hidden: true })
+
+// Sitemap entries use fixed defaults / code-driven URLs, so this field is
+// hidden from the Studio editor everywhere it is used. It is also optional:
+// Studio drops hidden fields when it rewrites a file, and an optional field
+// keeps that from breaking content validation (the onUrl override still runs).
+const createSitemapSchema = (options?: DefineSitemapSchemaOptions) => defineSitemapSchema({ z, ...options }).optional().editor({ hidden: true })
 
 const createLocaleSchema = () => z.enum(['en', 'de'])
 
@@ -66,7 +75,7 @@ export default defineContentConfig({
             url.loc = entry.locale === 'de' ? '/de' : '/'
           }
         }),
-        seo: createSeoSchema()
+        navigation: createHiddenNavigation()
       })
     }),
     menuPage: defineCollection({
@@ -83,7 +92,7 @@ export default defineContentConfig({
             url.loc = entry.locale === 'de' ? '/de/menu' : '/menu'
           }
         }),
-        seo: createSeoSchema(),
+        navigation: createHiddenNavigation(),
         hero: createBaseSchema().extend({
           headline: z.string(),
           image: createImageSchema()
@@ -137,7 +146,7 @@ export default defineContentConfig({
             url.loc = entry.locale === 'de' ? '/de/events' : '/events'
           }
         }),
-        seo: createSeoSchema(),
+        navigation: createHiddenNavigation(),
         hero: createBaseSchema().extend({
           headline: z.string(),
           image: createImageSchema(),
@@ -165,13 +174,18 @@ export default defineContentConfig({
       source: 'events/*.md',
       schema: z.object({
         locale: createLocaleSchema(),
+        // Hidden in Studio: the URL is derived from the file name, SEO is
+        // derived from the fields below, and the sitemap uses fixed defaults.
         sitemap: createSitemapSchema({
           name: 'events',
           onUrl: (url, entry) => {
-            url.loc = entry.locale === 'de' ? `/de/events/${entry.slug}` : `/events/${entry.slug}`
+            // Inlined (this runs in Nitro, so no external helper references):
+            // derive the slug from the file stem, e.g. `events/spring-brunch.de` -> `spring-brunch`.
+            const slug = String(entry.stem ?? '').replace(/^events\//, '').replace(/\.de$/, '')
+            url.loc = entry.locale === 'de' ? `/de/events/${slug}` : `/events/${slug}`
           }
         }),
-        slug: z.string().nonempty(),
+        navigation: createHiddenNavigation(),
         title: z.string().nonempty(),
         description: z.string().nonempty(),
         date: z.date(),
@@ -180,7 +194,7 @@ export default defineContentConfig({
         paid: z.boolean().default(false),
         price: z.number().optional(),
         reservation: z.enum(['required', 'recommended', 'walkin']).default('recommended'),
-        seo: createSeoSchema().optional()
+        seo: createSeoSchema().optional().editor({ hidden: true })
       })
     })
   }

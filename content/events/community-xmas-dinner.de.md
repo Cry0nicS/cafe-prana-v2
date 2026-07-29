@@ -1,9 +1,5 @@
 ---
 locale: de
-slug: community-xmas-dinner
-sitemap:
-  priority: 0.7
-  changefreq: monthly
 title: "Community Xmas Dinner"
 description: "Feiere Heiligabend mit meinem Community Xmas Dinner im Cafe Prana. Ein warmer Abend mit nährendem Essen, gemeinsamen Tischen und festlicher Atmosphäre."
 date: 2025-12-24

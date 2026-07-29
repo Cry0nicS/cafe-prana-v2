@@ -1,9 +1,5 @@
 ---
 locale: en
-slug: winter-celebration-dinner
-sitemap:
-  priority: 0.7
-  changefreq: monthly
 title: "Winter Celebration Dinner"
 description: "Let me celebrate the New Year with my Winter Celebration Dinner. Prana's annual five course dinner brings together seasonal highlights and beloved classics in one special evening."
 date: 2026-01-05

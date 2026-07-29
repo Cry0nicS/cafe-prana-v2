@@ -1,9 +1,5 @@
 ---
 locale: en
-slug: community-breakfast
-sitemap:
-  priority: 0.7
-  changefreq: monthly
 title: "Community Breakfast"
 description: "Start the day with my Community Breakfast at Café Prana. A relaxed morning gathering with nourishing food, warm drinks, and a welcoming community vibe."
 date: 2025-12-28

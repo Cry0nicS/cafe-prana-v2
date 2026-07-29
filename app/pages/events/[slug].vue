@@ -7,6 +7,7 @@ import {
 } from '#shared/utils/constants'
 import {
   compareEventsDesc,
+  eventSlug,
   formatEventDate,
   formatEventPrice,
   getEventDateIso,
@@ -19,13 +20,15 @@ const { global } = useAppConfig()
 const { locale, t } = useI18n()
 const localePath = useLocalePath()
 const slug = computed(() => String(route.params.slug))
+// URL slug maps back to the file stem: en -> `events/<slug>`, de -> `events/<slug>.de`.
+const stem = computed(() => locale.value === 'de' ? `events/${slug.value}.de` : `events/${slug.value}`)
 
 const [{ data: rawEvent }, { data: events }] = await Promise.all([
   useAsyncData(
     `event-${locale.value}-${slug.value}`,
     () => queryCollection('events')
       .where('locale', '=', locale.value)
-      .where('slug', '=', slug.value)
+      .where('stem', '=', stem.value)
       .first(),
     { watch: [locale, slug] }
   ),
@@ -47,7 +50,7 @@ if (!rawEvent.value) {
 const event = computed(() => rawEvent.value
   ? {
       ...rawEvent.value,
-      path: localePath(`/events/${rawEvent.value.slug}`)
+      path: localePath(`/events/${slug.value}`)
     }
   : null
 )
@@ -80,10 +83,10 @@ const relatedEvents = computed(() => {
   }
 
   return (events.value || [])
-    .filter(item => item.slug !== event.value?.slug)
+    .filter(item => eventSlug(item.stem) !== slug.value)
     .map(item => ({
       ...item,
-      path: localePath(`/events/${item.slug}`)
+      path: localePath(`/events/${eventSlug(item.stem)}`)
     }))
     .sort(compareEventsDesc)
     .slice(0, 3)

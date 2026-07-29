@@ -28,9 +28,9 @@ if (!page.value) {
 }
 
 useCafeSeo({
-  title: page.value.seo.title,
-  description: page.value.seo.description,
-  image: page.value.seo.ogImage
+  title: () => t('seo.menu.title'),
+  description: () => t('seo.menu.description'),
+  image: '/images/hero.png'
 })
 
 const labelLookup = computed(() =>

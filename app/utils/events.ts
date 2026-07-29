@@ -51,3 +51,9 @@ export const compareEventsDesc = (a: EventLike, b: EventLike) => {
 export const getEventDateIso = (value: EventDateValue) => {
   return toEventDate(value).toISOString().slice(0, 10)
 }
+
+// An event's URL slug is derived from its file name: `events/spring-brunch.md`
+// and `events/spring-brunch.de.md` both resolve to the slug `spring-brunch`.
+export const eventSlug = (stem?: string) => {
+  return String(stem ?? '').replace(/^events\//, '').replace(/\.de$/, '')
+}

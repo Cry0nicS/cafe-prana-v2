@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { CAFE_CONTACT_MAILTO } from '#shared/utils/constants'
-import { compareEventsAsc, compareEventsDesc, isUpcomingEvent } from '~/utils/events'
+import { compareEventsAsc, compareEventsDesc, eventSlug, isUpcomingEvent } from '~/utils/events'
 
 const { locale, t } = useI18n()
 const localePath = useLocalePath()
@@ -30,20 +30,18 @@ if (!page.value) {
 const allEvents = computed(() =>
   (events.value || []).map(event => ({
     ...event,
-    path: localePath(`/events/${event.slug}`)
+    path: localePath(`/events/${eventSlug(event.stem)}`)
   }))
 )
 const upcomingEvents = computed(() => allEvents.value.filter(event => isUpcomingEvent(event)).sort(compareEventsAsc))
 const pastEvents = computed(() => allEvents.value.filter(event => !isUpcomingEvent(event)).sort(compareEventsDesc))
 
-const title = computed(() => page.value?.seo.title || page.value?.hero.title)
-const description = computed(() => page.value?.seo.description || page.value?.hero.description)
 const heroLinks = computed(() => localizeLinks(page.value?.hero.links))
 
 useCafeSeo({
-  title,
-  description,
-  image: () => page.value?.seo.ogImage || page.value?.hero.image.src
+  title: () => t('seo.events.title'),
+  description: () => t('seo.events.description'),
+  image: '/images/events/index.png'
 })
 </script>
 
