@@ -1,21 +1,26 @@
 <script setup lang="ts">
-import { CAFE_SITE_URL } from '#shared/utils/constants'
+import {
+  CAFE_ADDRESS,
+  CAFE_MAPS_URL,
+  CAFE_NAME,
+  CAFE_SITE_URL
+} from '#shared/utils/constants'
 import {
   compareEventsDesc,
   formatEventDate,
-  getEventCategoryLabel,
+  formatEventPrice,
   getEventDateIso,
   getEventTime,
   isUpcomingEvent
 } from '~/utils/events'
 
 const route = useRoute()
+const { global } = useAppConfig()
 const { locale, t } = useI18n()
 const localePath = useLocalePath()
-const localizePath = useLocalizedPath()
 const slug = computed(() => String(route.params.slug))
 
-const [{ data: rawEvent }, { data: eventsIndex }, { data: events }] = await Promise.all([
+const [{ data: rawEvent }, { data: events }] = await Promise.all([
   useAsyncData(
     `event-${locale.value}-${slug.value}`,
     () => queryCollection('events')
@@ -25,13 +30,8 @@ const [{ data: rawEvent }, { data: eventsIndex }, { data: events }] = await Prom
     { watch: [locale, slug] }
   ),
   useAsyncData(
-    `events-page-for-detail-${locale.value}`,
-    () => queryCollection('eventsPage').where('locale', '=', locale.value).first(),
-    { watch: [locale] }
-  ),
-  useAsyncData(
     `events-related-${locale.value}`,
-    () => queryCollection('events').where('locale', '=', locale.value).order('startDate', 'DESC').all(),
+    () => queryCollection('events').where('locale', '=', locale.value).order('date', 'DESC').all(),
     { watch: [locale] }
   )
 ])
@@ -52,25 +52,27 @@ const event = computed(() => rawEvent.value
   : null
 )
 
-const labels = computed(() => eventsIndex.value?.labels || {
-  date: t('event.date'),
-  time: t('event.time'),
-  location: 'Location',
-  price: t('event.price'),
-  booking: 'Booking'
+const reservationPath = computed(() => localePath('/reservations'))
+const eventsPath = computed(() => localePath('/events'))
+const upcoming = computed(() => (event.value ? isUpcomingEvent(event.value) : false))
+const showPrice = computed(() => event.value?.paid && typeof event.value.price === 'number')
+const needsBooking = computed(() => event.value?.reservation !== 'walkin')
+const reservationNote = computed(() => {
+  switch (event.value?.reservation) {
+    case 'required':
+      return t('event.reservationRequired')
+    case 'walkin':
+      return t('event.noBookingNeeded')
+    default:
+      return t('event.reservationRecommended')
+  }
 })
+
+const locationLabel = computed(() => `${global.name}, ${CAFE_ADDRESS.city}`)
 
 const title = computed(() => event.value?.seo?.title || event.value?.title)
 const description = computed(() => event.value?.seo?.description || event.value?.description)
-const image = computed(() => event.value?.seo?.ogImage || event.value?.heroImage.src || event.value?.image.src)
-const eventIsUpcoming = computed(() => event.value ? isUpcomingEvent(event.value) : false)
-const bookingLabel = computed(() => {
-  if (!event.value?.booking.enabled) {
-    return t('event.noBookingNeeded')
-  }
-
-  return event.value.booking.required ? t('event.reservationRequired') : t('event.reservationRecommended')
-})
+const image = computed(() => event.value?.seo?.ogImage || event.value?.image.src)
 
 const relatedEvents = computed(() => {
   if (!event.value) {
@@ -96,10 +98,6 @@ const toAbsoluteUrl = (value?: string) => {
     return value
   }
 
-  if (value.startsWith('mailto:')) {
-    return undefined
-  }
-
   return `${CAFE_SITE_URL}${value.startsWith('/') ? value : `/${value}`}`
 }
 
@@ -110,59 +108,49 @@ const eventJsonLd = computed(() => {
     return {}
   }
 
-  const location: Record<string, unknown> = {
-    '@type': 'Place',
-    'name': currentEvent.location.name
-  }
-
-  if (currentEvent.location.address || currentEvent.location.city || currentEvent.location.country) {
-    location.address = {
-      '@type': 'PostalAddress',
-      'streetAddress': currentEvent.location.address,
-      'addressLocality': currentEvent.location.city,
-      'addressCountry': currentEvent.location.country
-    }
-  }
-
   const structuredEvent: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'Event',
     'name': currentEvent.title,
     'description': currentEvent.description,
-    'startDate': getEventDateIso(currentEvent.startDate),
+    'startDate': getEventDateIso(currentEvent.date),
     'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
     'eventStatus': 'https://schema.org/EventScheduled',
-    'location': location,
+    'location': {
+      '@type': 'Place',
+      'name': CAFE_NAME,
+      'address': {
+        '@type': 'PostalAddress',
+        'streetAddress': CAFE_ADDRESS.street,
+        'postalCode': CAFE_ADDRESS.postalCode,
+        'addressLocality': CAFE_ADDRESS.city,
+        'addressCountry': CAFE_ADDRESS.country
+      }
+    },
     'organizer': {
       '@type': 'Organization',
-      'name': 'Cafe Prana',
+      'name': CAFE_NAME,
       'url': CAFE_SITE_URL
     },
     'url': toAbsoluteUrl(currentEvent.path)
-  }
-
-  if (currentEvent.endDate) {
-    structuredEvent.endDate = getEventDateIso(currentEvent.endDate)
   }
 
   if (image.value) {
     structuredEvent.image = [toAbsoluteUrl(image.value)]
   }
 
-  if (currentEvent.price.amount !== undefined && currentEvent.price.currency) {
+  if (currentEvent.paid && typeof currentEvent.price === 'number') {
     structuredEvent.offers = {
       '@type': 'Offer',
-      'price': currentEvent.price.amount,
-      'priceCurrency': currentEvent.price.currency,
+      'price': currentEvent.price,
+      'priceCurrency': 'EUR',
       'availability': 'https://schema.org/InStock',
-      'url': toAbsoluteUrl(localizePath(currentEvent.booking.url || currentEvent.path))
+      'url': toAbsoluteUrl(reservationPath.value)
     }
   }
 
   return structuredEvent
 })
-
-const getTagLabel = (tag: string) => t(`event.tagLabels.${tag}`)
 
 useCafeSeo({
   title,
@@ -180,195 +168,166 @@ useHead(() => ({
 </script>
 
 <template>
-  <UPage v-if="event">
-    <UContainer class="pt-8">
-      <ULink
-        :to="localePath('/events')"
-        class="inline-flex items-center gap-1 text-sm text-muted transition hover:text-highlighted"
-      >
-        <UIcon
-          name="i-lucide-chevron-left"
-          class="size-4"
-        />
-        {{ t('event.backToEvents') }}
-      </ULink>
-    </UContainer>
-
-    <UPageSection
-      :ui="{
-        container: 'pt-8!'
-      }"
+  <UContainer
+    v-if="event"
+    class="pb-24 pt-8"
+  >
+    <ULink
+      :to="eventsPath"
+      class="inline-flex items-center gap-1 text-sm text-muted transition hover:text-highlighted"
     >
-      <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
-        <div class="space-y-6">
-          <div class="flex flex-wrap items-center gap-2">
-            <UBadge
-              :label="eventIsUpcoming ? t('event.upcoming') : t('event.pastEvent')"
-              :color="eventIsUpcoming ? 'primary' : 'neutral'"
-              variant="soft"
-            />
-            <UBadge
-              :label="event.badge || getEventCategoryLabel(event.category, locale)"
-              color="neutral"
-              variant="outline"
-            />
-            <UBadge
-              :label="getEventCategoryLabel(event.category, locale)"
-              color="neutral"
-              variant="soft"
-            />
-          </div>
+      <UIcon
+        name="i-lucide-chevron-left"
+        class="size-4"
+      />
+      {{ t('event.backToEvents') }}
+    </ULink>
 
-          <div class="max-w-3xl space-y-4">
-            <h1 class="text-4xl font-semibold tracking-normal text-highlighted sm:text-5xl">
-              {{ event.title }}
-            </h1>
-            <p class="text-lg leading-8 text-muted">
-              {{ event.description }}
-            </p>
-          </div>
-
-          <NuxtImg
-            :src="event.heroImage.src"
-            :alt="event.heroImage.alt"
-            class="aspect-[16/10] w-full rounded-lg object-cover shadow-lg ring-1 ring-default"
-            sizes="sm:100vw lg:760px"
-            format="webp"
-            placeholder
+    <article class="mx-auto mt-8 max-w-3xl">
+      <header class="space-y-5">
+        <div class="flex flex-wrap items-center gap-3">
+          <p class="cafe-eyebrow">
+            {{ formatEventDate(event, locale) }}
+          </p>
+          <UBadge
+            :label="upcoming ? t('event.upcoming') : t('event.pastEvent')"
+            :color="upcoming ? 'primary' : 'neutral'"
+            variant="soft"
+            size="sm"
           />
         </div>
 
-        <aside class="rounded-lg border border-default bg-muted/30 p-5 lg:sticky lg:top-24">
-          <dl class="grid gap-4 text-sm">
-            <div class="flex gap-3">
-              <UIcon
-                name="i-lucide-calendar-days"
-                class="mt-0.5 size-5 shrink-0 text-primary"
-              />
-              <div>
-                <dt class="font-medium text-highlighted">
-                  {{ labels.date }}
-                </dt>
-                <dd class="mt-1 text-muted">
-                  {{ formatEventDate(event, locale) }}
-                </dd>
-              </div>
-            </div>
-            <div class="flex gap-3">
-              <UIcon
-                name="i-lucide-clock"
-                class="mt-0.5 size-5 shrink-0 text-primary"
-              />
-              <div>
-                <dt class="font-medium text-highlighted">
-                  {{ labels.time }}
-                </dt>
-                <dd class="mt-1 text-muted">
-                  {{ getEventTime(event, t('event.noTime')) }}
-                </dd>
-              </div>
-            </div>
-            <div class="flex gap-3">
-              <UIcon
-                name="i-lucide-map-pin"
-                class="mt-0.5 size-5 shrink-0 text-primary"
-              />
-              <div>
-                <dt class="font-medium text-highlighted">
-                  {{ labels.location }}
-                </dt>
-                <dd class="mt-1 text-muted">
-                  {{ event.location.name }}
-                </dd>
-              </div>
-            </div>
-            <div class="flex gap-3">
-              <UIcon
-                name="i-lucide-ticket"
-                class="mt-0.5 size-5 shrink-0 text-primary"
-              />
-              <div>
-                <dt class="font-medium text-highlighted">
-                  {{ labels.price }}
-                </dt>
-                <dd class="mt-1 text-muted">
-                  {{ event.price.label }}
-                </dd>
-              </div>
-            </div>
-          </dl>
+        <h1 class="font-serif text-4xl font-medium tracking-tight text-highlighted sm:text-5xl">
+          {{ event.title }}
+        </h1>
+        <p class="text-lg leading-8 text-muted">
+          {{ event.description }}
+        </p>
+      </header>
 
-          <div class="mt-5 border-t border-default pt-5">
-            <p class="text-sm font-medium text-highlighted">
-              {{ labels.booking }}
-            </p>
-            <p
-              v-if="event.booking.note"
-              class="mt-2 text-sm leading-6 text-muted"
+      <NuxtImg
+        :src="event.image.src"
+        :alt="event.image.alt"
+        class="mt-8 aspect-[16/9] w-full rounded-2xl object-cover shadow-xl ring-1 ring-default"
+        sizes="sm:100vw lg:768px"
+        format="webp"
+        placeholder
+      />
+
+      <!-- Details bar -->
+      <dl class="mt-8 flex flex-wrap items-center gap-x-7 gap-y-3 rounded-2xl border border-default bg-muted/40 px-5 py-4 font-mono text-sm tabular-nums text-toned">
+        <div class="flex items-center gap-2">
+          <UIcon
+            name="i-lucide-calendar-days"
+            class="size-4 shrink-0 text-primary"
+          />
+          <dt class="sr-only">
+            {{ t('event.date') }}
+          </dt>
+          <dd>{{ formatEventDate(event, locale) }}</dd>
+        </div>
+        <div class="flex items-center gap-2">
+          <UIcon
+            name="i-lucide-clock"
+            class="size-4 shrink-0 text-primary"
+          />
+          <dt class="sr-only">
+            {{ t('event.time') }}
+          </dt>
+          <dd>{{ getEventTime(event, t('event.noTime')) }}</dd>
+        </div>
+        <div
+          v-if="showPrice"
+          class="flex items-center gap-2"
+        >
+          <UIcon
+            name="i-lucide-ticket"
+            class="size-4 shrink-0 text-primary"
+          />
+          <dt class="sr-only">
+            {{ t('event.price') }}
+          </dt>
+          <dd>{{ formatEventPrice(event.price!, locale) }}</dd>
+        </div>
+        <div class="flex items-center gap-2">
+          <UIcon
+            name="i-lucide-map-pin"
+            class="size-4 shrink-0 text-primary"
+          />
+          <dt class="sr-only">
+            {{ t('event.location') }}
+          </dt>
+          <dd>
+            <ULink
+              :to="CAFE_MAPS_URL"
+              target="_blank"
+              class="hover:text-highlighted"
             >
-              {{ event.booking.note }}
-            </p>
+              {{ locationLabel }}
+            </ULink>
+          </dd>
+        </div>
+      </dl>
+
+      <!-- Reservation -->
+      <div class="mt-6">
+        <template v-if="upcoming">
+          <div class="flex flex-wrap items-center gap-4">
             <UButton
-              v-if="event.booking.enabled"
-              :to="localizePath(event.booking.url || '/reservations')"
-              :label="event.booking.label"
+              v-if="needsBooking"
+              :to="reservationPath"
+              :label="t('event.reserve')"
               icon="i-lucide-calendar-check"
               color="primary"
-              block
-              class="mt-4"
+              size="lg"
             />
-            <p class="mt-3 text-xs text-muted">
-              {{ bookingLabel }}
-            </p>
+            <span class="text-sm text-muted">{{ reservationNote }}</span>
           </div>
-        </aside>
-      </div>
-    </UPageSection>
-
-    <UPageSection
-      :title="t('event.about')"
-      :ui="{
-        container: 'pt-0!'
-      }"
-    >
-      <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start">
-        <div class="min-w-0">
-          <ContentRenderer
-            v-if="event.body"
-            :value="event"
+        </template>
+        <div
+          v-else
+          class="flex flex-wrap items-center gap-4 rounded-xl border border-default bg-muted/30 px-4 py-3"
+        >
+          <span class="text-sm text-muted">{{ t('event.passed') }}</span>
+          <UButton
+            :to="eventsPath"
+            :label="t('event.more')"
+            icon="i-lucide-arrow-right"
+            trailing
+            color="neutral"
+            variant="outline"
+            size="sm"
           />
         </div>
-
-        <aside
-          v-if="event.tags.length"
-          class="lg:sticky lg:top-24"
-        >
-          <div class="rounded-lg border border-default bg-muted/30 p-6">
-            <h2 class="text-xl font-semibold text-highlighted">
-              {{ t('event.tags') }}
-            </h2>
-            <div class="mt-4 flex flex-wrap gap-2">
-              <UBadge
-                v-for="tag in event.tags"
-                :key="tag"
-                :label="getTagLabel(tag)"
-                color="neutral"
-                variant="soft"
-              />
-            </div>
-          </div>
-        </aside>
       </div>
-    </UPageSection>
 
-    <UPageSection
+      <p class="cafe-eyebrow mt-6">
+        {{ t('event.dietary') }}
+      </p>
+
+      <!-- Body -->
+      <div class="cafe-prose mt-10">
+        <ContentRenderer
+          v-if="event.body"
+          :value="event"
+        />
+      </div>
+    </article>
+
+    <section
       v-if="relatedEvents.length"
-      :title="t('event.more')"
-      :description="t('event.moreDescription')"
-      :ui="{
-        container: 'pt-0!'
-      }"
+      class="mx-auto mt-20 max-w-6xl"
     >
+      <div class="mb-8 flex items-end justify-between gap-4">
+        <div>
+          <p class="cafe-eyebrow">
+            {{ t('event.more') }}
+          </p>
+          <h2 class="mt-2 font-serif text-2xl font-medium tracking-tight text-highlighted sm:text-3xl">
+            {{ t('event.moreDescription') }}
+          </h2>
+        </div>
+      </div>
       <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         <EventsEventCard
           v-for="relatedEvent in relatedEvents"
@@ -376,6 +335,6 @@ useHead(() => ({
           :event="relatedEvent"
         />
       </div>
-    </UPageSection>
-  </UPage>
+    </section>
+  </UContainer>
 </template>

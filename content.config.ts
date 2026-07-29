@@ -50,27 +50,6 @@ const createMenuCategorySchema = () => z.enum([
   'food'
 ])
 
-const createEventCategorySchema = () => z.enum([
-  'breakfast',
-  'brunch',
-  'dinner',
-  'workshop',
-  'community',
-  'seasonal'
-])
-
-const createEventTagSchema = () => z.enum([
-  'vegan',
-  'gluten-free',
-  'organic',
-  'seasonal',
-  'community',
-  'limited-seats',
-  'reservation-required',
-  'special-guests',
-  'workshop'
-])
-
 export default defineContentConfig({
   collections: {
     index: defineCollection({
@@ -195,36 +174,12 @@ export default defineContentConfig({
         slug: z.string().nonempty(),
         title: z.string().nonempty(),
         description: z.string().nonempty(),
-        badge: z.string().optional(),
-        category: createEventCategorySchema(),
-        startDate: z.date(),
-        endDate: z.date().optional(),
-        time: z.string().optional(),
-        timezone: z.string().optional(),
+        date: z.date(),
+        time: z.string().nonempty(),
         image: createImageSchema(),
-        heroImage: createImageSchema(),
-        location: z.object({
-          name: z.string().nonempty(),
-          address: z.string().optional(),
-          city: z.string().optional(),
-          country: z.string().optional(),
-          mapsUrl: z.string().optional()
-        }),
-        price: z.object({
-          label: z.string().nonempty(),
-          amount: z.number().optional(),
-          currency: z.string().optional(),
-          isFree: z.boolean().optional()
-        }),
-        booking: z.object({
-          enabled: z.boolean(),
-          required: z.boolean().optional(),
-          label: z.string(),
-          url: z.string().optional(),
-          note: z.string().optional()
-        }),
-        tags: z.array(createEventTagSchema()),
-        featured: z.boolean().optional(),
+        paid: z.boolean().default(false),
+        price: z.number().optional(),
+        reservation: z.enum(['required', 'recommended', 'walkin']).default('recommended'),
         seo: createSeoSchema().optional()
       })
     })

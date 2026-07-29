@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {
   formatEventDate,
-  getEventCategoryLabel,
+  formatEventPrice,
   getEventTime,
   isUpcomingEvent,
   type EventLike
@@ -11,19 +11,13 @@ type EventCard = EventLike & {
   path: string
   title: string
   description: string
-  badge?: string
   image: {
     src: string
     alt: string
   }
-  price: {
-    label: string
-  }
-  booking: {
-    enabled: boolean
-    required?: boolean
-  }
-  tags?: string[]
+  paid?: boolean
+  price?: number
+  reservation?: 'required' | 'recommended' | 'walkin'
 }
 
 const props = defineProps<{
@@ -33,20 +27,21 @@ const props = defineProps<{
 const { locale, t } = useI18n()
 
 const upcoming = computed(() => isUpcomingEvent(props.event))
-const bookingLabel = computed(() => {
-  if (!props.event.booking.enabled) {
-    return t('event.noBookingNeeded')
+const showPrice = computed(() => props.event.paid && typeof props.event.price === 'number')
+const reservationNote = computed(() => {
+  switch (props.event.reservation) {
+    case 'required':
+      return t('event.reservationRequired')
+    case 'walkin':
+      return t('event.noBookingNeeded')
+    default:
+      return t('event.reservationRecommended')
   }
-
-  return props.event.booking.required ? t('event.reservationRequired') : t('event.reservationRecommended')
 })
-
-const visibleTags = computed(() => props.event.tags?.slice(0, 3) || [])
-const getTagLabel = (tag: string) => t(`event.tagLabels.${tag}`)
 </script>
 
 <template>
-  <article class="group flex h-full flex-col overflow-hidden rounded-lg border border-default bg-default shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md">
+  <article class="group flex h-full flex-col overflow-hidden rounded-lg border border-default bg-default shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md">
     <NuxtLink
       :to="event.path"
       class="block overflow-hidden"
@@ -55,7 +50,7 @@ const getTagLabel = (tag: string) => t(`event.tagLabels.${tag}`)
       <NuxtImg
         :src="event.image.src"
         :alt="event.image.alt"
-        class="aspect-[4/3] w-full object-cover transition duration-300 group-hover:scale-105"
+        class="aspect-[16/10] w-full object-cover transition duration-500 group-hover:scale-105"
         sizes="sm:100vw md:50vw lg:33vw"
         format="webp"
         placeholder
@@ -63,16 +58,16 @@ const getTagLabel = (tag: string) => t(`event.tagLabels.${tag}`)
     </NuxtLink>
 
     <div class="flex flex-1 flex-col gap-4 p-5">
-      <div class="flex flex-wrap items-center gap-2">
+      <div class="flex items-center justify-between gap-3">
+        <p class="cafe-eyebrow">
+          {{ formatEventDate(event, locale) }}
+        </p>
         <UBadge
-          :label="upcoming ? t('event.upcoming') : t('event.past')"
-          :color="upcoming ? 'primary' : 'neutral'"
-          variant="soft"
-        />
-        <UBadge
-          :label="event.badge || getEventCategoryLabel(event.category, locale)"
+          v-if="!upcoming"
+          :label="t('event.pastEvent')"
           color="neutral"
-          variant="outline"
+          variant="soft"
+          size="sm"
         />
       </div>
 
@@ -87,68 +82,29 @@ const getTagLabel = (tag: string) => t(`event.tagLabels.${tag}`)
         </p>
       </div>
 
-      <dl class="grid gap-3 text-sm">
-        <div class="flex items-start gap-3">
-          <UIcon
-            name="i-lucide-calendar-days"
-            class="mt-0.5 size-4 shrink-0 text-primary"
-          />
-          <div>
-            <dt class="sr-only">
-              {{ t('event.date') }}
-            </dt>
-            <dd class="font-mono font-medium tabular-nums text-highlighted">
-              {{ formatEventDate(event, locale) }}
-            </dd>
-          </div>
-        </div>
-        <div class="flex items-start gap-3">
+      <dl class="flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-sm tabular-nums text-muted">
+        <div class="flex items-center gap-2">
           <UIcon
             name="i-lucide-clock"
-            class="mt-0.5 size-4 shrink-0 text-primary"
+            class="size-4 shrink-0 text-primary"
           />
-          <div>
-            <dt class="sr-only">
-              {{ t('event.time') }}
-            </dt>
-            <dd class="font-mono tabular-nums">
-              {{ getEventTime(event, t('event.noTime')) }}
-            </dd>
-          </div>
+          <dd>{{ getEventTime(event, t('event.noTime')) }}</dd>
         </div>
-        <div class="flex items-start gap-3">
+        <div
+          v-if="showPrice"
+          class="flex items-center gap-2"
+        >
           <UIcon
             name="i-lucide-ticket"
-            class="mt-0.5 size-4 shrink-0 text-primary"
+            class="size-4 shrink-0 text-primary"
           />
-          <div>
-            <dt class="sr-only">
-              {{ t('event.price') }}
-            </dt>
-            <dd class="font-mono tabular-nums">
-              {{ event.price.label }}
-            </dd>
-          </div>
+          <dd>{{ formatEventPrice(event.price!, locale) }}</dd>
         </div>
       </dl>
 
-      <div
-        v-if="visibleTags.length"
-        class="flex flex-wrap gap-2"
-      >
-        <UBadge
-          v-for="tag in visibleTags"
-          :key="tag"
-          :label="getTagLabel(tag)"
-          color="neutral"
-          variant="soft"
-          size="sm"
-        />
-      </div>
-
       <div class="mt-auto flex flex-col gap-3 border-t border-default pt-4 sm:flex-row sm:items-center sm:justify-between">
         <span class="text-sm text-muted">
-          {{ bookingLabel }}
+          {{ reservationNote }}
         </span>
         <UButton
           :to="event.path"
