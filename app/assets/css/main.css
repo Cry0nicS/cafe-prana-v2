@@ -73,7 +73,7 @@
 /* ---------------------------------------------------------------- Light --- */
 :root {
   --ui-container: var(--container-7xl);
-  --ui-radius: 0.625rem;
+  --ui-radius: 0.75rem;
 
   --ui-bg: #f2f3ec;
   --ui-bg-muted: #eceee3;
@@ -157,6 +157,17 @@ html {
 }
 :where(.font-mono) {
   font-variant-numeric: tabular-nums;
+}
+
+/* Editorial drop-cap for the founder story's opening paragraph. */
+.cafe-dropcap > p:first-of-type::first-letter {
+  float: left;
+  margin: 0.05em 0.1em 0 0;
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 3.4em;
+  line-height: 0.72;
+  color: var(--ui-text-highlighted);
 }
 
 /* Eyebrow / kicker — a small mono label with a spark tick. */

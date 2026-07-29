@@ -59,6 +59,8 @@ const languageItems = computed<DropdownMenuItem[]>(() =>
           :items="links"
           variant="link"
           color="neutral"
+          highlight
+          highlight-color="primary"
           :ui="{
             link: 'px-3 py-2',
             linkLeadingIcon: 'size-4'

@@ -14,7 +14,7 @@ defineProps<{
     reverse
   >
     <template #description>
-      <div class="space-y-4 text-justify leading-7 text-muted">
+      <div class="cafe-dropcap space-y-4 text-left leading-7 text-muted">
         <slot />
       </div>
     </template>
@@ -25,7 +25,7 @@ defineProps<{
       :alt="image.alt"
       format="webp"
       sizes="sm:100vw md:50vw lg:460px"
-      class="aspect-[2/3] w-full rounded-lg object-cover shadow-lg ring-1 ring-default"
+      class="aspect-[2/3] w-full rounded-2xl object-cover shadow-lg ring-1 ring-default"
       placeholder
     />
   </UPageSection>
