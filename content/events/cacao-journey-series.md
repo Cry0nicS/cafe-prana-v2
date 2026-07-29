@@ -1,6 +1,9 @@
 ---
 locale: en
 slug: cacao-journey-series
+sitemap:
+  priority: 0.7
+  changefreq: monthly
 title: The Cacao Journey at Café Prana
 description: A heartfelt workshop series at Café Prana in Prenzlauer Berg, guided by ceremonial cacao. We'll gently explore ritual, body awareness, movement, stillness, and authentic sharing.
 badge: Workshop Series

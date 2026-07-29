@@ -1,5 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import { CAFE_CONTACT_EMAIL } from './shared/utils/constants'
+import { CAFE_CONTACT_EMAIL, CAFE_SITE_URL } from './shared/utils/constants'
 
 export default defineNuxtConfig({
 
@@ -7,6 +7,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxt/image',
     '@nuxt/ui',
+    '@nuxtjs/sitemap',
     '@nuxt/content',
     '@nuxtjs/i18n',
     '@vueuse/nuxt',
@@ -23,6 +24,10 @@ export default defineNuxtConfig({
   },
 
   css: ['~/assets/css/main.css'],
+  site: {
+    url: CAFE_SITE_URL,
+    name: 'Cafe Prana'
+  },
 
   runtimeConfig: {
     supabaseUrl: process.env.SUPABASE_URL || process.env.NUXT_SUPABASE_URL || '',
@@ -71,6 +76,15 @@ export default defineNuxtConfig({
       language: 'de-DE'
     }],
     vueI18n: './i18n.config.ts'
+  },
+  sitemap: {
+    autoI18n: true,
+    autoLastmod: true,
+    discoverImages: false,
+    exclude: [
+      '/cookies',
+      '/de/cookies'
+    ]
   },
   studio: {
     route: '/pranas',

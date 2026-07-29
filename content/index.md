@@ -1,5 +1,8 @@
 ---
 locale: en
+sitemap:
+  priority: 1
+  changefreq: weekly
 seo:
   title: "Cafe Prana Berlin | Gluten-Free Vegan Cafe & Brunch"
   description: "Visit Cafe Prana in Berlin Prenzlauer Berg for 100% gluten-free vegan brunch, organic lunch, specialty coffee, warm drinks, and cozy community events."

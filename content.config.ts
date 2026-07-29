@@ -1,4 +1,6 @@
 import { defineCollection, defineContentConfig, z } from '@nuxt/content'
+import { defineSitemapSchema } from '@nuxtjs/sitemap/content'
+import type { DefineSitemapSchemaOptions } from '@nuxtjs/sitemap/content'
 
 const createBaseSchema = () => z.object({
   title: z.string(),
@@ -25,6 +27,8 @@ const createSeoSchema = () => z.object({
   description: z.string(),
   ogImage: z.string().editor({ input: 'media' }).optional()
 })
+
+const createSitemapSchema = (options?: DefineSitemapSchemaOptions) => defineSitemapSchema({ z, ...options })
 
 const createLocaleSchema = () => z.enum(['en', 'de'])
 
@@ -77,6 +81,12 @@ export default defineContentConfig({
       ],
       schema: z.object({
         locale: createLocaleSchema(),
+        sitemap: createSitemapSchema({
+          name: 'index',
+          onUrl: (url, entry) => {
+            url.loc = entry.locale === 'de' ? '/de' : '/'
+          }
+        }),
         seo: createSeoSchema()
       })
     }),
@@ -88,6 +98,12 @@ export default defineContentConfig({
       ],
       schema: z.object({
         locale: createLocaleSchema(),
+        sitemap: createSitemapSchema({
+          name: 'menuPage',
+          onUrl: (url, entry) => {
+            url.loc = entry.locale === 'de' ? '/de/menu' : '/menu'
+          }
+        }),
         seo: createSeoSchema(),
         hero: createBaseSchema().extend({
           headline: z.string(),
@@ -136,6 +152,12 @@ export default defineContentConfig({
       ],
       schema: z.object({
         locale: createLocaleSchema(),
+        sitemap: createSitemapSchema({
+          name: 'eventsPage',
+          onUrl: (url, entry) => {
+            url.loc = entry.locale === 'de' ? '/de/events' : '/events'
+          }
+        }),
         seo: createSeoSchema(),
         hero: createBaseSchema().extend({
           headline: z.string(),
@@ -164,6 +186,12 @@ export default defineContentConfig({
       source: 'events/*.md',
       schema: z.object({
         locale: createLocaleSchema(),
+        sitemap: createSitemapSchema({
+          name: 'events',
+          onUrl: (url, entry) => {
+            url.loc = entry.locale === 'de' ? `/de/events/${entry.slug}` : `/events/${entry.slug}`
+          }
+        }),
         slug: z.string().nonempty(),
         title: z.string().nonempty(),
         description: z.string().nonempty(),

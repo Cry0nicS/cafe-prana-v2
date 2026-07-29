@@ -1,4 +1,7 @@
 locale: "de"
+sitemap:
+  priority: 0.9
+  changefreq: weekly
 title: "Menü"
 description: "Entdecke das glutenfreie und vegane Menü von Cafe Prana mit nährendem Brunch, ausgewogenem Lunch und wärmenden Getränken aus biologischen, pflanzlichen Zutaten."
 seo:
