@@ -1,0 +1,18 @@
+{
+  // Nuxt generates a project for `test/nuxt/**` (see `.nuxt/tsconfig.app.json`)
+  // but not for the tests that run in plain Node. They import server code and
+  // the shared schemas, so they belong to the server project: extending it
+  // gives them `~~/*`, `#shared/*` and the Nitro globals used by the code
+  // under test.
+  "extends": "../.nuxt/tsconfig.server.json",
+  "include": [
+    "../.nuxt/content/types.d.ts",
+    "../.nuxt/types/nitro-nuxt.d.ts",
+    "../.nuxt/types/nitro.d.ts",
+    "./setup/**/*",
+    "./server/**/*",
+    "./unit/**/*",
+    "./utils/**/*",
+    "../vitest.config.ts"
+  ]
+}

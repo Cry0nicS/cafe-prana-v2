@@ -6,6 +6,9 @@
 .cache
 dist
 
+# TypeScript build-mode cache (written next to referenced tsconfigs)
+*.tsbuildinfo
+
 # Node dependencies
 node_modules
 
