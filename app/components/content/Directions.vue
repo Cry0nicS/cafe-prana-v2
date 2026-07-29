@@ -35,7 +35,7 @@ const links = computed(() => [
     :title="title"
     :links="links"
     orientation="horizontal"
-    variant="outline"
+    variant="naked"
     class="mb-24 overflow-hidden"
   >
     <template #description>
@@ -53,7 +53,7 @@ const links = computed(() => [
             <span>{{ item.day }}</span>
             <UBadge
               variant="soft"
-              :color="item.closed ? 'error' : 'success'"
+              :color="item.closed ? 'neutral' : 'success'"
               class="font-mono tabular-nums"
             >
               {{ item.time }}
@@ -66,7 +66,7 @@ const links = computed(() => [
     <iframe
       :src="CAFE_MAP_EMBED_URL"
       width="100%"
-      class="h-[420px] w-full rounded-lg border-0 lg:h-full"
+      class="h-[420px] w-full rounded-2xl border-0 shadow-lg ring-1 ring-default lg:h-full"
       loading="lazy"
       referrerpolicy="no-referrer-when-downgrade"
       title="Café Prana map"

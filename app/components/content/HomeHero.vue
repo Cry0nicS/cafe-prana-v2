@@ -49,9 +49,7 @@ const links = computed(() => [
       <div
         class="cafe-aura"
         aria-hidden="true"
-      >
-        <span /><span /><span />
-      </div>
+      />
       <NuxtImg
         :src="image.src"
         :alt="image.alt"

@@ -30,13 +30,13 @@ const visibleLabels = computed(() =>
 </script>
 
 <template>
-  <article class="min-w-0 overflow-hidden rounded-lg border border-default bg-elevated/80 shadow-sm">
-    <div class="grid min-w-0 sm:grid-cols-[160px_minmax(0,1fr)] md:grid-cols-1">
+  <article class="group min-w-0 overflow-hidden rounded-lg border border-default bg-elevated/80 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md">
+    <div class="grid min-w-0 overflow-hidden sm:grid-cols-[160px_minmax(0,1fr)] md:grid-cols-1">
       <NuxtImg
         v-bind="item.image"
         format="webp"
         sizes="sm:100vw md:50vw lg:640px xl:420px"
-        class="aspect-[4/3] h-full w-full object-cover sm:aspect-auto md:aspect-[3/2] md:h-auto"
+        class="aspect-[4/3] h-full w-full object-cover transition duration-500 group-hover:scale-105 sm:aspect-auto md:aspect-[3/2] md:h-auto"
         placeholder
       />
 
