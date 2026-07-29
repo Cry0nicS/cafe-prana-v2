@@ -77,7 +77,7 @@ const getTagLabel = (tag: string) => t(`event.tagLabels.${tag}`)
       </div>
 
       <div class="space-y-2">
-        <h3 class="text-xl font-semibold text-highlighted">
+        <h3 class="font-serif text-xl font-medium tracking-tight text-highlighted">
           <ULink :to="event.path">
             {{ event.title }}
           </ULink>
@@ -97,7 +97,7 @@ const getTagLabel = (tag: string) => t(`event.tagLabels.${tag}`)
             <dt class="sr-only">
               {{ t('event.date') }}
             </dt>
-            <dd class="font-medium text-highlighted">
+            <dd class="font-mono font-medium tabular-nums text-highlighted">
               {{ formatEventDate(event, locale) }}
             </dd>
           </div>
@@ -111,7 +111,9 @@ const getTagLabel = (tag: string) => t(`event.tagLabels.${tag}`)
             <dt class="sr-only">
               {{ t('event.time') }}
             </dt>
-            <dd>{{ getEventTime(event, t('event.noTime')) }}</dd>
+            <dd class="font-mono tabular-nums">
+              {{ getEventTime(event, t('event.noTime')) }}
+            </dd>
           </div>
         </div>
         <div class="flex items-start gap-3">
@@ -123,7 +125,9 @@ const getTagLabel = (tag: string) => t(`event.tagLabels.${tag}`)
             <dt class="sr-only">
               {{ t('event.price') }}
             </dt>
-            <dd>{{ event.price.label }}</dd>
+            <dd class="font-mono tabular-nums">
+              {{ event.price.label }}
+            </dd>
           </div>
         </div>
       </dl>

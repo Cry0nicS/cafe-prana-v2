@@ -41,7 +41,7 @@ const links = computed(() => [
     <template #description>
       <p>{{ description }}</p>
       <div class="mt-6 max-w-md">
-        <h3 class="font-semibold text-highlighted">
+        <h3 class="font-mono text-xs uppercase tracking-[0.2em] text-primary">
           {{ hoursHeading }}
         </h3>
         <ul class="mt-3 space-y-2">
@@ -54,6 +54,7 @@ const links = computed(() => [
             <UBadge
               variant="soft"
               :color="item.closed ? 'error' : 'success'"
+              class="font-mono tabular-nums"
             >
               {{ item.time }}
             </UBadge>

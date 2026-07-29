@@ -3,83 +3,207 @@
 
 @source "../../../content/**/*";
 
+/* ============================================================================
+   Café Prana — "Chlorophyll & Paper"
+   A green-led, botanical identity tied to prana (breath / life force).
+   Cool paper ground + deep forest ink for crisp contrast; a living
+   chlorophyll green as the brand; a sprout-chartreuse spark as the accent;
+   warm cacao as the secondary. Display in Fraunces, body in Hanken Grotesk,
+   data/labels in Space Mono.
+   ========================================================================== */
+
 @theme static {
-  --font-sans: 'Public Sans', sans-serif;
-  --font-serif: 'Instrument Serif', serif;
+  --font-sans: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Fraunces', ui-serif, Georgia, serif;
+  --font-mono: 'Space Mono', ui-monospace, 'SFMono-Regular', monospace;
 
-  --color-sage-50: #f3f8f5;
-  --color-sage-100: #dfece5;
-  --color-sage-200: #c1d9cc;
-  --color-sage-300: #98c0b4;
-  --color-sage-400: #6fa294;
-  --color-sage-500: #518779;
-  --color-sage-600: #3f6b60;
-  --color-sage-700: #35574f;
-  --color-sage-800: #2d4741;
-  --color-sage-900: #263b36;
-  --color-sage-950: #14211e;
+  /* Brand — chlorophyll green */
+  --color-chlorophyll-50: #edf7f1;
+  --color-chlorophyll-100: #d2ecdd;
+  --color-chlorophyll-200: #a6d9bd;
+  --color-chlorophyll-300: #79c9a1;
+  --color-chlorophyll-400: #4bb082;
+  --color-chlorophyll-500: #2c8b5f;
+  --color-chlorophyll-600: #1f7150;
+  --color-chlorophyll-700: #1b5a42;
+  --color-chlorophyll-800: #184636;
+  --color-chlorophyll-900: #143a2d;
+  --color-chlorophyll-950: #0a2019;
 
-  --color-prana-warm-50: #fffaf5;
-  --color-prana-warm-100: #f6ebdd;
-  --color-prana-warm-200: #ead5bc;
-  --color-prana-warm-300: #dfbd98;
-  --color-prana-warm-400: #cfa171;
-  --color-prana-warm-500: #b98554;
-  --color-prana-warm-600: #9b6a40;
-  --color-prana-warm-700: #7d5234;
-  --color-prana-warm-800: #5f3f2b;
-  --color-prana-warm-900: #3f2a1d;
-  --color-prana-warm-950: #21150e;
+  /* Neutral — "paper": a cool ecru <-> forest ink ramp with a green bias */
+  --color-paper-50: #f6f7f2;
+  --color-paper-100: #edefe6;
+  --color-paper-200: #dce0d0;
+  --color-paper-300: #c3c9b3;
+  --color-paper-400: #9aa287;
+  --color-paper-500: #757d63;
+  --color-paper-600: #5b6250;
+  --color-paper-700: #474d40;
+  --color-paper-800: #2f342b;
+  --color-paper-900: #1c221b;
+  --color-paper-950: #101613;
+
+  /* Spark — sprout chartreuse (accent; used sparingly) */
+  --color-spark-50: #f8fce6;
+  --color-spark-100: #eff8c4;
+  --color-spark-200: #e0f291;
+  --color-spark-300: #cfe95f;
+  --color-spark-400: #bfe035;
+  --color-spark-500: #a3c81f;
+  --color-spark-600: #7e9d16;
+  --color-spark-700: #5f7416;
+  --color-spark-800: #4b5a18;
+  --color-spark-900: #3f4c19;
+  --color-spark-950: #212a08;
+
+  /* Cacao — warm secondary / ceremony */
+  --color-cacao-50: #faf4ee;
+  --color-cacao-100: #f1e0d0;
+  --color-cacao-200: #e2c1a4;
+  --color-cacao-300: #d09b71;
+  --color-cacao-400: #c07d4d;
+  --color-cacao-500: #a56139;
+  --color-cacao-600: #874c2d;
+  --color-cacao-700: #6d3e27;
+  --color-cacao-800: #5a3524;
+  --color-cacao-900: #4d2f21;
+  --color-cacao-950: #291710;
 }
 
+/* ---------------------------------------------------------------- Light --- */
 :root {
   --ui-container: var(--container-7xl);
-  --ui-bg: var(--color-prana-warm-50);
-  --ui-bg-muted: #f8f0e7;
-  --ui-bg-elevated: #fffdf9;
-  --ui-bg-accented: var(--color-prana-warm-100);
-  --ui-border: var(--color-prana-warm-200);
-  --ui-border-muted: var(--color-prana-warm-100);
-  --ui-text: var(--color-prana-warm-900);
-  --ui-text-muted: #755f4b;
-  --ui-text-toned: #5f4b39;
-  --ui-text-highlighted: #241912;
-  --ui-primary: var(--color-sage-600);
-  --ui-secondary: var(--color-prana-warm-500);
-  --ui-success: var(--color-sage-600);
-  --ui-info: var(--color-sage-500);
-  --ui-warning: var(--color-prana-warm-500);
-  --ui-radius: 0.5rem;
+  --ui-radius: 0.625rem;
+
+  --ui-bg: #f2f3ec;
+  --ui-bg-muted: #eceee3;
+  --ui-bg-elevated: #e9ebde;
+  --ui-bg-accented: #dfe2d1;
+  --ui-bg-inverted: #14201a;
+
+  --ui-border: #d6dac8;
+  --ui-border-muted: #e3e6d6;
+  --ui-border-accented: #c6ccb4;
+  --ui-border-inverted: #14201a;
+
+  --ui-text-dimmed: #8b9382;
+  --ui-text-muted: #5f6a57;
+  --ui-text-toned: #465142;
+  --ui-text: #2b3a30;
+  --ui-text-highlighted: #14201a;
+  --ui-text-inverted: #f6f7f2;
+
+  --ui-primary: var(--color-chlorophyll-600);
+  --ui-secondary: var(--color-cacao-600);
+  --ui-success: var(--color-chlorophyll-600);
+  --ui-info: #2f7d70;
+  --ui-warning: var(--color-cacao-500);
+  --ui-error: #b4432f;
+
+  /* Signature accent, referenced by components */
+  --cafe-spark: var(--color-spark-400);
 
   ::selection {
-    color: var(--color-prana-warm-950);
-    background-color: var(--color-sage-200);
+    color: var(--color-chlorophyll-950);
+    background-color: var(--color-spark-300);
   }
 }
 
+/* ----------------------------------------------------------------- Dark --- */
 .dark {
-  --ui-bg: var(--color-prana-warm-950);
-  --ui-bg-muted: #2b1d15;
-  --ui-bg-elevated: #352419;
-  --ui-bg-accented: #473121;
-  --ui-border: #473121;
-  --ui-border-muted: #352419;
-  --ui-text: var(--color-prana-warm-100);
-  --ui-text-muted: #d6c1aa;
-  --ui-text-toned: #ead5bc;
-  --ui-text-highlighted: #fffaf5;
-  --ui-primary: var(--color-sage-300);
-  --ui-secondary: var(--color-prana-warm-300);
-  --ui-success: var(--color-sage-300);
-  --ui-info: var(--color-sage-300);
-  --ui-warning: var(--color-prana-warm-300);
+  --ui-bg: #0d1411;
+  --ui-bg-muted: #111a15;
+  --ui-bg-elevated: #16211b;
+  --ui-bg-accented: #1e2a23;
+  --ui-bg-inverted: #f2f3ec;
+
+  --ui-border: #253229;
+  --ui-border-muted: #1a2620;
+  --ui-border-accented: #314136;
+  --ui-border-inverted: #f2f3ec;
+
+  --ui-text-dimmed: #6d7c72;
+  --ui-text-muted: #98a69c;
+  --ui-text-toned: #c2cdc4;
+  --ui-text: #dbe4dc;
+  --ui-text-highlighted: #f1f5ee;
+  --ui-text-inverted: #0d1411;
+
+  --ui-primary: var(--color-chlorophyll-400);
+  --ui-secondary: var(--color-cacao-300);
+  --ui-success: var(--color-chlorophyll-400);
+  --ui-info: #64b7ba;
+  --ui-warning: var(--color-cacao-300);
+  --ui-error: #e07a5f;
+
+  --cafe-spark: var(--color-spark-400);
 
   ::selection {
-    color: var(--color-prana-warm-950);
-    background-color: var(--color-sage-300);
+    color: var(--color-chlorophyll-950);
+    background-color: var(--color-spark-400);
   }
 }
 
+/* --------------------------------------------------------------- Globals --- */
 html {
   scroll-behavior: smooth;
+}
+
+/* Display type: Fraunces reads best with a hair of optical warmth and tight,
+   balanced headings. Data type: line up every digit. */
+:where(.font-serif) {
+  font-optical-sizing: auto;
+  letter-spacing: -0.012em;
+}
+:where(.font-mono) {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Eyebrow / kicker — a small mono label with a spark tick. */
+.cafe-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ui-primary);
+}
+.cafe-eyebrow::before {
+  content: "";
+  width: 1.25rem;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--cafe-spark);
+}
+
+/* Breath aura — the hero signature. Concentric rings that slowly inhale. */
+.cafe-aura {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  z-index: 0;
+}
+.cafe-aura span {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid var(--ui-primary);
+  opacity: 0.16;
+  animation: cafe-breathe 7s ease-in-out infinite;
+}
+.cafe-aura span:nth-child(1) { width: 42%; height: 42%; opacity: 0.24; }
+.cafe-aura span:nth-child(2) { width: 66%; height: 66%; animation-delay: 0.6s; }
+.cafe-aura span:nth-child(3) { width: 92%; height: 92%; opacity: 0.1; animation-delay: 1.2s; }
+
+@keyframes cafe-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .cafe-aura span { animation: none; }
 }

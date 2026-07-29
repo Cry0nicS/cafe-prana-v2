@@ -57,6 +57,14 @@ export default defineNuxtConfig({
     }
   },
 
+  fonts: {
+    families: [
+      { name: 'Fraunces', provider: 'google', weights: [400, 500, 600], styles: ['normal', 'italic'] },
+      { name: 'Hanken Grotesk', provider: 'google', weights: [400, 500, 600, 700, 800] },
+      { name: 'Space Mono', provider: 'google', weights: [400, 700] }
+    ]
+  },
+
   i18n: {
     defaultLocale: 'en',
     strategy: 'prefix_except_default',

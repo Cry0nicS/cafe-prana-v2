@@ -14,7 +14,7 @@ import {
 const colorMode = useColorMode()
 const { locale } = useI18n()
 
-const themeColor = computed(() => colorMode.value === 'dark' ? '#1f1711' : '#fffaf5')
+const themeColor = computed(() => colorMode.value === 'dark' ? '#0d1411' : '#f2f3ec')
 const htmlLang = computed(() => locale.value === 'de' ? 'de-DE' : 'en-US')
 const localBusinessJsonLd = computed(() => ({
   '@context': 'https://schema.org',

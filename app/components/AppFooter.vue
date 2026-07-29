@@ -22,7 +22,7 @@ const footerLinks = computed(() => [
   >
     <template #left>
       <div class="flex flex-col gap-1">
-        <span>{{ footer.credits }}</span>
+        <span class="font-mono tracking-tight">{{ footer.credits }}</span>
         <span>{{ t('footer.description') || global.description }}</span>
         <ULink
           :to="localePath('/cookies')"
