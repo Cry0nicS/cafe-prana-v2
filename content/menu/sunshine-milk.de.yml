@@ -1,12 +1,12 @@
-﻿locale: "de"
+locale: "de"
 title: "Sunshine Milk"
 category: "drinksHot"
-description: "Golden-Milk-GewÃ¼rz mit MCT-Ã–l."
-ingredients: "Goldene GewÃ¼rzmischung, MCT-Ã–l, Mylk deiner Wahl"
-price: "5,2â‚¬"
+description: "Golden-Milk-Gewürz mit MCT-Öl."
+ingredients: "Goldene Gewürzmischung, MCT-Öl, Mylk deiner Wahl"
+price: "5,2"
 image:
   src: "/images/menu/sunshine-milk.png"
-  alt: "Sunshine Milk mit goldener GewÃ¼rzmischung"
+  alt: "Sunshine Milk mit goldener Gewürzmischung"
 labels:
   - "gluten-free"
   - "vegan"

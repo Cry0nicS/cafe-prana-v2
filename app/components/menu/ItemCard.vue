@@ -56,7 +56,7 @@ const visibleLabels = computed(() =>
             size="lg"
             class="shrink-0 whitespace-nowrap font-mono font-bold tabular-nums"
           >
-            {{ item.price }}
+            {{ item.price }}€
           </UBadge>
         </div>
 

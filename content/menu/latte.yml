@@ -1,9 +1,9 @@
-﻿locale: "en"
+locale: "en"
 title: "Milchkaffee"
 category: "drinksCoffee"
 description: "Creamy, mild coffee with mylk."
 ingredients: "Single or double lungo with foamed mylk"
-price: "5,3â‚¬"
+price: "5,3"
 image:
   src: "/images/menu/latte.png"
   alt: "Milchkaffee with foamed plant milk"

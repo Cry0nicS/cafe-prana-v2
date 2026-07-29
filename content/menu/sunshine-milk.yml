@@ -1,9 +1,9 @@
-﻿locale: "en"
+locale: "en"
 title: "Sunshine Milk"
 category: "drinksHot"
 description: "Golden milk spice with MCT oil."
 ingredients: "Golden spice mix, MCT oil, mylk of choice"
-price: "5,2â‚¬"
+price: "5,2"
 image:
   src: "/images/menu/sunshine-milk.png"
   alt: "Sunshine milk with golden spice"

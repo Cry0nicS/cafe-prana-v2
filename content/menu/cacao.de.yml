@@ -1,9 +1,9 @@
-﻿locale: "de"
+locale: "de"
 title: "Zeremonieller Kakao"
 category: "drinksHot"
-description: "Reiner, roher Kakao fÃ¼r Achtsamkeit, WÃ¤rme und ein geÃ¶ffnetes Herz."
-ingredients: "Roher Kakao, heiÃŸes Wasser oder Mylk"
-price: "6â‚¬"
+description: "Reiner, roher Kakao für Achtsamkeit, Wärme und ein geöffnetes Herz."
+ingredients: "Roher Kakao, heißes Wasser oder Mylk"
+price: "6"
 image:
   src: "/images/menu/cacao.png"
   alt: "Zeremonieller Kakao"

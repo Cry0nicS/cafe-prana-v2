@@ -1,9 +1,9 @@
-﻿locale: "en"
+locale: "en"
 title: "Flat White"
 category: "drinksCoffee"
 description: "Smooth and rich with plant milk of your choice."
 ingredients: "Espresso, velvety microfoam, plant milk"
-price: "4,6â‚¬"
+price: "4,6"
 image:
   src: "/images/menu/flat-white.png"
   alt: "Flat white with plant milk"
