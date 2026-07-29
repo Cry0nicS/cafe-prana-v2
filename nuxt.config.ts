@@ -2,7 +2,6 @@
 import { CAFE_CONTACT_EMAIL, CAFE_SITE_URL } from './shared/utils/constants'
 
 export default defineNuxtConfig({
-
   modules: [
     '@nuxt/eslint',
     '@nuxt/image',
@@ -62,19 +61,6 @@ export default defineNuxtConfig({
     }
   },
 
-  icon: {
-    // Nuxt UI pre-bundles its own icons, but this project's icons live in
-    // content (`.md`/`.yml`) and composables, so without scanning they are
-    // fetched at runtime and warn on dev cold start. Scanning bakes them into
-    // the client bundle instead. The default glob omits `ts`, which is where
-    // the navigation icons are defined.
-    clientBundle: {
-      scan: {
-        globInclude: ['**/*.{vue,jsx,tsx,ts,md,mdc,mdx,yml,yaml}']
-      }
-    }
-  },
-
   fonts: {
     families: [
       { name: 'Fraunces', provider: 'google', weights: [400, 500, 600], styles: ['normal', 'italic'] },
@@ -97,6 +83,19 @@ export default defineNuxtConfig({
       language: 'de-DE'
     }],
     vueI18n: './i18n.config.ts'
+  },
+
+  icon: {
+    // Nuxt UI pre-bundles its own icons, but this project's icons live in
+    // content (`.md`/`.yml`) and composables, so without scanning they are
+    // fetched at runtime and warn on dev cold start. Scanning bakes them into
+    // the client bundle instead. The default glob omits `ts`, which is where
+    // the navigation icons are defined.
+    clientBundle: {
+      scan: {
+        globInclude: ['**/*.{vue,jsx,tsx,ts,md,mdc,mdx,yml,yaml}']
+      }
+    }
   },
   sitemap: {
     autoI18n: true,
