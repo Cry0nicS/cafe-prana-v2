@@ -30,7 +30,9 @@ export default defineI18nConfig(() => ({
       },
       footer: {
         description: 'A gluten-free and vegan haven in the heart of Berlin',
-        cookiePolicy: 'Cookie policy'
+        cookiePolicy: 'Cookie policy',
+        imprint: 'Imprint',
+        privacy: 'Privacy'
       },
       menu: {
         itemCount: '{count} item | {count} items',
@@ -263,7 +265,9 @@ export default defineI18nConfig(() => ({
       },
       footer: {
         description: 'Ein glutenfreies und veganes Café im Herzen von Berlin',
-        cookiePolicy: 'Cookie-Richtlinie'
+        cookiePolicy: 'Cookie-Richtlinie',
+        imprint: 'Impressum',
+        privacy: 'Datenschutz'
       },
       menu: {
         itemCount: '{count} Gericht | {count} Gerichte',
