@@ -22,13 +22,20 @@ const createImageSchema = () => z.object({
   alt: z.string()
 })
 
+// SEO is derived in code from each page's title/description/image, so the field
+// is hidden from the Studio editor on every collection that uses this helper.
 const createSeoSchema = () => z.object({
   title: z.string(),
   description: z.string(),
   ogImage: z.string().editor({ input: 'media' }).optional()
-})
+}).editor({ hidden: true })
 
-const createSitemapSchema = (options?: DefineSitemapSchemaOptions) => defineSitemapSchema({ z, ...options })
+// Standard hidden navigation field shared by the page collections.
+const createHiddenNavigation = () => z.boolean().default(false).editor({ hidden: true })
+
+// Sitemap entries use fixed defaults / code-driven URLs, so this field is also
+// hidden from the Studio editor everywhere it is used.
+const createSitemapSchema = (options?: DefineSitemapSchemaOptions) => defineSitemapSchema({ z, ...options }).editor({ hidden: true })
 
 const createLocaleSchema = () => z.enum(['en', 'de'])
 
@@ -66,6 +73,7 @@ export default defineContentConfig({
             url.loc = entry.locale === 'de' ? '/de' : '/'
           }
         }),
+        navigation: createHiddenNavigation(),
         seo: createSeoSchema()
       })
     }),
@@ -83,6 +91,7 @@ export default defineContentConfig({
             url.loc = entry.locale === 'de' ? '/de/menu' : '/menu'
           }
         }),
+        navigation: createHiddenNavigation(),
         seo: createSeoSchema(),
         hero: createBaseSchema().extend({
           headline: z.string(),
@@ -137,6 +146,7 @@ export default defineContentConfig({
             url.loc = entry.locale === 'de' ? '/de/events' : '/events'
           }
         }),
+        navigation: createHiddenNavigation(),
         seo: createSeoSchema(),
         hero: createBaseSchema().extend({
           headline: z.string(),
@@ -175,8 +185,8 @@ export default defineContentConfig({
             const slug = String(entry.stem ?? '').replace(/^events\//, '').replace(/\.de$/, '')
             url.loc = entry.locale === 'de' ? `/de/events/${slug}` : `/events/${slug}`
           }
-        }).editor({ hidden: true }),
-        navigation: z.boolean().default(false).editor({ hidden: true }),
+        }),
+        navigation: createHiddenNavigation(),
         title: z.string().nonempty(),
         description: z.string().nonempty(),
         date: z.date(),
