@@ -25,43 +25,42 @@ onMounted(() => {
       <aside
         v-if="bannerVisible"
         :aria-label="t('cookies.bannerTitle')"
-        class="fixed inset-x-0 bottom-0 z-50 p-3 sm:p-5"
+        class="fixed inset-x-0 bottom-0 z-50 p-3 sm:inset-x-auto sm:bottom-0 sm:right-0 sm:p-5"
       >
-        <div class="mx-auto max-w-4xl rounded-lg border border-default bg-default/95 p-4 shadow-xl ring-1 ring-default backdrop-blur sm:p-5">
-          <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-            <div class="max-w-2xl space-y-2">
-              <div class="flex items-center gap-2">
-                <UIcon
-                  name="i-lucide-cookie"
-                  class="size-5 text-primary"
-                />
-                <h2 class="text-base font-semibold text-highlighted">
-                  {{ t('cookies.bannerTitle') }}
-                </h2>
-              </div>
-              <p class="text-sm leading-6 text-muted">
+        <div class="mx-auto w-full rounded-xl border border-default bg-default/75 p-4 shadow-xl ring-1 ring-default backdrop-blur-md sm:mx-0 sm:w-[22rem]">
+          <div class="flex items-start gap-2.5">
+            <UIcon
+              name="i-lucide-cookie"
+              class="mt-0.5 size-4 shrink-0 text-primary"
+            />
+            <div class="space-y-1">
+              <h2 class="text-sm font-semibold text-highlighted">
+                {{ t('cookies.bannerTitle') }}
+              </h2>
+              <p class="text-xs leading-5 text-muted">
                 {{ t('cookies.bannerDescription') }}
               </p>
-              <ULink
-                :to="localePath('/cookies')"
-                class="inline-flex items-center gap-1 text-sm font-medium text-primary"
-              >
-                {{ t('cookies.readPolicy') }}
-                <UIcon
-                  name="i-lucide-arrow-right"
-                  class="size-4"
-                />
-              </ULink>
             </div>
+          </div>
 
-            <div class="grid gap-2 sm:flex md:flex-col lg:flex-row">
-              <UButton
-                :label="t('cookies.understand')"
-                color="primary"
-                :aria-label="t('cookies.acknowledgeLabel')"
-                @click="acknowledgeNotice"
+          <div class="mt-3 flex flex-wrap items-center justify-between gap-3">
+            <ULink
+              :to="localePath('/cookies')"
+              class="inline-flex items-center gap-1 text-xs font-medium text-primary"
+            >
+              {{ t('cookies.readPolicy') }}
+              <UIcon
+                name="i-lucide-arrow-right"
+                class="size-3.5"
               />
-            </div>
+            </ULink>
+            <UButton
+              :label="t('cookies.understand')"
+              color="primary"
+              size="sm"
+              :aria-label="t('cookies.acknowledgeLabel')"
+              @click="acknowledgeNotice"
+            />
           </div>
         </div>
       </aside>
