@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {
   formatEventDate,
-  getEventCategoryLabel,
+  formatEventPrice,
   getEventTime,
   isUpcomingEvent,
   type EventLike
@@ -11,19 +11,13 @@ type EventFeature = EventLike & {
   path: string
   title: string
   description: string
-  badge?: string
   image: {
     src: string
     alt: string
   }
-  price: {
-    label: string
-  }
-  booking: {
-    enabled: boolean
-    required?: boolean
-  }
-  tags?: string[]
+  paid?: boolean
+  price?: number
+  reservation?: 'required' | 'recommended' | 'walkin'
 }
 
 const props = defineProps<{
@@ -34,16 +28,17 @@ const props = defineProps<{
 const { locale, t } = useI18n()
 
 const upcoming = computed(() => isUpcomingEvent(props.event))
-const bookingLabel = computed(() => {
-  if (!props.event.booking.enabled) {
-    return t('event.noBookingNeeded')
+const showPrice = computed(() => props.event.paid && typeof props.event.price === 'number')
+const reservationNote = computed(() => {
+  switch (props.event.reservation) {
+    case 'required':
+      return t('event.reservationRequired')
+    case 'walkin':
+      return t('event.noBookingNeeded')
+    default:
+      return t('event.reservationRecommended')
   }
-
-  return props.event.booking.required ? t('event.reservationRequired') : t('event.reservationRecommended')
 })
-
-const visibleTags = computed(() => props.event.tags?.slice(0, 4) || [])
-const getTagLabel = (tag: string) => t(`event.tagLabels.${tag}`)
 </script>
 
 <template>
@@ -55,24 +50,21 @@ const getTagLabel = (tag: string) => t(`event.tagLabels.${tag}`)
       class="min-w-0 space-y-4"
       :class="reverse ? 'lg:order-2' : 'lg:order-1'"
     >
-      <div class="flex flex-wrap items-center gap-2">
+      <div class="flex items-center gap-3">
+        <p class="cafe-eyebrow">
+          {{ formatEventDate(event, locale) }}
+        </p>
         <UBadge
-          :label="upcoming ? t('event.upcoming') : t('event.pastEvent')"
-          :color="upcoming ? 'primary' : 'neutral'"
-          variant="soft"
-        />
-        <UBadge
-          :label="event.badge || getEventCategoryLabel(event.category, locale)"
+          v-if="!upcoming"
+          :label="t('event.pastEvent')"
           color="neutral"
-          variant="outline"
+          variant="soft"
+          size="sm"
         />
       </div>
 
       <div class="space-y-3">
-        <p class="text-sm font-medium text-muted">
-          {{ formatEventDate(event, locale) }}
-        </p>
-        <h3 class="text-2xl font-semibold leading-tight text-highlighted">
+        <h3 class="font-serif text-2xl font-medium leading-tight tracking-tight text-highlighted">
           <ULink :to="event.path">
             {{ event.title }}
           </ULink>
@@ -82,46 +74,25 @@ const getTagLabel = (tag: string) => t(`event.tagLabels.${tag}`)
         </p>
       </div>
 
-      <dl class="grid gap-3 text-sm text-muted sm:grid-cols-2">
-        <div class="flex items-start gap-2">
+      <dl class="flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-sm tabular-nums text-muted">
+        <div class="flex items-center gap-2">
           <UIcon
             name="i-lucide-clock"
-            class="mt-0.5 size-4 shrink-0 text-primary"
+            class="size-4 shrink-0 text-primary"
           />
-          <div>
-            <dt class="sr-only">
-              {{ t('event.time') }}
-            </dt>
-            <dd>{{ getEventTime(event, t('event.noTime')) }}</dd>
-          </div>
+          <dd>{{ getEventTime(event, t('event.noTime')) }}</dd>
         </div>
-        <div class="flex items-start gap-2">
+        <div
+          v-if="showPrice"
+          class="flex items-center gap-2"
+        >
           <UIcon
             name="i-lucide-ticket"
-            class="mt-0.5 size-4 shrink-0 text-primary"
+            class="size-4 shrink-0 text-primary"
           />
-          <div>
-            <dt class="sr-only">
-              {{ t('event.price') }}
-            </dt>
-            <dd>{{ event.price.label }}</dd>
-          </div>
+          <dd>{{ formatEventPrice(event.price!, locale) }}</dd>
         </div>
       </dl>
-
-      <div
-        v-if="visibleTags.length"
-        class="flex flex-wrap gap-2"
-      >
-        <UBadge
-          v-for="tag in visibleTags"
-          :key="tag"
-          :label="getTagLabel(tag)"
-          color="neutral"
-          variant="soft"
-          size="sm"
-        />
-      </div>
 
       <div class="flex flex-wrap items-center gap-3 pt-1">
         <UButton
@@ -134,14 +105,14 @@ const getTagLabel = (tag: string) => t(`event.tagLabels.${tag}`)
           class="px-0"
         />
         <span class="text-sm text-muted">
-          {{ bookingLabel }}
+          {{ reservationNote }}
         </span>
       </div>
     </div>
 
     <NuxtLink
       :to="event.path"
-      class="block overflow-hidden rounded-lg shadow-lg ring-1 ring-default"
+      class="block overflow-hidden rounded-2xl shadow-lg ring-1 ring-default"
       :class="reverse ? 'lg:order-1' : 'lg:order-2'"
       :aria-label="`${t('event.viewDetails')} ${event.title}`"
     >

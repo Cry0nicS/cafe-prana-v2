@@ -14,7 +14,7 @@ const [{ data: page }, { data: events }] = await Promise.all([
   ),
   useAsyncData(
     `events-list-${locale.value}`,
-    () => queryCollection('events').where('locale', '=', locale.value).order('startDate', 'ASC').all(),
+    () => queryCollection('events').where('locale', '=', locale.value).order('date', 'ASC').all(),
     { watch: [locale] }
   )
 ])
@@ -101,10 +101,10 @@ useCafeSeo({
         <div class="relative overflow-hidden rounded-xl border border-default bg-muted/40 p-5">
           <span class="absolute inset-x-0 top-0 h-0.5 bg-[var(--cafe-spark)]" />
           <p class="font-mono text-xs uppercase tracking-[0.2em] text-dimmed">
-            {{ t('event.format') }}
+            {{ t('event.everyGathering') }}
           </p>
-          <p class="mt-2 font-serif text-2xl font-medium text-highlighted">
-            {{ t('event.cafeGatherings') }}
+          <p class="mt-2 font-mono text-sm font-medium tracking-wide text-highlighted">
+            {{ t('event.dietary') }}
           </p>
         </div>
       </div>

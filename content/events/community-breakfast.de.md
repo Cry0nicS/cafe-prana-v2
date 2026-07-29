@@ -4,43 +4,16 @@ slug: community-breakfast
 sitemap:
   priority: 0.7
   changefreq: monthly
-title: Community Breakfast
-description: Starte den Tag mit meinem Community Breakfast im Cafe Prana. Ein entspannter Morgen mit nährendem Essen, warmen Getränken und einer einladenden Community-Atmosphäre.
-badge: Besondere Gäste
-category: breakfast
-startDate: 2025-12-28
+title: "Community Breakfast"
+description: "Starte den Tag mit meinem Community Breakfast im Cafe Prana. Ein entspannter Morgen mit nährendem Essen, warmen Getränken und einer einladenden Community-Atmosphäre."
+date: 2025-12-28
 time: "09:30-11:30"
-timezone: Europe/Berlin
 image:
-  src: /images/events/posts/community-breakfast.png
-  alt: Community Breakfast im Cafe Prana
-heroImage:
   src: /images/events/posts/community-breakfast-hero.png
-  alt: Frühstückstisch im Cafe Prana
-location:
-  name: Cafe Prana, Berlin
-price:
-  label: 18 € pro Person
-  amount: 18
-  currency: EUR
-booking:
-  enabled: true
-  required: true
-  label: Platz reservieren
-  url: /reservations
-  note: Reservierung erforderlich. Dieses Event ist exklusiv für besondere Gäste. Bitte reserviere über www.cafeprana.de.
-tags:
-  - vegan
-  - gluten-free
-  - organic
-  - community
-  - limited-seats
-  - reservation-required
-  - special-guests
-seo:
-  title: Community Breakfast im Cafe Prana
-  description: Ein entspanntes pflanzliches und glutenfreies Community-Frühstück für besondere Gäste im Cafe Prana in Berlin.
-  ogImage: /images/events/posts/community-breakfast-hero.png
+  alt: "Frühstückstisch im Cafe Prana"
+paid: true
+price: 18
+reservation: required
 ---
 
 Ein Frühstück im Buffet-Stil mit saisonalen pflanzlichen Gerichten, gedacht für Verbindung, Gespräche und einen ruhigen Start in den Tag.

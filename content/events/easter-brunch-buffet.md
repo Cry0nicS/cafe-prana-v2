@@ -4,42 +4,16 @@ slug: easter-brunch-buffet
 sitemap:
   priority: 0.7
   changefreq: monthly
-title: Easter Brunch Buffet
-description: Enjoy the Easter weekend with a festive Easter Brunch Buffet at Café Prana. A relaxed late morning filled with nourishing dishes, warm drinks, and spring comfort.
-badge: Easter Weekend
-category: brunch
-startDate: 2026-04-04
+title: "Easter Brunch Buffet"
+description: "Enjoy the Easter weekend with a festive Easter Brunch Buffet at Café Prana. A relaxed late morning filled with nourishing dishes, warm drinks, and spring comfort."
+date: 2026-04-04
 time: "11:00-13:00"
-timezone: Europe/Berlin
 image:
-  src: /images/events/posts/easter-brunch-buffet.png
-  alt: Easter Brunch Buffet at Café Prana
-heroImage:
   src: /images/events/posts/easter-brunch-buffet-hero.png
-  alt: Spring brunch buffet at Café Prana
-location:
-  name: Café Prana, Berlin
-price:
-  label: 20 € per person
-  amount: 20
-  currency: EUR
-booking:
-  enabled: true
-  required: true
-  label: Reserve your seat
-  url: /reservations
-  note: Reservation required due to limited availability. Please reserve via www.cafeprana.de.
-tags:
-  - vegan
-  - gluten-free
-  - organic
-  - seasonal
-  - limited-seats
-  - reservation-required
-seo:
-  title: Easter Brunch Buffet at Café Prana
-  description: Enjoy a festive plant based and gluten free Easter brunch buffet at Café Prana in Berlin.
-  ogImage: /images/events/posts/easter-brunch-buffet-hero.png
+  alt: "Spring brunch buffet at Café Prana"
+paid: true
+price: 20
+reservation: required
 ---
 
 A generous plant based brunch buffet featuring seasonal and festive dishes, inviting you to enjoy at your own pace in a cozy atmosphere.
