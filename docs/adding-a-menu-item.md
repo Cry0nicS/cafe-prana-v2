@@ -21,7 +21,8 @@ groups them under the right category automatically.
      - `food` → shows under **Food & Brunch**
    - **description** — a short line about the item
    - **ingredients** — shown in the "Ingredients" expander on the card
-   - **price** — free text, e.g. `18 €` or `22`
+   - **price** — just the number, e.g. `4,60`, or a range like `2,5 / 3,3`. The `€` sign is
+     added automatically, so don't type it.
    - **image** — choose or upload a photo via the media picker; add a short **alt** text
    - **labels** — optional tags, chosen from the fixed list
      (gluten-free, vegan, vegetarian, spicy, seasonal, organic)

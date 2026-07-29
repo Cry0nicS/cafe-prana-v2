@@ -1,9 +1,9 @@
-﻿locale: "de"
+locale: "de"
 title: "Chai Latte"
 category: "drinksHot"
-description: "Hausgemachte Chai-GewÃ¼rzmischung mit Mylk deiner Wahl."
-ingredients: "Chai-GewÃ¼rze, Mylk deiner Wahl"
-price: "4,6â‚¬"
+description: "Hausgemachte Chai-Gewürzmischung mit Mylk deiner Wahl."
+ingredients: "Chai-Gewürze, Mylk deiner Wahl"
+price: "4,6"
 image:
   src: "/images/menu/chai-latte.png"
   alt: "Chai Latte in einer Keramiktasse"

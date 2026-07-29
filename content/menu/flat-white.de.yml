@@ -1,9 +1,9 @@
-﻿locale: "de"
+locale: "de"
 title: "Flat White"
 category: "drinksCoffee"
 description: "Sanft und vollmundig mit Pflanzenmilch deiner Wahl."
 ingredients: "Espresso, samtiger Mikroschaum, Pflanzenmilch"
-price: "4,6â‚¬"
+price: "4,6"
 image:
   src: "/images/menu/flat-white.png"
   alt: "Flat White mit Pflanzenmilch"

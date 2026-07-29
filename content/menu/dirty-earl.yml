@@ -1,9 +1,9 @@
-﻿locale: "en"
+locale: "en"
 title: "Dirty Earl"
 category: "drinksCoffee"
 description: "Finest blend of black tea and coffee."
 ingredients: "Earl Grey tea, single espresso shot, steamed mylk of choice"
-price: "5.2â‚¬"
+price: "5.2"
 image:
   src: "/images/menu/dirty-earl.png"
   alt: "Dirty Earl drink with tea and coffee"

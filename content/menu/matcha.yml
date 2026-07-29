@@ -1,9 +1,9 @@
-﻿locale: "en"
+locale: "en"
 title: "Ceremonial Matcha"
 category: "drinksHot"
 description: "First-grade matcha served hot."
 ingredients: "Matcha powder served with hot water"
-price: "3,6â‚¬"
+price: "3,6"
 image:
   src: "/images/menu/matcha.png"
   alt: "Ceremonial matcha served hot"

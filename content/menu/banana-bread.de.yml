@@ -1,9 +1,9 @@
-﻿locale: "de"
+locale: "de"
 title: "Banana Bread"
 category: "food"
 description: "Getoastet und mit den Toppings des Tages serviert."
 ingredients: "Hausgemachte glutenfreie Mehlmischung, Banane, Mandeln"
-price: "9,5â‚¬"
+price: "9,5"
 image:
   src: "/images/menu/banana-bread.png"
   alt: "Getoastetes Banana Bread mit Toppings des Tages"

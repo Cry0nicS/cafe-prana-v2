@@ -1,9 +1,9 @@
-﻿locale: "de"
+locale: "de"
 title: "Bio Fairtrade Espresso / Americano"
 category: "drinksCoffee"
 description: "Klassischer Espresso oder Lungo aus meiner besonderen Mischung."
-ingredients: "SÃ¤urearme Mischung, kurzer Bezug"
-price: "2,5 / 3,3â‚¬"
+ingredients: "Säurearme Mischung, kurzer Bezug"
+price: "2,5 / 3,3"
 image:
   src: "/images/menu/espresso.png"
   alt: "Bio Fairtrade Espresso oder Americano"

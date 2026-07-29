@@ -1,9 +1,9 @@
-﻿locale: "en"
+locale: "en"
 title: "Ceremonial Cacao"
 category: "drinksHot"
 description: "Yes, I believe in mindfulness and the power of pure, raw cacao to uplift your spirit."
 ingredients: "Raw cacao, hot water or mylk"
-price: "6â‚¬"
+price: "6"
 image:
   src: "/images/menu/cacao.png"
   alt: "Ceremonial cacao drink"

@@ -1,12 +1,12 @@
-﻿locale: "de"
+locale: "de"
 title: "Zeremonieller Matcha"
 category: "drinksHot"
-description: "First-grade Matcha, heiÃŸ serviert."
-ingredients: "Matcha-Pulver mit heiÃŸem Wasser"
-price: "3,6â‚¬"
+description: "First-grade Matcha, heiß serviert."
+ingredients: "Matcha-Pulver mit heißem Wasser"
+price: "3,6"
 image:
   src: "/images/menu/matcha.png"
-  alt: "HeiÃŸ servierter zeremonieller Matcha"
+  alt: "Heiß servierter zeremonieller Matcha"
 labels:
   - "gluten-free"
   - "vegan"
