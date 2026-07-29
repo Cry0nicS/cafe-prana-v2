@@ -21,15 +21,29 @@ const footerLinks = computed(() => [
     :ui="{ left: 'text-muted text-xs', right: 'gap-1' }"
   >
     <template #left>
-      <div class="flex flex-col gap-1">
+      <div class="flex flex-col gap-2">
         <span class="font-mono tracking-tight">{{ footer.credits }}</span>
         <span>{{ t('footer.description') || global.description }}</span>
-        <ULink
-          :to="localePath('/cookies')"
-          class="text-xs text-muted underline-offset-4 hover:text-highlighted hover:underline"
-        >
-          {{ t('footer.cookiePolicy') }}
-        </ULink>
+        <nav class="flex flex-wrap items-center gap-x-4 gap-y-1">
+          <ULink
+            :to="localePath('/imprint')"
+            class="text-xs text-muted underline-offset-4 hover:text-highlighted hover:underline"
+          >
+            {{ t('footer.imprint') }}
+          </ULink>
+          <ULink
+            :to="localePath('/privacy')"
+            class="text-xs text-muted underline-offset-4 hover:text-highlighted hover:underline"
+          >
+            {{ t('footer.privacy') }}
+          </ULink>
+          <ULink
+            :to="localePath('/cookies')"
+            class="text-xs text-muted underline-offset-4 hover:text-highlighted hover:underline"
+          >
+            {{ t('footer.cookiePolicy') }}
+          </ULink>
+        </nav>
       </div>
     </template>
 
