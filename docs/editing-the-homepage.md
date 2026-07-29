@@ -36,13 +36,16 @@ This is the part that was missing before. Each repeatable block is a reusable co
 3. Choose the block you want:
    - **Feature** — a card with an icon, title, and description (used in *My Philosophy* and *Community gatherings*)
    - **Menu highlight** — a dish card with a photo, title, and description
-   - **Gallery image** — one photo in the gallery
    - **FAQ item** — one question and answer
 4. Fill in the text. For the icon or photo fields, see below.
 
 To **reorder**, drag the block by its handle. To **delete**, select it and remove it.
 
 > Tip: because these are reusable, you can grow any section just by adding more of the same block — e.g. a fifth menu highlight or a sixth FAQ.
+
+> The **Gallery** works differently: it's a single block with a **list of photos**. Click the
+> gallery and add, remove, or reorder photos in its image list (each needs a short alt text) —
+> you don't add gallery photos as separate blocks. Visitors swipe through them in a carousel.
 
 ## Adding a photo
 

@@ -25,8 +25,7 @@ The page is rendered by `app/pages/index.vue` with `<ContentRenderer :value="pag
 | `::menu-highlights` | `MenuHighlights` | `icon, title, description` | `::menu-highlight` children (CTAs from `home.menu.*`) | — |
 | `::menu-highlight` | `MenuHighlight` | `title, description, image{src,alt}` | — | ✅ reusable |
 | `::events-intro` | `EventsIntro` | `icon, headline, title, description, image{src,alt}` | `::feature` children (CTAs from `home.events.*`) | — |
-| `::gallery` | `Gallery` | `icon, title, description` | `::gallery-image` children | — |
-| `::gallery-image` | `GalleryImage` | `src, alt` | — | ✅ reusable |
+| `::gallery` | `Gallery` | `icon, headline, title, description, images[]{src,alt}` | — (renders a `UCarousel`; each image opens in a lightbox) | — |
 | `::story-section` | `StorySection` | `icon, title, image{src,alt}` | default slot = prose (rich text) | — |
 | `::faq` | `Faq` | `icon, title, description` | `::faq-item` children | — |
 | `::faq-item` | `FaqItem` | `label` | default slot = answer prose | ✅ reusable |
