@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { locale } = useI18n()
+const { locale, t } = useI18n()
 
 const { data: page } = await useAsyncData(
   `index-${locale.value}`,
@@ -16,9 +16,9 @@ if (!page.value) {
 }
 
 useCafeSeo({
-  title: page.value.seo.title,
-  description: page.value.seo.description,
-  image: page.value.seo.ogImage
+  title: () => t('seo.home.title'),
+  description: () => t('seo.home.description'),
+  image: '/images/hero.png'
 })
 </script>
 

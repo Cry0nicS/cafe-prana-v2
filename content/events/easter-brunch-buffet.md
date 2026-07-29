@@ -1,8 +1,5 @@
 ---
 locale: en
-sitemap:
-  priority: 0.7
-  changefreq: monthly
 title: "Easter Brunch Buffet"
 description: "Enjoy the Easter weekend with a festive Easter Brunch Buffet at Café Prana. A relaxed late morning filled with nourishing dishes, warm drinks, and spring comfort."
 date: 2026-04-04

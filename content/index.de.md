@@ -1,12 +1,5 @@
 ---
 locale: de
-sitemap:
-  priority: 1
-  changefreq: weekly
-seo:
-  title: "Cafe Prana Berlin | Glutenfreies veganes Cafe & Brunch"
-  description: "Besuche Cafe Prana in Berlin Prenzlauer Berg fuer 100% glutenfreien veganen Brunch, Bio-Lunch, Specialty Coffee, warme Drinks und Community-Events."
-  ogImage: /images/hero.png
 ---
 
 ::home-hero

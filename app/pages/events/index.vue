@@ -36,14 +36,12 @@ const allEvents = computed(() =>
 const upcomingEvents = computed(() => allEvents.value.filter(event => isUpcomingEvent(event)).sort(compareEventsAsc))
 const pastEvents = computed(() => allEvents.value.filter(event => !isUpcomingEvent(event)).sort(compareEventsDesc))
 
-const title = computed(() => page.value?.seo.title || page.value?.hero.title)
-const description = computed(() => page.value?.seo.description || page.value?.hero.description)
 const heroLinks = computed(() => localizeLinks(page.value?.hero.links))
 
 useCafeSeo({
-  title,
-  description,
-  image: () => page.value?.seo.ogImage || page.value?.hero.image.src
+  title: () => t('seo.events.title'),
+  description: () => t('seo.events.description'),
+  image: '/images/events/index.png'
 })
 </script>
 

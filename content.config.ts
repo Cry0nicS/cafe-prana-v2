@@ -33,9 +33,11 @@ const createSeoSchema = () => z.object({
 // Standard hidden navigation field shared by the page collections.
 const createHiddenNavigation = () => z.boolean().default(false).editor({ hidden: true })
 
-// Sitemap entries use fixed defaults / code-driven URLs, so this field is also
-// hidden from the Studio editor everywhere it is used.
-const createSitemapSchema = (options?: DefineSitemapSchemaOptions) => defineSitemapSchema({ z, ...options }).editor({ hidden: true })
+// Sitemap entries use fixed defaults / code-driven URLs, so this field is
+// hidden from the Studio editor everywhere it is used. It is also optional:
+// Studio drops hidden fields when it rewrites a file, and an optional field
+// keeps that from breaking content validation (the onUrl override still runs).
+const createSitemapSchema = (options?: DefineSitemapSchemaOptions) => defineSitemapSchema({ z, ...options }).optional().editor({ hidden: true })
 
 const createLocaleSchema = () => z.enum(['en', 'de'])
 
@@ -73,8 +75,7 @@ export default defineContentConfig({
             url.loc = entry.locale === 'de' ? '/de' : '/'
           }
         }),
-        navigation: createHiddenNavigation(),
-        seo: createSeoSchema()
+        navigation: createHiddenNavigation()
       })
     }),
     menuPage: defineCollection({
@@ -92,7 +93,6 @@ export default defineContentConfig({
           }
         }),
         navigation: createHiddenNavigation(),
-        seo: createSeoSchema(),
         hero: createBaseSchema().extend({
           headline: z.string(),
           image: createImageSchema()
@@ -147,7 +147,6 @@ export default defineContentConfig({
           }
         }),
         navigation: createHiddenNavigation(),
-        seo: createSeoSchema(),
         hero: createBaseSchema().extend({
           headline: z.string(),
           image: createImageSchema(),

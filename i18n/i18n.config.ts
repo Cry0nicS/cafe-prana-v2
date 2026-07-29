@@ -34,6 +34,20 @@ export default defineI18nConfig(() => ({
         imprint: 'Imprint',
         privacy: 'Privacy'
       },
+      seo: {
+        home: {
+          title: 'Gluten-Free Vegan Cafe & Brunch',
+          description: 'Visit Cafe Prana in Berlin Prenzlauer Berg for 100% gluten-free vegan brunch, organic lunch, specialty coffee, warm drinks, and cozy community events.'
+        },
+        menu: {
+          title: 'Gluten-Free Vegan Menu in Berlin',
+          description: 'Explore Cafe Prana\'s 100% gluten-free vegan menu in Berlin with organic brunch, nourishing lunch, specialty coffee, cacao, matcha, and warm drinks.'
+        },
+        events: {
+          title: 'Vegan Gluten-Free Events in Berlin',
+          description: 'Discover upcoming Cafe Prana events in Berlin, including vegan gluten-free brunches, community dinners, cacao workshops, and seasonal gatherings.'
+        }
+      },
       menu: {
         itemCount: '{count} item | {count} items',
         ingredients: 'Ingredients'
@@ -268,6 +282,20 @@ export default defineI18nConfig(() => ({
         cookiePolicy: 'Cookie-Richtlinie',
         imprint: 'Impressum',
         privacy: 'Datenschutz'
+      },
+      seo: {
+        home: {
+          title: 'Glutenfreies veganes Cafe & Brunch',
+          description: 'Besuche Cafe Prana in Berlin Prenzlauer Berg fuer 100% glutenfreien veganen Brunch, Bio-Lunch, Specialty Coffee, warme Drinks und Community-Events.'
+        },
+        menu: {
+          title: 'Glutenfreies veganes Menue in Berlin',
+          description: 'Entdecke das 100% glutenfreie vegane Menue von Cafe Prana in Berlin mit Bio-Brunch, naehrendem Lunch, Specialty Coffee, Kakao, Matcha und warmen Drinks.'
+        },
+        events: {
+          title: 'Vegane glutenfreie Events in Berlin',
+          description: 'Entdecke kommende Cafe Prana Events in Berlin: vegan-glutenfreie Brunches, Community-Dinner, Kakao-Workshops und saisonale Gatherings.'
+        }
       },
       menu: {
         itemCount: '{count} Gericht | {count} Gerichte',

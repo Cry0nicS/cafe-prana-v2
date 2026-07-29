@@ -1,8 +1,5 @@
 ---
 locale: en
-sitemap:
-  priority: 0.7
-  changefreq: monthly
 title: "Community Xmas Dinner"
 description: "Celebrate Christmas Eve with my Community Xmas Dinner at Café Prana. A warm evening of nourishing food, shared tables, and a festive atmosphere to come together as a community."
 date: 2025-12-24

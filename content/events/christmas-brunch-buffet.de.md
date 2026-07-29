@@ -1,8 +1,5 @@
 ---
 locale: de
-sitemap:
-  priority: 0.7
-  changefreq: monthly
 title: "Weihnachts-Brunch-Buffet"
 description: "Genieße den ersten Weihnachtstag mit meinem festlichen Weihnachts-Brunch-Buffet im Cafe Prana. Ein entspannter später Vormittag mit nährenden Gerichten, warmen Getränken und gemütlicher Feiertagsstimmung."
 date: 2025-12-25
