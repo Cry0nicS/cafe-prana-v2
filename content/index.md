@@ -154,47 +154,24 @@ description: Book my space for your own celebration, workshop, or gathering, wit
 ::
 :::
 
-:::gallery
+::gallery
 ---
 icon: i-lucide-camera
 title: Gallery
 description: Get a glimpse of the ambience, dishes and drinks that convey Café Prana's philosophy.
----
-::gallery-image
----
-src: /images/home/gallery/gallery-1.png
-alt: Café Prana interior and food detail 1
----
-::
-
-::gallery-image
----
-src: /images/home/gallery/gallery-2.png
-alt: Café Prana interior and food detail 2
----
-::
-
-::gallery-image
----
-src: /images/home/gallery/gallery-3.png
-alt: Café Prana interior and food detail 3
+images:
+  - src: /images/home/gallery/gallery-1.png
+    alt: Café Prana interior and food detail 1
+  - src: /images/home/gallery/gallery-2.png
+    alt: Café Prana interior and food detail 2
+  - src: /images/home/gallery/gallery-3.png
+    alt: Café Prana interior and food detail 3
+  - src: /images/home/gallery/gallery-4.png
+    alt: Café Prana interior and food detail 4
+  - src: /images/home/gallery/gallery-5.png
+    alt: Café Prana interior and food detail 5
 ---
 ::
-
-::gallery-image
----
-src: /images/home/gallery/gallery-4.png
-alt: Café Prana interior and food detail 4
----
-::
-
-::gallery-image
----
-src: /images/home/gallery/gallery-5.png
-alt: Café Prana interior and food detail 5
----
-::
-:::
 
 ::story-section
 ---

@@ -1,19 +1,71 @@
 <script setup lang="ts">
-defineProps<{
+type GalleryImg = { src: string, alt: string }
+
+const props = defineProps<{
   icon?: string
+  headline?: string
   title?: string
   description?: string
+  images?: GalleryImg[]
 }>()
+
+const items = computed(() => props.images ?? [])
+const active = ref<GalleryImg | null>(null)
 </script>
 
 <template>
   <UPageSection
     :icon="icon"
+    :headline="headline"
     :title="title"
     :description="description"
   >
-    <div class="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 sm:mx-0 sm:px-0">
-      <slot />
-    </div>
+    <UCarousel
+      v-slot="{ item }"
+      :items="items"
+      :arrows="items.length > 1"
+      :dots="items.length > 1"
+      loop
+      wheel-gestures
+      :ui="{
+        item: 'basis-4/5 sm:basis-1/2 lg:basis-1/3',
+        container: 'py-1',
+        dot: 'data-[state=active]:bg-primary'
+      }"
+    >
+      <button
+        type="button"
+        class="block w-full overflow-hidden rounded-xl ring-1 ring-default transition duration-300 hover:ring-primary/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cafe-spark)]"
+        :aria-label="`${item.alt} — view larger`"
+        @click="active = item"
+      >
+        <NuxtImg
+          :src="item.src"
+          :alt="item.alt"
+          format="webp"
+          sizes="sm:80vw md:50vw lg:360px"
+          class="aspect-[4/5] w-full object-cover transition duration-500 hover:scale-105"
+          placeholder
+        />
+      </button>
+    </UCarousel>
+
+    <UModal
+      :open="!!active"
+      :title="active?.alt"
+      :ui="{ content: 'max-w-3xl', header: 'sr-only' }"
+      @update:open="(value) => { if (!value) active = null }"
+    >
+      <template #body>
+        <NuxtImg
+          v-if="active"
+          :src="active.src"
+          :alt="active.alt"
+          format="webp"
+          sizes="md:90vw lg:800px"
+          class="mx-auto max-h-[80vh] w-full rounded-lg object-contain"
+        />
+      </template>
+    </UModal>
   </UPageSection>
 </template>

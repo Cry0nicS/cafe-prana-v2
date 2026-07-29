@@ -44,7 +44,7 @@ const links = computed(() => [
   >
     <div
       v-if="image?.src"
-      class="relative"
+      class="relative p-6 sm:p-8"
     >
       <div
         class="cafe-aura"
@@ -57,7 +57,7 @@ const links = computed(() => [
         :alt="image.alt"
         format="webp"
         sizes="sm:100vw md:50vw lg:560px"
-        class="relative aspect-[16/11] w-full rounded-2xl object-cover shadow-xl ring-1 ring-default"
+        class="relative z-10 aspect-[16/11] w-full rounded-2xl object-cover shadow-xl ring-1 ring-default"
         placeholder
       />
     </div>

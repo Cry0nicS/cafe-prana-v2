@@ -178,7 +178,8 @@ html {
   background: var(--cafe-spark);
 }
 
-/* Breath aura — the hero signature. Concentric rings that slowly inhale. */
+/* Breath aura — the hero signature. Concentric rings + a soft glow that
+   slowly inhale, haloing out from behind the hero image. */
 .cafe-aura {
   position: absolute;
   inset: 0;
@@ -187,16 +188,29 @@ html {
   pointer-events: none;
   z-index: 0;
 }
+.cafe-aura::before {
+  content: "";
+  position: absolute;
+  width: 78%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--ui-primary) 26%, transparent) 0%,
+    transparent 68%
+  );
+  animation: cafe-breathe 7s ease-in-out infinite;
+}
 .cafe-aura span {
   position: absolute;
   border-radius: 50%;
   border: 1.5px solid var(--ui-primary);
-  opacity: 0.16;
+  opacity: 0.28;
   animation: cafe-breathe 7s ease-in-out infinite;
 }
-.cafe-aura span:nth-child(1) { width: 42%; height: 42%; opacity: 0.24; }
-.cafe-aura span:nth-child(2) { width: 66%; height: 66%; animation-delay: 0.6s; }
-.cafe-aura span:nth-child(3) { width: 92%; height: 92%; opacity: 0.1; animation-delay: 1.2s; }
+.cafe-aura span:nth-child(1) { width: 58%; height: 58%; opacity: 0.4; }
+.cafe-aura span:nth-child(2) { width: 80%; height: 80%; animation-delay: 0.6s; }
+.cafe-aura span:nth-child(3) { width: 100%; height: 100%; opacity: 0.18; animation-delay: 1.2s; }
 
 @keyframes cafe-breathe {
   0%, 100% { transform: scale(1); }
@@ -205,5 +219,6 @@ html {
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .cafe-aura span { animation: none; }
+  .cafe-aura span,
+  .cafe-aura::before { animation: none; }
 }
