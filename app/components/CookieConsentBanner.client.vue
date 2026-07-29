@@ -33,27 +33,27 @@ onMounted(() => {
               name="i-lucide-cookie"
               class="mt-0.5 size-4 shrink-0 text-primary"
             />
-            <div class="space-y-1">
+            <div class="space-y-1.5">
               <h2 class="text-sm font-semibold text-highlighted">
                 {{ t('cookies.bannerTitle') }}
               </h2>
               <p class="text-xs leading-5 text-muted">
                 {{ t('cookies.bannerDescription') }}
               </p>
+              <ULink
+                :to="localePath('/cookies')"
+                class="inline-flex items-center gap-1 text-xs font-medium text-primary"
+              >
+                {{ t('cookies.readPolicy') }}
+                <UIcon
+                  name="i-lucide-arrow-right"
+                  class="size-3.5"
+                />
+              </ULink>
             </div>
           </div>
 
-          <div class="mt-3 flex flex-wrap items-center justify-between gap-3">
-            <ULink
-              :to="localePath('/cookies')"
-              class="inline-flex items-center gap-1 text-xs font-medium text-primary"
-            >
-              {{ t('cookies.readPolicy') }}
-              <UIcon
-                name="i-lucide-arrow-right"
-                class="size-3.5"
-              />
-            </ULink>
+          <div class="mt-4 flex justify-end">
             <UButton
               :label="t('cookies.understand')"
               color="primary"
