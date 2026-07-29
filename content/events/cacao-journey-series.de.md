@@ -1,6 +1,5 @@
 ---
 locale: de
-slug: cacao-journey-series
 sitemap:
   priority: 0.7
   changefreq: monthly

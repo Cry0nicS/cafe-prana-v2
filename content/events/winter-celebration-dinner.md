@@ -1,6 +1,5 @@
 ---
 locale: en
-slug: winter-celebration-dinner
 sitemap:
   priority: 0.7
   changefreq: monthly

@@ -10,17 +10,18 @@ note, and the search-engine info are all handled for you.
 
 ## Add a new event (in Studio)
 
-1. In the editor, open the **content/events** folder and create a **new file** — duplicating an
-   existing event is the easiest start.
+1. In the editor, open the **content/events** folder and create a **new event**. The name you
+   give it becomes the web address (e.g. an event named "Spring Brunch" lives at
+   `/events/spring-brunch`) — you don't set a slug or URL by hand.
 2. Use **two files per event**, one per language: `my-event.md` (English) and `my-event.de.md`
-   (German). Keep the same name before the `.de`.
-3. Fill in the **details** (the form at the top):
+   (German). Keep the same name before the `.de` so the two languages share one address and the
+   language switcher works.
+3. Fill in the **details** (the form at the top) — this is the whole form:
 
    | Field | What it is |
    |-------|------------|
    | `title` | The event name. |
    | `description` | One or two sentences, shown on the card and at the top of the page. |
-   | `slug` | The web address (e.g. `spring-brunch`). Must match the file name and be the **same in both languages**. |
    | `date` | The day it happens. |
    | `time` | Free text — e.g. `18:00` or `11:00–13:00`. |
    | `image` | The header photo, from the media library. Also used for the listing card. |
@@ -28,6 +29,8 @@ note, and the search-engine info are all handled for you.
    | `price` | The amount in **euros** (just the number, e.g. `30`). Only used when `paid` is on. |
    | `reservation` | `required`, `recommended`, or `walkin` (no booking needed). |
 
+   That's it — there is no SEO, navigation, sitemap or slug to fill in. Those are handled
+   automatically (see below).
 4. Below the details, **write the event page freely** — headings, paragraphs, photos, and note
    boxes. This is where you describe the event however you like.
 
@@ -61,13 +64,17 @@ are shown automatically in the page's info bar and on the card.
 
 ## What you no longer need to set
 
-These were removed to keep things simple — they're handled for you:
+These are hidden from the form and handled for you:
 
+- **URL / slug** — taken from the event's file name (created from the title). Keep the English
+  and German file names the same so both languages share one address.
+- **SEO** — the search-engine title, description and preview image are generated from the
+  `title`, `description` and `image` above. No SEO tab to fill.
+- **Navigation & sitemap** — set to sensible defaults automatically.
 - **Location** — always Café Prana; shown automatically.
 - **Currency** — always euros.
 - **Categories and tags** — events simply list by date. Every dish is vegan, gluten-free and
   organic, so that's stated once for the whole site.
-- **Search-engine info (SEO)** — generated from the title, description and image.
 
 > **Running a series** (e.g. a workshop over several weeks)? Create a **separate event for each
 > date**, each with a clear title. There is no separate "series" type, on purpose — it keeps every

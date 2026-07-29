@@ -1,6 +1,5 @@
 ---
 locale: de
-slug: community-breakfast
 sitemap:
   priority: 0.7
   changefreq: monthly

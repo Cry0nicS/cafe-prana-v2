@@ -1,6 +1,5 @@
 ---
 locale: de
-slug: easter-brunch-buffet
 sitemap:
   priority: 0.7
   changefreq: monthly

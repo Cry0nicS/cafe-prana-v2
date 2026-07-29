@@ -1,6 +1,5 @@
 ---
 locale: de
-slug: community-xmas-dinner
 sitemap:
   priority: 0.7
   changefreq: monthly

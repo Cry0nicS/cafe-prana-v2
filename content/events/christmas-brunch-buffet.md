@@ -1,6 +1,5 @@
 ---
 locale: en
-slug: christmas-brunch-buffet
 sitemap:
   priority: 0.7
   changefreq: monthly

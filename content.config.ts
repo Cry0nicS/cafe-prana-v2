@@ -165,13 +165,18 @@ export default defineContentConfig({
       source: 'events/*.md',
       schema: z.object({
         locale: createLocaleSchema(),
+        // Hidden in Studio: the URL is derived from the file name, SEO is
+        // derived from the fields below, and the sitemap uses fixed defaults.
         sitemap: createSitemapSchema({
           name: 'events',
           onUrl: (url, entry) => {
-            url.loc = entry.locale === 'de' ? `/de/events/${entry.slug}` : `/events/${entry.slug}`
+            // Inlined (this runs in Nitro, so no external helper references):
+            // derive the slug from the file stem, e.g. `events/spring-brunch.de` -> `spring-brunch`.
+            const slug = String(entry.stem ?? '').replace(/^events\//, '').replace(/\.de$/, '')
+            url.loc = entry.locale === 'de' ? `/de/events/${slug}` : `/events/${slug}`
           }
-        }),
-        slug: z.string().nonempty(),
+        }).editor({ hidden: true }),
+        navigation: z.boolean().default(false).editor({ hidden: true }),
         title: z.string().nonempty(),
         description: z.string().nonempty(),
         date: z.date(),
@@ -180,7 +185,7 @@ export default defineContentConfig({
         paid: z.boolean().default(false),
         price: z.number().optional(),
         reservation: z.enum(['required', 'recommended', 'walkin']).default('recommended'),
-        seo: createSeoSchema().optional()
+        seo: createSeoSchema().optional().editor({ hidden: true })
       })
     })
   }
