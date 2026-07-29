@@ -157,47 +157,24 @@ description: Buche den Raum für deine Feier, deinen Workshop oder dein Gatherin
 ::
 :::
 
-:::gallery
+::gallery
 ---
 icon: i-lucide-camera
 title: Galerie
 description: Ein Eindruck von Atmosphäre, Gerichten und Getränken, die die Philosophie von Cafe Prana zeigen.
----
-::gallery-image
----
-src: /images/home/gallery/gallery-1.png
-alt: Cafe-Prana-Interior und Food-Detail 1
----
-::
-
-::gallery-image
----
-src: /images/home/gallery/gallery-2.png
-alt: Cafe-Prana-Interior und Food-Detail 2
----
-::
-
-::gallery-image
----
-src: /images/home/gallery/gallery-3.png
-alt: Cafe-Prana-Interior und Food-Detail 3
+images:
+  - src: /images/home/gallery/gallery-1.png
+    alt: Cafe-Prana-Interior und Food-Detail 1
+  - src: /images/home/gallery/gallery-2.png
+    alt: Cafe-Prana-Interior und Food-Detail 2
+  - src: /images/home/gallery/gallery-3.png
+    alt: Cafe-Prana-Interior und Food-Detail 3
+  - src: /images/home/gallery/gallery-4.png
+    alt: Cafe-Prana-Interior und Food-Detail 4
+  - src: /images/home/gallery/gallery-5.png
+    alt: Cafe-Prana-Interior und Food-Detail 5
 ---
 ::
-
-::gallery-image
----
-src: /images/home/gallery/gallery-4.png
-alt: Cafe-Prana-Interior und Food-Detail 4
----
-::
-
-::gallery-image
----
-src: /images/home/gallery/gallery-5.png
-alt: Cafe-Prana-Interior und Food-Detail 5
----
-::
-:::
 
 ::story-section
 ---

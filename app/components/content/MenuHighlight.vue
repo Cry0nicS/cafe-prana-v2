@@ -12,7 +12,7 @@ defineProps<{
     :description="description"
     orientation="horizontal"
     reverse
-    class="bg-muted/50"
+    class="bg-elevated/60 transition duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md"
     :ui="{ root: 'overflow-hidden', body: 'flex flex-col justify-center' }"
   >
     <NuxtImg

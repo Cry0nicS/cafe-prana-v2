@@ -80,27 +80,30 @@ useCafeSeo({
       }"
     >
       <div class="grid gap-3 sm:grid-cols-3">
-        <div class="rounded-lg border border-default bg-muted/40 p-4">
-          <p class="text-sm text-muted">
+        <div class="relative overflow-hidden rounded-xl border border-default bg-muted/40 p-5">
+          <span class="absolute inset-x-0 top-0 h-0.5 bg-[var(--cafe-spark)]" />
+          <p class="font-mono text-xs uppercase tracking-[0.2em] text-dimmed">
             {{ t('event.upcoming') }}
           </p>
-          <p class="mt-1 text-2xl font-semibold text-highlighted">
+          <p class="mt-2 font-mono text-3xl font-bold tabular-nums text-highlighted">
             {{ upcomingEvents.length }}
           </p>
         </div>
-        <div class="rounded-lg border border-default bg-muted/40 p-4">
-          <p class="text-sm text-muted">
+        <div class="relative overflow-hidden rounded-xl border border-default bg-muted/40 p-5">
+          <span class="absolute inset-x-0 top-0 h-0.5 bg-[var(--cafe-spark)]" />
+          <p class="font-mono text-xs uppercase tracking-[0.2em] text-dimmed">
             {{ t('event.past') }}
           </p>
-          <p class="mt-1 text-2xl font-semibold text-highlighted">
+          <p class="mt-2 font-mono text-3xl font-bold tabular-nums text-highlighted">
             {{ pastEvents.length }}
           </p>
         </div>
-        <div class="rounded-lg border border-default bg-muted/40 p-4">
-          <p class="text-sm text-muted">
+        <div class="relative overflow-hidden rounded-xl border border-default bg-muted/40 p-5">
+          <span class="absolute inset-x-0 top-0 h-0.5 bg-[var(--cafe-spark)]" />
+          <p class="font-mono text-xs uppercase tracking-[0.2em] text-dimmed">
             {{ t('event.format') }}
           </p>
-          <p class="mt-1 text-2xl font-semibold text-highlighted">
+          <p class="mt-2 font-serif text-2xl font-medium text-highlighted">
             {{ t('event.cafeGatherings') }}
           </p>
         </div>

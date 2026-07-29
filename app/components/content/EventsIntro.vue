@@ -35,17 +35,17 @@ const links = computed(() => [
       <div>
         <p
           v-if="headline"
-          class="text-sm font-semibold text-primary"
+          class="cafe-eyebrow"
         >
           {{ headline }}
         </p>
-        <div class="mt-2 flex items-center gap-2">
+        <div class="mt-3 flex items-center gap-2">
           <UIcon
             v-if="icon"
             :name="icon"
             class="size-6 text-primary"
           />
-          <h2 class="text-2xl font-semibold text-highlighted sm:text-3xl">
+          <h2 class="font-serif text-3xl font-medium tracking-tight text-highlighted sm:text-4xl">
             {{ title }}
           </h2>
         </div>

@@ -30,20 +30,20 @@ const visibleLabels = computed(() =>
 </script>
 
 <template>
-  <article class="min-w-0 overflow-hidden rounded-lg border border-default bg-elevated/80 shadow-sm">
-    <div class="grid min-w-0 sm:grid-cols-[160px_minmax(0,1fr)] md:grid-cols-1">
+  <article class="group min-w-0 overflow-hidden rounded-lg border border-default bg-elevated/80 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md">
+    <div class="grid min-w-0 overflow-hidden sm:grid-cols-[160px_minmax(0,1fr)] md:grid-cols-1">
       <NuxtImg
         v-bind="item.image"
         format="webp"
         sizes="sm:100vw md:50vw lg:640px xl:420px"
-        class="aspect-[4/3] h-full w-full object-cover sm:aspect-auto md:aspect-[3/2] md:h-auto"
+        class="aspect-[4/3] h-full w-full object-cover transition duration-500 group-hover:scale-105 sm:aspect-auto md:aspect-[3/2] md:h-auto"
         placeholder
       />
 
       <div class="flex min-w-0 flex-col gap-4 p-4 sm:p-5 md:gap-3">
         <div class="flex min-w-0 items-start justify-between gap-4">
           <div class="min-w-0">
-            <h3 class="text-lg font-semibold leading-tight text-highlighted">
+            <h3 class="font-serif text-xl font-medium leading-tight text-highlighted">
               {{ item.title }}
             </h3>
             <p class="mt-2 text-sm leading-6 text-muted">
@@ -54,7 +54,7 @@ const visibleLabels = computed(() =>
             color="primary"
             variant="soft"
             size="lg"
-            class="shrink-0 whitespace-nowrap"
+            class="shrink-0 whitespace-nowrap font-mono font-bold tabular-nums"
           >
             {{ item.price }}
           </UBadge>

@@ -36,19 +36,28 @@ const links = computed(() => [
     orientation="horizontal"
     :ui="{
       container: 'py-12 sm:py-16 lg:py-24',
-      title: 'max-w-2xl text-left text-4xl font-semibold tracking-normal sm:text-5xl',
+      headline: 'font-mono text-xs uppercase tracking-[0.24em] text-primary',
+      title: 'max-w-2xl text-left font-serif text-5xl font-medium tracking-tight sm:text-6xl',
       description: 'max-w-xl text-left text-lg text-muted',
       links: 'justify-start'
     }"
   >
-    <NuxtImg
+    <div
       v-if="image?.src"
-      :src="image.src"
-      :alt="image.alt"
-      format="webp"
-      sizes="sm:100vw md:50vw lg:560px"
-      class="aspect-[16/11] w-full rounded-lg object-cover shadow-xl ring-1 ring-default"
-      placeholder
-    />
+      class="relative p-6 sm:p-8"
+    >
+      <div
+        class="cafe-aura"
+        aria-hidden="true"
+      />
+      <NuxtImg
+        :src="image.src"
+        :alt="image.alt"
+        format="webp"
+        sizes="sm:100vw md:50vw lg:560px"
+        class="relative z-10 aspect-[16/11] w-full rounded-2xl object-cover shadow-xl ring-1 ring-default"
+        placeholder
+      />
+    </div>
   </UPageHero>
 </template>

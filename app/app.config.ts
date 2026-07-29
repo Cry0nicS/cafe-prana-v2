@@ -16,14 +16,32 @@ export default defineAppConfig({
   },
   ui: {
     colors: {
-      primary: 'sage',
-      neutral: 'stone'
+      primary: 'chlorophyll',
+      neutral: 'paper'
     },
     pageHero: {
       slots: {
         container: 'py-16 sm:py-20 lg:py-28',
-        title: 'tracking-normal',
+        headline: 'font-mono text-xs uppercase tracking-[0.24em] text-primary',
+        title: 'font-serif font-medium tracking-tight',
         description: 'text-muted'
+      }
+    },
+    pageSection: {
+      slots: {
+        headline: 'font-mono text-xs uppercase tracking-[0.24em] text-primary',
+        title: 'font-serif font-medium tracking-tight',
+        description: 'text-muted'
+      }
+    },
+    pageCard: {
+      slots: {
+        title: 'font-serif font-medium'
+      }
+    },
+    pageCTA: {
+      slots: {
+        title: 'font-serif font-medium tracking-tight'
       }
     }
   },

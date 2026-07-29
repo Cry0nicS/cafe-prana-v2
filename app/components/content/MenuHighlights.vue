@@ -28,23 +28,25 @@ const links = computed(() => [
 </script>
 
 <template>
-  <UPageSection
-    id="menu"
-    :icon="icon"
-    :title="title"
-    :description="description"
-  >
-    <UPageGrid class="gap-6 lg:grid-cols-2">
-      <slot />
-    </UPageGrid>
+  <div class="-mx-4 border-y border-default bg-muted/40 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+    <UPageSection
+      id="menu"
+      :icon="icon"
+      :title="title"
+      :description="description"
+    >
+      <UPageGrid class="gap-6 lg:grid-cols-2">
+        <slot />
+      </UPageGrid>
 
-    <div class="flex flex-col justify-center gap-3 sm:flex-row">
-      <UButton
-        v-for="link in links"
-        :key="link.label"
-        v-bind="link"
-        class="justify-center"
-      />
-    </div>
-  </UPageSection>
+      <div class="flex flex-col justify-center gap-3 sm:flex-row">
+        <UButton
+          v-for="link in links"
+          :key="link.label"
+          v-bind="link"
+          class="justify-center"
+        />
+      </div>
+    </UPageSection>
+  </div>
 </template>

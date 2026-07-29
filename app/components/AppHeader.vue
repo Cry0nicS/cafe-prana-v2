@@ -42,15 +42,15 @@ const languageItems = computed<DropdownMenuItem[]>(() =>
         class="flex min-w-0 items-center gap-3"
         :aria-label="`${global.name} home`"
       >
-        <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-white shadow-sm dark:text-prana-warm-950">
+        <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-inverted shadow-sm ring-2 ring-[var(--cafe-spark)]/60">
           <UIcon
             name="i-lucide-sprout"
             class="size-5"
           />
         </span>
         <span class="min-w-0">
-          <span class="block truncate font-semibold text-highlighted">{{ global.name }}</span>
-          <span class="block truncate text-xs text-muted">{{ global.address }}</span>
+          <span class="block truncate font-serif text-lg font-medium tracking-tight text-highlighted">{{ global.name }}</span>
+          <span class="block truncate font-mono text-[0.7rem] tracking-wide text-muted">{{ global.address }}</span>
         </span>
       </NuxtLink>
 
@@ -59,6 +59,8 @@ const languageItems = computed<DropdownMenuItem[]>(() =>
           :items="links"
           variant="link"
           color="neutral"
+          highlight
+          highlight-color="primary"
           :ui="{
             link: 'px-3 py-2',
             linkLeadingIcon: 'size-4'

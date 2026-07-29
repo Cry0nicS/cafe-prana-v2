@@ -14,8 +14,8 @@ defineProps<{
     :title="title"
     :description="description"
   >
-    <UPageColumns>
+    <UPageGrid class="gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <slot />
-    </UPageColumns>
+    </UPageGrid>
   </UPageSection>
 </template>
