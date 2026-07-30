@@ -1,7 +1,16 @@
-name: ci
+name: CI
 
-on: push
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
+# Keep in sync with `.nvmrc`, which is what nvm and the local toolchain read.
+env:
+  NODE_VERSION: 24
+
+# Cancel superseded runs on the same branch/PR so a new push doesn't queue behind stale jobs.
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
@@ -10,34 +19,97 @@ permissions:
   contents: read
 
 jobs:
-  ci:
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-
       - name: Install node
         uses: actions/setup-node@v6
         with:
-          node-version-file: .nvmrc
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
-
       - name: Install dependencies
         run: npm ci
-
       - name: Lint
         run: npm run lint
 
+  typecheck:
+    name: Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Install node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
       - name: Typecheck
         run: npm run typecheck
 
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Install node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
       - name: Test
         run: npm test
 
+  content:
+    name: Content parity
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Install node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
       - name: Check content parity
         run: npm run check:content
 
-      - name: Build
+  build:
+    name: Build application
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Install node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Build application
         run: npm run build
+
+  # Single stable check to point branch protection at: green only when every job above passed.
+  # `always()` is what makes it report at all when a dependency fails - a skipped gate reports
+  # nothing, and the protected branch then waits forever for a status that never arrives.
+  # A `skipped` dependency is deliberately not treated as a failure, matching the jobs above,
+  # none of which are conditional.
+  ci-complete:
+    name: CI complete
+    if: always()
+    needs: [lint, typecheck, test, content, build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify all jobs succeeded
+        if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
+        run: exit 1
