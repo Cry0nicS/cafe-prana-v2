@@ -8,7 +8,7 @@ headline: Newly opened!
 title: Welcome to Café Prana
 description: A gluten-free and vegan haven in the heart of Berlin
 image:
-  src: /images/hero.png
+  src: /images/hero.webp
   alt: Café Prana table with nourishing gluten-free and vegan food
 ---
 ::
@@ -79,7 +79,7 @@ description: Here are a few of my favourite dishes and drinks you can enjoy ever
 title: Savoury Waffle
 description: Sweet potato waffle with Prana's savoury toppings of the day.
 image:
-  src: /images/menu/herzhafte-waffel.png
+  src: /images/menu/herzhafte-waffel.webp
   alt: Savoury waffle with colourful plant-based toppings
 ---
 ::
@@ -89,7 +89,7 @@ image:
 title: Chai Latte
 description: A warming, homemade chai spice blend crafted with care and served with your choice of plant-based milk.
 image:
-  src: /images/menu/chai-latte.png
+  src: /images/menu/chai-latte.webp
   alt: Chai latte in a ceramic cup
 ---
 ::
@@ -99,7 +99,7 @@ image:
 title: Ceremonial Cacao
 description: Yes, I believe in mindfulness and the power of pure, raw cacao to uplift your spirit.
 image:
-  src: /images/menu/cacao.png
+  src: /images/menu/cacao.webp
   alt: Ceremonial cacao drink
 ---
 ::
@@ -109,7 +109,7 @@ image:
 title: Prana's Banana Bread
 description: Very nourishing and sweetened banana bread, served with seasonal toppings like nut butter or compote.
 image:
-  src: /images/menu/banana-bread.png
+  src: /images/menu/banana-bread.webp
   alt: Slice of Prana banana bread with toppings
 ---
 ::
@@ -122,7 +122,7 @@ icon: i-lucide-party-popper
 title: Community gatherings
 description: "At Prana, I bring people together around nourishing food, shared tables, and mindful moments. From regular community meals to special occasions, my space is designed for connection, celebration, and ease."
 image:
-  src: /images/events/index.png
+  src: /images/events/index.webp
   alt: Community event at Café Prana
 ---
 ::feature
@@ -156,15 +156,15 @@ icon: i-lucide-camera
 title: Gallery
 description: Get a glimpse of the ambience, dishes and drinks that convey Café Prana's philosophy.
 images:
-  - src: /images/home/gallery/gallery-1.png
+  - src: /images/home/gallery/gallery-1.webp
     alt: Café Prana interior and food detail 1
-  - src: /images/home/gallery/gallery-2.png
+  - src: /images/home/gallery/gallery-2.webp
     alt: Café Prana interior and food detail 2
-  - src: /images/home/gallery/gallery-3.png
+  - src: /images/home/gallery/gallery-3.webp
     alt: Café Prana interior and food detail 3
-  - src: /images/home/gallery/gallery-4.png
+  - src: /images/home/gallery/gallery-4.webp
     alt: Café Prana interior and food detail 4
-  - src: /images/home/gallery/gallery-5.png
+  - src: /images/home/gallery/gallery-5.webp
     alt: Café Prana interior and food detail 5
 ---
 ::
@@ -174,7 +174,7 @@ images:
 icon: i-lucide-book-open
 title: My Story
 image:
-  src: /images/home/my-story.png
+  src: /images/home/my-story.webp
   alt: Founder story image for Café Prana
 ---
 Founded by a yogini, nutritionist, foodie, nature lover, fitness trainer, health cook, and barista (...you get the persona...) who wanted to bring the holistic aspects of health and energy under one roof, Café Prana is a one-woman show that combines a welcoming atmosphere with high-quality sourcing. Regional, seasonal vegetables meet nutritious pseudocereals and natural superfoods under the creative touch of the kitchen fairy. Whether you're grabbing a specialty coffee to go or settling into the cushions for brunch, it is a safe and open space awaiting you. Prana's long-term goal is to implement even more sustainable practices and foster a sense of community and profound respect.

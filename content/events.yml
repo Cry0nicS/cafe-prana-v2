@@ -4,7 +4,7 @@ hero:
   title: "Events at Café Prana"
   description: "Seasonal dinners, community celebrations, and mindful gatherings."
   image:
-    src: "/images/events/index.png"
+    src: "/images/events/index.webp"
     alt: "A warm Café Prana table setting for community events"
   links:
     - label: "Reserve your seat"

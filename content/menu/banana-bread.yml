@@ -5,7 +5,7 @@ description: "Toasted and served with toppings of the day."
 ingredients: "Gluten-free homemade flour blend, banana, almonds"
 price: "9,5"
 image:
-  src: "/images/menu/banana-bread.png"
+  src: "/images/menu/banana-bread.webp"
   alt: "Toasted banana bread with toppings of the day"
 labels:
   - "gluten-free"

@@ -5,7 +5,7 @@ description: "Golden milk spice with MCT oil."
 ingredients: "Golden spice mix, MCT oil, mylk of choice"
 price: "5,2"
 image:
-  src: "/images/menu/sunshine-milk.png"
+  src: "/images/menu/sunshine-milk.webp"
   alt: "Sunshine milk with golden spice"
 labels:
   - "gluten-free"

@@ -1,0 +1,59 @@
+name: optimize-images
+
+# Nuxt Studio commits uploads straight into `public/images`, so this runs after
+# every such push and normalises whatever the editor added. The optimiser is
+# idempotent, so the commit this job pushes is a no-op for a subsequent run and
+# cannot loop. Pushes made with GITHUB_TOKEN also do not re-trigger workflows,
+# which stops the recursion a second time.
+
+on:
+  push:
+    paths:
+      - 'public/images/**'
+      - 'scripts/optimize-images.mjs'
+      - '.github/workflows/optimize-images.yml'
+
+concurrency:
+  group: optimize-images-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Install node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Optimize images
+        id: optimize
+        run: npm run optimize:images
+
+      - name: Commit optimized images
+        if: steps.optimize.outputs.changed == 'true'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          # `git add` picking up nothing means another run already handled it.
+          if git diff --cached --quiet; then
+            echo 'Nothing staged, skipping commit'
+            exit 0
+          fi
+          git commit -m 'Optimize images added through Studio'
+          git push origin HEAD:${{ github.ref_name }}

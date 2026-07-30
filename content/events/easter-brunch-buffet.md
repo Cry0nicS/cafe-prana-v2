@@ -5,7 +5,7 @@ description: "Enjoy the Easter weekend with a festive Easter Brunch Buffet at Ca
 date: 2026-04-04
 time: "11:00-13:00"
 image:
-  src: /images/events/posts/easter-brunch-buffet-hero.png
+  src: /images/events/posts/easter-brunch-buffet-hero.webp
   alt: "Spring brunch buffet at Café Prana"
 paid: true
 price: 20

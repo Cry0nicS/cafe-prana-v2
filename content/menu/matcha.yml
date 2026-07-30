@@ -5,7 +5,7 @@ description: "First-grade matcha served hot."
 ingredients: "Matcha powder served with hot water"
 price: "3,6"
 image:
-  src: "/images/menu/matcha.png"
+  src: "/images/menu/matcha.webp"
   alt: "Ceremonial matcha served hot"
 labels:
   - "gluten-free"

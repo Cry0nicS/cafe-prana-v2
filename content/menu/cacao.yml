@@ -5,7 +5,7 @@ description: "Yes, I believe in mindfulness and the power of pure, raw cacao to 
 ingredients: "Raw cacao, hot water or mylk"
 price: "6"
 image:
-  src: "/images/menu/cacao.png"
+  src: "/images/menu/cacao.webp"
   alt: "Ceremonial cacao drink"
 labels:
   - "gluten-free"

@@ -5,7 +5,7 @@ description: "Genieße den ersten Weihnachtstag mit meinem festlichen Weihnachts
 date: 2025-12-25
 time: "11:00-13:00"
 image:
-  src: /images/events/posts/christmas-brunch-buffet-hero.png
+  src: /images/events/posts/christmas-brunch-buffet-hero.webp
   alt: "Festliche Brunch-Gerichte im Cafe Prana"
 paid: true
 price: 25

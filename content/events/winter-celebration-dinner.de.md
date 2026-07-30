@@ -5,7 +5,7 @@ description: "Feiere mit mir das neue Jahr beim Winter Celebration Dinner. Prana
 date: 2026-01-05
 time: "18:30"
 image:
-  src: /images/events/posts/winter-celebration-dinner-hero.png
+  src: /images/events/posts/winter-celebration-dinner-hero.webp
   alt: "Winterlicher Dinner-Tisch im Cafe Prana"
 paid: true
 price: 45

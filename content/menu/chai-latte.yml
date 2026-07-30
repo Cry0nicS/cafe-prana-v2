@@ -5,7 +5,7 @@ description: "Homemade chai spice blend with mylk of choice"
 ingredients: "Chai spices, mylk of choice"
 price: "4,6"
 image:
-  src: "/images/menu/chai-latte.png"
+  src: "/images/menu/chai-latte.webp"
   alt: "Chai latte in a ceramic cup"
 labels:
   - "gluten-free"

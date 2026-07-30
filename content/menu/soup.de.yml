@@ -5,7 +5,7 @@ description: "Wärmende Suppe mit Toppings."
 ingredients: "Meine Suppen entstehen aus saisonalem Gemüse, Gewürzen und Kräutern."
 price: "4 / 8"
 image:
-  src: "/images/menu/soup.png"
+  src: "/images/menu/soup.webp"
   alt: "Suppe des Tages mit Toppings"
 labels:
   - "gluten-free"

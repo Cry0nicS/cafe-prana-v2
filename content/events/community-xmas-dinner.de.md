@@ -5,7 +5,7 @@ description: "Feiere Heiligabend mit meinem Community Xmas Dinner im Cafe Prana.
 date: 2025-12-24
 time: "18:00"
 image:
-  src: /images/events/posts/community-xmas-dinner-hero.png
+  src: /images/events/posts/community-xmas-dinner-hero.webp
   alt: "Festlicher Tisch für das Community Xmas Dinner im Cafe Prana"
 paid: true
 price: 30

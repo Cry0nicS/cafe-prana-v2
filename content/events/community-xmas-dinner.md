@@ -5,7 +5,7 @@ description: "Celebrate Christmas Eve with my Community Xmas Dinner at Café Pra
 date: 2025-12-24
 time: "18:00"
 image:
-  src: /images/events/posts/community-xmas-dinner-hero.png
+  src: /images/events/posts/community-xmas-dinner-hero.webp
   alt: "Festive table for the Community Xmas Dinner at Café Prana"
 paid: true
 price: 30

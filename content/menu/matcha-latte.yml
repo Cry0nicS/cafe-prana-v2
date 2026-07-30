@@ -5,7 +5,7 @@ description: "First-grade matcha with mylk of choice and optional extra shot."
 ingredients: "Matcha powder, steamed milk"
 price: "5,9"
 image:
-  src: "/images/menu/matcha-latte.png"
+  src: "/images/menu/matcha-latte.webp"
   alt: "Matcha latte with plant milk"
 labels:
   - "gluten-free"

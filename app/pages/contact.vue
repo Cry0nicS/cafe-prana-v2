@@ -23,7 +23,7 @@ const directItems = computed(() => [{
 useCafeSeo({
   title: () => t('contact.seoTitle'),
   description: () => t('contact.seoDescription'),
-  image: '/images/hero.png'
+  image: '/images/hero.webp'
 })
 </script>
 

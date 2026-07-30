@@ -5,7 +5,7 @@ description: "Sanft und vollmundig mit Pflanzenmilch deiner Wahl."
 ingredients: "Espresso, samtiger Mikroschaum, Pflanzenmilch"
 price: "4,6"
 image:
-  src: "/images/menu/flat-white.png"
+  src: "/images/menu/flat-white.webp"
   alt: "Flat White mit Pflanzenmilch"
 labels:
   - "gluten-free"

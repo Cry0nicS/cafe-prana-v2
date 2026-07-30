@@ -5,7 +5,7 @@ description: "Enjoy Christmas Day with my festive Christmas Brunch Buffet at Caf
 date: 2025-12-25
 time: "11:00-13:00"
 image:
-  src: /images/events/posts/christmas-brunch-buffet-hero.png
+  src: /images/events/posts/christmas-brunch-buffet-hero.webp
   alt: "Festive brunch dishes at Café Prana"
 paid: true
 price: 25

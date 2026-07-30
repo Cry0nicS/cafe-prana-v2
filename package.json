@@ -16,7 +16,8 @@
     "typecheck": "nuxt typecheck",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check:content": "node scripts/check-content-parity.mjs"
+    "check:content": "node scripts/check-content-parity.mjs",
+    "optimize:images": "node scripts/optimize-images.mjs"
   },
   "dependencies": {
     "@iconify-json/lucide": "^1.2.120",
@@ -46,6 +47,7 @@
     "@vue/test-utils": "^2.4.11",
     "eslint": "^10.8.0",
     "happy-dom": "^20.11.1",
+    "sharp": "^0.35.3",
     "typescript": "^6.0.3",
     "vite": "^8.1.5",
     "vitest": "^4.1.10",

@@ -5,7 +5,7 @@ description: "À la carte and daily offer, sweet or savory."
 ingredients: "Gluten-free oat flour, sweet potato and almonds, toppings of the day"
 price: "9-15"
 image:
-  src: "/images/menu/waffle.png"
+  src: "/images/menu/waffle.webp"
   alt: "Gluten-free waffle with toppings of the day"
 labels:
   - "gluten-free"

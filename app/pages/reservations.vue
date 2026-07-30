@@ -29,7 +29,7 @@ const features = computed(() => [{
 useCafeSeo({
   title: () => t('reservations.seoTitle'),
   description: () => t('reservations.seoDescription'),
-  image: '/images/hero.png'
+  image: '/images/hero.webp'
 })
 </script>
 
