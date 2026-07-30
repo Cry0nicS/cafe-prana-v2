@@ -57,14 +57,21 @@ const active = ref<GalleryImg | null>(null)
       @update:open="(value) => { if (!value) active = null }"
     >
       <template #body>
-        <NuxtImg
+        <!--
+          Deliberately a plain <img> on the original file rather than <NuxtImg>.
+          The `ipxStatic` provider only bakes variants for images that render
+          during prerender, and this one sits behind `v-if="active"`, so its
+          IPX URLs would never be generated and would 404 on click.
+          The lightbox wants the full-resolution image anyway.
+        -->
+        <img
           v-if="active"
           :src="active.src"
           :alt="active.alt"
-          format="webp"
-          sizes="md:90vw lg:800px"
+          loading="lazy"
+          decoding="async"
           class="mx-auto max-h-[80vh] w-full rounded-lg object-contain"
-        />
+        >
       </template>
     </UModal>
   </UPageSection>

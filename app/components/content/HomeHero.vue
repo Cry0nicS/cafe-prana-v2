@@ -50,13 +50,25 @@ const links = computed(() => [
         class="cafe-aura"
         aria-hidden="true"
       />
+      <!--
+        This is the LCP element, so it intentionally differs from the other
+        images on the site:
+        - No `placeholder`. NuxtImg drops `srcset`/`sizes` from the server-
+          rendered markup while a placeholder is showing, so the real image
+          would only start downloading after hydration.
+        - `preload` emits a `<link rel="preload">` with the responsive
+          `imagesrcset`, so the browser starts fetching it during head parsing.
+        Sizing is handled by the `aspect-[16/11]` class, so no width/height
+        attributes: those feed IPX modifiers and would crop the source.
+      -->
       <NuxtImg
         :src="image.src"
         :alt="image.alt"
         format="webp"
         sizes="sm:100vw md:50vw lg:560px"
         class="relative z-10 aspect-[16/11] w-full rounded-2xl object-cover shadow-xl ring-1 ring-default"
-        placeholder
+        fetchpriority="high"
+        :preload="{ fetchPriority: 'high' }"
       />
     </div>
   </UPageHero>
