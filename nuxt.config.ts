@@ -97,6 +97,18 @@ export default defineNuxtConfig({
       }
     }
   },
+
+  image: {
+    // Without this, `provider: 'auto'` detects the Vercel deployment and routes
+    // every image through `/_vercel/image` at request time, so the first visitor
+    // to hit each variant pays for the transformation in their LCP. Every page
+    // here is prerendered, so the variants are all known at build time: pinning
+    // `ipxStatic` bakes them into `.output/public/_ipx/` as plain files served
+    // straight off the CDN. Nothing is transformed at runtime.
+    // Caveat: an image that is not rendered during prerender never gets baked
+    // and will 404, so images behind a `v-if` must not go through IPX.
+    provider: 'ipxStatic'
+  },
   sitemap: {
     autoI18n: true,
     autoLastmod: true,
