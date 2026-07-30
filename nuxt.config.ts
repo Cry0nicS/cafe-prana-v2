@@ -14,6 +14,16 @@ export default defineNuxtConfig({
     'nuxt-studio'
   ],
 
+  // `ipxStatic` only ever produces files during prerender, and it deliberately
+  // registers no `/_ipx/**` route, so in dev every image 404s and the request
+  // falls through to the router. Dev needs the real IPX handler instead; it is
+  // the same URL shape, so nothing else has to change between the two.
+  $development: {
+    image: {
+      provider: 'ipx'
+    }
+  },
+
   components: [
     { path: '~/components/content', global: true, pathPrefix: false },
     '~/components'
@@ -104,7 +114,8 @@ export default defineNuxtConfig({
     // to hit each variant pays for the transformation in their LCP. Every page
     // here is prerendered, so the variants are all known at build time: pinning
     // `ipxStatic` bakes them into `.output/public/_ipx/` as plain files served
-    // straight off the CDN. Nothing is transformed at runtime.
+    // straight off the CDN. Nothing is transformed at runtime, and `sharp` stays
+    // out of the server bundle.
     // Caveat: an image that is not rendered during prerender never gets baked
     // and will 404, so images behind a `v-if` must not go through IPX.
     provider: 'ipxStatic'
