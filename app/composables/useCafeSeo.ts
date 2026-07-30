@@ -54,7 +54,7 @@ export const useCafeSeo = (options: CafeSeoOptions) => {
 
   const title = computed(() => formatTitle(toValue(options.title)))
   const description = computed(() => toValue(options.description))
-  const image = computed(() => toAbsoluteUrl(toValue(options.image) || '/images/hero.png'))
+  const image = computed(() => toAbsoluteUrl(toValue(options.image) || '/images/hero.webp'))
   const type = computed(() => toValue(options.type) || 'website')
   const noindex = computed(() => Boolean(toValue(options.noindex)))
 

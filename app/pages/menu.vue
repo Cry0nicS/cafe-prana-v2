@@ -30,7 +30,7 @@ if (!page.value) {
 useCafeSeo({
   title: () => t('seo.menu.title'),
   description: () => t('seo.menu.description'),
-  image: '/images/hero.png'
+  image: '/images/hero.webp'
 })
 
 const labelLookup = computed(() =>

@@ -5,7 +5,7 @@ description: "À la carte und als Tagesangebot, süß oder herzhaft."
 ingredients: "Glutenfreies Hafermehl, Süßkartoffel und Mandeln, Toppings des Tages"
 price: "9-15"
 image:
-  src: "/images/menu/waffle.png"
+  src: "/images/menu/waffle.webp"
   alt: "Glutenfreie Waffel mit Toppings des Tages"
 labels:
   - "gluten-free"

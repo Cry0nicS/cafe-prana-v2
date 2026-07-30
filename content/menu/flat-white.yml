@@ -5,7 +5,7 @@ description: "Smooth and rich with plant milk of your choice."
 ingredients: "Espresso, velvety microfoam, plant milk"
 price: "4,6"
 image:
-  src: "/images/menu/flat-white.png"
+  src: "/images/menu/flat-white.webp"
   alt: "Flat white with plant milk"
 labels:
   - "gluten-free"

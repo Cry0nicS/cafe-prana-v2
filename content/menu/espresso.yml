@@ -5,7 +5,7 @@ description: "Classic espresso or lungo pulled from my special blend."
 ingredients: "Low acidity blend, short pull"
 price: "2,5 / 3,3"
 image:
-  src: "/images/menu/espresso.png"
+  src: "/images/menu/espresso.webp"
   alt: "Organic fair trade espresso or Americano"
 labels:
   - "gluten-free"

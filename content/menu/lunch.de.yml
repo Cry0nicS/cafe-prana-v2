@@ -5,7 +5,7 @@ description: "Ausgewogener, nährender Lunch für deinen Nachmittag."
 ingredients: "Meine Lunch-Optionen richten sich nach Saison und Verfügbarkeit frischer Zutaten."
 price: "14.90"
 image:
-  src: "/images/menu/lunch.png"
+  src: "/images/menu/lunch.webp"
   alt: "Ausgewogener und nährender Pranas Lunch"
 labels:
   - "gluten-free"

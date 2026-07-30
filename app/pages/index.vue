@@ -18,7 +18,7 @@ if (!page.value) {
 useCafeSeo({
   title: () => t('seo.home.title'),
   description: () => t('seo.home.description'),
-  image: '/images/hero.png'
+  image: '/images/hero.webp'
 })
 </script>
 

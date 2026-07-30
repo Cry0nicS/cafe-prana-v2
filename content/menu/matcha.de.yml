@@ -5,7 +5,7 @@ description: "First-grade Matcha, heiß serviert."
 ingredients: "Matcha-Pulver mit heißem Wasser"
 price: "3,6"
 image:
-  src: "/images/menu/matcha.png"
+  src: "/images/menu/matcha.webp"
   alt: "Heiß servierter zeremonieller Matcha"
 labels:
   - "gluten-free"

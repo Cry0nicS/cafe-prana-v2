@@ -23,7 +23,7 @@ const localBusinessJsonLd = computed(() => ({
   'name': CAFE_NAME,
   'legalName': CAFE_LEGAL_NAME,
   'url': CAFE_SITE_URL,
-  'image': `${CAFE_SITE_URL}/images/hero.png`,
+  'image': `${CAFE_SITE_URL}/images/hero.webp`,
   'logo': `${CAFE_SITE_URL}/favicon.ico`,
   'telephone': CAFE_PHONE,
   'email': CAFE_CONTACT_EMAIL,
@@ -80,7 +80,7 @@ useSeoMeta({
   title: 'Cafe Prana Berlin | Gluten-Free Vegan Cafe & Brunch',
   ogType: 'website',
   ogSiteName: 'Cafe Prana',
-  ogImage: '/images/hero.png',
+  ogImage: '/images/hero.webp',
   twitterCard: 'summary_large_image'
 })
 </script>

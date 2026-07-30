@@ -5,7 +5,7 @@ description: "Starte den Tag mit meinem Community Breakfast im Cafe Prana. Ein e
 date: 2025-12-28
 time: "09:30-11:30"
 image:
-  src: /images/events/posts/community-breakfast-hero.png
+  src: /images/events/posts/community-breakfast-hero.webp
   alt: "Frühstückstisch im Cafe Prana"
 paid: true
 price: 18

@@ -5,7 +5,7 @@ description: "Melted date-sweetened chocolate with mylk."
 ingredients: "Date chocolate, mylk of choice"
 price: "4,9"
 image:
-  src: "/images/menu/hot-chocolate.png"
+  src: "/images/menu/hot-chocolate.webp"
   alt: "Melted hot chocolate with plant milk"
 labels:
   - "gluten-free"

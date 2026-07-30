@@ -5,7 +5,7 @@ description: "Reiner, roher Kakao für Achtsamkeit, Wärme und ein geöffnetes H
 ingredients: "Roher Kakao, heißes Wasser oder Mylk"
 price: "6"
 image:
-  src: "/images/menu/cacao.png"
+  src: "/images/menu/cacao.webp"
   alt: "Zeremonieller Kakao"
 labels:
   - "gluten-free"

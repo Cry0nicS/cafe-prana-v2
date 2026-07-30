@@ -5,7 +5,7 @@ description: "Balanced and nourishing lunch to fuel your afternoon."
 ingredients: "My lunch options depend on the season and availability of fresh ingredients."
 price: "14.90"
 image:
-  src: "/images/menu/lunch.png"
+  src: "/images/menu/lunch.webp"
   alt: "Balanced and nourishing Pranas lunch"
 labels:
   - "gluten-free"

@@ -6,7 +6,7 @@ hero:
   title: "Menu"
   description: "Gluten-free coffee, brunch, lunch, and warming drinks prepared with care in Berlin."
   image:
-    src: "/images/menu/brunch.png"
+    src: "/images/menu/brunch.webp"
     alt: "Plant-based brunch plate at Café Prana"
 labels:
   - id: gluten-free

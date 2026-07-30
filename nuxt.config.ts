@@ -120,6 +120,16 @@ export default defineNuxtConfig({
   },
   studio: {
     route: '/pranas',
+    // Studio has no external blob storage configured here, so uploads are
+    // written into `public/` and committed to this repository. The defaults
+    // (10MB, `image/*` plus `video/*` and `audio/*`) are too permissive for
+    // something that lands in git history permanently: video and audio have no
+    // place in this project, and the size cap bounds how large a single upload
+    // can be before `scripts/optimize-images.mjs` gets a chance to shrink it.
+    media: {
+      maxFileSize: 5 * 1024 * 1024,
+      allowedTypes: ['image/*']
+    },
     repository: {
       provider: 'github',
       owner: 'Cry0nicS',

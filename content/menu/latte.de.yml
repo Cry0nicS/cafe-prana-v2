@@ -5,7 +5,7 @@ description: "Cremiger, milder Kaffee mit Mylk."
 ingredients: "Einfacher oder doppelter Lungo mit geschäumter Mylk"
 price: "5,3"
 image:
-  src: "/images/menu/latte.png"
+  src: "/images/menu/latte.webp"
   alt: "Milchkaffee mit geschäumter Pflanzenmilch"
 labels:
   - "gluten-free"

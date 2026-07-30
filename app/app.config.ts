@@ -9,8 +9,8 @@ export default defineAppConfig({
     meetingLink: '/reservations',
     available: true,
     picture: {
-      dark: '/images/hero.png',
-      light: '/images/hero.png',
+      dark: '/images/hero.webp',
+      light: '/images/hero.webp',
       alt: 'Café Prana'
     }
   },

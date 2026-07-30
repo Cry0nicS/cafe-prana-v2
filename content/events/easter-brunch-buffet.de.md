@@ -5,7 +5,7 @@ description: "Genieße das Osterwochenende mit einem festlichen Oster-Brunch-Buf
 date: 2026-04-04
 time: "11:00-13:00"
 image:
-  src: /images/events/posts/easter-brunch-buffet-hero.png
+  src: /images/events/posts/easter-brunch-buffet-hero.webp
   alt: "Frühlingshaftes Brunch-Buffet im Cafe Prana"
 paid: true
 price: 20

@@ -5,7 +5,7 @@ description: "Feine Verbindung aus schwarzem Tee und Kaffee."
 ingredients: "Earl-Grey-Tee, einfacher Espresso-Shot, aufgeschäumte Mylk deiner Wahl"
 price: "5.2"
 image:
-  src: "/images/menu/dirty-earl.png"
+  src: "/images/menu/dirty-earl.webp"
   alt: "Dirty Earl mit Tee und Kaffee"
 labels:
   - "gluten-free"
