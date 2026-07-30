@@ -1,10 +1,16 @@
-name: optimize-images
+name: images
 
-# Nuxt Studio commits uploads straight into `public/images`, so this runs after
-# every such push and normalises whatever the editor added. The optimiser is
-# idempotent, so the commit this job pushes is a no-op for a subsequent run and
-# cannot loop. Pushes made with GITHUB_TOKEN also do not re-trigger workflows,
-# which stops the recursion a second time.
+# Reports when anything under `public/images` is not in its optimised form.
+#
+# This used to run the optimiser and commit the result back, but a bot cannot
+# push to `main`: the ruleset requires pull requests, and GitHub refuses to grant
+# bypass to the GitHub Actions app on a user-owned repository. So the fix is
+# applied by hand with `npm run optimize:images` and this job only tells you when
+# it is needed, most likely after an upload through Studio.
+#
+# It fails rather than warns on purpose. A warning annotation leaves the run
+# green and sends no notification, so an unoptimised upload would sit unnoticed.
+# This is not a required status check, so a red run here never blocks a merge.
 
 on:
   push:
@@ -12,24 +18,27 @@ on:
       - 'public/images/**'
       - 'scripts/optimize-images.mjs'
       - '.github/workflows/optimize-images.yml'
+  pull_request:
+    paths:
+      - 'public/images/**'
+      - 'scripts/optimize-images.mjs'
+      - '.github/workflows/optimize-images.yml'
 
 concurrency:
-  group: optimize-images-${{ github.ref }}
-  cancel-in-progress: false
+  group: images-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  optimize:
+  check:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-        with:
-          ref: ${{ github.ref_name }}
 
       - name: Install node
         uses: actions/setup-node@v6
@@ -40,20 +49,30 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Optimize images
-        id: optimize
-        run: npm run optimize:images
-
-      - name: Commit optimized images
-        if: steps.optimize.outputs.changed == 'true'
+      # The optimiser rewrites files in place, so a dirty tree is the signal. The
+      # comparison is scoped to the paths it actually touches (the images plus
+      # the files that reference them), so an unrelated write from `npm ci` or a
+      # postinstall step cannot masquerade as an unoptimised image.
+      - name: Check images are optimised
         run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -A
-          # `git add` picking up nothing means another run already handled it.
-          if git diff --cached --quiet; then
-            echo 'Nothing staged, skipping commit'
+          npm run optimize:images
+
+          DIRTY=$(git status --porcelain -- public/images content app shared server test)
+
+          if [ -z "$DIRTY" ]; then
+            echo 'All images are already optimised.' >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
-          git commit -m 'Optimize images added through Studio'
-          git push origin HEAD:${{ github.ref_name }}
+
+          {
+            echo '## Images need optimising'
+            echo ''
+            echo 'Run `npm run optimize:images` locally and commit the result.'
+            echo ''
+            echo '```'
+            echo "$DIRTY"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          echo '::error::Unoptimised images committed. Run `npm run optimize:images` and commit the result.'
+          exit 1
