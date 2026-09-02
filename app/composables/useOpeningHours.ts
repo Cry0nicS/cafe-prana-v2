@@ -1,12 +1,17 @@
-import type { OpeningHoursEntry } from '#shared/utils/opening-hours'
+import type { OpeningHours } from '#shared/utils/opening-hours'
 
-// Shared between app.vue (structured data) and the Directions block. The key is
-// locale-independent on purpose: the hours are the same in every language.
+const EMPTY: OpeningHours = { hours: [], lastReservationBeforeClosing: 60 }
+
+// Shared between app.vue (structured data), the Directions block and the
+// reservation form. The key is locale-independent on purpose: the hours are
+// the same in every language.
 export const useOpeningHours = () => useAsyncData(
   'opening-hours',
   () => queryCollection('openingHours').first(),
   {
-    transform: document => (document?.hours ?? []) as OpeningHoursEntry[],
-    default: () => [] as OpeningHoursEntry[]
+    transform: (document): OpeningHours => document
+      ? { hours: document.hours, lastReservationBeforeClosing: document.lastReservationBeforeClosing ?? 60 }
+      : EMPTY,
+    default: () => EMPTY
   }
 )

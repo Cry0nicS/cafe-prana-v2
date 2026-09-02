@@ -15,7 +15,7 @@ const localePath = useLocalePath()
 // props, so English and German always show the same times.
 const { data: openingHours } = await useOpeningHours()
 
-const hours = computed(() => openingHours.value.map(entry => ({
+const hours = computed(() => openingHours.value.hours.map(entry => ({
   day: entry.day,
   label: weekdayLabel(entry.day, locale.value),
   time: formatOpeningHours(entry) ?? t('home.directions.closed'),

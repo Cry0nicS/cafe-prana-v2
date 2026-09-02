@@ -54,9 +54,14 @@ The hours are **not** part of the homepage text. They live in one file, **Openin
 you change them once and both languages update. Search engines get the same hours.
 
 1. In Studio, open **Opening Hours**.
-2. Each day has an `opens` and `closes` time in 24-hour format (e.g. `07:30`), or `closed`
-   switched on for a day off.
-3. Save and **Publish**.
+2. Each day has an `opens` and `closes` time chosen from a dropdown of 15-minute steps, or
+   `closed` switched on for a day off.
+3. `lastReservationBeforeClosing` is the number of minutes before closing at which the last
+   table can be booked (60 means a 15:00 close offers 14:00 as the last slot).
+4. Save and **Publish**.
+
+The **reservation form follows this file**: guests can only pick open days and times between
+opening and that last slot. There is nothing to update elsewhere.
 
 ## Adding a photo
 
