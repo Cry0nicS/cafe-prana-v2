@@ -15,7 +15,7 @@ export default defineI18nConfig(() => ({
         hero: { menu: 'Menu Highlights', directions: 'Get Directions' },
         menu: { explore: 'Explore the full menu', book: 'Book a table' },
         events: { explore: 'Explore all events', reserve: 'Reserve your seat' },
-        directions: { get: 'Get Directions' }
+        directions: { get: 'Get Directions', closed: 'Closed' }
       },
       language: {
         label: 'Language',
@@ -264,7 +264,7 @@ export default defineI18nConfig(() => ({
         hero: { menu: 'Menü-Highlights', directions: 'Anfahrt' },
         menu: { explore: 'Vollständiges Menü entdecken', book: 'Tisch reservieren' },
         events: { explore: 'Alle Events entdecken', reserve: 'Platz reservieren' },
-        directions: { get: 'Anfahrt' }
+        directions: { get: 'Anfahrt', closed: 'Geschlossen' }
       },
       language: {
         label: 'Sprache',

@@ -1,15 +1,26 @@
 <script setup lang="ts">
 import { CAFE_MAP_EMBED_URL, CAFE_MAPS_URL } from '#shared/utils/constants'
+import { formatOpeningHours, weekdayLabel } from '#shared/utils/opening-hours'
 
 defineProps<{
   title?: string
   description?: string
   hoursHeading?: string
-  hours?: { day: string, time: string, closed?: boolean }[]
 }>()
 
-const { t } = useI18n()
+const { locale, t } = useI18n()
 const localePath = useLocalePath()
+
+// The hours come from `content/opening-hours.yml`, not from this block's
+// props, so English and German always show the same times.
+const { data: openingHours } = await useOpeningHours()
+
+const hours = computed(() => openingHours.value.map(entry => ({
+  day: entry.day,
+  label: weekdayLabel(entry.day, locale.value),
+  time: formatOpeningHours(entry) ?? t('home.directions.closed'),
+  closed: !formatOpeningHours(entry)
+})))
 
 const links = computed(() => [
   {
@@ -50,7 +61,7 @@ const links = computed(() => [
             :key="item.day"
             class="flex items-center justify-between gap-4 border-b border-default pb-2"
           >
-            <span>{{ item.day }}</span>
+            <span>{{ item.label }}</span>
             <UBadge
               variant="soft"
               :color="item.closed ? 'neutral' : 'success'"

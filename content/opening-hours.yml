@@ -1,0 +1,27 @@
+# Opening hours shown on the homepage in both languages and published to
+# search engines as structured data. Day names are translated in code, so this
+# one file keeps English and German identical by construction.
+#
+# `day` is one of monday ... sunday. Times are 24-hour `HH:MM`.
+# A closed day needs only `closed: true`.
+hours:
+  - day: monday
+    closed: true
+  - day: tuesday
+    opens: '07:30'
+    closes: '16:00'
+  - day: wednesday
+    opens: '07:30'
+    closes: '15:00'
+  - day: thursday
+    opens: '07:30'
+    closes: '15:00'
+  - day: friday
+    opens: '07:30'
+    closes: '15:00'
+  - day: saturday
+    opens: '09:00'
+    closes: '17:00'
+  - day: sunday
+    opens: '09:00'
+    closes: '17:00'

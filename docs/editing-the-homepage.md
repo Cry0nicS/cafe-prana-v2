@@ -13,7 +13,7 @@ On the homepage you can edit, add, remove, and reorder:
 - The **Gallery** photos
 - **My Story** text and photo
 - The **FAQ** questions and answers
-- The **opening hours** and the “Come taste the difference” text
+- The “Come taste the difference” text (the **opening hours** live in their own file, see below)
 
 You do **not** need to worry about colours, buttons, icons, or layout — those are handled for you and always look right.
 
@@ -46,6 +46,17 @@ To **reorder**, drag the block by its handle. To **delete**, select it and remov
 > The **Gallery** works differently: it's a single block with a **list of photos**. Click the
 > gallery and add, remove, or reorder photos in its image list (each needs a short alt text) —
 > you don't add gallery photos as separate blocks. Visitors swipe through them in a carousel.
+
+## Changing the opening hours
+
+The hours are **not** part of the homepage text. They live in one file, **Opening Hours**
+(`content/opening-hours.yml`), and the site shows them in English and German automatically, so
+you change them once and both languages update. Search engines get the same hours.
+
+1. In Studio, open **Opening Hours**.
+2. Each day has an `opens` and `closes` time in 24-hour format (e.g. `07:30`), or `closed`
+   switched on for a day off.
+3. Save and **Publish**.
 
 ## Adding a photo
 

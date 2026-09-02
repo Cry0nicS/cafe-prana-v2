@@ -10,9 +10,11 @@ import {
   CAFE_PHONE,
   CAFE_SITE_URL
 } from '#shared/utils/constants'
+import { toOpeningHoursSpecification } from '#shared/utils/opening-hours'
 
 const colorMode = useColorMode()
 const { locale } = useI18n()
+const { data: openingHours } = await useOpeningHours()
 
 const themeColor = computed(() => colorMode.value === 'dark' ? '#0d1411' : '#f2f3ec')
 const htmlLang = computed(() => locale.value === 'de' ? 'de-DE' : 'en-US')
@@ -42,17 +44,7 @@ const localBusinessJsonLd = computed(() => ({
     'latitude': CAFE_GEO.latitude,
     'longitude': CAFE_GEO.longitude
   },
-  'openingHoursSpecification': [{
-    '@type': 'OpeningHoursSpecification',
-    'dayOfWeek': ['Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-    'opens': '07:30',
-    'closes': '15:00'
-  }, {
-    '@type': 'OpeningHoursSpecification',
-    'dayOfWeek': ['Saturday', 'Sunday'],
-    'opens': '09:00',
-    'closes': '17:00'
-  }]
+  'openingHoursSpecification': toOpeningHoursSpecification(openingHours.value)
 }))
 
 useHead(() => ({

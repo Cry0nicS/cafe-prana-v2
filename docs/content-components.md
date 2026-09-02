@@ -29,7 +29,7 @@ The page is rendered by `app/pages/index.vue` with `<ContentRenderer :value="pag
 | `::story-section` | `StorySection` | `icon, title, image{src,alt}` | default slot = prose (rich text) | — |
 | `::faq` | `Faq` | `icon, title, description` | `::faq-item` children | — |
 | `::faq-item` | `FaqItem` | `label` | default slot = answer prose | ✅ reusable |
-| `::directions` | `Directions` | `title, description, hoursHeading, hours[]` | — (map + CTAs from code) | no |
+| `::directions` | `Directions` | `title, description, hoursHeading` | — (hours from `content/opening-hours.yml`; map + CTAs from code) | no |
 | `::callout` | `Callout` | `icon, title` | default slot = note text | ✅ reusable |
 
 Note `Feature` is shared by both `FeatureGrid` (Philosophy) and `EventsIntro` (Events) — reuse it wherever a feature card is needed.

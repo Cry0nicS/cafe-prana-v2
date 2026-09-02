@@ -59,8 +59,35 @@ const createMenuCategorySchema = () => z.enum([
   'food'
 ])
 
+const createWeekdaySchema = () => z.enum([
+  'monday',
+  'tuesday',
+  'wednesday',
+  'thursday',
+  'friday',
+  'saturday',
+  'sunday'
+])
+
+const createTimeSchema = () => z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'Use 24-hour HH:MM, e.g. 07:30')
+
 export default defineContentConfig({
   collections: {
+    // Single, language-independent file. The homepage renders it for both
+    // locales and app.vue publishes it as structured data, so the two
+    // languages cannot show different hours.
+    openingHours: defineCollection({
+      type: 'data',
+      source: 'opening-hours.yml',
+      schema: z.object({
+        hours: z.array(z.object({
+          day: createWeekdaySchema(),
+          closed: z.boolean().default(false),
+          opens: createTimeSchema().optional(),
+          closes: createTimeSchema().optional()
+        })).length(7)
+      })
+    }),
     index: defineCollection({
       type: 'page',
       source: [
