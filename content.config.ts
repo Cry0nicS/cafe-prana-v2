@@ -83,7 +83,9 @@ export default defineContentConfig({
       type: 'data',
       source: 'opening-hours.yml',
       schema: z.object({
-        lastReservationBeforeClosing: z.number().int().min(0).max(240).default(60),
+        // Coerced: Studio writes this field back as a string ("60"), which a
+        // plain number schema would reject and silently drop the document.
+        lastReservationBeforeClosing: z.coerce.number().int().min(0).max(240).default(60),
         hours: z.array(z.object({
           day: createWeekdaySchema(),
           closed: z.boolean().default(false),

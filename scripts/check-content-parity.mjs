@@ -12,12 +12,14 @@ const pairs = [
   { label: 'homepage', a: 'content/index.md', b: 'content/index.de.md' }
 ]
 
-// Extract ordered MDC opening tags (e.g. ::feature, :::feature-grid, ::faq-item{...}).
-// Closing fences (`::`) have no name and are ignored.
+// Extract ordered MDC component tags (e.g. ::feature, :::feature-grid, ::faq-item{...}).
+// Studio serialises a block without children as an inline component with a single
+// colon (`:directions{...}`), so one colon counts too. Closing fences (`::`) have
+// no name and are ignored.
 const extractBlocks = src =>
   src
     .split(/\r?\n/)
-    .map(line => line.match(/^\s*:{2,}([a-z][a-z0-9-]*)/))
+    .map(line => line.match(/^\s*:+([a-z][a-z0-9-]*)/))
     .filter(Boolean)
     .map(match => match[1])
 
