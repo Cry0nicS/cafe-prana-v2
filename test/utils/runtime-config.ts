@@ -6,7 +6,7 @@ export const testRuntimeConfig: Record<string, string> = {}
 
 export const defaultTestRuntimeConfig = {
   supabaseUrl: 'https://supabase.test',
-  supabaseKey: 'test-service-role-key',
+  supabaseServiceRoleKey: 'sb_secret_test',
   mailgunBaseUrl: 'https://api.eu.mailgun.net',
   mailgunKey: 'test-mailgun-key',
   mailgunDomain: 'mail.test',

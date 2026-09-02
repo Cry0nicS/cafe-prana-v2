@@ -77,6 +77,9 @@ The most important concepts in this project, in plain terms.
   used by both the app and the server.
 
 - **Supabase** — the hosted Postgres database; used by the server to store reservations.
+  The server uses the **service-role key** only; the `reservations` table has row-level
+  security on and no grants for the anon role, so the public anon key can do nothing
+  (`supabase/migrations/`).
 
 - **Mailgun** — the email service; the server sends reservation and contact emails through it
   (`server/services/email.ts`).
