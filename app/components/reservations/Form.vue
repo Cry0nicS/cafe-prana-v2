@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CAFE_CLOSED_WEEKDAYS, CAFE_CONTACT_EMAIL, CAFE_RESERVATION_TIME } from '#shared/utils/constants'
+import { CAFE_CLOSED_WEEKDAYS, CAFE_CONTACT_EMAIL, CAFE_RESERVATION_TIME_SLOTS } from '#shared/utils/constants'
 import { ReservationSchema, getReservationValidationMessage } from '#shared/utils/schemas'
 
 type ReservationFormState = {
@@ -238,13 +238,16 @@ const sendReservation = async () => {
           :label="t('reservations.form.time')"
           required
         >
-          <UInput
+          <!--
+            A native time input lets the guest type any minute, then the
+            browser's own step validation rejects it on submit with a message we
+            cannot translate. Offering the bookable slots directly avoids both.
+          -->
+          <USelect
             v-model="formState.time"
             class="w-full"
-            type="time"
-            :min="CAFE_RESERVATION_TIME.min"
-            :max="CAFE_RESERVATION_TIME.max"
-            :step="CAFE_RESERVATION_TIME.step"
+            :items="CAFE_RESERVATION_TIME_SLOTS"
+            icon="i-lucide-clock"
           />
         </UFormField>
 

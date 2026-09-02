@@ -56,6 +56,13 @@ const fillForm = async (wrapper: VueWrapper, overrides: Record<string, string> =
   }
 
   for (const [name, value] of Object.entries(values)) {
+    if (name === 'time') {
+      // The time is a Nuxt UI select of bookable slots, not a native input, so
+      // it is driven through the component rather than a DOM element.
+      await wrapper.findComponent({ name: 'USelect' }).setValue(value)
+      continue
+    }
+
     await wrapper.get(`[name="${name}"]`).setValue(value)
   }
 }
@@ -103,6 +110,17 @@ describe('reservation form', () => {
 
     // The form is emptied so a reload cannot resend the same request.
     expect((wrapper.get('[name="firstName"]').element as HTMLInputElement).value).toBe('')
+  })
+
+  it('sends the slot the guest picked', async () => {
+    const wrapper = await mountSuspended(ReservationForm)
+
+    await fillForm(wrapper, { time: '13:15' })
+    await acceptPrivacy(wrapper)
+    await submit(wrapper)
+
+    expect(calls).toHaveLength(1)
+    expect(calls[0]!.body.time).toBe('13:15')
   })
 
   it('does not send a reservation without privacy consent', async () => {
