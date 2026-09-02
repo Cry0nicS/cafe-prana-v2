@@ -163,7 +163,7 @@ hours:
     time: Closed
     closed: true
   - day: Tuesday
-    time: 07:30 - 15:00
+    time: 07:30 - 16:00
   - day: Wednesday
     time: 07:30 - 15:00
   - day: Thursday
