@@ -40,7 +40,10 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     supabaseUrl: process.env.SUPABASE_URL || process.env.NUXT_SUPABASE_URL || '',
-    supabaseKey: process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY || process.env.NUXT_SUPABASE_SERVICE_ROLE_KEY || process.env.NUXT_SUPABASE_KEY || '',
+    // Service-role key only. The `reservations` table grants nothing to the
+    // anon role, so an anon key here would make every request fail, and any
+    // fallback to one would silently reintroduce a public key on the server.
+    supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NUXT_SUPABASE_SERVICE_ROLE_KEY || '',
     mailgunBaseUrl: process.env.NUXT_MAILGUN_BASE_URL || process.env.MAILGUN_BASE_URL || '',
     mailgunKey: process.env.NUXT_MAILGUN_KEY || process.env.MAILGUN_KEY || '',
     mailgunDomain: process.env.NUXT_MAILGUN_DOMAIN || process.env.MAILGUN_DOMAIN || 'mail.cafeprana.de',
