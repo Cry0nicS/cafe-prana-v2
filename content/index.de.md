@@ -157,22 +157,6 @@ title: Häufige Fragen
 
 ::directions
 ---
-hours:
-  - day: Montag
-    time: Geschlossen
-    closed: true
-  - day: Dienstag
-    time: 07:30 - 15:00
-  - day: Mittwoch
-    time: 07:30 - 15:00
-  - day: Donnerstag
-    time: 07:30 - 15:00
-  - day: Freitag
-    time: 07:30 - 15:00
-  - day: Samstag
-    time: 09:00 - 17:00
-  - day: Sonntag
-    time: 09:00 - 17:00
 description: Besuche Cafe Prana und entdecke deinen neuen Lieblingsort. Ich bin
   Dienstag bis Sonntag für Kaffee, Frühstück, Brunch und Lunch da.
 hoursHeading: Öffnungszeiten
