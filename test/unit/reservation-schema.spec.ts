@@ -147,6 +147,11 @@ describe('ReservationSchema', () => {
       expect(messagesFor('time', parse({ time })))
         .toContain('reservations.form.errors.time.invalid')
     })
+
+    it.each(['12:23', '07:05', '15:59', '12:30:30'])('rejects %j off the 15-minute slot grid', (time) => {
+      expect(messagesFor('time', parse({ time })))
+        .toContain('reservations.form.errors.time.invalid')
+    })
   })
 
   describe('message', () => {

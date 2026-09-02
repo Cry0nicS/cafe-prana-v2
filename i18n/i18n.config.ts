@@ -143,7 +143,7 @@ export default defineI18nConfig(() => ({
               max: 'Maximum 20 guests allowed.'
             },
             date: { invalid: 'Please choose a valid date today or later.' },
-            time: { invalid: 'Please choose a valid time between 07:00 and 16:00.' },
+            time: { invalid: 'Please choose a time between 07:00 and 16:00, in 15-minute steps.' },
             privacy: { required: 'Please confirm the privacy policy and consent to be contacted.' }
           }
         }
@@ -392,7 +392,7 @@ export default defineI18nConfig(() => ({
               max: 'Maximal 20 Gäste sind möglich.'
             },
             date: { invalid: 'Bitte wähle ein gültiges Datum ab heute.' },
-            time: { invalid: 'Bitte wähle eine gültige Uhrzeit zwischen 07:00 und 16:00.' },
+            time: { invalid: 'Bitte wähle eine Uhrzeit zwischen 07:00 und 16:00 in 15-Minuten-Schritten.' },
             privacy: { required: 'Bitte bestätige die Datenschutzrichtlinie und die Kontaktaufnahme.' }
           }
         }
