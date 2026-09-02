@@ -3,11 +3,10 @@ import { CAFE_CONTACT_EMAIL, CAFE_PHONE, CAFE_SITE_URL } from '#shared/utils/con
 
 const { locale } = useI18n()
 
-// NOTE: German law requires the full name of the natural person operating a
-// sole proprietorship in the imprint. Replace the OWNER_NAME placeholder with
-// the owner's real full legal name before go-live.
-const OWNER_NAME = 'Café Prana — Inhaberin: [Vor- und Nachname eintragen]'
-const OWNER_NAME_EN = 'Café Prana — Owner: [add full legal name]'
+// German law requires the full name of the natural person operating a sole
+// proprietorship in the imprint.
+const OWNER_NAME = 'Café Prana — Inhaberin: Sarah Frankenreiter'
+const OWNER_NAME_EN = 'Café Prana — Owner: Sarah Frankenreiter'
 
 const en = {
   title: 'Imprint',
@@ -22,7 +21,7 @@ const en = {
   sections: [
     {
       title: 'Responsible for content (§ 18 (2) MStV)',
-      paragraphs: ['[Owner full name]\nPasteurstraße 2\n10407 Berlin\nGermany']
+      paragraphs: ['Sarah Frankenreiter\nPasteurstraße 2\n10407 Berlin\nGermany']
     },
     {
       title: 'Supervisory authority',
@@ -30,7 +29,7 @@ const en = {
     },
     {
       title: 'VAT',
-      paragraphs: ['As a small business under § 19 UStG, no value-added tax is charged and no VAT identification number is issued. (If a VAT ID applies, add it here.)']
+      paragraphs: ['As a small business under § 19 UStG, no value-added tax is charged and no VAT identification number is issued.']
     },
     {
       title: 'Liability for content',
@@ -54,12 +53,10 @@ const en = {
       ]
     },
     {
-      title: 'EU dispute resolution / consumer mediation',
+      title: 'Consumer dispute resolution',
       paragraphs: [
-        'The European Commission provides a platform for online dispute resolution (ODR).',
-        'I am neither willing nor obliged to participate in dispute resolution proceedings before a consumer arbitration board.'
-      ],
-      link: { label: 'ec.europa.eu/consumers/odr', href: 'https://ec.europa.eu/consumers/odr' }
+        'I am neither willing nor obliged to participate in dispute resolution proceedings before a consumer arbitration board (§ 36 VSBG).'
+      ]
     }
   ]
 }
@@ -77,7 +74,7 @@ const de = {
   sections: [
     {
       title: 'Inhaltlich verantwortlich (§ 18 Abs. 2 MStV)',
-      paragraphs: ['[Vollständiger Name der Inhaberin]\nPasteurstraße 2\n10407 Berlin\nDeutschland']
+      paragraphs: ['Sarah Frankenreiter\nPasteurstraße 2\n10407 Berlin\nDeutschland']
     },
     {
       title: 'Aufsichtsbehörde',
@@ -85,7 +82,7 @@ const de = {
     },
     {
       title: 'Umsatzsteuer',
-      paragraphs: ['Als Kleinunternehmerin im Sinne von § 19 UStG wird keine Umsatzsteuer erhoben und keine Umsatzsteuer-Identifikationsnummer ausgewiesen. (Falls eine USt-IdNr. vorliegt, bitte hier ergänzen.)']
+      paragraphs: ['Als Kleinunternehmerin im Sinne von § 19 UStG wird keine Umsatzsteuer erhoben und keine Umsatzsteuer-Identifikationsnummer ausgewiesen.']
     },
     {
       title: 'Haftung für Inhalte',
@@ -109,12 +106,10 @@ const de = {
       ]
     },
     {
-      title: 'EU-Streitschlichtung / Verbraucherschlichtung',
+      title: 'Verbraucherstreitbeilegung',
       paragraphs: [
-        'Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit.',
-        'Ich bin weder bereit noch verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.'
-      ],
-      link: { label: 'ec.europa.eu/consumers/odr', href: 'https://ec.europa.eu/consumers/odr' }
+        'Ich bin weder bereit noch verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen (§ 36 VSBG).'
+      ]
     }
   ]
 }
