@@ -17,34 +17,3 @@ export const CAFE_GEO = {
   latitude: 52.53430503505275,
   longitude: 13.428888413148465
 }
-// Weekdays the cafe is closed for reservations (0 = Sunday, 1 = Monday, ...).
-// Keep in sync with the opening hours shown on the homepage.
-export const CAFE_CLOSED_WEEKDAYS = [1]
-// Reservation time window, in 'HH:mm' with the step in seconds. The schema
-// validates against it and the form offers exactly these slots.
-export const CAFE_RESERVATION_TIME = { min: '07:00', max: '16:00', step: 900 }
-
-const toSeconds = (value: string) => {
-  const [hours = 0, minutes = 0] = value.split(':').map(Number)
-
-  return hours * 3600 + minutes * 60
-}
-
-const toLabel = (seconds: number) => {
-  const hours = String(Math.floor(seconds / 3600)).padStart(2, '0')
-  const minutes = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0')
-
-  return `${hours}:${minutes}`
-}
-
-export const CAFE_RESERVATION_TIME_SECONDS = {
-  min: toSeconds(CAFE_RESERVATION_TIME.min),
-  max: toSeconds(CAFE_RESERVATION_TIME.max),
-  step: CAFE_RESERVATION_TIME.step
-}
-
-// Every bookable time: '07:00', '07:15', ..., '16:00'.
-export const CAFE_RESERVATION_TIME_SLOTS = Array.from(
-  { length: Math.floor((CAFE_RESERVATION_TIME_SECONDS.max - CAFE_RESERVATION_TIME_SECONDS.min) / CAFE_RESERVATION_TIME_SECONDS.step) + 1 },
-  (_, index) => toLabel(CAFE_RESERVATION_TIME_SECONDS.min + index * CAFE_RESERVATION_TIME_SECONDS.step)
-)

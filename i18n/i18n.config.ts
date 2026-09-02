@@ -117,7 +117,7 @@ export default defineI18nConfig(() => ({
           privacyPrefix: 'I have read and accept the',
           privacyLink: 'privacy and cookie policy',
           privacySuffix: 'It is agreed that the voluntarily provided data may be stored and used to contact you. Processing can be revoked at any time.',
-          mondayUnavailable: 'Reservations are not available on Mondays. Please choose another date.',
+          noSlots: 'No times available',
           info: 'Reservations are requests first. Cafe Prana confirms availability by email, usually within 24 hours.',
           urgent: 'For urgent changes, please email {email}.',
           submit: 'Submit',
@@ -142,8 +142,14 @@ export default defineI18nConfig(() => ({
               min: 'At least 1 guest is required.',
               max: 'Maximum 20 guests allowed.'
             },
-            date: { invalid: 'Please choose a valid date today or later.' },
-            time: { invalid: 'Please choose a time between 07:00 and 16:00, in 15-minute steps.' },
+            date: {
+              invalid: 'Please choose a valid date today or later.',
+              closed: 'The cafe is closed on this day. Please choose another date.'
+            },
+            time: {
+              invalid: 'Please choose a time in 15-minute steps.',
+              unavailable: 'Please choose a time within the opening hours of that day.'
+            },
             privacy: { required: 'Please confirm the privacy policy and consent to be contacted.' }
           }
         }
@@ -366,7 +372,7 @@ export default defineI18nConfig(() => ({
           privacyPrefix: 'Ich habe die',
           privacyLink: 'Datenschutz- und Cookie-Richtlinie',
           privacySuffix: 'gelesen und akzeptiere sie. Die freiwillig angegebenen Daten dürfen gespeichert und zur Kontaktaufnahme genutzt werden. Die Verarbeitung kann jederzeit widerrufen werden.',
-          mondayUnavailable: 'Montags sind keine Reservierungen möglich. Bitte wähle ein anderes Datum.',
+          noSlots: 'Keine Uhrzeiten verfügbar',
           info: 'Reservierungen sind zunächst Anfragen. Cafe Prana bestätigt die Verfügbarkeit in der Regel innerhalb von 24 Stunden per E-Mail.',
           urgent: 'Für dringende Änderungen schreibe bitte an {email}.',
           submit: 'Absenden',
@@ -391,8 +397,14 @@ export default defineI18nConfig(() => ({
               min: 'Mindestens 1 Gast ist erforderlich.',
               max: 'Maximal 20 Gäste sind möglich.'
             },
-            date: { invalid: 'Bitte wähle ein gültiges Datum ab heute.' },
-            time: { invalid: 'Bitte wähle eine Uhrzeit zwischen 07:00 und 16:00 in 15-Minuten-Schritten.' },
+            date: {
+              invalid: 'Bitte wähle ein gültiges Datum ab heute.',
+              closed: 'Das Cafe ist an diesem Tag geschlossen. Bitte wähle ein anderes Datum.'
+            },
+            time: {
+              invalid: 'Bitte wähle eine Uhrzeit in 15-Minuten-Schritten.',
+              unavailable: 'Bitte wähle eine Uhrzeit innerhalb der Öffnungszeiten dieses Tages.'
+            },
             privacy: { required: 'Bitte bestätige die Datenschutzrichtlinie und die Kontaktaufnahme.' }
           }
         }

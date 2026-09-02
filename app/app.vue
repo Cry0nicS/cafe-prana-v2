@@ -44,7 +44,7 @@ const localBusinessJsonLd = computed(() => ({
     'latitude': CAFE_GEO.latitude,
     'longitude': CAFE_GEO.longitude
   },
-  'openingHoursSpecification': toOpeningHoursSpecification(openingHours.value)
+  'openingHoursSpecification': toOpeningHoursSpecification(openingHours.value.hours)
 }))
 
 useHead(() => ({

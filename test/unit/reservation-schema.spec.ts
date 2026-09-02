@@ -139,13 +139,8 @@ describe('ReservationSchema', () => {
   })
 
   describe('time', () => {
-    it.each(['07:00', '12:15', '16:00'])('accepts %j inside opening hours', (time) => {
+    it.each(['00:00', '07:00', '12:15', '16:00', '23:45'])('accepts %j on the 15-minute grid', (time) => {
       expect(parse({ time }).success).toBe(true)
-    })
-
-    it.each(['06:59', '16:01', '16:15', '17:00', '20:00', '23:00'])('rejects %j outside opening hours', (time) => {
-      expect(messagesFor('time', parse({ time })))
-        .toContain('reservations.form.errors.time.invalid')
     })
 
     it.each(['12:23', '07:05', '15:59', '12:30:30'])('rejects %j off the 15-minute slot grid', (time) => {

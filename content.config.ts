@@ -1,6 +1,7 @@
 import { defineCollection, defineContentConfig, z } from '@nuxt/content'
 import { defineSitemapSchema } from '@nuxtjs/sitemap/content'
 import type { DefineSitemapSchemaOptions } from '@nuxtjs/sitemap/content'
+import { OPENING_TIME_OPTIONS } from './shared/utils/opening-hours'
 
 const createBaseSchema = () => z.object({
   title: z.string(),
@@ -69,7 +70,9 @@ const createWeekdaySchema = () => z.enum([
   'sunday'
 ])
 
-const createTimeSchema = () => z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'Use 24-hour HH:MM, e.g. 07:30')
+// An enum rather than a free string, so Studio offers a dropdown of 15-minute
+// times instead of a text field that accepts anything.
+const createTimeSchema = () => z.enum(OPENING_TIME_OPTIONS as unknown as [string, ...string[]])
 
 export default defineContentConfig({
   collections: {
@@ -80,6 +83,7 @@ export default defineContentConfig({
       type: 'data',
       source: 'opening-hours.yml',
       schema: z.object({
+        lastReservationBeforeClosing: z.number().int().min(0).max(240).default(60),
         hours: z.array(z.object({
           day: createWeekdaySchema(),
           closed: z.boolean().default(false),

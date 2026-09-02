@@ -1,6 +1,6 @@
 import { CalendarDate, Time } from '@internationalized/date'
 import * as z from 'zod'
-import { CAFE_RESERVATION_TIME_SECONDS } from '../constants'
+import { SLOT_MINUTES } from '../opening-hours'
 
 const required = (message: string) => z.string().trim().min(1, message)
 
@@ -43,7 +43,9 @@ export const reservationValidationMessages: Record<string, string> = {
   'reservations.form.errors.guests.min': 'At least 1 guest is required.',
   'reservations.form.errors.guests.max': 'Maximum 20 guests allowed.',
   'reservations.form.errors.date.invalid': 'Please choose a valid date today or later.',
-  'reservations.form.errors.time.invalid': 'Please choose a time between 07:00 and 16:00, in 15-minute steps.',
+  'reservations.form.errors.date.closed': 'The cafe is closed on this day. Please choose another date.',
+  'reservations.form.errors.time.invalid': 'Please choose a time in 15-minute steps.',
+  'reservations.form.errors.time.unavailable': 'Please choose a time within the opening hours of that day.',
   'reservations.form.errors.privacy.required': 'Please confirm the privacy policy and consent to be contacted.'
 }
 
@@ -109,12 +111,10 @@ export const ReservationSchema = z.object({
     }))
     .refine(
       (time) => {
-        const seconds = time.hour * 3600 + time.minute * 60 + time.second
-        const { min, max, step } = CAFE_RESERVATION_TIME_SECONDS
-
-        // Inside opening hours and on the slot grid the form offers, so a
-        // hand-crafted request cannot book 12:23.
-        return seconds >= min && seconds <= max && (seconds - min) % step === 0
+        // On the slot grid the form offers, so a hand-crafted request cannot
+        // book 12:23. Whether the slot falls inside that day's opening hours
+        // is checked separately against the content file.
+        return time.second === 0 && time.minute % SLOT_MINUTES === 0
       },
       {
         message: 'reservations.form.errors.time.invalid'

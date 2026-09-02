@@ -70,6 +70,10 @@ The most important concepts in this project, in plain terms.
   Mailgun, Studio auth, …). Defined in `nuxt.config.ts`; secrets come from `.env` locally and
   Vercel env vars in production. `.env.example` lists what's needed.
 
+- **Opening hours** — `content/opening-hours.yml`, one language-independent file. Drives the
+  homepage hours, the structured data for search engines, and the days and slots the
+  reservation form offers and the API accepts.
+
 - **Zod schema** — a validation definition. The reservation/contact form schemas in
   `shared/utils/schemas/` validate input on **both** the client form and the server endpoint.
 

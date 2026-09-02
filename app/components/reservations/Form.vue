@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { CAFE_CLOSED_WEEKDAYS, CAFE_CONTACT_EMAIL, CAFE_RESERVATION_TIME_SLOTS } from '#shared/utils/constants'
+import { CAFE_CONTACT_EMAIL } from '#shared/utils/constants'
+import { reservationSlotsOn, validateReservationSlot } from '#shared/utils/opening-hours'
+import type { DateParts, TimeParts } from '#shared/utils/opening-hours'
 import { ReservationSchema, getReservationValidationMessage } from '#shared/utils/schemas'
 
 type ReservationFormState = {
@@ -28,6 +30,10 @@ const toast = useToast()
 const { t } = useI18n()
 const localePath = useLocalePath()
 
+// The bookable days and slots come from the same opening-hours file the
+// homepage shows, so the form can only offer what the cafe actually opens.
+const { data: openingHours } = await useOpeningHours()
+
 const isSubmitting = ref(false)
 const showModal = ref(false)
 
@@ -40,35 +46,57 @@ const todayInput = () => {
   return `${year}-${month}-${day}`
 }
 
-const defaultState = (): ReservationFormState => ({
-  firstName: '',
-  lastName: '',
-  email: '',
-  phone: '',
-  date: todayInput(),
-  time: '12:30',
-  guests: 2,
-  message: '',
-  privacyConsent: false
-})
+const toDateParts = (date: string): DateParts | null => {
+  const [year, month, day] = date.split('-').map(Number)
+
+  return year && month && day ? { year, month, day } : null
+}
+
+const toTimeParts = (time: string): TimeParts | null => {
+  const [hour, minute] = time.split(':').map(Number)
+
+  return Number.isInteger(hour) && Number.isInteger(minute) ? { hour: hour!, minute: minute! } : null
+}
+
+const slotsOn = (date: string) => {
+  const parts = toDateParts(date)
+
+  return parts ? reservationSlotsOn(openingHours.value, parts) : []
+}
+
+const PREFERRED_SLOT = '12:30'
+
+// The usual lunch slot when the day offers it, otherwise the first one.
+const defaultSlot = (slots: string[]) => slots.includes(PREFERRED_SLOT) ? PREFERRED_SLOT : (slots[0] ?? '')
+
+const defaultState = (): ReservationFormState => {
+  const date = todayInput()
+
+  return {
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    date,
+    time: defaultSlot(slotsOn(date)),
+    guests: 2,
+    message: '',
+    privacyConsent: false
+  }
+}
 
 const formState = reactive<ReservationFormState>(defaultState())
 
-const isClosedDay = (date: string) => {
-  if (!date) {
-    return false
+const availableSlots = computed(() => slotsOn(formState.date))
+const dateUnavailable = computed(() => Boolean(formState.date) && availableSlots.value.length === 0)
+
+// Changing the date changes the slots; keep the chosen time if it still
+// exists, otherwise fall back so the guest never submits a stale slot.
+watch(availableSlots, (slots) => {
+  if (!slots.includes(formState.time)) {
+    formState.time = defaultSlot(slots)
   }
-
-  const [year, month, day] = date.split('-').map(Number)
-
-  if (!year || !month || !day) {
-    return false
-  }
-
-  return CAFE_CLOSED_WEEKDAYS.includes(new Date(year, month - 1, day).getDay())
-}
-
-const dateUnavailable = computed(() => isClosedDay(formState.date))
+})
 
 const buildPayload = (state: ReservationFormState) => ({
   firstName: state.firstName,
@@ -104,8 +132,12 @@ const validateReservation = (state: ReservationFormState) => {
         message: translateReservationMessage(issue.message)
       }))
 
-  if (isClosedDay(state.date) && !errors.some(error => error.name === 'date')) {
-    errors.push({ name: 'date', message: t('reservations.form.mondayUnavailable') })
+  const date = toDateParts(state.date)
+  const time = toTimeParts(state.time)
+  const slotIssue = date && time ? validateReservationSlot(openingHours.value, date, time) : null
+
+  if (slotIssue && !errors.some(error => error.name === slotIssue.path)) {
+    errors.push({ name: slotIssue.path, message: t(slotIssue.message) })
   }
 
   return errors
@@ -222,7 +254,7 @@ const sendReservation = async () => {
         <UFormField
           name="date"
           :label="t('reservations.form.date')"
-          :error="dateUnavailable ? t('reservations.form.mondayUnavailable') : undefined"
+          :error="dateUnavailable ? t('reservations.form.errors.date.closed') : undefined"
           required
         >
           <UInput
@@ -246,7 +278,9 @@ const sendReservation = async () => {
           <USelect
             v-model="formState.time"
             class="w-full"
-            :items="CAFE_RESERVATION_TIME_SLOTS"
+            :items="availableSlots"
+            :disabled="dateUnavailable"
+            :placeholder="t('reservations.form.noSlots')"
             icon="i-lucide-clock"
           />
         </UFormField>

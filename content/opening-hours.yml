@@ -2,8 +2,13 @@
 # search engines as structured data. Day names are translated in code, so this
 # one file keeps English and German identical by construction.
 #
-# `day` is one of monday ... sunday. Times are 24-hour `HH:MM`.
-# A closed day needs only `closed: true`.
+# `day` is one of monday ... sunday. Times are 24-hour `HH:MM`, in 15-minute
+# steps. A closed day needs only `closed: true`.
+#
+# The reservation form follows this file too: it offers 15-minute slots from
+# the opening time up to `lastReservationBeforeClosing` minutes before closing,
+# and a closed day cannot be booked.
+lastReservationBeforeClosing: 60
 hours:
   - day: monday
     closed: true
