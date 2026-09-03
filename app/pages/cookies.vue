@@ -87,7 +87,7 @@ useCafeSeo({
                     </tr>
                     <tr>
                       <td class="p-3 align-top font-medium text-highlighted">
-                        banner-site-notice-…
+                        cafe-prana-site-notice-…
                       </td>
                       <td class="p-3 align-top">
                         {{ t('cookies.noticeStoragePurpose') }}

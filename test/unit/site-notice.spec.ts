@@ -8,8 +8,8 @@ import {
 } from '#shared/utils/notice'
 
 const notice = (overrides: Partial<SiteNotice> = {}): SiteNotice => ({
-  enabled: true,
   tone: 'warning',
+  schedule: { until: '2026-12-31' },
   en: { title: 'Closed on Friday', message: 'Back on Saturday.' },
   de: { title: 'Freitag geschlossen', message: 'Samstag sind wir zurück.' },
   ...overrides
@@ -47,14 +47,17 @@ describe('site notice schedule', () => {
 describe('isNoticeActive', () => {
   const now = new Date('2026-09-05T10:00:00.000Z')
 
-  it('is off while the switch is off, whatever the schedule says', () => {
-    expect(isNoticeActive(notice({ enabled: false }), now)).toBe(false)
+  it('is off without an end date, whatever else is set', () => {
     expect(isNoticeActive(null, now)).toBe(false)
+    expect(isNoticeActive(notice({ schedule: undefined }), now)).toBe(false)
+    expect(isNoticeActive(notice({ schedule: { from: '', until: '' } }), now)).toBe(false)
+    expect(isNoticeActive(notice({ schedule: { from: '2026-09-01', until: '' } }), now)).toBe(false)
+    expect(isNoticeActive(notice({ schedule: { until: 'next friday' } }), now)).toBe(false)
   })
 
-  it('is on without a schedule', () => {
+  it('is on from now until the end date when no start is set', () => {
     expect(isNoticeActive(notice(), now)).toBe(true)
-    expect(isNoticeActive(notice({ schedule: { from: '', until: '' } }), now)).toBe(true)
+    expect(isNoticeActive(notice({ schedule: { from: '', until: '2026-09-05 18:00:00' } }), now)).toBe(true)
   })
 
   it('waits for the start and stops at the end', () => {
@@ -76,11 +79,11 @@ describe('isNoticeActive', () => {
     expect(isNoticeActive(scheduled, new Date('2026-09-06T22:00:00.000Z'))).toBe(false)
   })
 
-  it('works with only one side set', () => {
+  it('respects a start date and an end date that has passed', () => {
     expect(isNoticeActive(notice({ schedule: { until: '2026-09-04' } }), now)).toBe(false)
     expect(isNoticeActive(notice({ schedule: { until: '2026-09-05' } }), now)).toBe(true)
-    expect(isNoticeActive(notice({ schedule: { from: '2026-09-06' } }), now)).toBe(false)
-    expect(isNoticeActive(notice({ schedule: { from: '2026-09-01' } }), now)).toBe(true)
+    expect(isNoticeActive(notice({ schedule: { from: '2026-09-06', until: '2026-09-07' } }), now)).toBe(false)
+    expect(isNoticeActive(notice({ schedule: { from: '2026-09-01', until: '2026-09-07' } }), now)).toBe(true)
   })
 })
 

@@ -1,18 +1,16 @@
-# A short notice shown as a banner at the top of every page, in both languages.
+# A short notice shown as a card in the middle of the screen, in both languages.
 # Meant for spontaneous news: closing for a day at short notice, a changed
 # opening time, a private event. Visitors can dismiss it; a rewritten notice
 # shows up again.
 #
-# `enabled` is the switch. Nothing is shown while it is off, whatever else is
-# set here.
+# `schedule.until` is the switch: the notice is shown until that moment and
+# hidden while the field is empty or the moment has passed. `schedule.from` is
+# optional and delays the start; leave it empty to start right away.
 #
-# `schedule` is optional and narrows when the banner is shown while `enabled`
-# is on. Times are Berlin time, `YYYY-MM-DD HH:MM:SS`. Leave `from` empty to
-# start right away and `until` empty to keep showing it until you switch it
-# off. A bare date like `2026-09-05` means the whole day.
+# Times are Berlin time, `YYYY-MM-DD HH:MM:SS`. A bare date like `2026-09-05`
+# means the whole day.
 #
 # `tone` is one of info (green), warning (brown) or urgent (red).
-enabled: false
 tone: warning
 schedule:
   from: ''

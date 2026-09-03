@@ -74,10 +74,10 @@ The most important concepts in this project, in plain terms.
   homepage hours, the structured data for search engines, and the days and slots the
   reservation form offers and the API accepts.
 
-- **Site notice** — `content/notice.yml`, one file for both languages. A dismissible banner
-  above the header for short-notice news (a closure, a late opening). An `enabled` switch plus
-  an optional `from` / `until` schedule in Berlin time, evaluated on the visitor's clock because
-  every page is prerendered. See `docs/site-notice.md`.
+- **Site notice** — `content/notice.yml`, one file for both languages. A dismissible card shown
+  in the middle of the screen for short-notice news (a closure, a late opening). Shown while the
+  visitor's clock is inside the `from` / `until` schedule (Berlin time); `until` doubles as the
+  on/off switch. Evaluated on the device because every page is prerendered. See `docs/site-notice.md`.
 
 - **Zod schema** — a validation definition. The reservation/contact form schemas in
   `shared/utils/schemas/` validate input on **both** the client form and the server endpoint.
