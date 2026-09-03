@@ -21,6 +21,9 @@ export default defineI18nConfig(() => ({
         label: 'Language',
         switch: 'Switch language'
       },
+      notice: {
+        label: 'Notice from the cafe'
+      },
       error: {
         notFoundTitle: 'Page not found',
         notFoundMessage: 'This page could not be found.',
@@ -239,6 +242,7 @@ export default defineI18nConfig(() => ({
         tablePurpose: 'Purpose',
         tableType: 'Type',
         storagePurpose: 'Stores that the cookie and analytics notice has been acknowledged.',
+        noticeStoragePurpose: 'Stores that you dismissed the current notice banner from the cafe, so it stays hidden until the notice changes.',
         storageType: 'Browser localStorage',
         analyticsTitle: 'Anonymous analytics',
         analyticsP1: 'Vercel Web Analytics helps Cafe Prana understand whether the website is useful and working well. It records aggregated statistics for page views and basic technical context.',
@@ -275,6 +279,9 @@ export default defineI18nConfig(() => ({
       language: {
         label: 'Sprache',
         switch: 'Sprache wechseln'
+      },
+      notice: {
+        label: 'Hinweis vom Café'
       },
       error: {
         notFoundTitle: 'Seite nicht gefunden',
@@ -494,6 +501,7 @@ export default defineI18nConfig(() => ({
         tablePurpose: 'Zweck',
         tableType: 'Typ',
         storagePurpose: 'Speichert, dass der Cookie- und Analytics-Hinweis bestätigt wurde.',
+        noticeStoragePurpose: 'Speichert, dass du den aktuellen Hinweis-Banner des Cafés geschlossen hast, damit er erst wieder erscheint, wenn sich der Hinweis ändert.',
         storageType: 'Browser localStorage',
         analyticsTitle: 'Anonyme Analytics',
         analyticsP1: 'Vercel Web Analytics hilft Cafe Prana zu verstehen, ob die Website nützlich ist und gut funktioniert. Erfasst werden aggregierte Statistiken zu Seitenaufrufen und grundlegender technischer Kontext.',

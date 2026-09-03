@@ -1,0 +1,25 @@
+# A short notice shown as a banner at the top of every page, in both languages.
+# Meant for spontaneous news: closing for a day at short notice, a changed
+# opening time, a private event. Visitors can dismiss it; a rewritten notice
+# shows up again.
+#
+# `enabled` is the switch. Nothing is shown while it is off, whatever else is
+# set here.
+#
+# `schedule` is optional and narrows when the banner is shown while `enabled`
+# is on. Times are Berlin time, `YYYY-MM-DD HH:MM:SS`. Leave `from` empty to
+# start right away and `until` empty to keep showing it until you switch it
+# off. A bare date like `2026-09-05` means the whole day.
+#
+# `tone` is one of info (green), warning (brown) or urgent (red).
+enabled: false
+tone: warning
+schedule:
+  from: ''
+  until: ''
+en:
+  title: We are closed on Friday, 5 September
+  message: A family matter keeps us away for the day. We are back on Saturday as usual, and reservations for Friday have been cancelled.
+de:
+  title: Am Freitag, 5. September bleibt das Café geschlossen
+  message: Eine familiäre Angelegenheit hält uns für einen Tag fern. Am Samstag sind wir wie gewohnt zurück; Reservierungen für Freitag wurden storniert.

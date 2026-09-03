@@ -1,6 +1,7 @@
 import { defineCollection, defineContentConfig, z } from '@nuxt/content'
 import { defineSitemapSchema } from '@nuxtjs/sitemap/content'
 import type { DefineSitemapSchemaOptions } from '@nuxtjs/sitemap/content'
+import { NOTICE_TONES } from './shared/utils/notice'
 import { OPENING_TIME_OPTIONS } from './shared/utils/opening-hours'
 
 const createBaseSchema = () => z.object({
@@ -74,6 +75,17 @@ const createWeekdaySchema = () => z.enum([
 // times instead of a text field that accepts anything.
 const createTimeSchema = () => z.enum(OPENING_TIME_OPTIONS as unknown as [string, ...string[]])
 
+const createNoticeTextSchema = () => z.object({
+  title: z.string().nonempty(),
+  message: z.string().editor({ input: 'textarea' }).optional()
+})
+
+// `datetime()` is what gives the field a `date-time` JSON-schema format, which
+// makes Studio render its date and time picker. Studio writes the value back
+// as `YYYY-MM-DD HH:mm:ss` (Berlin time, no zone), or an empty string when the
+// picker is cleared; `shared/utils/notice.ts` reads both.
+const createNoticeDateTimeSchema = () => z.string().datetime({ local: true }).optional()
+
 export default defineContentConfig({
   collections: {
     // Single, language-independent file. The homepage renders it for both
@@ -92,6 +104,26 @@ export default defineContentConfig({
           opens: createTimeSchema().optional(),
           closes: createTimeSchema().optional()
         })).length(7)
+      })
+    }),
+    // Single file for both languages, so the switch, the schedule and the
+    // wording are edited in one place. See docs/site-notice.md.
+    notice: defineCollection({
+      type: 'data',
+      source: 'notice.yml',
+      schema: z.object({
+        enabled: z.boolean().default(false),
+        tone: z.enum(NOTICE_TONES).default('warning'),
+        // Nested on purpose. A top-level `date-time` field becomes a DATETIME
+        // column and is run through `new Date()` on insert, which throws on
+        // the empty string Studio writes for a cleared picker. Inside an
+        // object the values are stored as JSON, untouched.
+        schedule: z.object({
+          from: createNoticeDateTimeSchema(),
+          until: createNoticeDateTimeSchema()
+        }).optional(),
+        en: createNoticeTextSchema(),
+        de: createNoticeTextSchema()
       })
     }),
     index: defineCollection({
