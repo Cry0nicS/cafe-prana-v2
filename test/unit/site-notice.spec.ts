@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import {
+  NOTICE_STORAGE_PREFIX,
   isNoticeActive,
+  nextNoticeChange,
   noticeRevision,
+  noticeStorageKey,
   noticeWindow,
   parseNoticeBound,
   type SiteNotice
@@ -33,6 +36,13 @@ describe('site notice schedule', () => {
   it('treats a bare date as the whole day', () => {
     expect(parseNoticeBound('2026-09-05', 'from')?.toISOString()).toBe('2026-09-04T22:00:00.000Z')
     expect(parseNoticeBound('2026-09-05', 'until')?.toISOString()).toBe('2026-09-05T22:00:00.000Z')
+  })
+
+  it('reads an end at midnight, the picker default, as the end of that day', () => {
+    expect(parseNoticeBound('2026-09-25 00:00:00', 'until')?.toISOString()).toBe('2026-09-25T22:00:00.000Z')
+    expect(parseNoticeBound('2026-09-25T00:00', 'until')?.toISOString()).toBe('2026-09-25T22:00:00.000Z')
+    expect(parseNoticeBound('2026-09-25 00:00:00', 'from')?.toISOString()).toBe('2026-09-24T22:00:00.000Z')
+    expect(parseNoticeBound('2026-09-25 00:15:00', 'until')?.toISOString()).toBe('2026-09-24T22:15:00.000Z')
   })
 
   it('treats empty, missing and unparseable bounds as open', () => {
@@ -79,11 +89,32 @@ describe('isNoticeActive', () => {
     expect(isNoticeActive(scheduled, new Date('2026-09-06T22:00:00.000Z'))).toBe(false)
   })
 
+  it('never shows when the start is after the end', () => {
+    expect(isNoticeActive(notice({ schedule: { from: '2026-09-06', until: '2026-09-05' } }), now)).toBe(false)
+  })
+
   it('respects a start date and an end date that has passed', () => {
     expect(isNoticeActive(notice({ schedule: { until: '2026-09-04' } }), now)).toBe(false)
     expect(isNoticeActive(notice({ schedule: { until: '2026-09-05' } }), now)).toBe(true)
     expect(isNoticeActive(notice({ schedule: { from: '2026-09-06', until: '2026-09-07' } }), now)).toBe(false)
     expect(isNoticeActive(notice({ schedule: { from: '2026-09-01', until: '2026-09-07' } }), now)).toBe(true)
+  })
+})
+
+describe('nextNoticeChange', () => {
+  const now = new Date('2026-09-05T10:00:00.000Z')
+
+  it('points at the start while waiting, then at the end while showing', () => {
+    const scheduled = notice({ schedule: { from: '2026-09-05 14:00:00', until: '2026-09-05 18:00:00' } })
+
+    expect(nextNoticeChange(scheduled, now)?.toISOString()).toBe('2026-09-05T12:00:00.000Z')
+    expect(nextNoticeChange(scheduled, new Date('2026-09-05T13:00:00.000Z'))?.toISOString()).toBe('2026-09-05T16:00:00.000Z')
+  })
+
+  it('has nothing to wait for once the end has passed or without an end', () => {
+    expect(nextNoticeChange(notice({ schedule: { until: '2026-09-04' } }), now)).toBeNull()
+    expect(nextNoticeChange(notice({ schedule: { until: '' } }), now)).toBeNull()
+    expect(nextNoticeChange(null, now)).toBeNull()
   })
 })
 
@@ -93,5 +124,9 @@ describe('noticeRevision', () => {
     expect(noticeRevision(notice())).not.toBe(noticeRevision(notice({ en: { title: 'Open again' } })))
     expect(noticeRevision(notice())).not.toBe(noticeRevision(notice({ schedule: { until: '2026-09-06' } })))
     expect(noticeRevision(notice())).toMatch(/^[0-9a-z]+$/)
+  })
+
+  it('keys the dismissed flag by prefix and fingerprint', () => {
+    expect(noticeStorageKey(notice())).toBe(`${NOTICE_STORAGE_PREFIX}${noticeRevision(notice())}`)
   })
 })

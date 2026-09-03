@@ -1,6 +1,6 @@
 import type { SiteNotice } from '#shared/utils/notice'
 
-// The notice banner's content. Locale-independent key: both languages live in
+// The site notice's content. Locale-independent key: both languages live in
 // the one file, and the component picks the wording for the current locale.
 export const useSiteNotice = () => useAsyncData(
   'site-notice',
