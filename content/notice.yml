@@ -7,8 +7,9 @@
 # hidden while the field is empty or the moment has passed. `schedule.from` is
 # optional and delays the start; leave it empty to start right away.
 #
-# Times are Berlin time, `YYYY-MM-DD HH:MM:SS`. A bare date like `2026-09-05`
-# means the whole day.
+# Times are Berlin time, `YYYY-MM-DD HH:MM:SS`. The picker starts the time at
+# 00:00; for `until` that means the whole of that day, so `2026-09-05 00:00:00`
+# keeps the notice up through 5 September.
 #
 # `tone` is one of info (green), warning (brown) or urgent (red).
 tone: warning

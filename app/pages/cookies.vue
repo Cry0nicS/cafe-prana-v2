@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { CAFE_CONTACT_MAILTO } from '#shared/utils/constants'
+import { NOTICE_STORAGE_PREFIX } from '#shared/utils/notice'
 
 const { t } = useI18n()
 
@@ -87,7 +88,7 @@ useCafeSeo({
                     </tr>
                     <tr>
                       <td class="p-3 align-top font-medium text-highlighted">
-                        cafe-prana-site-notice-…
+                        {{ NOTICE_STORAGE_PREFIX }}…
                       </td>
                       <td class="p-3 align-top">
                         {{ t('cookies.noticeStoragePurpose') }}

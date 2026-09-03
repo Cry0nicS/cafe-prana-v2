@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { isNoticeActive, noticeRevision, type NoticeTone } from '#shared/utils/notice'
-
-// One key per wording, so a rewritten notice shows again for visitors who
-// dismissed the previous one. Older keys are cleaned up on the way.
-const STORAGE_PREFIX = 'cafe-prana-site-notice-'
+import {
+  NOTICE_STORAGE_PREFIX,
+  isNoticeActive,
+  nextNoticeChange,
+  noticeStorageKey,
+  type NoticeTone
+} from '#shared/utils/notice'
 
 const TONES: Record<NoticeTone, { icon: string, badge: string, label: string }> = {
   info: { icon: 'i-lucide-info', badge: 'bg-primary/12 text-primary', label: 'text-primary' },
@@ -11,37 +13,69 @@ const TONES: Record<NoticeTone, { icon: string, badge: string, label: string }> 
   urgent: { icon: 'i-lucide-octagon-alert', badge: 'bg-error/12 text-error', label: 'text-error' }
 }
 
+// setTimeout treats anything above this as 0 and fires straight away.
+const MAX_TIMEOUT_MS = 2 ** 31 - 1
+
 const { locale, t } = useI18n()
+const route = useRoute()
+// Not a `.client` component, unlike the cookie notice: the content has to
+// ride the server payload, since fetching it on the client would query the
+// content database from the browser.
 const { data: notice } = await useSiteNotice()
 
 const tone = computed(() => TONES[notice.value?.tone ?? 'warning'])
 const text = computed(() => notice.value?.[locale.value === 'de' ? 'de' : 'en'])
-const storageKey = computed(() => (notice.value ? `${STORAGE_PREFIX}${noticeRevision(notice.value)}` : ''))
+const storageKey = computed(() => (notice.value ? noticeStorageKey(notice.value) : ''))
 
-// The content travels in the server payload, but the card itself is only
-// decided on the visitor's device: every page is prerendered, so whether the
-// visitor arrives inside the schedule, and whether they already dismissed this
-// wording, is unknown on the server. A fixed overlay cannot shift the layout,
-// so appearing after mount costs nothing.
+// Everything below happens on the visitor's device: every page is prerendered,
+// so whether they arrive inside the schedule, and whether they already
+// dismissed this wording, is unknown on the server. A fixed overlay cannot
+// shift the layout, so appearing after mount costs nothing.
 const visible = ref(false)
+const dismissed = ref(false)
 const dismissButton = useTemplateRef('dismissButton')
+let timer: ReturnType<typeof setTimeout> | undefined
 
-const readDismissed = () => {
+const pruneOldDismissals = () => {
   try {
     for (const key of Object.keys(window.localStorage)) {
-      if (key.startsWith(STORAGE_PREFIX) && key !== storageKey.value) {
+      if (key.startsWith(NOTICE_STORAGE_PREFIX) && key !== storageKey.value) {
         window.localStorage.removeItem(key)
       }
     }
+  } catch {
+    // Storage unavailable: nothing to prune.
+  }
+}
 
+const readDismissed = () => {
+  try {
     return window.localStorage.getItem(storageKey.value) !== null
   } catch {
     return false
   }
 }
 
+// Shows or hides the card for the current moment, and books the next check
+// for when the schedule says the answer changes.
+const evaluate = () => {
+  clearTimeout(timer)
+
+  const now = new Date()
+
+  visible.value = Boolean(text.value?.title) && !dismissed.value && isNoticeActive(notice.value, now)
+
+  const change = nextNoticeChange(notice.value, now)
+
+  if (change && !dismissed.value) {
+    timer = setTimeout(evaluate, Math.min(change.getTime() - now.getTime() + 1000, MAX_TIMEOUT_MS))
+  }
+}
+
 const dismiss = () => {
+  dismissed.value = true
   visible.value = false
+  clearTimeout(timer)
 
   try {
     window.localStorage.setItem(storageKey.value, new Date().toISOString())
@@ -51,13 +85,22 @@ const dismiss = () => {
 }
 
 onMounted(() => {
-  if (!text.value?.title || !isNoticeActive(notice.value, new Date()) || readDismissed()) {
-    return
+  pruneOldDismissals()
+  dismissed.value = readDismissed()
+  evaluate()
+})
+
+onBeforeUnmount(() => clearTimeout(timer))
+
+// A visitor who arrived before the start and keeps browsing should still see
+// the notice once it begins; the timer covers a page left open, this covers
+// navigation in between.
+watch(() => route.path, evaluate)
+
+watch(visible, (isVisible) => {
+  if (isVisible) {
+    nextTick(() => dismissButton.value?.$el?.focus?.())
   }
-
-  visible.value = true
-
-  nextTick(() => dismissButton.value?.$el?.focus?.())
 })
 
 useEventListener(document, 'keydown', (event) => {

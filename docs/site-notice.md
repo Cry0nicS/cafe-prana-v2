@@ -1,13 +1,13 @@
 # Showing a notice to visitors
 
-This guide is for the café owner. It explains how to put a short notice at the top of every
-page of the website — for example when you have to close for a day at short notice, open
+This guide is for the café owner. It explains how to show visitors a short notice when they open
+the website — for example when you have to close for a day at short notice, open
 later than usual, or host a private event.
 
 The notice appears as a small card in the middle of the screen when a visitor opens the site, in
 English on the English site and in German on the German site. Visitors close it with **Got it**,
 the **×** button, or by clicking outside it; it then stays hidden for them until you change the
-text.
+notice (its text, its dates or its tone).
 
 ## Where to edit
 
@@ -38,7 +38,10 @@ hides itself when that passes:
 To take a notice down early, clear `until` (or move it to the past) and publish. To reuse the
 notice later, just set a new `until`.
 
-Times are Berlin time. Picking a date without a time counts as the whole day.
+Times are Berlin time. The picker starts the time at **00:00**: for `until` that counts as the
+**whole of that day**, so picking the closure day itself keeps the notice up until midnight at its
+end. Pick a later time only if the notice should end during the day. `from` must be before
+`until`; otherwise nothing is shown.
 
 ## Tips
 
@@ -46,6 +49,7 @@ Times are Berlin time. Picking a date without a time counts as the whole day.
   *“Important information”*. Put the why and the what-next in the message.
 - Fill in **both** languages. Each site only shows its own language, so an empty German title
   means German visitors see nothing.
-- When you change the wording, visitors who had closed the old notice see the new one again.
+- When you change the notice — wording, dates or tone — visitors who had closed the old one see it
+  again.
 - The notice is separate from the opening hours. If a closure is permanent, change the hours
   in `content/opening-hours.yml` as well.
