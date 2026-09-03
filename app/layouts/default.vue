@@ -11,6 +11,7 @@ const wideLayout = computed(() => route.path.endsWith('/menu') || route.path.end
       class="min-h-svh border-default sm:border-x"
       :class="wideLayout ? 'max-w-6xl!' : ''"
     >
+      <SiteNotice />
       <AppHeader :links="navigationLinks" />
       <slot />
       <AppFooter />

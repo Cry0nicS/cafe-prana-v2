@@ -85,6 +85,17 @@ useCafeSeo({
                         {{ t('cookies.storageType') }}
                       </td>
                     </tr>
+                    <tr>
+                      <td class="p-3 align-top font-medium text-highlighted">
+                        banner-site-notice-…
+                      </td>
+                      <td class="p-3 align-top">
+                        {{ t('cookies.noticeStoragePurpose') }}
+                      </td>
+                      <td class="p-3 align-top">
+                        {{ t('cookies.storageType') }}
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
