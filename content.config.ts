@@ -106,13 +106,13 @@ export default defineContentConfig({
         })).length(7)
       })
     }),
-    // Single file for both languages, so the switch, the schedule and the
-    // wording are edited in one place. See docs/site-notice.md.
+    // Single file for both languages, so the schedule and the wording are
+    // edited in one place. The end date is the on/off switch: the card shows
+    // while the visitor's clock is inside `schedule`. See docs/site-notice.md.
     notice: defineCollection({
       type: 'data',
       source: 'notice.yml',
       schema: z.object({
-        enabled: z.boolean().default(false),
         tone: z.enum(NOTICE_TONES).default('warning'),
         // Nested on purpose. A top-level `date-time` field becomes a DATETIME
         // column and is run through `new Date()` on insert, which throws on

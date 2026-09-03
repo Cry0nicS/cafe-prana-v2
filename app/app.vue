@@ -84,6 +84,7 @@ useSeoMeta({
         <NuxtPage />
       </UMain>
     </NuxtLayout>
+    <SiteNotice />
     <CookieAnalytics />
     <CookieConsentBanner />
   </UApp>

@@ -6,11 +6,10 @@ export const useSiteNotice = () => useAsyncData(
   'site-notice',
   () => queryCollection('notice').first(),
   {
-    // The defaults mirror the schema; the generated document type marks
+    // The default mirrors the schema; the generated document type marks
     // defaulted fields optional.
     transform: (document): SiteNotice | null => document
       ? {
-          enabled: document.enabled ?? false,
           tone: document.tone ?? 'warning',
           schedule: document.schedule,
           en: document.en,

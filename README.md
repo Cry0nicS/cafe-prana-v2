@@ -10,7 +10,7 @@ The homepage is fully content-driven and highlights the cafe's philosophy, menu 
 - Philosophy section focused on nourishing, plant-based, gluten-free food
 - Menu spotlight cards, events, testimonials, and FAQ
 - Gallery carousel and embedded Google Maps section with opening hours
-- Dismissible site-wide notice banner the owner can switch on or schedule from Studio
+- Dismissible site-wide notice card the owner schedules from Studio
 - SEO metadata sourced from content
 
 ## Tech Stack
