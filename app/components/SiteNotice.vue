@@ -15,6 +15,9 @@ const TONES: Record<NoticeTone, { icon: string, badge: string, label: string }> 
 
 // setTimeout treats anything above this as 0 and fires straight away.
 const MAX_TIMEOUT_MS = 2 ** 31 - 1
+// Timers can fire a few milliseconds early; landing this far past the boundary
+// guarantees the re-check sees the other side of it.
+const BOUNDARY_SLACK_MS = 1000
 
 const { locale, t } = useI18n()
 const route = useRoute()
@@ -68,7 +71,7 @@ const evaluate = () => {
   const change = nextNoticeChange(notice.value, now)
 
   if (change && !dismissed.value) {
-    timer = setTimeout(evaluate, Math.min(change.getTime() - now.getTime() + 1000, MAX_TIMEOUT_MS))
+    timer = setTimeout(evaluate, Math.min(change.getTime() - now.getTime() + BOUNDARY_SLACK_MS, MAX_TIMEOUT_MS))
   }
 }
 

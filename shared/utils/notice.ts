@@ -38,7 +38,8 @@ const DATE_ONLY = /^\d{4}-\d{2}-\d{2}$/
 // The instant a schedule bound refers to, or null when it is unset or
 // unparseable. An unparseable value counts as unset: for `from` that means
 // "starting now", for `until` it means the notice stays off.
-// Exported for the tests; the app goes through `noticeWindow`.
+// Exported for the tests; the app goes through `isNoticeActive` and
+// `nextNoticeChange`.
 export const parseNoticeBound = (value: string | undefined, edge: 'from' | 'until'): Date | null => {
   const trimmed = value?.trim()
 
@@ -67,7 +68,7 @@ type NoticeWindow = {
   until: number | null
 }
 
-export const noticeWindow = (schedule: NoticeSchedule | undefined): NoticeWindow => ({
+const noticeWindow = (schedule: NoticeSchedule | undefined): NoticeWindow => ({
   from: parseNoticeBound(schedule?.from, 'from')?.getTime() ?? null,
   // `until` is exclusive: a whole-day `until` resolves to the start of the
   // following day.

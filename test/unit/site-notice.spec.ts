@@ -5,7 +5,6 @@ import {
   nextNoticeChange,
   noticeRevision,
   noticeStorageKey,
-  noticeWindow,
   parseNoticeBound,
   type SiteNotice
 } from '#shared/utils/notice'
@@ -50,7 +49,6 @@ describe('site notice schedule', () => {
     expect(parseNoticeBound('   ', 'until')).toBeNull()
     expect(parseNoticeBound(undefined, 'from')).toBeNull()
     expect(parseNoticeBound('2026-13-45 99:00', 'from')).toBeNull()
-    expect(noticeWindow(undefined)).toEqual({ from: null, until: null })
   })
 })
 
