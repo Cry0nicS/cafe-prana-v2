@@ -31,17 +31,17 @@ There is no on/off switch to remember. The notice is shown **until** the moment 
 hides itself when that passes:
 
 1. Write the title and message in both languages.
-2. Set `until` — for example the evening of the day you are closed.
+2. Set `until` — for example the day you are closed (see the note on times below).
 3. Optionally set `from` to make the notice appear later, say the day before a closure.
 4. Publish.
 
 To take a notice down early, clear `until` (or move it to the past) and publish. To reuse the
 notice later, just set a new `until`.
 
-Times are Berlin time. The picker starts the time at **00:00**: for `until` that counts as the
-**whole of that day**, so picking the closure day itself keeps the notice up until midnight at its
-end. Pick a later time only if the notice should end during the day. `from` must be before
-`until`; otherwise nothing is shown.
+Times are Berlin time. The picker starts the time at **00:00**. For `from` that is simply the
+start of the day. For `until` it counts as the **whole of that day**, so picking the closure day
+itself keeps the notice up until midnight at its end; pick a later time only if the notice should
+end during the day. `from` must be before `until`; otherwise nothing is shown.
 
 ## Tips
 
