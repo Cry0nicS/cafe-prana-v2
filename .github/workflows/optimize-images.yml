@@ -8,10 +8,10 @@ name: images
 # guard. It used to fail on drift, which meant every Studio upload produced a
 # red run that only a manual `npm run optimize:images` could clear.
 #
-# It is kept for the one signal the build cannot give early: the job goes red
-# if the optimiser itself throws on a file, which now matters more than it did,
-# because that would break the deploy rather than just this run. Drift is
-# reported in the summary and exits 0.
+# It is kept for the one signal the build deliberately swallows: the pass exits
+# non-zero when it cannot process a file, so this job goes red for an upload
+# that defeats the encoder. The build leaves that file alone and deploys the
+# original instead of failing. Drift, by contrast, is only reported.
 
 on:
   push:
