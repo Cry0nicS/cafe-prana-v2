@@ -8,7 +8,7 @@ paid: true
 price: 25
 reservation: required
 image:
-  src: /images/events/posts/deep-talk.png
+  src: /images/events/posts/deep-talk.webp
   alt: Deep Talks
 ---
 
