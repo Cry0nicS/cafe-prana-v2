@@ -3,20 +3,24 @@
 //
 // Nuxt Studio writes uploads straight into `public/` and commits them to the
 // repository, so this cannot be a one-off cleanup: whatever the editor uploads
-// next has to go through the same pass. It runs in CI on every push (see
-// `.github/workflows/optimize-images.yml`) and can be run by hand with
-// `npm run optimize:images`.
+// next has to go through the same pass. Nobody can be relied on to run it,
+// either, because Studio commits to `main` without a local checkout ever being
+// involved. So `modules/optimize-images.ts` runs it on every production build,
+// which is what guarantees an upload is normalised before it is deployed, and
+// `npm run optimize:images` runs the same pass by hand to settle the committed
+// files back into their optimised form.
 //
-// The pass has to be idempotent, because CI commits its own output back to the
-// branch and a second opinion on an already-processed file would loop forever.
-// Idempotency holds because the transform is a pure function of the input
-// bytes and a file is only ever written when the result is genuinely smaller,
-// so a rerun recomputes the same buffer, finds no improvement, and writes
-// nothing.
+// The pass has to be idempotent, because the build reruns it over output a
+// previous run may already have committed and a second opinion on an
+// already-processed file would keep churning the bytes. Idempotency holds
+// because the transform is a pure function of the input bytes and a file is
+// only ever written when the result is genuinely smaller, so a rerun
+// recomputes the same buffer, finds no improvement, and writes nothing.
 
 import { readdir, readFile, stat, unlink, writeFile } from 'node:fs/promises'
 import { extname, join, relative, resolve } from 'node:path'
 import process from 'node:process'
+import { pathToFileURL } from 'node:url'
 import sharp from 'sharp'
 
 const ROOT = resolve(import.meta.dirname, '..')
@@ -138,7 +142,7 @@ async function rewriteReferences(renames) {
   return touched
 }
 
-async function main() {
+export async function optimizeImages() {
   const files = await walk(IMAGE_DIR)
   if (files.length === 0) {
     console.log(`No images found under ${relative(ROOT, IMAGE_DIR)}`)
@@ -204,12 +208,10 @@ async function main() {
       console.log(`  - ${entry}`)
     }
   }
-
-  // Let CI decide whether there is anything to commit.
-  if (process.env.GITHUB_OUTPUT) {
-    const dirty = changed > 0 ? 'true' : 'false'
-    await writeFile(process.env.GITHUB_OUTPUT, `changed=${dirty}\n`, { flag: 'a' })
-  }
 }
 
-await main()
+// Executed directly by `npm run optimize:images`; imported by the Nuxt module
+// otherwise, which calls `optimizeImages()` itself.
+if (process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url) {
+  await optimizeImages()
+}
