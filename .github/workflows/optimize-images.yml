@@ -2,26 +2,29 @@ name: images
 
 # Reports when anything under `public/images` is not in its optimised form.
 #
-# This used to run the optimiser and commit the result back, but a bot cannot
-# push to `main`: the ruleset requires pull requests, and GitHub refuses to grant
-# bypass to the GitHub Actions app on a user-owned repository. So the fix is
-# applied by hand with `npm run optimize:images` and this job only tells you when
-# it is needed, most likely after an upload through Studio.
+# Nothing here blocks or fixes anything. The production build runs the same
+# pass itself (see `modules/optimize-images.ts`), so an unoptimised upload can
+# no longer reach the deployed site and there is nothing left for this job to
+# guard. It used to fail on drift, which meant every Studio upload produced a
+# red run that only a manual `npm run optimize:images` could clear.
 #
-# It fails rather than warns on purpose. A warning annotation leaves the run
-# green and sends no notification, so an unoptimised upload would sit unnoticed.
-# This is not a required status check, so a red run here never blocks a merge.
+# It is kept for the one signal the build cannot give early: the job goes red
+# if the optimiser itself throws on a file, which now matters more than it did,
+# because that would break the deploy rather than just this run. Drift is
+# reported in the summary and exits 0.
 
 on:
   push:
     paths:
       - 'public/images/**'
       - 'scripts/optimize-images.mjs'
+      - 'modules/optimize-images.ts'
       - '.github/workflows/optimize-images.yml'
   pull_request:
     paths:
       - 'public/images/**'
       - 'scripts/optimize-images.mjs'
+      - 'modules/optimize-images.ts'
       - '.github/workflows/optimize-images.yml'
 
 concurrency:
@@ -65,14 +68,14 @@ jobs:
           fi
 
           {
-            echo '## Images need optimising'
+            echo '## Images are not in their optimised form'
             echo ''
-            echo 'Run `npm run optimize:images` locally and commit the result.'
+            echo 'The build normalises them anyway, so the deployed site is fine.'
+            echo 'To settle the committed files, run `npm run optimize:images` locally and commit the result.'
             echo ''
             echo '```'
             echo "$DIRTY"
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
 
-          echo '::error::Unoptimised images committed. Run `npm run optimize:images` and commit the result.'
-          exit 1
+          echo '::notice::Committed images are not in their optimised form. The build normalises them; run `npm run optimize:images` to settle the files.'

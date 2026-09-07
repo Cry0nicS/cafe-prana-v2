@@ -51,19 +51,23 @@ npm run preview
 Images live in `public/images`. Their responsive variants are generated at build
 time and served as static files, so nothing is optimised at request time.
 
-After adding images — including uploads through Studio, which commits them
-straight to this repository — normalise them:
+Every production build normalises the folder first: it resizes anything longer
+than 1800px on its longest edge, re-encodes to WebP unless the original is
+already smaller, and rewrites the `src` references that point at the files it
+renames. So an upload through Studio, which commits straight to this repository
+without a checkout in between, is always deployed in its optimised form even
+though the committed file is not.
+
+To settle the committed files into that same form, run the pass by hand and
+commit the result:
 
 ```bash
 npm run optimize:images
 ```
 
-It resizes anything longer than 1800px on its longest edge, re-encodes to WebP
-unless the original is already smaller, and rewrites the `src` references that
-point at the files it renames. Then commit the result. A second run is a no-op,
-so it is safe to run at any time.
-
-CI fails with the same command if unoptimised images reach a branch.
+A second run is a no-op, so it is safe to run at any time. The `images`
+workflow reports in its summary when the committed files have drifted, but it
+does not fail — the build has already handled it.
 
 ## Tests
 
