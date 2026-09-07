@@ -52,11 +52,16 @@ Images live in `public/images`. Their responsive variants are generated at build
 time and served as static files, so nothing is optimised at request time.
 
 Every production build normalises the folder first: it resizes anything longer
-than 1800px on its longest edge, re-encodes to WebP unless the original is
-already smaller, and rewrites the `src` references that point at the files it
-renames. So an upload through Studio, which commits straight to this repository
-without a checkout in between, is always deployed in its optimised form even
-though the committed file is not.
+than 1800px on its longest edge, re-encodes still PNG/JPEG/TIFF/AVIF to WebP
+unless the original is already smaller, and rewrites the `src` references that
+point at the files it renames. So an upload through Studio, which commits
+straight to this repository without a checkout in between, is deployed in its
+optimised form even though the committed file is not.
+
+Not everything is covered. Animated images, GIF and SVG pass through untouched,
+and a still image that cannot be squeezed under 400KB is only reported. A file
+the encoder chokes on is left in place and logged rather than failing the
+build, so a bad upload costs page weight, never a deployment.
 
 To settle the committed files into that same form, run the pass by hand and
 commit the result:
@@ -66,8 +71,9 @@ npm run optimize:images
 ```
 
 A second run is a no-op, so it is safe to run at any time. The `images`
-workflow reports in its summary when the committed files have drifted, but it
-does not fail — the build has already handled it.
+workflow reports in its summary when the committed files have drifted, without
+failing over it — the build has already handled that. It does go red when the
+pass cannot process a file at all.
 
 ## Tests
 

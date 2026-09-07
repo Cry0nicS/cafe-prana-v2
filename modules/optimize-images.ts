@@ -1,5 +1,4 @@
 import { defineNuxtModule } from 'nuxt/kit'
-import { optimizeImages } from '../scripts/optimize-images.mjs'
 
 // Runs the image optimiser as part of the production build.
 //
@@ -30,6 +29,13 @@ export default defineNuxtModule({
       return
     }
 
+    // Imported here rather than at the top of the file so that the cases above
+    // never load `sharp`'s native binding at all: a broken platform binary
+    // should not be able to fail `npm install` or `nuxt dev`.
+    const { optimizeImages } = await import('../scripts/optimize-images.mjs')
+
+    // Resolves even when a file could not be encoded, on purpose. The `images`
+    // workflow is what goes red for that; a deployment carries on.
     await optimizeImages()
   }
 })
