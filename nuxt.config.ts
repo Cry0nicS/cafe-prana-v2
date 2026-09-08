@@ -38,6 +38,28 @@ export default defineNuxtConfig({
     name: 'Cafe Prana'
   },
 
+  // Nuxt Studio always parses MDC with remark-mdc's `autoUnwrap` on (it is
+  // hardcoded in `generateDocumentFromContent`), while the build defaults it
+  // off. A block component whose slot is a single paragraph therefore came out
+  // as `["callout", {}, ["p", {}, "..."]]` in the deployed database and as
+  // `["callout", {}, "..."]` in Studio, and Studio reads that one structural
+  // difference as "Conflict detected" and refuses to edit the file. Turning it
+  // on here is the only way to make the two agree: the flag is not
+  // configurable on Studio's side.
+  content: {
+    build: {
+      markdown: {
+        remarkPlugins: {
+          'remark-mdc': {
+            options: {
+              autoUnwrap: true
+            }
+          }
+        }
+      }
+    }
+  },
+
   runtimeConfig: {
     supabaseUrl: process.env.SUPABASE_URL || process.env.NUXT_SUPABASE_URL || '',
     // Service-role key only. The `reservations` table grants nothing to the
