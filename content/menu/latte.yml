@@ -1,13 +1,13 @@
-locale: "en"
-title: "Milchkaffee"
-category: "drinksCoffee"
-description: "Creamy, mild coffee with mylk."
-ingredients: "Single or double lungo with foamed mylk"
-price: "5,3"
+title: Latte
+category: drinksCoffee
+description: Double espresso with a loooot of mylk.
 image:
-  src: "/images/menu/latte.webp"
-  alt: "Milchkaffee with foamed plant milk"
+  src: /images/menu/latte.webp
+  alt: Milchkaffee with foamed plant milk
+ingredients: Double espresso with foamed mylk, 300ml
 labels:
-  - "gluten-free"
-  - "vegan"
+  - gluten-free
+  - vegan
+locale: en
 order: 40
+price: 5,3
