@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import {
+  OPENING_TIME_OPTIONS,
   formatOpeningHours,
   toOpeningHoursSpecification,
-  weekdayLabel,
   type OpeningHoursEntry
 } from '#shared/utils/opening-hours'
 
@@ -17,10 +17,11 @@ const week: OpeningHoursEntry[] = [
 ]
 
 describe('opening hours', () => {
-  it('labels weekdays in the visitor language', () => {
-    expect(weekdayLabel('monday', 'en')).toBe('Monday')
-    expect(weekdayLabel('monday', 'de')).toBe('Montag')
-    expect(weekdayLabel('sunday', 'de')).toBe('Sonntag')
+  it('offers Studio the same 15-minute grid for opening and closing times', () => {
+    expect(OPENING_TIME_OPTIONS[0]).toBe('06:00')
+    expect(OPENING_TIME_OPTIONS.at(-1)).toBe('23:00')
+    expect(OPENING_TIME_OPTIONS).toContain('07:30')
+    expect(OPENING_TIME_OPTIONS.every(time => Number(time.slice(3)) % 15 === 0)).toBe(true)
   })
 
   it('formats an open day and leaves a closed day to the caller', () => {

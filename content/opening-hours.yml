@@ -5,10 +5,10 @@
 # `day` is one of monday ... sunday. Times are 24-hour `HH:MM`, in 15-minute
 # steps. A closed day needs only `closed: true`.
 #
-# The reservation form follows this file too: it offers 15-minute slots from
-# the opening time up to `lastReservationBeforeClosing` minutes before closing,
-# and a closed day cannot be booked.
-lastReservationBeforeClosing: 60
+# These hours are what the site *displays*. What can be *reserved* is separate,
+# because events regularly run outside them: the booking days and times live in
+# `shared/utils/reservations.ts` and only a developer can change them. Changing
+# a closing day here means changing it there too.
 hours:
   - day: monday
     closed: true

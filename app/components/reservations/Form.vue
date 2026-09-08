@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import type { DateParts, TimeParts } from '#shared/utils/calendar'
 import { CAFE_CONTACT_EMAIL } from '#shared/utils/constants'
-import { reservationSlotsOn, validateReservationSlot } from '#shared/utils/opening-hours'
-import type { DateParts, TimeParts } from '#shared/utils/opening-hours'
+import { reservationSlotsOn, validateReservationSlot } from '#shared/utils/reservations'
 import { ReservationSchema, getReservationValidationMessage } from '#shared/utils/schemas'
 
 type ReservationFormState = {
@@ -30,10 +30,6 @@ const toast = useToast()
 const { t } = useI18n()
 const localePath = useLocalePath()
 
-// The bookable days and slots come from the same opening-hours file the
-// homepage shows, so the form can only offer what the cafe actually opens.
-const { data: openingHours } = await useOpeningHours()
-
 const isSubmitting = ref(false)
 const showModal = ref(false)
 
@@ -58,10 +54,13 @@ const toTimeParts = (time: string): TimeParts | null => {
   return Number.isInteger(hour) && Number.isInteger(minute) ? { hour: hour!, minute: minute! } : null
 }
 
+// The bookable days and slots come from `shared/utils/reservations.ts`, not
+// from the opening hours: an event can run after the counter closes, and its
+// guests still need a slot to pick.
 const slotsOn = (date: string) => {
   const parts = toDateParts(date)
 
-  return parts ? reservationSlotsOn(openingHours.value, parts) : []
+  return parts ? reservationSlotsOn(parts) : []
 }
 
 const PREFERRED_SLOT = '12:30'
@@ -134,7 +133,7 @@ const validateReservation = (state: ReservationFormState) => {
 
   const date = toDateParts(state.date)
   const time = toTimeParts(state.time)
-  const slotIssue = date && time ? validateReservationSlot(openingHours.value, date, time) : null
+  const slotIssue = date && time ? validateReservationSlot(date, time) : null
 
   if (slotIssue && !errors.some(error => error.name === slotIssue.path)) {
     errors.push({ name: slotIssue.path, message: t(slotIssue.message) })

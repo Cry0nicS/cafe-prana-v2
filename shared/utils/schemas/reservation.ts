@@ -1,6 +1,6 @@
 import { CalendarDate, Time } from '@internationalized/date'
 import * as z from 'zod'
-import { SLOT_MINUTES } from '../opening-hours'
+import { SLOT_MINUTES } from '../calendar'
 
 const required = (message: string) => z.string().trim().min(1, message)
 
@@ -112,8 +112,8 @@ export const ReservationSchema = z.object({
     .refine(
       (time) => {
         // On the slot grid the form offers, so a hand-crafted request cannot
-        // book 12:23. Whether the slot falls inside that day's opening hours
-        // is checked separately against the content file.
+        // book 12:23. Whether the slot is actually bookable that day is
+        // checked separately, against `shared/utils/reservations.ts`.
         return time.second === 0 && time.minute % SLOT_MINUTES === 0
       },
       {

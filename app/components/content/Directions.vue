@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { CAFE_MAP_EMBED_URL, CAFE_MAPS_URL } from '#shared/utils/constants'
-import { formatOpeningHours, weekdayLabel } from '#shared/utils/opening-hours'
+import { weekdayLabel } from '#shared/utils/calendar'
+import { formatOpeningHours } from '#shared/utils/opening-hours'
 
 defineProps<{
   title?: string
