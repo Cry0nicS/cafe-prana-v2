@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { nextUpcomingEvent } from '~/utils/events'
 
 // "Now" is a Tuesday morning. `isUpcomingEvent` compares against the start of
@@ -8,6 +8,23 @@ const now = new Date('2026-09-08T10:00:00.000Z')
 const event = (title: string, date: string, time?: string) => ({ title, date, time })
 
 describe('nextUpcomingEvent', () => {
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  it('reads the clock when no "now" is given, so the composable follows the visitor\'s day', () => {
+    vi.useFakeTimers({ toFake: ['Date'] })
+
+    const events = [event('Yesterday', '2026-09-07'), event('Tonight', '2026-09-08'), event('Next week', '2026-09-14')]
+
+    vi.setSystemTime(new Date('2026-09-08T23:30:00'))
+    expect(nextUpcomingEvent(events)?.title).toBe('Tonight')
+
+    // The day after, the same list promotes the following event.
+    vi.setSystemTime(new Date('2026-09-09T00:30:00'))
+    expect(nextUpcomingEvent(events)?.title).toBe('Next week')
+  })
+
   it('picks the soonest upcoming event', () => {
     const events = [
       event('Later', '2026-10-01'),
