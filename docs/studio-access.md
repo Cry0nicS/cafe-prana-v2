@@ -60,3 +60,22 @@ needs OAuth credentials, which are **not** committed. Do this once:
   `/__nuxt_studio/auth/github`) instead. Then access is controlled by **repository
   collaborators** (no email allowlist or service token needed), but each editor needs a
   GitHub account with write access to the repo.
+
+## "Conflict Detected" on a page
+
+Studio shows this when the file in GitHub and the copy the deployed site is serving do not
+look identical to it:
+
+> The content on GitHub differs from your website version. Ensure your latest changes are
+> deployed and refresh the page.
+
+The message points at a stale deployment, and sometimes that is all it is — a deploy still
+running, or one that failed. Check the Vercel deployment for the newest commit on `main`
+first, and note that Vercel's **Redeploy** button rebuilds the *same* commit, so it will not
+pick up newer ones.
+
+If the newest commit really is live and one particular page still conflicts, it is not
+staleness: something in the build is storing that document differently from the way Studio
+reads the file, and no amount of redeploying will clear it. That is a developer fix, not an
+editing mistake. `npm run check:studio` (after a build) reports exactly which documents and
+fields disagree, and CI runs it on every push so it should not reach production again.
