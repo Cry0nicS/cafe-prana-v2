@@ -4,6 +4,11 @@ Events are individual pages. The **Events listing page updates itself** — when
 event, it automatically appears in the right place (Upcoming vs. Past) with a card. You never
 edit the listing by hand.
 
+The **homepage follows too**: while at least one event is still to come, the top of the homepage
+announces the soonest one — its name, description, photo, date, time and price, with a button to
+its page. Once the last event has passed, the ordinary welcome block returns by itself. See
+`docs/editing-the-homepage.md` for what that hides in the welcome block meanwhile.
+
 Everything an event needs is intentionally small: you fill in a few fields, then write the page
 freely. The location, the euro sign, the reservation link, the "vegan · gluten-free · organic"
 note, and the search-engine info are all handled for you.

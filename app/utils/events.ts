@@ -48,6 +48,41 @@ export const compareEventsDesc = (a: EventLike, b: EventLike) => {
   return toEventDate(b.date).getTime() - toEventDate(a.date).getTime()
 }
 
+type NamedEvent = EventLike & { title?: string }
+
+// Same-day events are ordered by start time (an event without one goes last),
+// then by title, so the pick does not depend on the order the query returned.
+const compareNextEvent = (a: NamedEvent, b: NamedEvent) => {
+  const byDate = compareEventsAsc(a, b)
+
+  if (byDate) {
+    return byDate
+  }
+
+  if (a.time !== b.time) {
+    if (!a.time) {
+      return 1
+    }
+
+    if (!b.time) {
+      return -1
+    }
+
+    return a.time.localeCompare(b.time)
+  }
+
+  return (a.title ?? '').localeCompare(b.title ?? '')
+}
+
+// The soonest event that is still to come, or `null`. "Upcoming" is decided by
+// `isUpcomingEvent`, the same helper the events listing uses, so the homepage
+// hero and `/events` cannot disagree about it.
+export const nextUpcomingEvent = <T extends NamedEvent>(events: T[], now = new Date()): T | null => {
+  return events
+    .filter(event => isUpcomingEvent(event, now))
+    .sort(compareNextEvent)[0] ?? null
+}
+
 export const getEventDateIso = (value: EventDateValue) => {
   return toEventDate(value).toISOString().slice(0, 10)
 }
