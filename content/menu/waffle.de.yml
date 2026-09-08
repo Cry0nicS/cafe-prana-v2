@@ -1,14 +1,14 @@
-locale: "de"
-title: "Waffeln"
-category: "food"
-description: "À la carte und als Tagesangebot, süß oder herzhaft."
-ingredients: "Glutenfreies Hafermehl, Süßkartoffel und Mandeln, Toppings des Tages"
-price: "9-15"
+title: Waffeln
+category: food
+description: À la carte und als Tagesangebot, süß oder herzhaft.
 image:
-  src: "/images/menu/waffle.webp"
-  alt: "Glutenfreie Waffel mit Toppings des Tages"
+  src: /images/menu/waffle.webp
+  alt: Glutenfreie Waffel mit Toppings des Tages
+ingredients: Glutenfreies Hafermehl, Süßkartoffel und Mandeln, Toppings des Tages
 labels:
-  - "gluten-free"
-  - "vegan"
-  - "seasonal"
+  - gluten-free
+  - vegan
+  - seasonal
+locale: de
 order: 230
+price: 10-15

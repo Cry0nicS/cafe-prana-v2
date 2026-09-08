@@ -1,14 +1,14 @@
-locale: "en"
-title: "Pranas Lunch"
-category: "food"
-description: "Balanced and nourishing lunch to fuel your afternoon."
-ingredients: "My lunch options depend on the season and availability of fresh ingredients."
-price: "14.90"
+title: Pranas Lunch
+category: food
+description: Balanced and nourishing lunch to fuel your afternoon.
 image:
-  src: "/images/menu/lunch.webp"
-  alt: "Balanced and nourishing Pranas lunch"
+  src: /images/menu/lunch.webp
+  alt: Balanced and nourishing Pranas lunch
+ingredients: My lunch options depend on the season and availability of fresh ingredients.
 labels:
-  - "gluten-free"
-  - "vegan"
-  - "seasonal"
+  - gluten-free
+  - vegan
+  - seasonal
+locale: en
 order: 250
+price: "15"
