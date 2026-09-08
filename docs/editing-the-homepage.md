@@ -17,6 +17,20 @@ On the homepage you can edit, add, remove, and reorder:
 
 You do **not** need to worry about colours, buttons, icons, or layout — those are handled for you and always look right.
 
+## The welcome block and your next event
+
+While at least one event is still to come, the top of the homepage announces the **soonest
+upcoming event** instead of the ordinary welcome block: the event's name, description, photo,
+date, time and price, with a button to that event's page. The day after the last event has
+passed, the welcome block comes back on its own. Nothing to switch on or off — publishing an
+event is all it takes, and the events page decides "upcoming" the same way.
+
+While an event is showing, only the welcome block's **title** ("Welcome to Café Prana") is
+visible, kept small above the event's name. Its **headline**, **description** and **photo** are
+hidden until no event is coming up. If you edit one of those three and the change does not appear
+on the live site, this is why — it is saved, and it shows again as soon as the welcome block
+returns.
+
 ## Opening the editor
 
 1. Go to your Nuxt Studio project and open the site.

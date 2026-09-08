@@ -19,7 +19,7 @@ The page is rendered by `app/pages/index.vue` with `<ContentRenderer :value="pag
 
 | MDC tag | Component | Props | Slot / children | Repeatable |
 |---------|-----------|-------|-----------------|------------|
-| `::home-hero` | `HomeHero` | `headline, title, description, image{src,alt}` | — (CTAs from i18n `home.hero.*`) | no |
+| `::home-hero` | `HomeHero` | `headline, title, description, image{src,alt}` | — (CTAs from i18n `home.hero.*`; see the next-event note below) | no |
 | `::feature-grid` | `FeatureGrid` | `icon, headline, title, description` | `::feature` children | — |
 | `::feature` | `Feature` | `icon, title, description` | — | ✅ reusable |
 | `::menu-highlights` | `MenuHighlights` | `icon, title, description` | `::menu-highlight` children (CTAs from `home.menu.*`) | — |
@@ -33,6 +33,23 @@ The page is rendered by `app/pages/index.vue` with `<ContentRenderer :value="pag
 | `::callout` | `Callout` | `icon, title` | default slot = note text | ✅ reusable |
 
 Note `Feature` is shared by both `FeatureGrid` (Philosophy) and `EventsIntro` (Events) — reuse it wherever a feature card is needed.
+
+### The next-event hero
+
+`HomeHero` reads the soonest upcoming event through `useNextEvent` (a locale-aware query over
+the `events` collection plus `nextUpcomingEvent` from `app/utils/events.ts`, which reuses the
+listing page's `isUpcomingEvent`). When there is one it renders `NextEventHero`, an announcement
+poster built from the event document, and passes only its own `title` along; `headline`,
+`description` and `image` drive the welcome hero alone. When there is none, the welcome
+`UPageHero` renders unchanged.
+
+`NextEventHero` lives in `app/components/content/` next to the hero that owns it, but it is not
+a block for content files: it takes the event as a prop, so there is no `::next-event-hero` to
+place in `index.md`, and both locale homepages keep the same block set. The eyebrow and the button
+label are `home.hero.nextEvent` / `home.hero.viewEvent` in `i18n/i18n.config.ts`. Its photo
+deliberately uses the event detail page's `sizes`/`format`: `ipxStatic` only bakes variants that
+were rendered during prerender, and those exist for every event, so whichever event becomes next
+after a date rollover still resolves.
 
 **These components are global**, so they work in *any* MDC document — not just the homepage.
 Event pages (`content/events/*.md`) use `::callout` and can use `::feature-grid`, `::gallery`,

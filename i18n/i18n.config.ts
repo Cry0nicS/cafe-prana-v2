@@ -12,7 +12,12 @@ export default defineI18nConfig(() => ({
         contact: 'Contact'
       },
       home: {
-        hero: { menu: 'Menu Highlights', directions: 'Get Directions' },
+        hero: {
+          menu: 'Menu Highlights',
+          directions: 'Get Directions',
+          nextEvent: 'Our next event',
+          viewEvent: 'View event'
+        },
         menu: { explore: 'Explore the full menu', book: 'Book a table' },
         events: { explore: 'Explore all events', reserve: 'Reserve your seat' },
         directions: { get: 'Get Directions', closed: 'Closed' }
@@ -273,7 +278,12 @@ export default defineI18nConfig(() => ({
         contact: 'Kontakt'
       },
       home: {
-        hero: { menu: 'Menü-Highlights', directions: 'Anfahrt' },
+        hero: {
+          menu: 'Menü-Highlights',
+          directions: 'Anfahrt',
+          nextEvent: 'Unser nächstes Event',
+          viewEvent: 'Zum Event'
+        },
         menu: { explore: 'Vollständiges Menü entdecken', book: 'Tisch reservieren' },
         events: { explore: 'Alle Events entdecken', reserve: 'Platz reservieren' },
         directions: { get: 'Anfahrt', closed: 'Geschlossen' }
