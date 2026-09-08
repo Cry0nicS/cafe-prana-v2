@@ -90,14 +90,12 @@ export default defineContentConfig({
   collections: {
     // Single, language-independent file. The homepage renders it for both
     // locales and app.vue publishes it as structured data, so the two
-    // languages cannot show different hours.
+    // languages cannot show different hours. Display only - when reservations
+    // can be taken is configured in `shared/utils/reservations.ts`.
     openingHours: defineCollection({
       type: 'data',
       source: 'opening-hours.yml',
       schema: z.object({
-        // Coerced: Studio writes this field back as a string ("60"), which a
-        // plain number schema would reject and silently drop the document.
-        lastReservationBeforeClosing: z.coerce.number().int().min(0).max(240).default(60),
         hours: z.array(z.object({
           day: createWeekdaySchema(),
           closed: z.boolean().default(false),

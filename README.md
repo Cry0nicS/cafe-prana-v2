@@ -86,7 +86,8 @@ The suite (Vitest + `@nuxt/test-utils`) covers the two paths a guest can break:
 reservations and contact messages.
 
 - `test/unit` — the shared Zod schemas that both the forms and the API routes
-  validate against (opening hours, closed days, guest limits, consent, ...).
+  validate against, plus the booking availability in `shared/utils/reservations.ts`
+  (closed days, bookable windows, guest limits, consent, ...).
 - `test/server` — the Nitro routes and the Mailgun service, running in plain
   Node with Supabase and Mailgun mocked. Nitro auto-imports come from
   `test/setup/nitro-globals.ts`.

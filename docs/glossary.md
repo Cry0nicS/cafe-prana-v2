@@ -71,8 +71,12 @@ The most important concepts in this project, in plain terms.
   Vercel env vars in production. `.env.example` lists what's needed.
 
 - **Opening hours** — `content/opening-hours.yml`, one language-independent file. Drives the
-  homepage hours, the structured data for search engines, and the days and slots the
-  reservation form offers and the API accepts.
+  homepage hours and the structured data for search engines. Display only.
+
+- **Booking availability** — `shared/utils/reservations.ts`, in code rather than content. The
+  closed weekdays, the one-off closures and the bookable window per weekday that the
+  reservation form offers and the API accepts. Deliberately separate from the opening hours,
+  because events run outside them. See `docs/reservation-availability.md`.
 
 - **Site notice** — `content/notice.yml`, one file for both languages. A dismissible card shown
   in the middle of the screen for short-notice news (a closure, a late opening). Shown while the

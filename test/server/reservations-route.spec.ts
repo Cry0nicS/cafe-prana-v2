@@ -1,7 +1,6 @@
 import { createError } from 'h3'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { postJson } from '../utils/h3'
-import { openingHoursDocument, testOpeningHours } from '../utils/opening-hours'
 
 const { insertReservation, sendReservationEmail, supabaseClient } = vi.hoisted(() => ({
   insertReservation: vi.fn(),
@@ -12,23 +11,8 @@ const { insertReservation, sendReservationEmail, supabaseClient } = vi.hoisted((
 vi.mock('~~/server/repositories/reservations', () => ({ insertReservation }))
 vi.mock('~~/server/services/email', () => ({ sendReservationEmail }))
 vi.mock('~~/server/utils/supabase', () => ({ useServerSupabaseClient: () => supabaseClient }))
-// The route reads the opening hours from the content database; serve the
-// fixture instead. Only that one collection is expected server-side.
-vi.mock('@nuxt/content/server', async () => {
-  const { openingHoursDocument } = await import('../utils/opening-hours')
-
-  return {
-    queryCollection: (_event: unknown, collection: string) => ({
-      first: async () => {
-        if (collection !== 'openingHours') {
-          throw new Error(`Unexpected server content query for collection "${collection}"`)
-        }
-
-        return openingHoursDocument.value
-      }
-    })
-  }
-})
+// No content mock: the bookable days and times come from
+// `shared/utils/reservations.ts`, so this route never touches the database.
 
 const handler = await import('~~/server/api/reservations/index.post').then(module => module.default)
 
@@ -72,11 +56,10 @@ describe('POST /api/reservations', () => {
   afterEach(() => {
     vi.useRealTimers()
     vi.restoreAllMocks()
-    openingHoursDocument.value = testOpeningHours
   })
 
-  // 2026-08-08 is a Saturday (09:00 to 17:00, last slot 16:00).
-  it('rejects a slot outside that day\'s opening hours', async () => {
+  // 2026-08-08 is a Saturday, bookable from 09:00 to 21:00.
+  it('rejects a time the day does not offer', async () => {
     const response = await postJson(handler, { ...validPayload(), time: '08:00' })
 
     expect(response.status).toBe(422)
@@ -84,11 +67,22 @@ describe('POST /api/reservations', () => {
     expect(insertReservation).not.toHaveBeenCalled()
   })
 
-  it('rejects the last hour before closing', async () => {
-    const response = await postJson(handler, { ...validPayload(), time: '16:15' })
+  it('rejects a time past the end of the booking window', async () => {
+    const response = await postJson(handler, { ...validPayload(), time: '21:15' })
 
     expect(response.status).toBe(422)
     expect(insertReservation).not.toHaveBeenCalled()
+  })
+
+  // The counter closes at 17:00 on a Saturday, but events run later than that.
+  it('accepts an evening slot outside the displayed opening hours', async () => {
+    const response = await postJson(handler, { ...validPayload(), time: '19:00' })
+
+    expect(response.status).toBe(200)
+    expect(insertReservation).toHaveBeenCalledWith(
+      supabaseClient,
+      expect.objectContaining({ time: '19:00:00' })
+    )
   })
 
   // 2026-08-10 is a Monday, which is closed.
@@ -97,15 +91,6 @@ describe('POST /api/reservations', () => {
 
     expect(response.status).toBe(422)
     expect(JSON.stringify(response.body)).toContain('reservations.form.errors.date.closed')
-    expect(insertReservation).not.toHaveBeenCalled()
-  })
-
-  it('fails loudly when the opening hours are missing from content', async () => {
-    openingHoursDocument.value = null
-
-    const response = await postJson(handler, validPayload())
-
-    expect(response.status).toBe(500)
     expect(insertReservation).not.toHaveBeenCalled()
   })
 

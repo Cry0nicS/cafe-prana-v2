@@ -153,7 +153,7 @@ export default defineI18nConfig(() => ({
             },
             time: {
               invalid: 'Please choose a time in 15-minute steps.',
-              unavailable: 'Please choose a time within the opening hours of that day.'
+              unavailable: 'Please choose one of the times offered for that day.'
             },
             privacy: { required: 'Please confirm the privacy policy and consent to be contacted.' }
           }
@@ -414,7 +414,7 @@ export default defineI18nConfig(() => ({
             },
             time: {
               invalid: 'Bitte wähle eine Uhrzeit in 15-Minuten-Schritten.',
-              unavailable: 'Bitte wähle eine Uhrzeit innerhalb der Öffnungszeiten dieses Tages.'
+              unavailable: 'Bitte wähle eine der für diesen Tag angebotenen Uhrzeiten.'
             },
             privacy: { required: 'Bitte bestätige die Datenschutzrichtlinie und die Kontaktaufnahme.' }
           }

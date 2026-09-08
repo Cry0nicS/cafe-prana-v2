@@ -4,14 +4,11 @@ import { defineEventHandler, readBody } from 'h3'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import ReservationForm from '~/components/reservations/Form.vue'
 
-import { testOpeningHours } from '../utils/opening-hours'
-
 const { toastAdd } = vi.hoisted(() => ({ toastAdd: vi.fn() }))
 
 mockNuxtImport('useToast', () => () => ({ add: toastAdd }))
-// The form reads the opening hours through this composable; serve the fixture
-// instead of hitting the content database.
-mockNuxtImport('useOpeningHours', () => async () => ({ data: ref(testOpeningHours) }))
+// No opening-hours mock: the bookable days and slots come from
+// `shared/utils/reservations.ts`, so the form needs nothing from content.
 
 type ApiCall = { body: any }
 
@@ -164,16 +161,16 @@ describe('reservation form', () => {
   it('offers only the slots of the chosen day', async () => {
     const wrapper = await mountSuspended(ReservationForm)
 
-    // Wednesday: 07:30 to 15:00, so the last bookable slot is 14:00.
+    // Wednesday's booking window is 07:00 to 18:00.
     await wrapper.get('[name="date"]').setValue(OPEN_DAY)
     await wrapper.vm.$nextTick()
 
     const select = wrapper.findComponent({ name: 'USelect' })
     const items = select.props('items') as string[]
 
-    expect(items[0]).toBe('07:30')
-    expect(items.at(-1)).toBe('14:00')
-    expect(items).not.toContain('15:00')
+    expect(items[0]).toBe('07:00')
+    expect(items.at(-1)).toBe('18:00')
+    expect(items).not.toContain('18:15')
   })
 
   it('reports a failing request without clearing what the guest typed', async () => {
