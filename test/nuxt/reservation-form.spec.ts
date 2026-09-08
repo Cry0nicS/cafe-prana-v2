@@ -1,14 +1,16 @@
 import { mockNuxtImport, mountSuspended, registerEndpoint } from '@nuxt/test-utils/runtime'
 import type { VueWrapper } from '@vue/test-utils'
 import { defineEventHandler, readBody } from 'h3'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import ReservationForm from '~/components/reservations/Form.vue'
+import { testOpeningHours } from '../utils/opening-hours'
 
 const { toastAdd } = vi.hoisted(() => ({ toastAdd: vi.fn() }))
 
 mockNuxtImport('useToast', () => () => ({ add: toastAdd }))
-// No opening-hours mock: the bookable days and slots come from
-// `shared/utils/reservations.ts`, so the form needs nothing from content.
+// The form reads the opening hours through this composable; serve the fixture
+// instead of hitting the content database.
+mockNuxtImport('useOpeningHours', () => async () => ({ data: ref(testOpeningHours) }))
 
 type ApiCall = { body: any }
 
@@ -24,25 +26,17 @@ registerEndpoint('/api/reservations', {
   })
 })
 
-// Dates are relative to today, because the schema rejects anything in the past.
-const nextWeekday = (weekday: number) => {
-  const date = new Date()
+// The clock is pinned to a Thursday, so the dates below are always in the
+// future for the schema and always fall on the weekdays the fixture describes.
+const NOW = new Date('2026-08-06T09:00:00.000Z')
 
-  date.setHours(12, 0, 0, 0)
+// Wednesday: 07:30 to 15:00 in the fixture, so the last bookable slot is 14:00.
+const OPEN_DAY = '2026-08-12'
+const CLOSED_MONDAY = '2026-08-10'
+// A Monday the fixture opens for a dinner, 17:00 to 20:00.
+const EXCEPTION_MONDAY = '2026-08-17'
 
-  do {
-    date.setDate(date.getDate() + 1)
-  } while (date.getDay() !== weekday)
-
-  return [
-    date.getFullYear(),
-    String(date.getMonth() + 1).padStart(2, '0'),
-    String(date.getDate()).padStart(2, '0')
-  ].join('-')
-}
-
-const OPEN_DAY = nextWeekday(3)
-const CLOSED_MONDAY = nextWeekday(1)
+const slotItems = (wrapper: VueWrapper) => wrapper.findComponent({ name: 'USelect' }).props('items') as string[]
 
 const fillForm = async (wrapper: VueWrapper, overrides: Record<string, string> = {}) => {
   const values: Record<string, string> = {
@@ -80,9 +74,16 @@ const submit = async (wrapper: VueWrapper) => {
 
 describe('reservation form', () => {
   beforeEach(() => {
+    // Only the clock: the submit helper waits on a real setTimeout.
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(NOW)
     calls.length = 0
     toastAdd.mockReset()
     respond = () => ({ message: 'Reservation created successfully', emailSent: true })
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
   })
 
   it('sends the reservation and confirms it to the guest', async () => {
@@ -161,16 +162,39 @@ describe('reservation form', () => {
   it('offers only the slots of the chosen day', async () => {
     const wrapper = await mountSuspended(ReservationForm)
 
-    // Wednesday's booking window is 07:00 to 18:00.
     await wrapper.get('[name="date"]').setValue(OPEN_DAY)
     await wrapper.vm.$nextTick()
 
-    const select = wrapper.findComponent({ name: 'USelect' })
-    const items = select.props('items') as string[]
+    const items = slotItems(wrapper)
 
-    expect(items[0]).toBe('07:00')
-    expect(items.at(-1)).toBe('18:00')
-    expect(items).not.toContain('18:15')
+    expect(items[0]).toBe('07:30')
+    expect(items.at(-1)).toBe('14:00')
+    expect(items).not.toContain('15:00')
+  })
+
+  it('offers exactly the window of a date the cafe opened by exception', async () => {
+    const wrapper = await mountSuspended(ReservationForm)
+
+    await wrapper.get('[name="date"]').setValue(EXCEPTION_MONDAY)
+    await wrapper.vm.$nextTick()
+
+    const items = slotItems(wrapper)
+
+    expect(items[0]).toBe('17:00')
+    expect(items.at(-1)).toBe('20:00')
+    expect(items).toHaveLength(13)
+    expect(wrapper.text()).not.toContain('The cafe is closed on this day.')
+  })
+
+  it('sends a booking for an evening event on an exception date', async () => {
+    const wrapper = await mountSuspended(ReservationForm)
+
+    await fillForm(wrapper, { date: EXCEPTION_MONDAY, time: '18:30' })
+    await acceptPrivacy(wrapper)
+    await submit(wrapper)
+
+    expect(calls).toHaveLength(1)
+    expect(calls[0]!.body).toMatchObject({ date: EXCEPTION_MONDAY, time: '18:30' })
   })
 
   it('reports a failing request without clearing what the guest typed', async () => {

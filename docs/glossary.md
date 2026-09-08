@@ -70,13 +70,24 @@ The most important concepts in this project, in plain terms.
   Mailgun, Studio auth, …). Defined in `nuxt.config.ts`; secrets come from `.env` locally and
   Vercel env vars in production. `.env.example` lists what's needed.
 
-- **Opening hours** — `content/opening-hours.yml`, one language-independent file. Drives the
-  homepage hours and the structured data for search engines. Display only.
+- **Opening hours** — `content/opening-hours.yml`, one language-independent file, edited in
+  Studio. Drives the homepage hours, the structured data for search engines, and which days and
+  times the reservation form offers: slots run from opening until `lastReservationBeforeClosing`
+  minutes before closing.
 
-- **Booking availability** — `shared/utils/reservations.ts`, in code rather than content. The
-  closed weekdays, the one-off closures and the bookable window per weekday that the
-  reservation form offers and the API accepts. Deliberately separate from the opening hours,
-  because events run outside them. See `docs/reservation-availability.md`.
+- **Reservation exception** — a row in the opening hours file's `reservationExceptions` list
+  naming one date that does not follow its weekday for bookings: either closed (a holiday) or
+  bookable for exactly the range given (an evening event on a Monday). Wins over the weekday
+  entirely. Not shown on the site; only the form and the API read it. Owner-editable.
+  See `docs/reservation-availability.md`.
+
+- **Booking availability** — the pure rules in `shared/utils/reservations.ts` that turn the
+  opening hours document into the slots the form offers and the API accepts. No configuration
+  of its own.
+
+- **Event bookability check** — `npm run check:events`, run in CI. Fails when an upcoming
+  event that asks for a reservation starts at a time nobody can book on its date; the fix is a
+  reservation exception the owner adds in Studio.
 
 - **Site notice** — `content/notice.yml`, one file for both languages. A dismissible card shown
   in the middle of the screen for short-notice news (a closure, a late opening). Shown while the
@@ -104,6 +115,7 @@ The most important concepts in this project, in plain terms.
   server functions.
 
 - **`npm run check:content`** — a guard that fails if the two homepage locale files drift out
-  of structural sync.
+  of structural sync. Runs in CI next to `npm run check:events`.
 
-- **CI gate** — `npm run lint` + `npm run typecheck` must pass (there is no unit-test suite).
+- **CI gate** — lint, typecheck, the test suite (`npm test`), the content checks
+  (`check:content`, `check:events`) and the build followed by `check:studio` must all pass.

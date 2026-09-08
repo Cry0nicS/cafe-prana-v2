@@ -5,10 +5,17 @@
 # `day` is one of monday ... sunday. Times are 24-hour `HH:MM`, in 15-minute
 # steps. A closed day needs only `closed: true`.
 #
-# These hours are what the site *displays*. What can be *reserved* is separate,
-# because events regularly run outside them: the booking days and times live in
-# `shared/utils/reservations.ts` and only a developer can change them. Changing
-# a closing day here means changing it there too.
+# The reservation form follows this file too: it offers 15-minute slots from
+# the opening time up to `lastReservationBeforeClosing` minutes before closing,
+# and a closed weekday cannot be booked.
+#
+# `reservationExceptions` lists single dates that do not follow their weekday
+# for bookings - an evening event on a day the cafe is normally closed, or a
+# public holiday on a day it is normally open. An exception replaces the
+# weekday entirely for that date. Its times are the bookable range itself: the
+# last slot offered is `bookableUntil`, with nothing taken off. Rows in the
+# past are harmless. See docs/reservation-availability.md.
+lastReservationBeforeClosing: 60
 hours:
   - day: monday
     closed: true
@@ -30,3 +37,20 @@ hours:
   - day: sunday
     opens: '09:00'
     closes: '17:00'
+reservationExceptions:
+  - date: '2025-12-24'
+    bookableFrom: '17:00'
+    bookableUntil: '19:00'
+    note: Community Xmas Dinner, 18:00
+  - date: '2026-01-05'
+    bookableFrom: '17:30'
+    bookableUntil: '19:30'
+    note: Winter Celebration Dinner, 18:30
+  - date: '2026-02-22'
+    bookableFrom: '16:00'
+    bookableUntil: '18:00'
+    note: The Cacao Journey kick-off workshop, 17:00
+  - date: '2026-09-14'
+    bookableFrom: '17:00'
+    bookableUntil: '19:00'
+    note: Deep Talk Aperitivo, 18:00

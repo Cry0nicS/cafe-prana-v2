@@ -51,6 +51,7 @@ end during the day. `from` must be before `until`; otherwise nothing is shown.
   means German visitors see nothing.
 - When you change the notice — wording, dates or tone — visitors who had closed the old one see it
   again.
-- The notice is separate from the opening hours. If a closure is permanent, change the hours
-  in `content/opening-hours.yml` as well — and ask a developer to close the day for bookings
-  too (`docs/reservation-availability.md`), or the form will keep offering it.
+- The notice is separate from the opening hours, and it does not stop bookings. For a one-day
+  closure, also add that date as a closed **reservation exception** in
+  `content/opening-hours.yml`, or the form will keep offering it. If a closure is permanent,
+  change the weekly hours in the same file. See `docs/reservation-availability.md`.

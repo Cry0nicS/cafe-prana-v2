@@ -55,6 +55,11 @@ Pick one `reservation` value:
 
 The button always links to the reservations page — you don't set a link.
 
+> **Does the event run outside your opening hours?** A dinner at 18:30, or anything on a Monday,
+> cannot be booked until you open that date: add a row for it under `reservationExceptions` in
+> **Opening Hours** (`content/opening-hours.yml`) in the same session. If you forget, the site's
+> checks fail and name the event. See `docs/reservation-availability.md`.
+
 ## What you can put in the page content
 
 - **Text** — headings and paragraphs, written normally.

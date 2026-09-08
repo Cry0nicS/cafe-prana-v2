@@ -1,75 +1,85 @@
 // When the cafe takes reservations, and for which times.
 //
-// Deliberately not derived from `content/opening-hours.yml`. The opening hours
-// are what the cafe is normally open to walk-ins, and events regularly fall
-// outside them - a dinner starting at 18:30 on a day the counter closes at
-// 15:00. While the booking form followed the opening hours, those guests had
-// no slot to pick, so the two are now separate: the content file says what the
-// site displays, this file says what can be booked.
+// Pure functions over the opening hours document (`content/opening-hours.yml`),
+// which the owner edits in Studio. This module holds no configuration of its
+// own: the form and the `/api/reservations` route hand it the same document, so
+// what is offered and what is accepted cannot drift.
 //
-// The trade-off is that these values are not editable from Studio. That is the
-// point - they change roughly once a year, and a wrong booking window is worse
-// than a small developer task. When the cafe's closing day changes, it has to
-// be changed in BOTH places: here, and in the content file that displays it.
+// The rules, in order:
+//   1. An exception for the date wins entirely - it is not merged with the
+//      weekday. Closed means no slots whatever the weekday says; a window means
+//      exactly that window, even on a weekday that is normally closed. With two
+//      rows for one date, the first wins.
+//   2. Otherwise the weekday entry applies: slots from opening time up to
+//      `lastReservationBeforeClosing` minutes before closing, and none on a
+//      closed weekday.
+//
+// The margin applies to the weekday hours only. They are opening times, and a
+// guest should not be seated as the counter shuts. An exception is already a
+// bookable range - `bookableUntil` is the last slot offered, as written.
 import { slotRange, toDateKey, toLabel, toMinutes, weekdayOf } from './calendar'
-import type { DateParts, TimeParts, Weekday } from './calendar'
+import type { DateParts, TimeParts } from './calendar'
+import { isOpen } from './opening-hours'
+import type { OpeningHours, ReservationException } from './opening-hours'
 
-// `from` is the first bookable slot and `to` the last one - both inclusive,
-// both on the `SLOT_MINUTES` grid.
-export type BookingWindow = { from: string, to: string }
+// First and last bookable slot, both inclusive, in minutes since midnight.
+type BookingWindow = { from: number, to: number }
 
-// The weekdays the cafe never takes a booking on. This list is the switch: to
-// add a second weekly closing day, add it here and drop that day's entry from
-// `BOOKING_WINDOWS` below.
-export const CLOSED_WEEKDAYS: readonly Weekday[] = ['monday']
+// The exception row in force on a date, if any. The first row for a date wins,
+// which is what `Array.prototype.find` gives.
+export const reservationExceptionOn = (openingHours: OpeningHours, date: DateParts): ReservationException | undefined => {
+  const key = toDateKey(date)
 
-// One-off closures - a public holiday, a vacation week, a private event. Berlin
-// dates as `YYYY-MM-DD`, e.g. '2026-12-24'. Entries in the past are harmless
-// (the form cannot offer a past date anyway) but worth clearing out when this
-// file is next touched.
-export const CLOSED_DATES: readonly string[] = []
-
-// The bookable range per open weekday. Wider than the opening hours on purpose,
-// so an evening event can be booked; a weekday that is closed has no entry.
-export const BOOKING_WINDOWS: Partial<Record<Weekday, BookingWindow>> = {
-  tuesday: { from: '07:00', to: '18:00' },
-  wednesday: { from: '07:00', to: '18:00' },
-  thursday: { from: '07:00', to: '21:00' },
-  friday: { from: '07:00', to: '21:00' },
-  saturday: { from: '09:00', to: '21:00' },
-  sunday: { from: '09:00', to: '18:00' }
+  return openingHours.reservationExceptions?.find(exception => exception.date.trim() === key)
 }
 
-// Exported so the one-off-closure mechanism can be tested against arbitrary
-// dates while `CLOSED_DATES` stays empty until the cafe actually declares one.
-export const isClosedDateIn = (closedDates: readonly string[], date: DateParts) =>
-  closedDates.includes(toDateKey(date))
+// A row that is not closed but has no complete range cannot open anything: the
+// owner has written down a date without saying when guests may book. Treating
+// it as closed is the safe reading, and the event guard reports the event that
+// needed it.
+const exceptionWindow = (exception: ReservationException): BookingWindow | undefined => {
+  if (exception.closed || !exception.bookableFrom || !exception.bookableUntil) {
+    return undefined
+  }
 
-export const isClosedOn = (date: DateParts) =>
-  CLOSED_WEEKDAYS.includes(weekdayOf(date)) || isClosedDateIn(CLOSED_DATES, date)
+  return { from: toMinutes(exception.bookableFrom), to: toMinutes(exception.bookableUntil) }
+}
 
-// The window in force on a date, or `undefined` when nothing can be booked -
-// the day is closed, or its weekday has no window configured.
-export const bookingWindowOn = (date: DateParts) =>
-  isClosedOn(date) ? undefined : BOOKING_WINDOWS[weekdayOf(date)]
+const weekdayWindow = (openingHours: OpeningHours, date: DateParts): BookingWindow | undefined => {
+  const entry = openingHours.hours.find(entry => entry.day === weekdayOf(date))
 
-// The slots the form offers on a given date. Empty when the cafe is closed.
-export const reservationSlotsOn = (date: DateParts) => {
-  const window = bookingWindowOn(date)
+  if (!entry || !isOpen(entry)) {
+    return undefined
+  }
 
-  return window ? slotRange(toMinutes(window.from), toMinutes(window.to)) : []
+  return { from: toMinutes(entry.opens), to: toMinutes(entry.closes) - openingHours.lastReservationBeforeClosing }
+}
+
+const bookingWindowOn = (openingHours: OpeningHours, date: DateParts): BookingWindow | undefined => {
+  const exception = reservationExceptionOn(openingHours, date)
+  const window = exception ? exceptionWindow(exception) : weekdayWindow(openingHours, date)
+
+  return window && window.to >= window.from ? window : undefined
+}
+
+// The slots the form offers on a given date. Empty when nothing can be booked.
+export const reservationSlotsOn = (openingHours: OpeningHours, date: DateParts) => {
+  const window = bookingWindowOn(openingHours, date)
+
+  return window ? slotRange(window.from, window.to) : []
 }
 
 export type ReservationSlotIssue = { path: 'date' | 'time', message: string }
 
-// Checks a date and time against the booking configuration. The message is an
-// i18n key the form translates and the API passes through, like the schema
-// messages.
+// Checks a date and time against the opening hours. The message is an i18n key
+// the form translates and the API passes through, like the schema messages;
+// the path says whether the guest has to change the date or pick another slot.
 export const validateReservationSlot = (
+  openingHours: OpeningHours,
   date: DateParts,
   time: TimeParts
 ): ReservationSlotIssue | null => {
-  const slots = reservationSlotsOn(date)
+  const slots = reservationSlotsOn(openingHours, date)
 
   if (slots.length === 0) {
     return { path: 'date', message: 'reservations.form.errors.date.closed' }

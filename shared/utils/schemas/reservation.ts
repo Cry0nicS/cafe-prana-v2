@@ -113,7 +113,7 @@ export const ReservationSchema = z.object({
       (time) => {
         // On the slot grid the form offers, so a hand-crafted request cannot
         // book 12:23. Whether the slot is actually bookable that day is
-        // checked separately, against `shared/utils/reservations.ts`.
+        // checked separately, against the opening hours in content.
         return time.second === 0 && time.minute % SLOT_MINUTES === 0
       },
       {
