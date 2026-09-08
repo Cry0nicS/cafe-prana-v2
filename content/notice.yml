@@ -1,24 +1,10 @@
-# A short notice shown as a card in the middle of the screen, in both languages.
-# Meant for spontaneous news: closing for a day at short notice, a changed
-# opening time, a private event. Visitors can dismiss it; a rewritten notice
-# shows up again.
-#
-# `schedule.until` is the switch: the notice is shown until that moment and
-# hidden while the field is empty or the moment has passed. `schedule.from` is
-# optional and delays the start; leave it empty to start right away.
-#
-# Times are Berlin time, `YYYY-MM-DD HH:MM:SS`. The picker starts the time at
-# 00:00; for `until` that means the whole of that day, so `2026-09-05 00:00:00`
-# keeps the notice up through 5 September.
-#
-# `tone` is one of info (green), warning (brown) or urgent (red).
-tone: warning
-schedule:
-  from: ''
-  until: ''
-en:
-  title: We are closed on Friday, 5 September
-  message: A family matter keeps us away for the day. We are back on Saturday as usual, and reservations for Friday have been cancelled.
 de:
-  title: Am Freitag, 5. September bleibt das Café geschlossen
-  message: Eine familiäre Angelegenheit hält uns für einen Tag fern. Am Samstag sind wir wie gewohnt zurück; Reservierungen für Freitag wurden storniert.
+  title: Neues Event!
+  message: Liebe Pranamenschen, schaut euch die nächsten Events an!
+en:
+  title: New Event!
+  message: Hi Prana People, check out what's coming up :)
+schedule:
+  from: 2026-09-08 00:00:00
+  until: 2026-09-09 00:00:00
+tone: warning
