@@ -98,6 +98,12 @@ jobs:
         run: npm ci
       - name: Build application
         run: npm run build
+      # After the build, because it reads the content dump the build writes.
+      # Catches a schema or markdown-config change that would lock the owner
+      # out of a page in Studio with "Conflict detected" - which neither the
+      # build nor the running site notices.
+      - name: Check Studio parity
+        run: npm run check:studio
 
   # Single stable check to point branch protection at: green only when every job above passed.
   # `always()` is what makes it report at all when a dependency fails - a skipped gate reports
