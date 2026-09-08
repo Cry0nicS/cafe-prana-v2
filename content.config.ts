@@ -90,8 +90,10 @@ export default defineContentConfig({
   collections: {
     // Single, language-independent file. The homepage renders it for both
     // locales and app.vue publishes it as structured data, so the two
-    // languages cannot show different hours. Display only - when reservations
-    // can be taken is configured in `shared/utils/reservations.ts`.
+    // languages cannot show different hours. The reservation form and the API
+    // read it too (`shared/utils/reservations.ts`): the weekday hours say when
+    // a table can be booked, and the exceptions list opens or closes single
+    // dates. See docs/reservation-availability.md.
     openingHours: defineCollection({
       type: 'data',
       source: 'opening-hours.yml',
@@ -101,7 +103,29 @@ export default defineContentConfig({
           closed: z.boolean().default(false),
           opens: createTimeSchema().optional(),
           closes: createTimeSchema().optional()
-        })).length(7)
+        })).length(7),
+        // Deliberately not `.int()`: that emits JSON-schema `type: "integer"`,
+        // which @nuxt/content does not map, so the column silently becomes
+        // TEXT and the built site holds "60" where the file holds 60 - a
+        // permanent "Conflict detected" on this file in Studio. A plain number
+        // constrained to whole values keeps the column numeric.
+        lastReservationBeforeClosing: z.number().min(0).max(240).multipleOf(1).default(60),
+        // Dates that do not follow their weekday for bookings. An array of
+        // objects on purpose: a top-level date field becomes a DATE column and
+        // is run through `new Date()` on insert, which throws on the empty
+        // string Studio writes for a cleared picker. Inside an array the
+        // values are stored as JSON, untouched. The ISO `date` format is what
+        // makes Studio render a date picker rather than a text box, and the
+        // times reuse the weekday dropdown so an off-grid time cannot be typed.
+        reservationExceptions: z.array(z.object({
+          date: z.string().date(),
+          closed: z.boolean().default(false),
+          // A bookable range, not opening times: the last slot offered is
+          // `bookableUntil` itself, with no margin taken off.
+          bookableFrom: createTimeSchema().optional(),
+          bookableUntil: createTimeSchema().optional(),
+          note: z.string().optional()
+        })).default([])
       })
     }),
     // Single file for both languages, so the schedule and the wording are

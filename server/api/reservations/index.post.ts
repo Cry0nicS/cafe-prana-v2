@@ -4,6 +4,7 @@ import { ReservationSchema, getReservationValidationMessage } from '#shared/util
 import type { Database } from '#shared/utils/types'
 import { insertReservation } from '~~/server/repositories/reservations'
 import { sendReservationEmail } from '~~/server/services/email'
+import { getOpeningHours } from '~~/server/utils/opening-hours'
 import { useServerSupabaseClient } from '~~/server/utils/supabase'
 
 type ReservationInsert = Database['public']['Tables']['reservations']['Insert']
@@ -34,9 +35,10 @@ export default defineEventHandler(async (event) => {
   }
 
   // The schema only checks the shape; whether the slot exists on that day is
-  // decided by the booking configuration in `shared/utils/reservations.ts` -
-  // the same module the form offers its slots from, so the two cannot drift.
-  const slotIssue = validateReservationSlot(result.data.date, result.data.time)
+  // decided by the opening hours the cafe maintains in content, read through
+  // the same rules the form offers its slots from, so the two cannot drift.
+  const openingHours = await getOpeningHours(event)
+  const slotIssue = validateReservationSlot(openingHours, result.data.date, result.data.time)
 
   if (slotIssue) {
     throw createError({

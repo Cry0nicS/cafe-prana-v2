@@ -30,6 +30,12 @@ const toast = useToast()
 const { t } = useI18n()
 const localePath = useLocalePath()
 
+// The bookable days and slots come from the same opening-hours file the
+// homepage shows, plus its list of dated exceptions, so the form can only
+// offer what the cafe actually opens - and an evening event on a closed
+// weekday is bookable once the owner has added its date.
+const { data: openingHours } = await useOpeningHours()
+
 const isSubmitting = ref(false)
 const showModal = ref(false)
 
@@ -54,13 +60,10 @@ const toTimeParts = (time: string): TimeParts | null => {
   return Number.isInteger(hour) && Number.isInteger(minute) ? { hour: hour!, minute: minute! } : null
 }
 
-// The bookable days and slots come from `shared/utils/reservations.ts`, not
-// from the opening hours: an event can run after the counter closes, and its
-// guests still need a slot to pick.
 const slotsOn = (date: string) => {
   const parts = toDateParts(date)
 
-  return parts ? reservationSlotsOn(parts) : []
+  return parts ? reservationSlotsOn(openingHours.value, parts) : []
 }
 
 const PREFERRED_SLOT = '12:30'
@@ -133,7 +136,7 @@ const validateReservation = (state: ReservationFormState) => {
 
   const date = toDateParts(state.date)
   const time = toTimeParts(state.time)
-  const slotIssue = date && time ? validateReservationSlot(date, time) : null
+  const slotIssue = date && time ? validateReservationSlot(openingHours.value, date, time) : null
 
   if (slotIssue && !errors.some(error => error.name === slotIssue.path)) {
     errors.push({ name: slotIssue.path, message: t(slotIssue.message) })

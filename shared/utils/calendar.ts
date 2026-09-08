@@ -1,10 +1,9 @@
 // Weekday, date and 15-minute-grid primitives.
 //
-// The hours the site displays and the windows it takes bookings in are
-// deliberately independent of one another - an event can run outside opening
-// hours, and a guest still has to be able to book a slot for it. So the pieces
-// both of them need live here, rather than in `opening-hours.ts` (display) or
-// `reservations.ts` (booking), and neither of those two imports the other.
+// Shared by `opening-hours.ts` (the document and how it is displayed) and
+// `reservations.ts` (which slots that document makes bookable), so that the
+// booking rules stay a separate module from the display and structured-data
+// helpers while both walk the same grid.
 
 export const WEEKDAYS = [
   'monday',
@@ -21,9 +20,8 @@ export type Weekday = typeof WEEKDAYS[number]
 export type DateParts = { year: number, month: number, day: number }
 export type TimeParts = { hour: number, minute: number }
 
-// Every time on the site sits on this grid: the opening and closing times in
-// the content file, the booking windows in code, and the slots offered to
-// guests.
+// Every time on the site sits on this grid: the opening and closing times and
+// the exception windows in the content file, and the slots offered to guests.
 export const SLOT_MINUTES = 15
 
 export const toMinutes = (value: string) => {
@@ -59,7 +57,7 @@ export const weekdayLabel = (day: Weekday, locale: string) =>
 export const weekdayOf = (date: DateParts): Weekday =>
   WEEKDAYS[(new Date(Date.UTC(date.year, date.month - 1, date.day)).getUTCDay() + 6) % 7]!
 
-// `YYYY-MM-DD`, which is both what a date input hands over and how one-off
-// closures are written down.
+// `YYYY-MM-DD`, which is both what a date input hands over and how Studio's
+// date picker writes a reservation exception's date.
 export const toDateKey = (date: DateParts) =>
   `${String(date.year).padStart(4, '0')}-${String(date.month).padStart(2, '0')}-${String(date.day).padStart(2, '0')}`

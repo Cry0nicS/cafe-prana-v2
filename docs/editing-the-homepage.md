@@ -72,10 +72,11 @@ you change them once and both languages update. Search engines get the same hour
    `closed` switched on for a day off.
 3. Save and **Publish**.
 
-These hours are what the site **shows**. They are not what the reservation form offers — the
-form has to stay bookable for events that run after the counter closes, so its days and times
-are set in code. Changing which day the cafe is closed therefore needs a developer to change it
-there too; see `docs/reservation-availability.md`.
+The reservation form follows the same file: guests can book on the days you are open, from
+your opening time until shortly before you close, and a closed day cannot be booked. The same
+form has a list of **reservation exceptions** for single dates — to open a Monday evening for an
+event, or to close a date for a holiday — and a field for how long before closing the last
+booking is taken. All of it is yours to edit; see `docs/reservation-availability.md`.
 
 ## Adding a photo
 
