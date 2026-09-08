@@ -198,8 +198,12 @@ html {
   font-weight: 600;
 }
 
-/* Editorial drop-cap for the founder story's opening paragraph. */
-.cafe-dropcap > p:first-of-type::first-letter {
+/* Editorial drop-cap for the founder story's opening paragraph. Matched on the
+   container, not on a child `p`: MDC's `autoUnwrap` (on, so the build and Studio
+   agree - see `nuxt.config.ts`) drops the wrapping paragraph when a block
+   component's slot holds a single one, and `::first-letter` on a block container
+   reaches the first letter either way. */
+.cafe-dropcap::first-letter {
   float: left;
   margin: 0.05em 0.1em 0 0;
   font-family: var(--font-serif);
