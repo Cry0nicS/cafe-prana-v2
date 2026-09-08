@@ -43,9 +43,11 @@ poster built from the event document, and passes only its own `title` along; `he
 `description` and `image` drive the welcome hero alone. When there is none, the welcome
 `UPageHero` renders unchanged.
 
-`NextEventHero` lives in `app/components/content/` next to the hero that owns it, but it is not
-a block for content files: it takes the event as a prop, so there is no `::next-event-hero` to
-place in `index.md`, and both locale homepages keep the same block set. The eyebrow and the button
+`NextEventHero` lives in `app/components/events/` (used as `EventsNextEventHero`), not in
+`app/components/content/`: that folder is registered globally for MDC, which would list the
+poster as an insertable block in Studio even though it takes the event as a prop and cannot render
+from content. So there is no `::next-event-hero` to place in `index.md`, and both locale homepages
+keep the same block set. The eyebrow and the button
 label are `home.hero.nextEvent` / `home.hero.viewEvent` in `i18n/i18n.config.ts`. Its photo
 deliberately uses the event detail page's `sizes`/`format`: `ipxStatic` only bakes variants that
 were rendered during prerender, and those exist for every event, so whichever event becomes next

@@ -44,7 +44,7 @@ const links = computed(() => [
 </script>
 
 <template>
-  <NextEventHero
+  <EventsNextEventHero
     v-if="poster"
     :title="title"
     :event="poster"

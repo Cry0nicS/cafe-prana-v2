@@ -21,6 +21,9 @@ type NextEvent = EventLike & {
 // The announcement poster the homepage leads with while an event is coming
 // up. It is rendered by `HomeHero`, not placed in content: the welcome hero
 // decides between the two, so the owner never has to manage a second block.
+// It lives here rather than in `components/content/` on purpose - that folder
+// is registered globally for MDC, which would offer this as a block in
+// Studio's slash menu, where it could only render broken without its prop.
 const props = defineProps<{
   title?: string
   event: NextEvent
