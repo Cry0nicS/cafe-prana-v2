@@ -26,12 +26,12 @@ string, the row's `id`:
    `join(collection.name, source.prefix || '', key)`
    (`node_modules/@nuxt/content/dist/module.mjs:3308`, and again at `:1819` for the dev watcher).
 2. `key` is the glob match with the source's **fixed part stripped**: `getKeys()` returns
-   `_keys.map(key => key.substring(fixed.length))` (`module.mjs:1978`), where `fixed` is everything
+   `_keys.map(key => key.substring(fixed.length))` (`module.mjs:1975-1978`), where `fixed` is everything
    before the first `*` in `include` — and is the empty string when `include` has no `*` at all
    (`parseSourceBase`, `module.mjs:2086`).
 3. `prefix` defaults to that same fixed part, but an explicitly configured `prefix` wins: the
    resolved source is built as `{ prefix: <derived>, …, ...source }`, so the user's value overwrites
-   the derived one (`module.mjs:1969-1987`).
+   the derived one (`module.mjs:1968-1988`).
 4. `stem` is the id minus its **first segment** (the collection name) and minus the file extension;
    `path` is that same stem, slugified per segment, with a leading slash — and with a segment named
    `index` emptied out (`pathMetaTransformer`, `describeId` and `generatePath`,
@@ -75,7 +75,8 @@ Two details in there are load-bearing:
 
 - **The singletons need a glob, and `en/**/<file>` is the right one.** `include: 'en/index.md'` has
   no `*`, so its fixed part is empty, the key stays `en/index.md`, and the row comes out as
-  `stem: 'en/index'`, `path: '/en'`. A glob is required to make the fixed part end at `en/`.
+  `stem: 'en/index'`, `path: '/en'` (measured — see question 1). A glob is required to make the
+  fixed part end at `en/`.
   `en/*.md` works for the build but is both loose (it would silently swallow any future
   `content/en/about.md` into the `index` collection) and actively wrong for Studio (see
   [the empty-prefix trap](#the-empty-prefix-trap)). `en/**/<file>` keeps the fixed part at `en/`
@@ -118,12 +119,23 @@ locale-prefixed tree, content `path` and public URL finally agree.
 
 ### 1. What `path` does `content/en/index.md` get, and can `prefix`/`cwd` make it `/`?
 
-Out of the box (`include: 'en/index.md'`) the path is `/en`, because a source without a `*` strips
-nothing. With `include: 'en/**/index.md', prefix: ''` it is **`/`**, and `content/de/index.md` with
+With the naive `include: 'en/index.md', prefix: ''` the path is **`/en`** — a source without a `*`
+strips nothing, so the key keeps its `en/`. Worse, the German source's prefix then *stacks* on top
+of the un-stripped key. Measured in a build of exactly that config:
+
+```
+id="index/en/index.md"     stem="en/index"     path="/en"
+id="index/de/de/index.md"  stem="de/de/index"  path="/de/de"
+```
+
+With `include: 'en/**/index.md', prefix: ''` it is **`/`**, and `content/de/index.md` with
 `include: 'de/**/index.md', prefix: '/de'` is **`/de`**. Both measured, above.
 
+So: yes, `prefix` (plus a glob whose fixed part ends at the locale folder) makes it `/` and `/de`.
+`cwd` gets there too, and is rejected for a different reason.
+
 The `index` → `''` rewrite that makes this land on `/` rather than `/index` is in `refineUrlPart`,
-`module.mjs:1167` (`.replace(/^index(\.draft)?$/, '')`), applied per path segment. `de/index`
+`module.mjs:1166-1172` (`.replace(/^index(\.draft)?$/, '')`), applied per path segment. `de/index`
 therefore becomes `/de/` and then `withoutTrailingSlash` → `/de`.
 
 ### 2. What is `stem` — `en/events/…`, or is the locale stripped?
@@ -146,7 +158,7 @@ Consequences for the two places the sibling tickets name:
 ### 3. Does `queryCollection('events').path(…)` still behave?
 
 Yes — and it becomes the *right* way to do it, replacing the hand-rolled stem at
-`app/pages/events/[slug].vue:14`. `path()` is just
+`app/pages/events/[slug].vue:24` (on `main`). `path()` is just
 `where('path', '=', withoutTrailingSlash(path))`
 (`runtime/internal/query.js:85`), and since the row's `path` is now the public route, passing
 `route.path` resolves the correct locale's document with no locale argument at all:
@@ -199,12 +211,16 @@ form does. It was built and measured that way first, and the site came out corre
 `getCollectionSourceById` (`node_modules/nuxt-studio/dist/module/runtime/utils/source.js:11`) and
 `generateFsPathFromId` (`…/utils/collection.js:14`), and both work purely from `include` and
 `prefix`. Fed the real resolved sources the build generated plus every id in the built database
-(`research-studio-fspath.mjs`), the two configurations score:
+(`research-studio-fspath.mjs`), the three spellings score:
 
-| Sources | rows whose id Studio resolves to a real file |
+| Sources for the six locale-split collections | rows whose id Studio resolves to a real file |
 |---|---|
-| `cwd: <abs>/content/<locale>` | **0 of 53** — every path missing its locale folder |
-| locale folder inside `include` | **53 of 53** |
+| `cwd: <abs>/content/<locale>` | **0 of 52** — every path missing its locale folder |
+| locale folder inside `include`, `<locale>/*.…` singletons | **49 of 52** |
+| locale folder inside `include`, `<locale>/**/<file>` singletons | **52 of 52** |
+
+(`research-cwd-vs-glob.mjs`. The three spellings produce identical ids, so all three can be scored
+against one built database — and the scores agree with what three separate real builds showed.)
 
 Under `cwd`, Studio would try to open `content/events/deep-talk-aperitivo.md`, which does not
 exist. Every edit surface that starts from an id — the document list, the click-to-edit overlay,
@@ -217,13 +233,14 @@ Found while testing, and the reason the singletons use `en/**/index.md` rather t
 It does `prefixAndPath.replace(withoutLeadingSlash(prefix), '')`, and `ufo`'s
 `withoutLeadingSlash('')` returns **`'/'`**, not `''` — so for the German row `index/de/index.md`
 it strips the first slash, yielding `deindex.md`, joins the English source's fixed part onto it, and
-`minimatch('en/deindex.md', 'en/*.md')` **matches**. The German document is then attributed to the
+`minimatch('en/deindex.md', 'en/*.md')` **matches** (checked: it returns `true`, while
+`minimatch('en/deindex.md', 'en/**/index.md')` returns `false`). The German document is then attributed to the
 English source and resolved to `content/en/de/index.md`.
 
 Measured: with `en/*.yml` / `en/*.md` singletons, exactly the three German singletons
 (`index`, `menuPage`, `eventsPage`) resolved to a non-existent `content/en/de/…`. With
 `en/**/index.md` the mangled candidate no longer matches the glob, the correct German source is
-found, and all 53 rows resolve. The per-item collections were never affected — their prefixes are
+found, and all 54 rows resolve. The per-item collections were never affected — their prefixes are
 non-empty (`/events`, `/menu`, `/menu-categories`).
 
 A related sharp edge in the same helper, not currently hit: `generateFsPathFromId` returns the path
@@ -237,21 +254,28 @@ adds `content/en/enquiries.md`.
 Everything below is implementation work for the follow-up ticket, not a reason to reconsider the
 layout.
 
-- **`npm run check:studio` fails for every English file.** `contentPathFor`
+- **`npm run check:studio` fails for every English file** (measured: exit 1, "26 committed content
+  file(s) are absent from the dump" listing `content/en/**`, then a hard failure on the dump holding
+  `content/events/cacao-journey-series.md`, which no longer exists at HEAD). `contentPathFor`
   (`scripts/studio-document.mjs:211`) maps an id to a file by dropping the first segment:
   `content/${id.split('/').slice(1).join('/')}`. That was exact under the flat tree. Under the
   locale-prefixed tree it produces `content/menu/latte.yml` for a file that lives at
-  `content/en/menu/latte.yml` — 26 of 53 rows (measured). The fix matches that file's own stated
-  policy of borrowing Studio's helpers rather than reimplementing them: use
+  `content/en/menu/latte.yml` — 26 of the 54 rows (measured; every English row). The fix matches
+  that file's own stated policy of borrowing Studio's helpers rather than reimplementing them: use
   `getCollectionSourceById` + `generateFsPathFromId` from
   `node_modules/nuxt-studio/dist/module/runtime/utils/`. This is the map's stated gate
   ("`npm run check:studio` green before and after"), so it needs doing as part of the move, not
   after.
-- **`scripts/check-content-parity.mjs:12`** hardcodes `content/index.md` / `content/index.de.md`.
-- **`test/unit/studio-document.spec.ts:127-128`** asserts the old id→path mapping;
-  **`test/unit/events.spec.ts:66-67`** uses `stem: 'events/dinner.de'`.
+- **`npm run check:content` crashes** (exit 1, `ENOENT` on `content/index.md`):
+  `scripts/check-content-parity.mjs:12` hardcodes `content/index.md` / `content/index.de.md`.
 - **`eventSlug()`** and **`app/pages/events/[slug].vue`**, as above (both already changed on the
   research branch).
+- **The unit suite does not notice any of this** — 266/266 still pass after the restructure. Two
+  tests encode the old convention as their fixture without asserting it structurally:
+  `test/unit/studio-document.spec.ts:127-128` (`contentPathFor('index/index.de.md')`, still true of
+  the pure function, no longer true of any real file) and `test/unit/events.spec.ts:66-67`
+  (`stem: 'events/dinner.de'`). They should be updated with the move, but a green `npm run test` is
+  not evidence the move worked. The two `check:*` scripts and a build are.
 - **Nothing else queries by `path`** today (`app/pages/**`, `app/composables/**` all filter on
   `locale`, and `useNextEvent` selects `stem`), so the blast radius of the id change is limited to
   the two scripts, the two test files and `eventSlug()`.
@@ -287,6 +311,8 @@ Branch `research/nuxt-content-locale-paths` carries the restructured tree, the r
 | `research-dump.mjs` | `id` / `stem` / `path` / `locale` for every row of the built database |
 | `research-queries.mjs` | the `stem LIKE` locale filter and the `path()` lookups |
 | `research-studio-fspath.mjs` | id → file round-trip, via Studio's own helpers |
+| `research-cwd-vs-glob.mjs` | the same round-trip scored across the three source spellings |
+| `research-fspath-trace.mjs` | the empty-prefix mis-match, step by step |
 | `research-glob-probe.mjs` | `**/` matching zero directories in `tinyglobby` and `minimatch` |
 | `research-cwd-probe.mjs` | what each `cwd` spelling resolves to |
 
