@@ -48,13 +48,26 @@ const reservationNote = computed(() => {
       :aria-label="`${t('event.viewDetails')} ${event.title}`"
     >
       <NuxtImg
+        v-if="event.image?.src"
         :src="event.image.src"
-        :alt="event.image.alt"
+        :alt="event.image.alt || ''"
         class="aspect-[16/10] w-full object-cover transition duration-500 group-hover:scale-105"
         sizes="sm:100vw md:50vw lg:33vw"
         format="webp"
         placeholder
       />
+      <!-- An event whose photo has not been chosen yet. Keeps the frame so the
+           listing stays even, rather than collapsing one card. -->
+      <div
+        v-else
+        data-photo="pending"
+        class="grid aspect-[16/10] w-full place-items-center bg-gradient-to-br from-elevated via-muted to-accented/60"
+      >
+        <UIcon
+          name="i-lucide-image"
+          class="size-7 text-dimmed"
+        />
+      </div>
     </NuxtLink>
 
     <div class="flex flex-1 flex-col gap-4 p-5">

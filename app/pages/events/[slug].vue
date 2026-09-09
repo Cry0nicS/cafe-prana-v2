@@ -75,7 +75,7 @@ const locationLabel = computed(() => `${global.name}, ${CAFE_ADDRESS.city}`)
 
 const title = computed(() => event.value?.seo?.title || event.value?.title)
 const description = computed(() => event.value?.seo?.description || event.value?.description)
-const image = computed(() => event.value?.seo?.ogImage || event.value?.image.src)
+const image = computed(() => event.value?.seo?.ogImage || event.value?.image?.src)
 
 const relatedEvents = computed(() => {
   if (!event.value) {
@@ -208,9 +208,12 @@ useHead(() => ({
         </p>
       </header>
 
+      <!-- Omitted rather than filled in when the photo has not been chosen yet:
+           a lone hero closes up cleanly, where a card in a grid cannot. -->
       <NuxtImg
+        v-if="event.image?.src"
         :src="event.image.src"
-        :alt="event.image.alt"
+        :alt="event.image.alt || ''"
         class="mt-8 aspect-[16/9] w-full rounded-2xl object-cover shadow-xl ring-1 ring-default"
         sizes="sm:100vw lg:768px"
         format="webp"
