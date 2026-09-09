@@ -1,7 +1,3 @@
----
-
----
-
 ::home-hero
 ---
 image:
@@ -156,4 +152,4 @@ title: Frequently Asked Questions
   :::
 ::
 
-:directions{description="Visit Café Prana and discover your new favourite spot. I'm open Tuesday to Sunday for coffee, breakfast, brunch and lunch." hoursHeading="Opening Hours" title="Come taste the difference"}
+:directions{description="Visit Café Prana and discover your new favourite spot. I'm open Tuesday to Sunday for coffee, breakfast, brunch and lunch." hours-heading="Opening Hours" title="Come taste the difference"}

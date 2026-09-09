@@ -1,6 +1,3 @@
----
----
-
 ::home-hero
 ---
 image:
@@ -154,11 +151,4 @@ title: Häufige Fragen
   :::
 ::
 
-::directions
----
-description: Besuche Cafe Prana und entdecke deinen neuen Lieblingsort. Ich bin
-  Dienstag bis Sonntag für Kaffee, Frühstück, Brunch und Lunch da.
-hoursHeading: Öffnungszeiten
-title: Komm vorbei und probiere den Unterschied
----
-::
+:directions{description="Besuche Cafe Prana und entdecke deinen neuen Lieblingsort. Ich bin Dienstag bis Sonntag für Kaffee, Frühstück, Brunch und Lunch da." hoursHeading="Öffnungszeiten" title="Komm vorbei und probiere den Unterschied"}
