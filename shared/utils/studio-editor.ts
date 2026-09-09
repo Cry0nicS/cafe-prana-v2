@@ -16,6 +16,17 @@ import type { ModuleOptions } from 'nuxt-studio'
  *
  * This is only about what the owner can *insert*. Every component stays
  * registered and every already-published tag keeps rendering.
+ *
+ * One non-obvious consequence, worth knowing before adding to this list. Studio
+ * derives `hasNuxtUI` from whether any component it is served resolves inside
+ * `@nuxt/ui`, and that single flag gates two things at once: whether its editor
+ * registers the built-in `u-callout` tiptap node, and whether its parser turns
+ * `::callout` (and `::note` / `::tip` / `::warning` / `::caution`) into that
+ * node instead of a generic element. Because nothing here comes from
+ * `@nuxt/ui`, the flag is false, both halves are off together, and `::callout`
+ * is parsed as an ordinary component block like `::feature`. Putting a Nuxt UI
+ * component back in the palette flips the flag and hands those five tags to
+ * Studio's own callout node - which is not this project's `Callout`.
  */
 
 /** Homepage-scale blocks: a whole band of the page, top to bottom. */

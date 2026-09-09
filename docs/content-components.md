@@ -46,6 +46,8 @@ Note `Feature` is shared by both `FeatureGrid` (Philosophy) and `EventsIntro` (E
 `::callout` and `::video` both reach their component through `mdc.components.map` in `nuxt.config.ts`, and both would silently render as something else without it:
 
 - **`callout`** is claimed by Nuxt UI, which installs a tag map pointing it at its own `ProseCallout`. Until that map entry was added, this project's `Callout.vue` never rendered at all — every callout in `content/*/events/` came out as a documentation-site box.
+
+  Studio claims the same tag on its own side, and the allowlist is what stops it: Studio sets `hasNuxtUI` when any component it is served resolves inside `@nuxt/ui`, and that one flag decides both whether its editor registers a built-in `u-callout` tiptap node *and* whether its parser turns `::callout` (plus `::note` / `::tip` / `::warning` / `::caution`) into that node. Since nothing in the palette comes from `@nuxt/ui`, the flag stays off and `::callout` is edited as an ordinary component block, like `::feature`.
 - **`video`** is an HTML tag, so Nuxt refuses to register a component called `Video`, and MDC resolves a bare HTML tag to the element before it consults the component registry. The component is therefore `VideoEmbed`, and the map is what lets a body write `::video`. A raw `<video>` element in a body lands in the same component rather than rendering unstyled.
 
 The rest of Nuxt UI's tag map (`::card`, `::accordion`, `::tabs`, …) is deliberately left alone, so anything already published keeps rendering.
