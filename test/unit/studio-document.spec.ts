@@ -123,43 +123,32 @@ describe('reading the build dump', () => {
     }])
   })
 
-  // Shaped like `.nuxt/content/preview.mjs`, which is what the script passes in.
-  // Only `source` matters to `contentPathFor`.
-  const collections = {
-    menuItemsEn: { name: 'menuItemsEn', source: [{ include: 'en/menu/*.yml', prefix: '/menu' }] },
-    menuItemsDe: { name: 'menuItemsDe', source: [{ include: 'de/menu/*.yml', prefix: '/de/menu' }] },
-    indexEn: { name: 'indexEn', source: [{ include: 'en/**/index.md', prefix: '' }] },
-    indexDe: { name: 'indexDe', source: [{ include: 'de/**/index.md', prefix: '/de' }] },
-    openingHours: { name: 'openingHours', source: [{ include: 'opening-hours.yml', prefix: '/' }] }
-  }
-
   // The locale is the collection, and an id carries the collection's URL
-  // `prefix` rather than the folder its file is in — so English ids have to be
-  // mapped through the source. Stripping the first segment, as this once did,
-  // yields `content/menu/latte.yml` for a file that lives in `content/en/`.
+  // `prefix` rather than the folder its file is in - so an English id has the
+  // locale folder put back, while a German one already carries `de/`.
+  // Stripping the first segment, as this once did, yields
+  // `content/menu/latte.yml` for a file that lives in `content/en/`.
   it('maps a document id back to its content file, per locale', () => {
-    expect(contentPathFor('menuItemsEn/menu/latte.yml', collections)).toBe('content/en/menu/latte.yml')
-    expect(contentPathFor('menuItemsDe/de/menu/latte.yml', collections)).toBe('content/de/menu/latte.yml')
-    expect(contentPathFor('indexEn/index.md', collections)).toBe('content/en/index.md')
-    expect(contentPathFor('indexDe/de/index.md', collections)).toBe('content/de/index.md')
+    expect(contentPathFor('menuItemsEn/menu/latte.yml')).toBe('content/en/menu/latte.yml')
+    expect(contentPathFor('menuItemsDe/de/menu/latte.yml')).toBe('content/de/menu/latte.yml')
+    expect(contentPathFor('indexEn/index.md')).toBe('content/en/index.md')
+    expect(contentPathFor('indexDe/de/index.md')).toBe('content/de/index.md')
+    expect(contentPathFor('eventsEn/events/spring.md')).toBe('content/en/events/spring.md')
+    expect(contentPathFor('eventsDe/de/events/spring.md')).toBe('content/de/events/spring.md')
   })
 
-  // Language-independent files stay at the content root.
+  // Language-independent files stay at the content root, and their collections
+  // carry no locale suffix.
   it('maps a root-level document id', () => {
-    expect(contentPathFor('openingHours/opening-hours.yml', collections)).toBe('content/opening-hours.yml')
+    expect(contentPathFor('openingHours/opening-hours.yml')).toBe('content/opening-hours.yml')
+    expect(contentPathFor('notice/notice.yml')).toBe('content/notice.yml')
   })
 
   // Distinct ids must never collapse onto one file: that is what happens when a
   // collection is given two differently-prefixed sources, and it is how the
   // owner gets locked out of the German half of the site.
   it('keeps the two locales on distinct files', () => {
-    const en = contentPathFor('menuItemsEn/menu/latte.yml', collections)
-    const de = contentPathFor('menuItemsDe/de/menu/latte.yml', collections)
-
-    expect(en).not.toBe(de)
-  })
-
-  it('refuses an id whose collection is not in the build', () => {
-    expect(() => contentPathFor('nope/nope.md', collections)).toThrow(/not in the build/)
+    expect(contentPathFor('menuItemsEn/menu/latte.yml'))
+      .not.toBe(contentPathFor('menuItemsDe/de/menu/latte.yml'))
   })
 })

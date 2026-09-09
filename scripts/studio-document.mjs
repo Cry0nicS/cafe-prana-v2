@@ -32,8 +32,6 @@ const studioImport = async (path) => {
 
 const { doObjectsMatch } = await studioImport('object.js')
 const { removeLastStylesFromTree } = await studioImport('document/tree.js')
-const { generateFsPathFromId } = await studioImport('collection.js')
-const { getCollectionSourceById } = await studioImport('source.js')
 
 // Studio's runtime imports `@nuxtjs/mdc` from inside `node_modules/nuxt-studio`,
 // which npm has given a nested copy of its own whenever its range does not meet
@@ -208,43 +206,40 @@ export function documentsFromQueries(queries) {
   return documents
 }
 
-// A document id back to the file it came from: `eventsEn/events/spring.md` ->
-// `content/en/events/spring.md`.
+// A document id back to the file it came from:
 //
-// Not derivable by stripping the collection segment any more. Under the
-// locale-folder layout a collection's `include` carries the locale and its
-// `prefix` carries the public URL, so the id holds the prefix rather than the
-// folder - `eventsEn/events/spring.md` for a file that lives in `en/events/`.
-// Studio does this reconstruction itself to decide which file a row belongs to,
-// and it is the mapping this whole check exists to mirror, so use Studio's
-// implementation rather than a second guess at it.
+//   openingHours/opening-hours.yml  -> content/opening-hours.yml
+//   indexEn/index.md                -> content/en/index.md
+//   indexDe/de/index.md             -> content/de/index.md
+//   eventsEn/events/spring.md       -> content/en/events/spring.md
+//   eventsDe/de/events/spring.md    -> content/de/events/spring.md
 //
-// `collections` is passed in rather than imported here: it comes from the build
-// (`.nuxt/content/preview.mjs`, the same source Studio's runtime reads it
-// from), and `nuxt prepare` alone does not write that file. Loading it at
-// module scope would make merely importing this module require a full build,
-// which is what keeps the derivation unit-testable - see the header. The caller
-// needs a build anyway for the dumps to exist.
-export const loadBuiltCollections = async () => {
-  const path = join(ROOT, '.nuxt', 'content', 'preview.mjs')
+// The first segment of an id is its collection, not a directory. What follows
+// is the collection's URL `prefix` plus the file's tail - so a German id
+// already carries `de/` (that is its prefix), while an English one carries
+// nothing, because `en` is i18n's unprefixed default locale. The locale folder
+// therefore has to be put back for English, and only for English.
+//
+// Derived from this repo's own collection naming (`...En` / `...De`, one
+// collection per locale - see docs/adr/0001-bilingual-content-layout.md) rather
+// than from Studio's `generateFsPathFromId`. That is the deliberate exception
+// to this file's rule about not reimplementing Studio: this mapping follows
+// from *our* content config, not from Studio's internals, and Studio's version
+// needs the resolved collection sources, which are not available after a build
+// (`.nuxt/content/preview.mjs` is written by the dev server, not by `nuxt
+// build`).
+const LOCALE_BY_COLLECTION_SUFFIX = { En: 'en', De: 'de' }
 
-  try {
-    return (await import(new URL(`file://${path}`))).collections
-  } catch (error) {
-    throw new Error(
-      'cannot load .nuxt/content/preview.mjs - it is written by `npm run build`, not by `nuxt prepare`',
-      { cause: error }
-    )
-  }
-}
+export const contentPathFor = (id) => {
+  const [collection, ...rest] = id.split(/[/:]/)
+  const tail = rest.join('/')
 
-export const contentPathFor = (id, collections) => {
-  const collectionName = id.split(/[/:]/)[0]
-  const collection = collections[collectionName]
+  const suffix = Object.keys(LOCALE_BY_COLLECTION_SUFFIX).find(candidate => collection.endsWith(candidate))
+  const locale = suffix ? LOCALE_BY_COLLECTION_SUFFIX[suffix] : null
 
-  if (!collection) {
-    throw new Error(`document id '${id}' names collection '${collectionName}', which is not in the build`)
+  if (locale && !tail.startsWith(`${locale}/`)) {
+    return `content/${locale}/${tail}`
   }
 
-  return `content/${generateFsPathFromId(id, getCollectionSourceById(id, collection.source))}`
+  return `content/${tail}`
 }
