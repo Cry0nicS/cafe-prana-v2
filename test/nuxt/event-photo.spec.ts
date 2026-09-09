@@ -2,6 +2,7 @@ import { mountSuspended } from '@nuxt/test-utils/runtime'
 import { describe, expect, it } from 'vitest'
 import EventCard from '~/components/events/EventCard.vue'
 import EventFeature from '~/components/events/EventFeature.vue'
+import NextEventHero from '~/components/events/NextEventHero.vue'
 
 // An event the owner has started but not finished. `image` is required by the
 // events schema, but @nuxt/content stores a missing one as `null` rather than
@@ -49,6 +50,24 @@ describe('an event with no photo yet', () => {
 
     expect(wrapper.find('[data-photo="pending"]').exists()).toBe(true)
   })
+
+  // The homepage poster is the opposite case: the photo is a whole grid column,
+  // so leaving the wrapper behind reserves an empty 42% of the card with a 24rem
+  // floor under it. The card has to collapse to one column instead.
+  it('collapses the homepage poster to a single column', async () => {
+    const wrapper = await mountSuspended(NextEventHero, {
+      props: { title: 'Welcome to Cafe Prana', event: draft }
+    })
+
+    const card = wrapper.get('article')
+
+    expect(wrapper.text()).toContain('My event')
+    expect(wrapper.find('img').exists()).toBe(false)
+    expect(card.classes()).toContain('lg:grid-cols-1')
+    expect(card.classes().join(' ')).not.toContain('42%')
+    // `col-span-2` in a one-column grid would conjure a second column back.
+    expect(wrapper.get('footer').classes()).not.toContain('lg:col-span-2')
+  })
 })
 
 describe('an event with a photo', () => {
@@ -60,5 +79,15 @@ describe('an event with a photo', () => {
     expect(image.attributes('alt')).toBe('A table at Prana')
     expect(image.attributes('src')).toContain('hero')
     expect(wrapper.find('[data-photo="pending"]').exists()).toBe(false)
+  })
+
+  it('gives the homepage poster its two-column card back', async () => {
+    const wrapper = await mountSuspended(NextEventHero, {
+      props: { title: 'Welcome to Cafe Prana', event: published }
+    })
+
+    expect(wrapper.get('img').attributes('alt')).toBe('A table at Prana')
+    expect(wrapper.get('article').classes().join(' ')).toContain('42%')
+    expect(wrapper.get('footer').classes()).toContain('lg:col-span-2')
   })
 })
