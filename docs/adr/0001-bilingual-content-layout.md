@@ -78,8 +78,10 @@ collection, and scores 58/58.
 
 This is easy to test the wrong way round. The *reverse* mapping (`generateFsPathFromId`) does take a
 per-document source and scores 52/52, so verifying only that direction reports everything as healthy. The
-forward direction is the one that runs when the owner clicks a file. Probes for both are on branch
-`prototype/content-locale-tree` under `docs/research/probes/`.
+forward direction is the one that runs when the owner clicks a file. A probe for it is kept at
+`docs/research/probes/studio-path-resolution.mjs` — not in CI, because it needs `.nuxt/content/preview.mjs`,
+which the dev server writes and `nuxt build` does not. `npm run check:studio` catches a merged collection
+too, by a different route: the id no longer names a file that exists.
 
 `queryCollection(isDe ? 'eventsDe' : 'eventsEn')` typechecks, so a locale-specific collection name costs
 nothing at the call site — and because the collection *is* the locale, there is **no locale predicate
