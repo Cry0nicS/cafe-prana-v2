@@ -32,12 +32,18 @@ const props = defineProps<{
 const { locale, t } = useI18n()
 
 const showPrice = computed(() => props.event.paid && typeof props.event.price === 'number')
+// The photo is a whole grid column, so an event without one has to collapse the
+// card to a single column rather than reserve an empty 42% and a 24rem floor.
+const hasPhoto = computed(() => Boolean(props.event.image?.src))
 </script>
 
 <template>
   <section>
     <UContainer class="py-12 sm:py-16 lg:py-24">
-      <article class="relative grid overflow-hidden rounded-xl border border-default bg-muted/40 lg:grid-cols-[minmax(0,1fr)_minmax(0,42%)]">
+      <article
+        class="relative grid overflow-hidden rounded-xl border border-default bg-muted/40"
+        :class="hasPhoto ? 'lg:grid-cols-[minmax(0,1fr)_minmax(0,42%)]' : 'lg:grid-cols-1'"
+      >
         <!-- The spark hairline, brought up from the events listing's stat cards. -->
         <span
           class="absolute inset-x-0 top-0 z-10 h-0.5 bg-[var(--cafe-spark)]"
@@ -79,7 +85,10 @@ const showPrice = computed(() => props.event.paid && typeof props.event.price ==
           side by side it is taken out of flow so the text column sets the
           card's height and the photo fills it.
         -->
-        <div class="relative lg:min-h-96">
+        <div
+          v-if="hasPhoto"
+          class="relative lg:min-h-96"
+        >
           <!--
             LCP element while the poster shows, so it follows the welcome
             hero's image handling: no `placeholder` (it strips `srcset` from
@@ -90,7 +99,6 @@ const showPrice = computed(() => props.event.paid && typeof props.event.price ==
             after a date rollover still resolves under `ipxStatic`.
           -->
           <NuxtImg
-            v-if="event.image?.src"
             :src="event.image.src"
             :alt="event.image.alt || ''"
             format="webp"
@@ -101,7 +109,10 @@ const showPrice = computed(() => props.event.paid && typeof props.event.price ==
           />
         </div>
 
-        <footer class="flex flex-wrap items-center gap-x-7 gap-y-3 border-t border-default px-6 py-4 sm:px-8 lg:col-span-2 lg:px-12">
+        <footer
+          class="flex flex-wrap items-center gap-x-7 gap-y-3 border-t border-default px-6 py-4 sm:px-8 lg:px-12"
+          :class="{ 'lg:col-span-2': hasPhoto }"
+        >
           <dl class="flex flex-wrap items-center gap-x-7 gap-y-3 font-mono text-sm tabular-nums text-toned">
             <div class="flex items-center gap-2">
               <UIcon
