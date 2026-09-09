@@ -26,31 +26,73 @@ export type ReservationException = {
   note?: string
 }
 
+// The document once it has been through `toOpeningHours`: every field present
+// and within its bounds, so the booking rules can be plain arithmetic.
 export type OpeningHours = {
   hours: OpeningHoursEntry[]
   // Minutes before closing at which the last reservation slot is taken.
   lastReservationBeforeClosing: number
-  reservationExceptions?: ReservationException[]
+  reservationExceptions: ReservationException[]
 }
 
 // What applies when the content file does not say.
 export const DEFAULT_LAST_RESERVATION_BEFORE_CLOSING = 60
 
-// The document as the content database or a YAML parse hands it over, before
-// the defaults are filled in.
+// A margin longer than this is a typo rather than an intention; the schema
+// offers the same ceiling in Studio.
+export const MAX_LAST_RESERVATION_BEFORE_CLOSING = 240
+
+// The document as the content database or a YAML parse hands it over.
+//
+// The schema in `content.config.ts` types the columns, but @nuxt/content never
+// runs it against the stored content: a hand edit or a half-saved Studio row
+// reaches the site exactly as written. So the types here describe the happy
+// path and `toOpeningHours` below checks what actually arrived.
 export type OpeningHoursDocument = {
-  hours: OpeningHoursEntry[]
+  hours?: OpeningHoursEntry[] | null
   lastReservationBeforeClosing?: number | null
-  reservationExceptions?: ReservationException[] | null
+  reservationExceptions?: (ReservationException | null | undefined)[] | null
+}
+
+const asOptionalTime = (value: unknown) =>
+  typeof value === 'string' && value.trim() !== '' ? value.trim() : undefined
+
+// A row whose date is missing or is not a date cannot apply to any date, and
+// comparing it would throw on every page that offers slots. Dropping it leaves
+// that date on its weekday hours, which is the only reading available.
+const toReservationException = (row: ReservationException | null | undefined): ReservationException | null => {
+  if (!row || typeof row.date !== 'string' || row.date.trim() === '') {
+    return null
+  }
+
+  return {
+    date: row.date.trim(),
+    closed: Boolean(row.closed),
+    bookableFrom: asOptionalTime(row.bookableFrom),
+    bookableUntil: asOptionalTime(row.bookableUntil),
+    note: typeof row.note === 'string' ? row.note : undefined
+  }
+}
+
+// Whole minutes inside the bounds. A negative margin would push the last slot
+// past closing time and take bookings after the cafe has shut.
+export const toReservationMargin = (minutes: unknown) => {
+  if (typeof minutes !== 'number' || !Number.isFinite(minutes)) {
+    return DEFAULT_LAST_RESERVATION_BEFORE_CLOSING
+  }
+
+  return Math.min(Math.max(Math.round(minutes), 0), MAX_LAST_RESERVATION_BEFORE_CLOSING)
 }
 
 // Every reader of the document - the composable, the server util and the event
-// guard - normalises it the same way, so a missing field means the same thing
-// everywhere.
+// guard - goes through here, so a missing, malformed or out-of-range value
+// means the same thing everywhere, and means it in one place.
 export const toOpeningHours = (document: OpeningHoursDocument): OpeningHours => ({
-  hours: document.hours,
-  lastReservationBeforeClosing: document.lastReservationBeforeClosing ?? DEFAULT_LAST_RESERVATION_BEFORE_CLOSING,
-  reservationExceptions: document.reservationExceptions ?? []
+  hours: Array.isArray(document.hours) ? document.hours.filter(entry => Boolean(entry)) : [],
+  lastReservationBeforeClosing: toReservationMargin(document.lastReservationBeforeClosing),
+  reservationExceptions: (Array.isArray(document.reservationExceptions) ? document.reservationExceptions : [])
+    .map(toReservationException)
+    .filter((exception): exception is ReservationException => exception !== null)
 })
 
 // The choices Studio offers for an opening or closing time.

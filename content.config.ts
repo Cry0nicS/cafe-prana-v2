@@ -2,7 +2,11 @@ import { defineCollection, defineContentConfig, z } from '@nuxt/content'
 import { defineSitemapSchema } from '@nuxtjs/sitemap/content'
 import type { DefineSitemapSchemaOptions } from '@nuxtjs/sitemap/content'
 import { NOTICE_TONES } from './shared/utils/notice'
-import { OPENING_TIME_OPTIONS } from './shared/utils/opening-hours'
+import {
+  DEFAULT_LAST_RESERVATION_BEFORE_CLOSING,
+  MAX_LAST_RESERVATION_BEFORE_CLOSING,
+  OPENING_TIME_OPTIONS
+} from './shared/utils/opening-hours'
 
 const createBaseSchema = () => z.object({
   title: z.string(),
@@ -109,7 +113,16 @@ export default defineContentConfig({
         // TEXT and the built site holds "60" where the file holds 60 - a
         // permanent "Conflict detected" on this file in Studio. A plain number
         // constrained to whole values keeps the column numeric.
-        lastReservationBeforeClosing: z.number().min(0).max(240).multipleOf(1).default(60),
+        //
+        // The bounds are Studio's guard rails only: @nuxt/content types the
+        // column from this schema but never validates content against it, so
+        // `shared/utils/opening-hours.ts` clamps the value it reads back.
+        lastReservationBeforeClosing: z
+          .number()
+          .min(0)
+          .max(MAX_LAST_RESERVATION_BEFORE_CLOSING)
+          .multipleOf(1)
+          .default(DEFAULT_LAST_RESERVATION_BEFORE_CLOSING),
         // Dates that do not follow their weekday for bookings. An array of
         // objects on purpose: a top-level date field becomes a DATE column and
         // is run through `new Date()` on insert, which throws on the empty

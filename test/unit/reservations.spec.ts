@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { toOpeningHours } from '#shared/utils/opening-hours'
 import type { OpeningHours } from '#shared/utils/opening-hours'
 import { reservationSlotsOn, validateReservationSlot } from '#shared/utils/reservations'
 import { ReservationSchema } from '#shared/utils/schemas'
@@ -41,8 +42,15 @@ describe('reservation slots from the weekday hours', () => {
     expect(slots.every(slot => Number(slot.slice(3)) % 15 === 0)).toBe(true)
   })
 
-  it('offers nothing when the margin swallows the whole day', () => {
-    expect(reservationSlotsOn({ ...testOpeningHours, lastReservationBeforeClosing: 600 }, saturday)).toEqual([])
+  it('offers nothing when the margin swallows a short day', () => {
+    const openingHours: OpeningHours = {
+      ...testOpeningHours,
+      hours: testOpeningHours.hours.map(entry =>
+        entry.day === 'saturday' ? { day: 'saturday', opens: '09:00', closes: '11:00' } : entry),
+      lastReservationBeforeClosing: 240
+    }
+
+    expect(reservationSlotsOn(openingHours, saturday)).toEqual([])
   })
 
   it('flags a closed day on the date and an off-hours time on the time', () => {
@@ -114,7 +122,11 @@ describe('reservation exceptions', () => {
   })
 
   it('behaves like the plain weekday hours with an empty or absent list', () => {
-    for (const openingHours of [withExceptions([]), withExceptions(undefined)]) {
+    const empty = withExceptions([])
+    // A document that never mentions exceptions at all, as the file did before.
+    const absent = toOpeningHours({ hours: testOpeningHours.hours, lastReservationBeforeClosing: 60 })
+
+    for (const openingHours of [empty, absent]) {
       expect(reservationSlotsOn(openingHours, saturday)).toHaveLength(29)
       expect(reservationSlotsOn(openingHours, monday)).toEqual([])
       expect(reservationSlotsOn(openingHours, tuesday)).toHaveLength(31)

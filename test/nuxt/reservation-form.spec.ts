@@ -3,14 +3,25 @@ import type { VueWrapper } from '@vue/test-utils'
 import { defineEventHandler, readBody } from 'h3'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import ReservationForm from '~/components/reservations/Form.vue'
+import { CAFE_CONTACT_EMAIL } from '#shared/utils/constants'
+import type { OpeningHours } from '#shared/utils/opening-hours'
 import { testOpeningHours } from '../utils/opening-hours'
 
-const { toastAdd } = vi.hoisted(() => ({ toastAdd: vi.fn() }))
+const { toastAdd, hours } = vi.hoisted(() => ({
+  toastAdd: vi.fn(),
+  // What the composable serves this mount: a document, or nothing plus an
+  // error, which is what a failed content query looks like to the form.
+  hours: { document: null as OpeningHours | null, error: null as Error | null }
+}))
 
 mockNuxtImport('useToast', () => () => ({ add: toastAdd }))
 // The form reads the opening hours through this composable; serve the fixture
-// instead of hitting the content database.
-mockNuxtImport('useOpeningHours', () => async () => ({ data: ref(testOpeningHours) }))
+// instead of hitting the content database. The empty document mirrors the
+// composable's own default, so a failed query looks exactly as it really does.
+mockNuxtImport('useOpeningHours', () => async () => ({
+  data: ref(hours.document ?? { hours: [], lastReservationBeforeClosing: 60, reservationExceptions: [] }),
+  error: ref(hours.error)
+}))
 
 type ApiCall = { body: any }
 
@@ -77,6 +88,8 @@ describe('reservation form', () => {
     // Only the clock: the submit helper waits on a real setTimeout.
     vi.useFakeTimers({ toFake: ['Date'] })
     vi.setSystemTime(NOW)
+    hours.document = testOpeningHours
+    hours.error = null
     calls.length = 0
     toastAdd.mockReset()
     respond = () => ({ message: 'Reservation created successfully', emailSent: true })
@@ -195,6 +208,24 @@ describe('reservation form', () => {
 
     expect(calls).toHaveLength(1)
     expect(calls[0]!.body).toMatchObject({ date: EXCEPTION_MONDAY, time: '18:30' })
+  })
+
+  // Every date offering nothing is our problem, not an answer about the cafe:
+  // telling the guest we are closed on a day we are open loses the booking.
+  it('says the times could not be loaded instead of claiming the cafe is closed', async () => {
+    hours.document = null
+    hours.error = new Error('content query failed')
+
+    const wrapper = await mountSuspended(ReservationForm)
+
+    await wrapper.get('[name="date"]').setValue(OPEN_DAY)
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.text()).toContain('booking times cannot be loaded')
+    expect(wrapper.text()).toContain(CAFE_CONTACT_EMAIL)
+    expect(wrapper.text()).not.toContain('The cafe is closed on this day.')
+    expect(slotItems(wrapper)).toEqual([])
+    expect(wrapper.findComponent({ name: 'USelect' }).props('disabled')).toBe(true)
   })
 
   it('reports a failing request without clearing what the guest typed', async () => {
