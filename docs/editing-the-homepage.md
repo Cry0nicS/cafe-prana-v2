@@ -34,7 +34,7 @@ returns.
 ## Opening the editor
 
 1. Go to your Nuxt Studio project and open the site.
-2. In the pages list, open **Home** (there are two versions — **English** and **German** / `index.de`). You edit each language separately.
+2. Open the language folder you want — **content/en** for English, **content/de** for German — and open **Home** inside it. You edit each language separately.
 3. You’ll see the page the way visitors see it. Click any text to edit it.
 
 ## Editing text
@@ -88,7 +88,7 @@ Feature cards have an optional **icon** field. You can pick one from the icon pi
 
 ## The two languages
 
-English and German are edited separately (**Home** and **index.de**). When you add or change something in one language, remember to do the same in the other so both stay in sync.
+English and German are edited separately — the **Home** page inside **content/en**, and the one inside **content/de**. The folder is the language; there is nothing to set on the page itself. When you add or change something in one language, remember to do the same in the other so both stay in sync.
 
 ## Publishing
 
