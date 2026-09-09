@@ -4,17 +4,17 @@ const { locale, t } = useI18n()
 const [{ data: page }, { data: categories }, { data: items }] = await Promise.all([
   useAsyncData(
     `menu-page-${locale.value}`,
-    () => queryCollection('menuPage').where('locale', '=', locale.value).first(),
+    () => queryCollection('menuPage').where(...localeStem(locale.value)).first(),
     { watch: [locale] }
   ),
   useAsyncData(
     `menu-categories-${locale.value}`,
-    () => queryCollection('menuCategories').where('locale', '=', locale.value).order('order', 'ASC').all(),
+    () => queryCollection('menuCategories').where(...localeStem(locale.value)).order('order', 'ASC').all(),
     { watch: [locale] }
   ),
   useAsyncData(
     `menu-items-${locale.value}`,
-    () => queryCollection('menuItems').where('locale', '=', locale.value).order('order', 'ASC').all(),
+    () => queryCollection('menuItems').where(...localeStem(locale.value)).order('order', 'ASC').all(),
     { watch: [locale] }
   )
 ])

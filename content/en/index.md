@@ -1,5 +1,4 @@
 ---
-locale: en
 ---
 
 ::home-hero

@@ -1,5 +1,4 @@
 ---
-locale: en
 title: "The Cacao Journey at Café Prana"
 description: "A heartfelt workshop series at Café Prana in Prenzlauer Berg, guided by ceremonial cacao. We'll gently explore ritual, body awareness, movement, stillness, and authentic sharing."
 date: 2026-02-22

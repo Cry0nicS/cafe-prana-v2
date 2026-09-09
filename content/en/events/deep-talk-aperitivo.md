@@ -1,7 +1,6 @@
 ---
 title: "Deep Talk Aperitivo: Couples & Friends Edition"
 description: Deep Talk Aperitivo with wine tasting and antipasti
-locale: en
 date: 2026-09-14
 time: 18:00
 paid: true

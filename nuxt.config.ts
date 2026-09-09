@@ -170,7 +170,11 @@ export default defineNuxtConfig({
       provider: 'github',
       owner: 'Cry0nicS',
       repo: 'cafe-prana-v2',
-      branch: 'main'
+      // PROTOTYPE (#36) — deliberately NOT `main`. Under `nuxt dev` Studio edits
+      // the local filesystem, but this repo's Studio publishes straight to
+      // `main` via a bypass token, so a stray Publish here must not be able to
+      // reach production. Restore `main` before any of this is merged.
+      branch: 'prototype/content-locale-tree'
     }
   }
 })

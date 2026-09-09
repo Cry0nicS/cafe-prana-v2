@@ -1,5 +1,4 @@
 ---
-locale: en
 title: "Christmas Brunch Buffet"
 description: "Enjoy Christmas Day with my festive Christmas Brunch Buffet at Café Prana. A relaxed late morning filled with nourishing dishes, warm drinks, and holiday comfort."
 date: 2025-12-25

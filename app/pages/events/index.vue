@@ -9,12 +9,12 @@ const localizeLinks = useLocalizedLinks()
 const [{ data: page }, { data: events }] = await Promise.all([
   useAsyncData(
     `events-page-${locale.value}`,
-    () => queryCollection('eventsPage').where('locale', '=', locale.value).first(),
+    () => queryCollection('eventsPage').where(...localeStem(locale.value)).first(),
     { watch: [locale] }
   ),
   useAsyncData(
     `events-list-${locale.value}`,
-    () => queryCollection('events').where('locale', '=', locale.value).order('date', 'ASC').all(),
+    () => queryCollection('events').where(...localeStem(locale.value)).order('date', 'ASC').all(),
     { watch: [locale] }
   )
 ])

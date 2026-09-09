@@ -53,8 +53,6 @@ const createHiddenNavigation = () => z.boolean().default(false).editor({ hidden:
 // keeps that from breaking content validation (the onUrl override still runs).
 const createSitemapSchema = (options?: DefineSitemapSchemaOptions) => defineSitemapSchema({ z, ...options }).optional().editor({ hidden: true })
 
-const createLocaleSchema = () => z.enum(['en', 'de'])
-
 const createMenuLabelSchema = () => z.enum([
   'gluten-free',
   'vegan',
@@ -181,7 +179,6 @@ export default defineContentConfig({
         { include: 'de/**/index.md', prefix: '/de' }
       ],
       schema: z.object({
-        locale: createLocaleSchema(),
         // RESEARCH: no `onUrl` at all. `@nuxtjs/sitemap` bakes
         // `sitemap.loc = content.path` in `content:file:afterParse`, and under
         // the locale-prefixed tree that path is already the public URL.
@@ -196,7 +193,6 @@ export default defineContentConfig({
         { include: 'de/**/menu.yml', prefix: '/de' }
       ],
       schema: z.object({
-        locale: createLocaleSchema(),
         sitemap: createSitemapSchema(),
         navigation: createHiddenNavigation(),
         hero: createBaseSchema().extend({
@@ -217,7 +213,6 @@ export default defineContentConfig({
         { include: 'de/menu-categories/*.yml', prefix: '/de/menu-categories' }
       ],
       schema: z.object({
-        locale: createLocaleSchema(),
         slug: createMenuCategorySchema(),
         title: z.string().nonempty(),
         description: z.string().optional(),
@@ -235,7 +230,6 @@ export default defineContentConfig({
         { include: 'de/menu/*.yml', prefix: '/de/menu' }
       ],
       schema: z.object({
-        locale: createLocaleSchema(),
         title: z.string().nonempty(),
         category: createMenuCategorySchema(),
         description: z.string().nonempty(),
@@ -253,7 +247,6 @@ export default defineContentConfig({
         { include: 'de/**/events.yml', prefix: '/de' }
       ],
       schema: z.object({
-        locale: createLocaleSchema(),
         sitemap: createSitemapSchema(),
         navigation: createHiddenNavigation(),
         hero: createBaseSchema().extend({
@@ -285,7 +278,6 @@ export default defineContentConfig({
         { include: 'de/events/*.md', prefix: '/de/events' }
       ],
       schema: z.object({
-        locale: createLocaleSchema(),
         // Hidden in Studio: the URL is derived from the file name, SEO is
         // derived from the fields below, and the sitemap uses fixed defaults.
         sitemap: createSitemapSchema(),

@@ -1,7 +1,6 @@
 ---
 title: "Deep Talk Aperitivo: Couples & Friends Edition"
 description: Ein entspannter Abend mit gutem Essen, alkoholfreiem Wein und Gesprächen, die über Small Talk hinausgehen.
-locale: de
 date: 2026-09-14
 time: 18:00
 paid: true

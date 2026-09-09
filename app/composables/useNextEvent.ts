@@ -13,7 +13,7 @@ export const useNextEvent = async () => {
   const { data: events, ...rest } = await useAsyncData(
     () => `next-event-${locale.value}`,
     () => queryCollection('events')
-      .where('locale', '=', locale.value)
+      .where(...localeStem(locale.value))
       .order('date', 'ASC')
       // Only what the poster reads. Without this every event's rendered body
       // would travel in the homepage payload.

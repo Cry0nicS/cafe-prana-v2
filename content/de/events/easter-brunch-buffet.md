@@ -1,5 +1,4 @@
 ---
-locale: de
 title: "Oster-Brunch-Buffet"
 description: "Genieße das Osterwochenende mit einem festlichen Oster-Brunch-Buffet im Cafe Prana. Ein entspannter später Vormittag mit nährenden Gerichten, warmen Getränken und Frühlingsstimmung."
 date: 2026-04-04

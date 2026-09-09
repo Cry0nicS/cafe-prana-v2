@@ -3,7 +3,7 @@ const { locale, t } = useI18n()
 
 const { data: page } = await useAsyncData(
   `index-${locale.value}`,
-  () => queryCollection('index').where('locale', '=', locale.value).first(),
+  () => queryCollection('index').where(...localeStem(locale.value)).first(),
   { watch: [locale] }
 )
 

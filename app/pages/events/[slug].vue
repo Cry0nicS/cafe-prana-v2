@@ -34,7 +34,7 @@ const [{ data: rawEvent }, { data: events }] = await Promise.all([
   ),
   useAsyncData(
     `events-related-${locale.value}`,
-    () => queryCollection('events').where('locale', '=', locale.value).order('date', 'DESC').all(),
+    () => queryCollection('events').where(...localeStem(locale.value)).order('date', 'DESC').all(),
     { watch: [locale] }
   )
 ])
