@@ -30,6 +30,7 @@ import {
   contentPathFor,
   documentsFromQueries,
   findEmojiShortcodes,
+  loadBuiltCollections,
   studioDocument
 } from './studio-document.mjs'
 
@@ -53,9 +54,9 @@ const fileFromGit = (path) => {
 
 // --- load the build's dumps --------------------------------------------------
 
-let collections
+let dumpDirs
 try {
-  collections = await readdir(DUMPS)
+  dumpDirs = await readdir(DUMPS)
 } catch {
   console.error(`✖ no content dumps under ${relative(ROOT, DUMPS)}.`)
   console.error('  They are written by the build, so run `npm run build` first.')
@@ -64,10 +65,15 @@ try {
 
 // Each collection is one gzipped, base64-encoded JSON array of SQL statements.
 const queries = []
-for (const collection of collections) {
-  const encoded = await readFile(join(DUMPS, collection, 'sql_dump.txt'), 'utf8')
+for (const dumpDir of dumpDirs) {
+  const encoded = await readFile(join(DUMPS, dumpDir, 'sql_dump.txt'), 'utf8')
   queries.push(...JSON.parse(gunzipSync(Buffer.from(encoded, 'base64')).toString()))
 }
+
+// The collection definitions, needed to map a document id back to its file:
+// each collection's `include` and `prefix` are what decide that. Same source
+// Studio's own runtime reads them from.
+const collections = await loadBuiltCollections()
 
 const deployedDocuments = documentsFromQueries(queries)
 
@@ -98,7 +104,7 @@ const committed = new Set(
     .split('\n')
     .filter(path => /\.(md|ya?ml|json)$/.test(path))
 )
-const inDump = new Set(deployedDocuments.map(document => contentPathFor(document.id)))
+const inDump = new Set(deployedDocuments.map(document => contentPathFor(document.id, collections)))
 const missingFromDump = [...committed].filter(path => !inDump.has(path))
 
 if (missingFromDump.length > 0) {
@@ -116,7 +122,7 @@ const conflicts = []
 let checked = 0
 
 for (const deployed of deployedDocuments) {
-  const path = contentPathFor(deployed.id)
+  const path = contentPathFor(deployed.id, collections)
   const source = fileFromGit(path)
 
   if (source === null) {
@@ -149,9 +155,57 @@ for (const deployed of deployedDocuments) {
   conflicts.push({ path, reasons })
 }
 
-if (conflicts.length === 0) {
+// --- can Studio reach every file at all? ------------------------------------
+//
+// The comparison above only sees documents the build produced. It cannot see a
+// file Studio resolves to the WRONG document, which is the failure mode of
+// giving one collection two differently-prefixed sources: Studio derives a
+// document id from `source[0]` alone, so every German file resolves to its
+// English counterpart and the owner is locked out of the German half of the
+// site. It builds, it serves correct URLs, and nothing else here notices.
+//
+// So: walk the id -> file mapping and require it to be one-to-one. A collection
+// merged back together fails this immediately.
+// See docs/adr/0001-bilingual-content-layout.md.
+
+const misresolved = []
+const seen = new Map()
+
+for (const deployed of deployedDocuments) {
+  let path
+  try {
+    path = contentPathFor(deployed.id, collections)
+  } catch (error) {
+    misresolved.push(`${deployed.id} -> ${error.message}`)
+    continue
+  }
+
+  const previous = seen.get(path)
+  if (previous) {
+    misresolved.push(`${previous} and ${deployed.id} both resolve to ${path}`)
+    continue
+  }
+  seen.set(path, deployed.id)
+}
+
+if (misresolved.length > 0) {
+  console.error(`✖ ${misresolved.length} document id(s) do not map one-to-one onto content files:`)
+  for (const reason of misresolved) {
+    console.error(`    ${reason}`)
+  }
+  console.error('  Studio would open the wrong file. If a collection was just given a second source,')
+  console.error('  that is the cause - see docs/adr/0001-bilingual-content-layout.md.')
+  process.exitCode = 1
+}
+
+if (conflicts.length === 0 && misresolved.length === 0) {
   console.log(`✔ ${checked} content documents match what Studio derives from their source at ${REVISION}`)
+  console.log(`✔ ${seen.size} document ids each map to a distinct content file`)
   process.exit(0)
+}
+
+if (conflicts.length === 0) {
+  process.exit(process.exitCode ?? 0)
 }
 
 console.error(`✖ ${conflicts.length}/${checked} content documents would show "Conflict detected" in Studio:`)

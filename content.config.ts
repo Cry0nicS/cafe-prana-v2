@@ -1,12 +1,41 @@
 import { defineCollection, defineContentConfig, z } from '@nuxt/content'
 import { defineSitemapSchema } from '@nuxtjs/sitemap/content'
-import type { DefineSitemapSchemaOptions } from '@nuxtjs/sitemap/content'
 import { NOTICE_TONES } from './shared/utils/notice'
 import {
   DEFAULT_LAST_RESERVATION_BEFORE_CLOSING,
   MAX_LAST_RESERVATION_BEFORE_CLOSING,
   OPENING_TIME_OPTIONS
 } from './shared/utils/opening-hours'
+
+// A content file's language is the folder it lives in: `content/en/...` and
+// `content/de/...`. Files that exist once for both languages
+// (`opening-hours.yml`, `notice.yml`) stay at the root.
+// See docs/adr/0001-bilingual-content-layout.md.
+// Matches `i18n.locales` in nuxt.config.ts. Adding a locale here means adding
+// its folder and its pair of collection entries below.
+type Locale = 'en' | 'de'
+
+// `en` is i18n's `defaultLocale` under `prefix_except_default`, so English
+// URLs carry no prefix and German ones carry `/de`.
+const localeUrlPrefix = (locale: Locale) => locale === 'en' ? '' : `/${locale}`
+
+// The locale folder goes inside `include` so that it lands in the glob's
+// *fixed* part and is stripped from the document key; `prefix` then writes the
+// public URL back. Two traps, each of which looks like it works:
+//
+//   - `cwd` produces identical `path` and `stem`, but Studio rebuilds a file
+//     path from `include` and `prefix` alone and ignores it - 0 of 52 rows
+//     resolvable. `cwd: '~~/content/en'` ingests nothing and still exits 0.
+//   - a singleton needs a glob. `en/index.md` has no `*`, so nothing is
+//     stripped: the path comes out `/en` and the German prefix stacks into
+//     `/de/de`. `**/` matches zero directories, so `en/**/index.md` pins one
+//     file while still ending the fixed part at `en/`. Not `en/*.md` either -
+//     that builds, but breaks Studio via a ufo quirk where an empty prefix
+//     becomes `/`.
+const localeSource = (locale: Locale, include: string, urlPath = '') => ({
+  include: `${locale}/${include}`,
+  prefix: `${localeUrlPrefix(locale)}${urlPath}`
+})
 
 const createBaseSchema = () => z.object({
   title: z.string(),
@@ -41,13 +70,16 @@ const createSeoSchema = () => z.object({
 // Standard hidden navigation field shared by the page collections.
 const createHiddenNavigation = () => z.boolean().default(false).editor({ hidden: true })
 
-// Sitemap entries use fixed defaults / code-driven URLs, so this field is
-// hidden from the Studio editor everywhere it is used. It is also optional:
-// Studio drops hidden fields when it rewrites a file, and an optional field
-// keeps that from breaking content validation (the onUrl override still runs).
-const createSitemapSchema = (options?: DefineSitemapSchemaOptions) => defineSitemapSchema({ z, ...options }).optional().editor({ hidden: true })
-
-const createLocaleSchema = () => z.enum(['en', 'de'])
+// Sitemap entries use fixed defaults, so this field is hidden from the Studio
+// editor everywhere it is used, and optional because Studio drops hidden fields
+// when it rewrites a file.
+//
+// There is deliberately no `onUrl` override on any collection.
+// `@nuxtjs/sitemap` bakes `sitemap.loc = content.path` during
+// `content:file:afterParse`, and under the locale-folder layout that path is
+// already the public URL - the overrides existed only to repair paths the old
+// `name.de.md` convention got wrong.
+const createSitemapSchema = () => defineSitemapSchema({ z }).optional().editor({ hidden: true })
 
 const createMenuLabelSchema = () => z.enum([
   'gluten-free',
@@ -92,7 +124,128 @@ const createNoticeTextSchema = () => z.object({
 // picker is cleared; `shared/utils/notice.ts` reads both.
 const createNoticeDateTimeSchema = () => z.string().datetime({ local: true }).optional()
 
+// --- one collection per locale ----------------------------------------------
+//
+// Each localized collection below is declared TWICE, once per locale, each
+// with exactly ONE source. This is forced, not stylistic: Studio derives a
+// document's id from `source[0]` unconditionally
+// (`nuxt-studio/.../utils/collection.js`), so a single collection carrying two
+// differently-prefixed sources makes every German file resolve to its English
+// counterpart - measured at 28 of 58 files, all German. Do not merge these
+// back together; it builds, it serves correct URLs, and it locks the owner out
+// of the German half of the site.
+//
+// The collection is therefore the locale, which is why no query filters on one
+// and why no content file carries a `locale` field.
+
+const createIndexCollection = (locale: Locale) => defineCollection({
+  type: 'page',
+  source: localeSource(locale, '**/index.md'),
+  schema: z.object({
+    sitemap: createSitemapSchema(),
+    navigation: createHiddenNavigation()
+  })
+})
+
+const createMenuPageCollection = (locale: Locale) => defineCollection({
+  type: 'page',
+  source: localeSource(locale, '**/menu.yml'),
+  schema: z.object({
+    sitemap: createSitemapSchema(),
+    navigation: createHiddenNavigation(),
+    hero: createBaseSchema().extend({
+      headline: z.string(),
+      image: createImageSchema()
+    }),
+    labels: z.array(z.object({
+      id: createMenuLabelSchema(),
+      label: z.string(),
+      icon: z.string().editor({ input: 'icon' }).optional()
+    })).optional()
+  })
+})
+
+const createMenuCategoriesCollection = (locale: Locale) => defineCollection({
+  type: 'data',
+  source: localeSource(locale, 'menu-categories/*.yml', '/menu-categories'),
+  schema: z.object({
+    slug: createMenuCategorySchema(),
+    title: z.string().nonempty(),
+    description: z.string().optional(),
+    options: z.string().optional(),
+    icon: z.string().editor({ input: 'icon' }).optional(),
+    order: z.number()
+  })
+})
+
+const createMenuItemsCollection = (locale: Locale) => defineCollection({
+  type: 'data',
+  source: localeSource(locale, 'menu/*.yml', '/menu'),
+  schema: z.object({
+    title: z.string().nonempty(),
+    category: createMenuCategorySchema(),
+    description: z.string().nonempty(),
+    ingredients: z.string().nonempty(),
+    price: z.string().nonempty(),
+    image: createImageSchema(),
+    labels: z.array(createMenuLabelSchema()).optional(),
+    order: z.number()
+  })
+})
+
+const createEventsPageCollection = (locale: Locale) => defineCollection({
+  type: 'page',
+  source: localeSource(locale, '**/events.yml'),
+  schema: z.object({
+    sitemap: createSitemapSchema(),
+    navigation: createHiddenNavigation(),
+    hero: createBaseSchema().extend({
+      headline: z.string(),
+      image: createImageSchema(),
+      links: z.array(createButtonSchema())
+    }),
+    sections: z.object({
+      upcomingTitle: z.string(),
+      pastTitle: z.string(),
+      pastDescription: z.string(),
+      pastOnlyDescription: z.string(),
+      emptyUpcomingTitle: z.string(),
+      emptyUpcomingDescription: z.string()
+    }),
+    labels: z.object({
+      date: z.string(),
+      time: z.string(),
+      location: z.string(),
+      price: z.string(),
+      booking: z.string()
+    })
+  })
+})
+
+const createEventsCollection = (locale: Locale) => defineCollection({
+  type: 'page',
+  source: localeSource(locale, 'events/*.md', '/events'),
+  schema: z.object({
+    // Hidden in Studio: the URL comes from the file's name and folder, SEO is
+    // derived from the fields below, and the sitemap uses fixed defaults.
+    sitemap: createSitemapSchema(),
+    navigation: createHiddenNavigation(),
+    title: z.string().nonempty(),
+    description: z.string().nonempty(),
+    date: z.date(),
+    time: z.string().nonempty(),
+    image: createImageSchema(),
+    paid: z.boolean().default(false),
+    price: z.number().optional(),
+    reservation: z.enum(['required', 'recommended', 'walkin']).default('recommended'),
+    seo: createSeoSchema().optional().editor({ hidden: true })
+  })
+})
+
 export default defineContentConfig({
+  // The keys are spelled out rather than generated: @nuxt/content types
+  // `queryCollection()` from these literals, and building them dynamically
+  // would erase the collection names from the types.
   collections: {
     // Single, language-independent file. The homepage renders it for both
     // locales and app.vue publishes it as structured data, so the two
@@ -163,141 +316,23 @@ export default defineContentConfig({
         de: createNoticeTextSchema()
       })
     }),
-    index: defineCollection({
-      type: 'page',
-      source: [
-        { include: 'index.md', prefix: '' },
-        { include: 'index.de.md', prefix: '' }
-      ],
-      schema: z.object({
-        locale: createLocaleSchema(),
-        sitemap: createSitemapSchema({
-          name: 'index',
-          onUrl: (url, entry) => {
-            url.loc = entry.locale === 'de' ? '/de' : '/'
-          }
-        }),
-        navigation: createHiddenNavigation()
-      })
-    }),
-    menuPage: defineCollection({
-      type: 'page',
-      source: [
-        { include: 'menu.yml', prefix: '' },
-        { include: 'menu.de.yml', prefix: '' }
-      ],
-      schema: z.object({
-        locale: createLocaleSchema(),
-        sitemap: createSitemapSchema({
-          name: 'menuPage',
-          onUrl: (url, entry) => {
-            url.loc = entry.locale === 'de' ? '/de/menu' : '/menu'
-          }
-        }),
-        navigation: createHiddenNavigation(),
-        hero: createBaseSchema().extend({
-          headline: z.string(),
-          image: createImageSchema()
-        }),
-        labels: z.array(z.object({
-          id: createMenuLabelSchema(),
-          label: z.string(),
-          icon: z.string().editor({ input: 'icon' }).optional()
-        })).optional()
-      })
-    }),
-    menuCategories: defineCollection({
-      type: 'data',
-      source: 'menu-categories/*.yml',
-      schema: z.object({
-        locale: createLocaleSchema(),
-        slug: createMenuCategorySchema(),
-        title: z.string().nonempty(),
-        description: z.string().optional(),
-        options: z.string().optional(),
-        icon: z.string().editor({ input: 'icon' }).optional(),
-        order: z.number()
-      })
-    }),
-    menuItems: defineCollection({
-      type: 'data',
-      source: 'menu/*.yml',
-      schema: z.object({
-        locale: createLocaleSchema(),
-        title: z.string().nonempty(),
-        category: createMenuCategorySchema(),
-        description: z.string().nonempty(),
-        ingredients: z.string().nonempty(),
-        price: z.string().nonempty(),
-        image: createImageSchema(),
-        labels: z.array(createMenuLabelSchema()).optional(),
-        order: z.number()
-      })
-    }),
-    eventsPage: defineCollection({
-      type: 'page',
-      source: [
-        { include: 'events.yml', prefix: '' },
-        { include: 'events.de.yml', prefix: '' }
-      ],
-      schema: z.object({
-        locale: createLocaleSchema(),
-        sitemap: createSitemapSchema({
-          name: 'eventsPage',
-          onUrl: (url, entry) => {
-            url.loc = entry.locale === 'de' ? '/de/events' : '/events'
-          }
-        }),
-        navigation: createHiddenNavigation(),
-        hero: createBaseSchema().extend({
-          headline: z.string(),
-          image: createImageSchema(),
-          links: z.array(createButtonSchema())
-        }),
-        sections: z.object({
-          upcomingTitle: z.string(),
-          pastTitle: z.string(),
-          pastDescription: z.string(),
-          pastOnlyDescription: z.string(),
-          emptyUpcomingTitle: z.string(),
-          emptyUpcomingDescription: z.string()
-        }),
-        labels: z.object({
-          date: z.string(),
-          time: z.string(),
-          location: z.string(),
-          price: z.string(),
-          booking: z.string()
-        })
-      })
-    }),
-    events: defineCollection({
-      type: 'page',
-      source: 'events/*.md',
-      schema: z.object({
-        locale: createLocaleSchema(),
-        // Hidden in Studio: the URL is derived from the file name, SEO is
-        // derived from the fields below, and the sitemap uses fixed defaults.
-        sitemap: createSitemapSchema({
-          name: 'events',
-          onUrl: (url, entry) => {
-            // Inlined (this runs in Nitro, so no external helper references):
-            // derive the slug from the file stem, e.g. `events/spring-brunch.de` -> `spring-brunch`.
-            const slug = String(entry.stem ?? '').replace(/^events\//, '').replace(/\.de$/, '')
-            url.loc = entry.locale === 'de' ? `/de/events/${slug}` : `/events/${slug}`
-          }
-        }),
-        navigation: createHiddenNavigation(),
-        title: z.string().nonempty(),
-        description: z.string().nonempty(),
-        date: z.date(),
-        time: z.string().nonempty(),
-        image: createImageSchema(),
-        paid: z.boolean().default(false),
-        price: z.number().optional(),
-        reservation: z.enum(['required', 'recommended', 'walkin']).default('recommended'),
-        seo: createSeoSchema().optional().editor({ hidden: true })
-      })
-    })
+
+    indexEn: createIndexCollection('en'),
+    indexDe: createIndexCollection('de'),
+
+    menuPageEn: createMenuPageCollection('en'),
+    menuPageDe: createMenuPageCollection('de'),
+
+    menuCategoriesEn: createMenuCategoriesCollection('en'),
+    menuCategoriesDe: createMenuCategoriesCollection('de'),
+
+    menuItemsEn: createMenuItemsCollection('en'),
+    menuItemsDe: createMenuItemsCollection('de'),
+
+    eventsPageEn: createEventsPageCollection('en'),
+    eventsPageDe: createEventsPageCollection('de'),
+
+    eventsEn: createEventsCollection('en'),
+    eventsDe: createEventsCollection('de')
   }
 })

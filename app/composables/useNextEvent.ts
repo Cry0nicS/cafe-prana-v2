@@ -12,8 +12,7 @@ export const useNextEvent = async () => {
   // in its own cache entry instead of overwriting the previous locale's.
   const { data: events, ...rest } = await useAsyncData(
     () => `next-event-${locale.value}`,
-    () => queryCollection('events')
-      .where('locale', '=', locale.value)
+    () => queryCollection(locale.value === 'de' ? 'eventsDe' : 'eventsEn')
       .order('date', 'ASC')
       // Only what the poster reads. Without this every event's rendered body
       // would travel in the homepage payload.

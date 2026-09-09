@@ -72,8 +72,8 @@ export const getEventDateIso = (value: EventDateValue) => {
   return toEventDate(value).toISOString().slice(0, 10)
 }
 
-// An event's URL slug is derived from its file name: `events/spring-brunch.md`
-// and `events/spring-brunch.de.md` both resolve to the slug `spring-brunch`.
+// RESEARCH (#35): under the locale-prefixed tree the stem is
+// `events/<slug>` (en) or `de/events/<slug>` (de).
 export const eventSlug = (stem?: string) => {
-  return String(stem ?? '').replace(/^events\//, '').replace(/\.de$/, '')
+  return String(stem ?? '').replace(/^(?:de\/)?events\//, '')
 }

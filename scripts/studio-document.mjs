@@ -32,6 +32,8 @@ const studioImport = async (path) => {
 
 const { doObjectsMatch } = await studioImport('object.js')
 const { removeLastStylesFromTree } = await studioImport('document/tree.js')
+const { generateFsPathFromId } = await studioImport('collection.js')
+const { getCollectionSourceById } = await studioImport('source.js')
 
 // Studio's runtime imports `@nuxtjs/mdc` from inside `node_modules/nuxt-studio`,
 // which npm has given a nested copy of its own whenever its range does not meet
@@ -206,6 +208,43 @@ export function documentsFromQueries(queries) {
   return documents
 }
 
-// `openingHours/opening-hours.yml` -> `content/opening-hours.yml`. The first
-// segment of a document id is its collection, not a directory.
-export const contentPathFor = id => `content/${id.split('/').slice(1).join('/')}`
+// A document id back to the file it came from: `eventsEn/events/spring.md` ->
+// `content/en/events/spring.md`.
+//
+// Not derivable by stripping the collection segment any more. Under the
+// locale-folder layout a collection's `include` carries the locale and its
+// `prefix` carries the public URL, so the id holds the prefix rather than the
+// folder - `eventsEn/events/spring.md` for a file that lives in `en/events/`.
+// Studio does this reconstruction itself to decide which file a row belongs to,
+// and it is the mapping this whole check exists to mirror, so use Studio's
+// implementation rather than a second guess at it.
+//
+// `collections` is passed in rather than imported here: it comes from the build
+// (`.nuxt/content/preview.mjs`, the same source Studio's runtime reads it
+// from), and `nuxt prepare` alone does not write that file. Loading it at
+// module scope would make merely importing this module require a full build,
+// which is what keeps the derivation unit-testable - see the header. The caller
+// needs a build anyway for the dumps to exist.
+export const loadBuiltCollections = async () => {
+  const path = join(ROOT, '.nuxt', 'content', 'preview.mjs')
+
+  try {
+    return (await import(new URL(`file://${path}`))).collections
+  } catch (error) {
+    throw new Error(
+      'cannot load .nuxt/content/preview.mjs - it is written by `npm run build`, not by `nuxt prepare`',
+      { cause: error }
+    )
+  }
+}
+
+export const contentPathFor = (id, collections) => {
+  const collectionName = id.split(/[/:]/)[0]
+  const collection = collections[collectionName]
+
+  if (!collection) {
+    throw new Error(`document id '${id}' names collection '${collectionName}', which is not in the build`)
+  }
+
+  return `content/${generateFsPathFromId(id, getCollectionSourceById(id, collection.source))}`
+}
