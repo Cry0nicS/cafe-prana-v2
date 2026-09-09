@@ -26,11 +26,12 @@ import type { OpeningHours, ReservationException } from './opening-hours'
 type BookingWindow = { from: number, to: number }
 
 // The exception row in force on a date, if any. The first row for a date wins,
-// which is what `Array.prototype.find` gives.
+// which is what `Array.prototype.find` gives. Rows are already normalised by
+// `toOpeningHours`, so a date here is a trimmed string.
 export const reservationExceptionOn = (openingHours: OpeningHours, date: DateParts): ReservationException | undefined => {
   const key = toDateKey(date)
 
-  return openingHours.reservationExceptions?.find(exception => exception.date.trim() === key)
+  return openingHours.reservationExceptions.find(exception => exception.date === key)
 }
 
 // A row that is not closed but has no complete range cannot open anything: the

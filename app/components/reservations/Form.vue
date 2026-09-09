@@ -34,7 +34,10 @@ const localePath = useLocalePath()
 // homepage shows, plus its list of dated exceptions, so the form can only
 // offer what the cafe actually opens - and an evening event on a closed
 // weekday is bookable once the owner has added its date.
-const { data: openingHours } = await useOpeningHours()
+//
+// `error` matters as much as the data: without the hours the form knows
+// nothing about any date, which must not be shown as "we are closed".
+const { data: openingHours, error: openingHoursError } = await useOpeningHours()
 
 const isSubmitting = ref(false)
 const showModal = ref(false)
@@ -90,7 +93,14 @@ const defaultState = (): ReservationFormState => {
 const formState = reactive<ReservationFormState>(defaultState())
 
 const availableSlots = computed(() => slotsOn(formState.date))
-const dateUnavailable = computed(() => Boolean(formState.date) && availableSlots.value.length === 0)
+
+// A failed query or an empty document, as opposed to a date the cafe does not
+// open: every date would offer nothing, and the reason is on our side.
+const hoursUnavailable = computed(() =>
+  Boolean(openingHoursError.value) || openingHours.value.hours.length === 0)
+
+const dateUnavailable = computed(() =>
+  !hoursUnavailable.value && Boolean(formState.date) && availableSlots.value.length === 0)
 
 // Changing the date changes the slots; keep the chosen time if it still
 // exists, otherwise fall back so the guest never submits a stale slot.
@@ -281,7 +291,7 @@ const sendReservation = async () => {
             v-model="formState.time"
             class="w-full"
             :items="availableSlots"
-            :disabled="dateUnavailable"
+            :disabled="dateUnavailable || hoursUnavailable"
             :placeholder="t('reservations.form.noSlots')"
             icon="i-lucide-clock"
           />
@@ -337,7 +347,20 @@ const sendReservation = async () => {
       </UFormField>
     </fieldset>
 
+    <!--
+      Shown instead of the usual note when the opening hours could not be
+      loaded: no date can be offered, and saying "closed" would be a lie.
+    -->
     <UAlert
+      v-if="hoursUnavailable"
+      icon="i-lucide-shield-alert"
+      color="error"
+      variant="soft"
+      class="mt-5"
+      :description="t('reservations.form.hoursUnavailable', { email: CAFE_CONTACT_EMAIL })"
+    />
+    <UAlert
+      v-else
       icon="i-lucide-info"
       color="primary"
       variant="soft"

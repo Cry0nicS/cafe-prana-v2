@@ -57,8 +57,10 @@ The button always links to the reservations page — you don't set a link.
 
 > **Does the event run outside your opening hours?** A dinner at 18:30, or anything on a Monday,
 > cannot be booked until you open that date: add a row for it under `reservationExceptions` in
-> **Opening Hours** (`content/opening-hours.yml`) in the same session. If you forget, the site's
-> checks fail and name the event. See `docs/reservation-availability.md`.
+> **Opening Hours** (`content/opening-hours.yml`) in the same session. A check reports events
+> nobody can book, but it runs after you publish and cannot judge a repeating time such as
+> "Thursdays at 17:00", so the row is the part to remember.
+> See `docs/reservation-availability.md`.
 
 ## What you can put in the page content
 

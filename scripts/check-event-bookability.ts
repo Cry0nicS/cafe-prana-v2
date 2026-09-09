@@ -4,17 +4,23 @@
 // runs outside those hours - a dinner at 18:30 on a day the counter closes at
 // 15:00, or anything on a Monday - needs a row in that file's
 // `reservationExceptions` before a guest can reserve for it. Forgetting the row
-// used to surface as a guest who could not book; now it is a red build with a
-// one-line fix the owner makes herself in Studio.
+// otherwise surfaces as a guest who could not book; this turns it into a named
+// failure with a one-line fix the owner makes herself in Studio.
 //
-// Events whose time field holds no `HH:MM` are reported as unchecked rather
-// than passed or failed; walk-in and past events are skipped. A recurring
-// series is only known by its single document date, so later sessions are not
-// checked. See docs/reservation-availability.md.
+// It reports rather than prevents: Studio publishes straight to main and Vercel
+// deploys from that push, both independently of Actions, so this runs after the
+// deploy. See the note in docs/reservation-availability.md.
+//
+// Reported as unchecked rather than passed or failed: an event whose time
+// field holds no `HH:MM`, one that names several times without saying which
+// starts it, and a recurring series, whose later sessions are nowhere in the
+// content. Walk-in and past events are skipped.
+// See docs/reservation-availability.md.
 //
 // TypeScript, because the verdict comes from the same modules the form and
 // the API use, and the source of truth should not be re-implemented for a
 // check. Run through `jiti` (`npm run check:events`).
+import { appendFileSync } from 'node:fs'
 import { readFile, readdir } from 'node:fs/promises'
 import { join, relative, resolve } from 'node:path'
 import process from 'node:process'
@@ -81,25 +87,53 @@ for (const result of results) {
   }
 }
 
-const count = (status: EventCheck['status']) => results.filter(result => result.status === status).length
-const unbookable = count('unbookable')
-const unchecked = count('unchecked')
+const of = (status: EventCheck['status']) => results.filter(result => result.status === status)
+const unbookable = of('unbookable')
+const unchecked = of('unchecked')
+
+const tally
+  = `${of('bookable').length} bookable, ${unbookable.length} unbookable, ${unchecked.length} unchecked, `
+    + `${of('skipped').length} skipped (past or walk-in) of ${results.length} event files`
 
 console.log('')
-console.log(
-  `${count('bookable')} bookable, ${unbookable} unbookable, ${unchecked} unchecked, ${count('skipped')} skipped `
-  + `(past or walk-in) of ${results.length} event files`
-)
+console.log(tally)
 
-if (unchecked > 0) {
-  console.warn('⚠ unchecked events have no HH:MM in their time field, so nothing can be said about them.')
+if (unchecked.length > 0) {
+  console.warn('⚠ nothing can be said about the unchecked events above; read their time field yourself.')
 }
 
-if (unbookable > 0) {
+// A CI log is not where this is read: the owner publishes from Studio and sees
+// GitHub's run summary at best, so the failure has to explain itself there.
+const summarise = (markdown: string) => {
+  const path = process.env.GITHUB_STEP_SUMMARY
+
+  if (path) {
+    appendFileSync(path, `${markdown}\n`)
+  }
+}
+
+const list = (checks: EventCheck[]) =>
+  checks.map(check => `- **${check.title}** (\`${check.path}\`) - ${check.detail}`).join('\n')
+
+if (unbookable.length > 0) {
+  const fix
+    = 'Open **Opening Hours** in Studio and add a row under `reservationExceptions` for that date, '
+      + 'with a bookable range that contains the start time. '
+      + 'See [docs/reservation-availability.md](docs/reservation-availability.md).'
+
   console.error('')
   console.error('✖ an upcoming event cannot be booked at its start time.')
   console.error('  Add a row for its date under `reservationExceptions` in content/opening-hours.yml')
   console.error('  (in Studio: Opening Hours) whose bookable range contains the start time.')
   console.error('  See docs/reservation-availability.md.')
+
+  summarise(`## Guests cannot book these events\n\n${list(unbookable)}\n\n${fix}\n\n${tally}`)
   process.exitCode = 1
+} else {
+  summarise(
+    unchecked.length > 0
+      ? `## Every upcoming event is bookable, ${unchecked.length} could not be checked\n\n`
+      + `${list(unchecked)}\n\nCheck those by hand.\n\n${tally}`
+      : `Every upcoming event is bookable. ${tally}`
+  )
 }

@@ -6,7 +6,10 @@
 //
 // The rules are the reservation form's own (`shared/utils/reservations.ts`), so
 // "bookable" here means exactly that a guest could pick the slot.
-import { isUpcomingEvent } from '../app/utils/events'
+//
+// Where the event's own fields do not say when it starts, the verdict is
+// `unchecked` rather than a guess: the `time` field is free text, and a wrong
+// green is worse than an honest gap.
 import { toDateKey, toLabel, weekdayOf } from '../shared/utils/calendar'
 import type { DateParts, TimeParts } from '../shared/utils/calendar'
 import type { OpeningHours } from '../shared/utils/opening-hours'
@@ -31,20 +34,49 @@ export type EventCheck = {
   detail: string
 }
 
-const TIME = /(?<!\d)(\d{1,2}):(\d{2})(?!\d)/
+const TIME = /(?<!\d)(\d{1,2}):(\d{2})(?!\d)/g
 
-// The first `HH:MM` in the time field, or null when there is none to read.
-export const firstTimeIn = (time: string | undefined): TimeParts | null => {
-  const match = time?.match(TIME)
+// A range: the first time is the start, the second the end. Covers the dash
+// forms the content uses and the words either language writes them with.
+const RANGE = /(?<!\d)\d{1,2}:\d{2}\s*(?:[-–—]|to|till|until|bis)\s*\d{1,2}:\d{2}(?!\d)/i
 
-  if (!match) {
-    return null
+// A time field describing a repeating event. Only the document's own date can
+// be checked, so the other sessions would be waved through unexamined - the
+// plural weekday ("Thursdays", "Donnerstags") is what gives that away.
+const RECURRING = new RegExp(
+  '\\b(?:mondays|tuesdays|wednesdays|thursdays|fridays|saturdays|sundays)\\b'
+  + '|\\b(?:montags|dienstags|mittwochs|donnerstags|freitags|samstags|sonntags)\\b'
+  + '|\\b(?:weekly|fortnightly|monthly|every|each)\\b'
+  + '|\\b(?:woechentlich|wöchentlich|monatlich|jeden|jede|jeweils)\\b',
+  'i'
+)
+
+export const looksRecurring = (time: string | undefined) => Boolean(time && RECURRING.test(time))
+
+// Every valid `HH:MM` in the field, in the order written.
+export const timesIn = (time: string | undefined): TimeParts[] =>
+  [...(time ?? '').matchAll(TIME)]
+    .map(match => ({ hour: Number(match[1]), minute: Number(match[2]) }))
+    .filter(parts => parts.hour <= 23 && parts.minute <= 59)
+
+export type StartTimeReading = { time: TimeParts } | { problem: 'none' | 'ambiguous' }
+
+// The event's start time. One time is the start; two in a range are a start
+// and an end. Anything else - "Einlass 17:30, Beginn 18:30" - names several
+// moments without saying which begins the event, and guessing the first would
+// pass or fail the event for the wrong reason.
+export const readStartTime = (time: string | undefined): StartTimeReading => {
+  const times = timesIn(time)
+
+  if (times.length === 0) {
+    return { problem: 'none' }
   }
 
-  const hour = Number(match[1])
-  const minute = Number(match[2])
+  if (times.length === 1 || RANGE.test(time ?? '')) {
+    return { time: times[0]! }
+  }
 
-  return hour <= 23 && minute <= 59 ? { hour, minute } : null
+  return { problem: 'ambiguous' }
 }
 
 const DATE = /^(\d{4})-(\d{2})-(\d{2})/
@@ -63,6 +95,20 @@ const eventDateParts = (date: string | Date): DateParts | null => {
   return match ? { year: Number(match[1]), month: Number(match[2]), day: Number(match[3]) } : null
 }
 
+// Today as the cafe counts it. `en-CA` formats as `YYYY-MM-DD`, so these keys
+// compare as strings.
+//
+// Deliberately not the events page's `isUpcomingEvent`: that truncates to the
+// *visitor's* midnight, which is what a browser wants and what makes a check
+// disagree with itself between a developer's machine and a UTC CI runner. An
+// event on today's date counts as upcoming, exactly as the page treats it.
+const BERLIN_DAY = new Intl.DateTimeFormat('en-CA', {
+  timeZone: 'Europe/Berlin',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit'
+})
+
 const describeDate = (date: DateParts) => `${toDateKey(date)} (a ${weekdayOf(date)})`
 
 export const checkEventBookability = (event: EventFrontmatter, openingHours: OpeningHours, now: Date): EventCheck => {
@@ -79,31 +125,47 @@ export const checkEventBookability = (event: EventFrontmatter, openingHours: Ope
     return verdict('unchecked', `cannot read the date ${JSON.stringify(event.date)}`)
   }
 
-  if (!isUpcomingEvent({ date: toDateKey(date) }, now)) {
-    return verdict('skipped', `in the past (${toDateKey(date)})`)
+  const key = toDateKey(date)
+
+  if (key < BERLIN_DAY.format(now)) {
+    return verdict('skipped', `in the past (${key})`)
   }
 
-  const time = firstTimeIn(event.time)
-
-  if (!time) {
-    return verdict('unchecked', `no HH:MM start time found in ${JSON.stringify(event.time ?? '')}`)
+  if (looksRecurring(event.time)) {
+    return verdict(
+      'unchecked',
+      `${JSON.stringify(event.time)} describes a repeating event, and only ${key} is written down, `
+      + 'so the other sessions cannot be checked'
+    )
   }
 
+  const reading = readStartTime(event.time)
+
+  if ('problem' in reading) {
+    return verdict(
+      'unchecked',
+      reading.problem === 'none'
+        ? `no HH:MM start time found in ${JSON.stringify(event.time ?? '')}`
+        : `${JSON.stringify(event.time)} names several times without saying which one the event starts at`
+    )
+  }
+
+  const time = reading.time
   const issue = validateReservationSlot(openingHours, date, time)
 
   if (!issue) {
     return verdict('bookable', `${event.time} on ${describeDate(date)}`)
   }
 
-  if (issue.path === 'date') {
+  const slots = reservationSlotsOn(openingHours, date)
+
+  if (slots.length === 0) {
     return verdict('unbookable', `the cafe takes no bookings on ${describeDate(date)}`)
   }
 
-  const slots = reservationSlotsOn(openingHours, date)
-  const start = toLabel(time.hour * 60 + time.minute)
-
   return verdict(
     'unbookable',
-    `${start} is not a bookable slot on ${describeDate(date)}; bookings run ${slots[0]} to ${slots.at(-1)}`
+    `${toLabel(time.hour * 60 + time.minute)} is not a bookable slot on ${describeDate(date)}; `
+    + `bookings run ${slots[0]} to ${slots.at(-1)}`
   )
 }
