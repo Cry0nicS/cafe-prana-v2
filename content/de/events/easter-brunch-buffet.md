@@ -1,30 +1,30 @@
 ---
-title: "Oster-Brunch-Buffet"
-description: "Genieße das Osterwochenende mit einem festlichen Oster-Brunch-Buffet im Cafe Prana. Ein entspannter später Vormittag mit nährenden Gerichten, warmen Getränken und Frühlingsstimmung."
+title: Easter Brunch Buffet
 date: 2026-04-04
-time: "11:00-13:00"
+description: Enjoy the Easter weekend with a festive Easter Brunch Buffet at Café Prana. A relaxed late morning filled with nourishing dishes, warm drinks, and spring comfort.
 image:
   src: /images/events/posts/easter-brunch-buffet-hero.webp
-  alt: "Frühlingshaftes Brunch-Buffet im Cafe Prana"
+  alt: Spring brunch buffet at Café Prana
 paid: true
 price: 20
 reservation: required
+time: 11:00-13:00
 ---
 
-Ein großzügiges pflanzliches Brunch-Buffet mit saisonalen und festlichen Gerichten, das du in gemütlicher Atmosphäre in deinem Tempo genießen kannst.
+A generous plant based brunch buffet featuring seasonal and festive dishes, inviting you to enjoy at your own pace in a cozy atmosphere.
 
 ::callout{icon="i-lucide-info"}
-Das Buffet ist vollständig pflanzlich und glutenfrei, mit süßen und herzhaften saisonalen Optionen.
+The buffet is fully plant based and gluten free, with a variety of sweet and savory seasonal options.
 ::
 
-### Was dich erwartet
+### What to expect
 
-- Pflanzliches Brunch-Buffet
-- Glutenfrei
+- Plant based brunch buffet
+- Gluten free
 - Vegan
-- Entspannte Frühlingsatmosphäre
-- Saisonale Bio-Zutaten
+- Relaxed spring atmosphere
+- Seasonal and organic ingredients
 
-### Für wen ist das?
+### Who this is for
 
-Ideal für alle, die Ostern mit einem nährenden und stressfreien Brunch genießen möchten.
+Ideal for anyone who wants to enjoy Easter with a nourishing and stress free brunch experience.
