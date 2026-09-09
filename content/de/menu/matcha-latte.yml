@@ -1,0 +1,12 @@
+title: "Matcha Latte"
+category: "drinksHot"
+description: "First-grade Matcha mit Mylk deiner Wahl und optionalem Extra-Shot."
+ingredients: "Matcha-Pulver, aufgeschäumte Mylk"
+price: "5,9"
+image:
+  src: "/images/menu/matcha-latte.webp"
+  alt: "Matcha Latte mit Pflanzenmilch"
+labels:
+  - "gluten-free"
+  - "vegan"
+order: 160

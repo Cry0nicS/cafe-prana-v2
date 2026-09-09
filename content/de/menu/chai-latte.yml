@@ -1,0 +1,12 @@
+title: Chai Latte
+category: drinksHot
+description: Hausgemachte Chai-Gewürzmischung mit Mylk deiner Wahl.
+image:
+  src: /images/menu/chai-latte.webp
+  alt: Chai Latte in einer Keramiktasse
+ingredients: Chai-Gewürze, Mylk deiner Wahl
+labels:
+  - gluten-free
+  - vegan
+order: 130
+price: 4,8

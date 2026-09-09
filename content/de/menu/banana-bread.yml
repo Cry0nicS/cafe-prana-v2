@@ -1,0 +1,13 @@
+title: Banana Bread
+category: food
+description: Getoastet und mit den Toppings des Tages serviert.
+image:
+  src: /images/menu/banana-bread.webp
+  alt: Getoastetes Banana Bread mit Toppings des Tages
+ingredients: Hausgemachte glutenfreie Mehlmischung, Banane, Mandeln
+labels:
+  - gluten-free
+  - vegan
+  - seasonal
+order: 220
+price: 10,5

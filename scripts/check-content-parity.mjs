@@ -1,15 +1,22 @@
-// Verifies that each localized homepage MDC file uses the same set and order of
-// component blocks. This guards against a section being added/removed in one
-// language but not the other. Zero dependencies; safe to run in CI.
-import { readFile } from 'node:fs/promises'
-import { dirname, join } from 'node:path'
+// Two content checks over the locale folders. Zero dependencies; safe to run in
+// CI, and needs no build.
+//
+//   1. FAILS when the localized homepage MDC files do not use the same set and
+//      order of component blocks - a section added or removed in one language
+//      but not the other.
+//   2. REPORTS content that exists in only one language, without failing. That
+//      is a legitimate state, not a defect; see the bottom of this file.
+import { readFile, readdir } from 'node:fs/promises'
+import { dirname, join, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 
-// Each locale's homepage and the file it must stay in sync with.
+// Each locale's homepage and the file it must stay in sync with. A locale pair
+// is the same filename in each locale folder - see
+// docs/adr/0001-bilingual-content-layout.md.
 const pairs = [
-  { label: 'homepage', a: 'content/index.md', b: 'content/index.de.md' }
+  { label: 'homepage', a: 'content/en/index.md', b: 'content/de/index.md' }
 ]
 
 // Extract ordered MDC component tags (e.g. ::feature, :::feature-grid, ::faq-item{...}).
@@ -45,6 +52,53 @@ for (const { label, a, b } of pairs) {
     console.error(`✖ ${label}: ${a} and ${b} are out of sync`)
     console.error(`  ${a}: ${blocksA.join(', ')}`)
     console.error(`  ${b}: ${blocksB.join(', ')}`)
+  }
+}
+
+// --- content that exists in only one language -------------------------------
+//
+// Deliberately a REPORT, not a gate. Publishing in one language only is the
+// owner's call, so an unpaired file is legitimate and must never fail CI or
+// block a deploy - see docs/adr/0001-bilingual-content-layout.md. This exists
+// so a developer can see the gaps, since the owner never will.
+
+const listFiles = async (dir) => {
+  const found = []
+  let entries
+
+  try {
+    entries = await readdir(dir, { withFileTypes: true, recursive: true })
+  } catch {
+    return found
+  }
+
+  for (const entry of entries) {
+    if (entry.isFile() && /\.(md|ya?ml|json)$/.test(entry.name)) {
+      found.push(relative(dir, join(entry.parentPath, entry.name)))
+    }
+  }
+
+  return found
+}
+
+const [enFiles, deFiles] = await Promise.all([
+  listFiles(join(root, 'content', 'en')),
+  listFiles(join(root, 'content', 'de'))
+])
+
+const enOnly = enFiles.filter(file => !deFiles.includes(file)).sort()
+const deOnly = deFiles.filter(file => !enFiles.includes(file)).sort()
+
+if (enOnly.length === 0 && deOnly.length === 0) {
+  console.log(`✔ locale pairs: all ${enFiles.length} files exist in both languages`)
+} else {
+  console.log(`ℹ ${enOnly.length + deOnly.length} file(s) exist in one language only.`)
+  console.log('  Allowed - the language switcher on such a page has nowhere to go, which is accepted.')
+  for (const file of enOnly) {
+    console.log(`  en only: content/en/${file}`)
+  }
+  for (const file of deOnly) {
+    console.log(`  de only: content/de/${file}`)
   }
 }
 
