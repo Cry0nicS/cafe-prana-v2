@@ -42,12 +42,13 @@ const languageItems = computed<DropdownMenuItem[]>(() =>
         class="flex min-w-0 items-center gap-3"
         :aria-label="`${global.name} home`"
       >
-        <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-inverted shadow-sm ring-2 ring-[var(--cafe-spark)]/60">
-          <UIcon
-            name="i-lucide-sprout"
-            class="size-5"
-          />
-        </span>
+        <img
+          src="/logo.svg"
+          alt=""
+          width="40"
+          height="40"
+          class="size-10 shrink-0"
+        >
         <span class="min-w-0">
           <span class="block truncate font-serif text-lg font-medium tracking-tight text-highlighted">{{ global.name }}</span>
           <span class="block truncate font-mono text-[0.7rem] tracking-wide text-muted">{{ global.address }}</span>
