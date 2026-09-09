@@ -32,7 +32,14 @@ import type { EventCheck, EventFrontmatter } from './event-bookability'
 
 const ROOT = resolve(import.meta.dirname, '..')
 const OPENING_HOURS = join(ROOT, 'content', 'opening-hours.yml')
-const EVENTS = join(ROOT, 'content', 'events')
+// Both locale folders. The date and time of a locale pair should agree, but
+// nothing enforces that (deliberately - see
+// docs/adr/0001-bilingual-content-layout.md), and content may exist in one
+// language only, so each file is checked on its own.
+const EVENT_DIRS = [
+  join(ROOT, 'content', 'en', 'events'),
+  join(ROOT, 'content', 'de', 'events')
+]
 
 // Studio reads a data file as frontmatter without the fences, so wrapping it
 // in them here parses it the same way the Studio parity check does.
@@ -48,10 +55,14 @@ const readOpeningHours = async (): Promise<OpeningHours> => {
 }
 
 const readEvents = async (): Promise<EventFrontmatter[]> => {
-  const files = (await readdir(EVENTS)).filter(file => file.endsWith('.md')).sort()
+  const paths: string[] = []
 
-  return Promise.all(files.map(async (file) => {
-    const path = join(EVENTS, file)
+  for (const dir of EVENT_DIRS) {
+    const files = (await readdir(dir)).filter(file => file.endsWith('.md')).sort()
+    paths.push(...files.map(file => join(dir, file)))
+  }
+
+  return Promise.all(paths.map(async (path) => {
     const { data } = parseFrontMatter(await readFile(path, 'utf8')) as { data: Record<string, unknown> }
 
     return {
