@@ -11,13 +11,11 @@ image:
   alt: Deep Talks
 ---
 
-# Deep Talk Aperitivo: Couples & Friends Edition
-
 Ein entspannter Abend mit gutem Essen, alkoholfreiem Wein und Gesprächen, die über den üblichen Small Talk hinausgehen. Komm mit deinem Partner, deiner Partnerin oder bring einen Freund oder eine Freundin mit und genießt gemeinsam einen etwas anderen Aperitivo im Café Prana.
 
 ## Was dich erwartet
 
-- Deep Talks in entspannter Atmosphäre []{.PDq2pG_selectionAnchor}
+- Deep Talks in entspannter Atmosphäre
 - Antipasti
 - Alkoholfreies Wine Tasting
 - Veganes und glutenfreies Essen

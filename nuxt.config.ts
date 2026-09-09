@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { CAFE_CONTACT_EMAIL, CAFE_SITE_URL } from './shared/utils/constants'
+import { STUDIO_EDITOR } from './shared/utils/studio-editor'
 
 export default defineNuxtConfig({
   modules: [
@@ -56,6 +57,38 @@ export default defineNuxtConfig({
             }
           }
         }
+      }
+    },
+
+    // Heading anchors are a documentation affordance: nobody deep-links to a
+    // paragraph of an event page, and the hover hash sits in the margin of
+    // every heading the owner writes.
+    renderer: {
+      anchorLinks: {
+        h2: false,
+        h3: false,
+        h4: false
+      }
+    }
+  },
+
+  // Nuxt UI ships an MDC tag map that points `::callout` at its own
+  // `ProseCallout` - so this project's `Callout` component has never actually
+  // rendered, and every callout in `content/*/events/` has been coming out as a
+  // documentation-site box. Reclaiming the tag is the whole fix; the rest of
+  // Nuxt UI's map is deliberately left alone so that anything already published
+  // keeps rendering.
+  //
+  // `video` gets the same treatment for a different reason. Nuxt refuses to
+  // register a component named `Video` at all - the name is a native HTML tag -
+  // so the component is `VideoEmbed`, and this is what lets a body still say
+  // `::video`. It also means a raw `<video>` element lands in the same frame
+  // instead of rendering unstyled and unbounded.
+  mdc: {
+    components: {
+      map: {
+        callout: 'Callout',
+        video: 'VideoEmbed'
       }
     }
   },
@@ -156,6 +189,9 @@ export default defineNuxtConfig({
   },
   studio: {
     route: '/pranas',
+    // The owner's insert palette. An allowlist, because the list Studio reads
+    // is generated rather than declared - see `shared/utils/studio-editor.ts`.
+    editor: STUDIO_EDITOR,
     // Studio has no external blob storage configured here, so uploads are
     // written into `public/` and committed to this repository. The defaults
     // (10MB, `image/*` plus `video/*` and `audio/*`) are too permissive for

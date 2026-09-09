@@ -31,6 +31,13 @@ export default defineI18nConfig(() => ({
         dismiss: 'Got it',
         close: 'Close notice'
       },
+      content: {
+        video: {
+          play: 'Play video',
+          open: 'Open the video',
+          unavailable: 'This video cannot be shown here.'
+        }
+      },
       error: {
         notFoundTitle: 'Page not found',
         notFoundMessage: 'This page could not be found.',
@@ -297,6 +304,13 @@ export default defineI18nConfig(() => ({
         label: 'Hinweis vom Café',
         dismiss: 'Alles klar',
         close: 'Hinweis schließen'
+      },
+      content: {
+        video: {
+          play: 'Video abspielen',
+          open: 'Video öffnen',
+          unavailable: 'Dieses Video kann hier nicht gezeigt werden.'
+        }
       },
       error: {
         notFoundTitle: 'Seite nicht gefunden',

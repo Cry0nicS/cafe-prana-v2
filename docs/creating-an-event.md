@@ -91,11 +91,27 @@ The button always links to the reservations page — you don't set a link.
 
 ## What you can put in the page content
 
-- **Text** — headings and paragraphs, written normally.
-- **Photos** — add them inline from the media library (always add a short alt text).
-- **A note box** — insert a **Callout** for things like menu notes or dietary info.
-- **Other blocks** from the homepage (feature cards, a gallery, …) are available via the `/`
-  menu if you want a richer page.
+The `/` menu is deliberately short. Everything in it does something, and everything in it looks
+like the café.
+
+- **Text** — paragraphs, and headings from **Heading 2** down. There is no Heading 1: the event's
+  name is already the page's title, set from the details form.
+- **Lists** — bulleted or numbered.
+- **A quote** — sets as a pull quote, for something a guest said.
+- **A table** — for a menu, a price list, or an evening's running order. Prices line up down the
+  column on their own.
+- **Photos** — add them inline from the media library (always add a short alt text). Guests can
+  click one to see it full size.
+- **A video** — insert **Video Embed**, paste a YouTube or Vimeo link, and give it a short title.
+  The page shows a still with a play button and only loads the video once somebody presses play,
+  so it stays fast and nothing is sent to YouTube for guests who never watch. You can pick a cover
+  image from the media library; without one, the café's own frame is used.
+- **A note box** — insert a **Callout** for things like menu notes or dietary info. It has a
+  **colour**: leave it `neutral`, or use `positive` for good news and `caution` for something
+  people need to be careful about.
+- **A section break** — a horizontal rule, to separate two halves of a long page.
+- **Other blocks** from the homepage (feature cards, a gallery, a story section, …) are in the
+  same `/` menu, under **Page sections**, if you want a richer page.
 
 There are no required content blocks — an event can be a couple of sentences and a photo, or a
 richer page. The date, time, price, location and reservation info come from the details form and

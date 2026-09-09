@@ -28,6 +28,11 @@ The most important concepts in this project, in plain terms.
   MDC body (they're registered globally). Examples: `HomeHero`, `FeatureGrid`, `Feature`,
   `Gallery`, `Callout`. See `docs/content-components.md`.
 
+- **Insert palette** — the short, curated list of blocks the owner is offered in Studio's `/`
+  menu, declared as an allowlist in `shared/utils/studio-editor.ts`. Nuxt UI and Nuxt Content
+  between them make about fifty blocks *renderable*; the palette decides which dozen are
+  *offerable*. A new content component does not appear until it is named there.
+
 - **Presentation vs content** — the guiding rule: editable **words and images** live in
   content; **styling** (button variants, icons, layout, map URL) lives in code. This keeps the
   Studio editing surface clean for non-technical editors.
