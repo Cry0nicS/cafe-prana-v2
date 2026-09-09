@@ -1,6 +1,6 @@
 # Homepage content components (developer reference)
 
-The homepage (`content/index.md` + `content/index.de.md`) is a Nuxt Content **MDC document**. Its sections are custom components in `app/components/content/`, registered globally for MDC via `nuxt.config.ts`:
+The homepage (`content/en/index.md` + `content/de/index.md`) is a Nuxt Content **MDC document**. Its sections are custom components in `app/components/content/`, registered globally for MDC via `nuxt.config.ts`:
 
 ```ts
 components: [
@@ -54,7 +54,7 @@ were rendered during prerender, and those exist for every event, so whichever ev
 after a date rollover still resolves.
 
 **These components are global**, so they work in *any* MDC document — not just the homepage.
-Event pages (`content/events/*.md`) use `::callout` and can use `::feature-grid`, `::gallery`,
+Event pages (`content/{en,de}/events/*.md`) use `::callout` and can use `::feature-grid`, `::gallery`,
 etc. in their freeform body.
 
 ## MDC nesting rule
@@ -78,9 +78,9 @@ Keep every fence at column 0 — indenting a block by 4 spaces turns it into a M
 
 1. Create `app/components/content/MySection.vue`. Take short text as props (defaults where sensible); expose a default `<slot />` for additive content / child blocks.
 2. Keep styling and any CTAs in code (add labels to `i18n/i18n.config.ts` under `home.*` if localized).
-3. Use it in `content/index.md` **and** `content/index.de.md` with `::my-section`.
+3. Use it in `content/en/index.md` **and** `content/de/index.md` with `::my-section`.
 4. Run `npm run lint && npm run typecheck && npm run build` — the build prerenders `/` and `/de`, which is the fastest way to confirm the component resolves and renders.
 
 ## Locale parity
 
-`index.md` (en) and `index.de.md` (de) must contain the **same set and order of blocks**; only the copy differs. When adding/removing a block, do it in both files.
+`content/en/index.md` and `content/de/index.md` must contain the **same set and order of blocks**; only the copy differs. When adding/removing a block, do it in both files. See `docs/adr/0001-bilingual-content-layout.md` for why the locale is the folder rather than a filename suffix.

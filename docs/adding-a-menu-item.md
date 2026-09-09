@@ -10,7 +10,9 @@ groups them under the right category automatically.
 
 ## Add a dish or drink
 
-1. In Studio, open the **Menu Items** collection (the list of existing dishes).
+1. In Studio, open the language folder you want: **content/en/menu** for English,
+   **content/de/menu** for German. The folder decides the language — there is no language to
+   choose on the form.
 2. Click **New** — or, easiest, **duplicate** an existing item that's similar and change the
    values. Duplicating is the quickest way to start from the right shape.
 3. Fill in the form:
@@ -31,10 +33,22 @@ groups them under the right category automatically.
 
 ## Two languages
 
-Every item exists in **two files**: English (`name.yml`) and German (`name.de.yml`), with the
-**same file name** before the `.de`. When you add a dish, add it in **both** languages so it
-appears on the English and German menus. The quickest path is to duplicate an existing item in
-each language and translate the text (keep `category`, `order`, and the image the same).
+Every item is **two files with the same name**, one in each language folder:
+
+```
+content/en/menu/flat-white.yml
+content/de/menu/flat-white.yml
+```
+
+Keeping the names identical is what pairs them up. There is no `.de` in the name and no language
+field on the form — the folder is the language.
+
+When you add a dish, add it in **both** languages so it appears on the English and German menus.
+The quickest path is to **duplicate** an item from inside each language folder and translate the
+text, keeping `category`, `order` and the image the same.
+
+> Duplicating copies **within** the folder you're in, so duplicate from inside `content/de/menu`
+> to get a German file. You can't duplicate an English item and move the copy across.
 
 ## Removing or reordering
 
@@ -52,6 +66,7 @@ there's no Publish button — see `docs/studio-access.md`.)
 Categories are fixed on purpose (so the item dropdown stays clean). To add one:
 
 1. A developer adds the new slug to `createMenuCategorySchema` in `content.config.ts`.
-2. Create the category in the **Menu Categories** list (`content/menu-categories/<slug>.yml`
-   and `<slug>.de.yml`) with a title, optional description/options, an icon, and an `order`.
+2. Create the category in **both** language folders
+   (`content/en/menu-categories/<slug>.yml` and `content/de/menu-categories/<slug>.yml`) with a
+   title, optional description/options, an icon, and an `order`.
 3. New items can then select that category from the dropdown.

@@ -12,14 +12,17 @@ If any of these files don't exist, **proceed silently**. Don't flag their absenc
 
 ## What this repo has today
 
-This is a **single-context** repo. As of this file's creation there is no `CONTEXT.md` and no
-`docs/adr/` — per the rule above, proceed silently rather than flagging that.
+This is a **single-context** repo, and both files now exist:
 
-There is, however, `docs/glossary.md`: an owner-facing, plain-language glossary of the project's
-concepts (collections, content components, presentation-vs-content, booking availability, and so
-on). It is the closest thing to a domain glossary this repo has, so read it for vocabulary and
-prefer its terms in output. When `/domain-modeling` eventually creates `CONTEXT.md`, the two
-should agree.
+- **`CONTEXT.md`** at the root — the ubiquitous language, written for developers and agents. It is a
+  glossary and nothing else: no implementation detail. Currently covers the content/locale model and the
+  editing vocabulary.
+- **`docs/adr/`** — starting with `0001-bilingual-content-layout.md`.
+
+Alongside them, `docs/glossary.md` is an **owner-facing**, plain-language glossary of the project's
+concepts (collections, content components, presentation-vs-content, booking availability, and so on). It
+serves a different reader than `CONTEXT.md`, but the two must **agree**: when a term changes in one, change
+it in the other. Read both for vocabulary and prefer their terms in output.
 
 ## File structure
 

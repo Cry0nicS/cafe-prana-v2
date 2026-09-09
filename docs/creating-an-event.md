@@ -15,12 +15,12 @@ note, and the search-engine info are all handled for you.
 
 ## Add a new event (in Studio)
 
-1. In the editor, open the **content/events** folder and create a **new event**. The name you
-   give it becomes the web address (e.g. an event named "Spring Brunch" lives at
-   `/events/spring-brunch`) — you don't set a slug or URL by hand.
-2. Use **two files per event**, one per language: `my-event.md` (English) and `my-event.de.md`
-   (German). Keep the same name before the `.de` so the two languages share one address and the
-   language switcher works.
+1. Pick the language folder first: **content/en/events** for English, **content/de/events** for
+   German. The folder you are in decides the language — there is no language to choose on the
+   form.
+2. Create a **new event** and type its name. That name becomes the web address (an event named
+   "Spring Brunch" lives at `/events/spring-brunch`, or `/de/events/spring-brunch` in German) —
+   you don't set a slug or URL by hand.
 3. Fill in the **details** (the form at the top) — this is the whole form:
 
    | Field | What it is |
@@ -38,6 +38,33 @@ note, and the search-engine info are all handled for you.
    automatically (see below).
 4. Below the details, **write the event page freely** — headings, paragraphs, photos, and note
    boxes. This is where you describe the event however you like.
+
+Then repeat it in the other language — see [Two languages](#two-languages).
+
+## Two languages
+
+Each event is **two files with the same name**, one in each language folder:
+
+```
+content/en/events/spring-brunch.md   → /events/spring-brunch
+content/de/events/spring-brunch.md   → /de/events/spring-brunch
+```
+
+Keeping the names identical is what makes the language switcher work on the event's page. There is
+no `.de` in the name and no language field on the form — the folder is the language.
+
+**The quickest way to make the second one:** go into the other language folder, **duplicate** the
+event nearest to the one you want (any recent event will do), then overwrite its title,
+description, date and text. Duplicating starts you from a filled-in form, so you're editing rather
+than typing everything again.
+
+> Duplicating copies **within** the folder you're in, so duplicate from inside `content/de/events`
+> to get a German file. You can't duplicate an English event and move the copy across.
+
+**Only have one language ready?** That's fine — publish it. The event simply won't appear on the
+other language's Events page until you add it there. (If someone is on the event's page and
+switches language before the second file exists, they'll get a "page not found" — so add the second
+language when you can.)
 
 ## Price — only shown when it's paid
 
@@ -78,8 +105,9 @@ are shown automatically in the page's info bar and on the card.
 
 These are hidden from the form and handled for you:
 
-- **URL / slug** — taken from the event's file name (created from the title). Keep the English
-  and German file names the same so both languages share one address.
+- **URL / slug** — taken from the event's name as you typed it, with the language coming from the
+  folder. Keep the two languages' names identical so both share one address.
+- **Language** — decided by the folder you created the event in. There is no language field.
 - **SEO** — the search-engine title, description and preview image are generated from the
   `title`, `description` and `image` above. No SEO tab to fill.
 - **Navigation & sitemap** — set to sensible defaults automatically.
@@ -95,4 +123,4 @@ These are hidden from the form and handled for you:
 ## Publishing
 
 Save and **Publish** — the event goes live and appears on the Events page within a couple of
-minutes. Remember to publish **both** the English and German versions.
+minutes. If you made both languages, publish **both** files.

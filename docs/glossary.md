@@ -52,8 +52,24 @@ The most important concepts in this project, in plain terms.
 - **Locales** — the site is bilingual: **en** (default) and **de**. German URLs are prefixed
   with `/de`.
 
-- **Per-locale content files** — content comes in pairs: `index.md` / `index.de.md`,
-  `brunch.yml` / `brunch.de.yml`. Both must exist and stay structurally in sync.
+- **Locale folder** — a file's language is decided by **where it lives**: everything under
+  `content/en/` is English, everything under `content/de/` is German. There is no language
+  suffix in the filename and no `locale` field on the form.
+
+- **Locale pair** — the same content in both languages, carrying the **same filename** in each
+  locale folder (`content/en/events/spring-brunch.md` and `content/de/events/spring-brunch.md`).
+  Matching names are what give the pair one shared address, so the language switcher can move
+  between them. Pairs should stay structurally in sync.
+
+- **Language-independent content** — content that exists once for both languages, and so sits at
+  the `content/` root instead of in a locale folder: `opening-hours.yml` (one set of hours) and
+  `notice.yml` (one schedule, with its text in `en:` and `de:` blocks). The rule in full: a
+  locale folder holds content that exists once *per language*; the root holds content that
+  exists once, *period*. See `docs/adr/0001-bilingual-content-layout.md`.
+
+- **Unpaired content** — content that exists in one language only. Allowed, not an error: it is
+  simply absent from the other language's listing. The one visible effect is that the language
+  switcher on its own page has nowhere to go and shows "page not found".
 
 - **UI strings vs content** — short interface labels (nav, buttons, form errors) live in
   `i18n/i18n.config.ts`; long editorial copy lives in `content/`.
