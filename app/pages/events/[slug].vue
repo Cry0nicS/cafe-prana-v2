@@ -20,15 +20,15 @@ const { global } = useAppConfig()
 const { locale, t } = useI18n()
 const localePath = useLocalePath()
 const slug = computed(() => String(route.params.slug))
-// URL slug maps back to the file stem: en -> `events/<slug>`, de -> `events/<slug>.de`.
-const stem = computed(() => locale.value === 'de' ? `events/${slug.value}.de` : `events/${slug.value}`)
+// RESEARCH (#35): the hand-rolled stem is gone. Under the locale-prefixed
+// tree the content `path` equals the public route, so query by path.
+const contentPath = computed(() => route.path.replace(/\/$/, '') || '/')
 
 const [{ data: rawEvent }, { data: events }] = await Promise.all([
   useAsyncData(
     `event-${locale.value}-${slug.value}`,
     () => queryCollection('events')
-      .where('locale', '=', locale.value)
-      .where('stem', '=', stem.value)
+      .path(contentPath.value)
       .first(),
     { watch: [locale, slug] }
   ),

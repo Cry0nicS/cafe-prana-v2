@@ -8,6 +8,12 @@ import {
   OPENING_TIME_OPTIONS
 } from './shared/utils/opening-hours'
 
+// RESEARCH (#35): locale-prefixed content tree. Every source puts the locale
+// folder inside the glob's *fixed* part (`en/events/*.md`) and then writes out
+// the `prefix` the public URL needs. The fixed part is stripped from the key,
+// the prefix is prepended, and `stem`/`path` follow from the result.
+// `cwd` would do the same to `path` but breaks Studio - see the findings doc.
+
 const createBaseSchema = () => z.object({
   title: z.string(),
   description: z.string()
@@ -166,34 +172,32 @@ export default defineContentConfig({
     index: defineCollection({
       type: 'page',
       source: [
-        { include: 'index.md', prefix: '' },
-        { include: 'index.de.md', prefix: '' }
+        // A glob, not `en/index.md`: a source with no `*` has an empty fixed
+        // part, so the `en/` segment would stay in the key (and in `stem` and
+        // `path`). `**/` matches zero directories, so this pins exactly one
+        // file while still ending the fixed part at `en/`. Not `en/*.md`: that
+        // also makes Studio resolve the *German* row to the English source.
+        { include: 'en/**/index.md', prefix: '' },
+        { include: 'de/**/index.md', prefix: '/de' }
       ],
       schema: z.object({
         locale: createLocaleSchema(),
-        sitemap: createSitemapSchema({
-          name: 'index',
-          onUrl: (url, entry) => {
-            url.loc = entry.locale === 'de' ? '/de' : '/'
-          }
-        }),
+        // RESEARCH: no `onUrl` at all. `@nuxtjs/sitemap` bakes
+        // `sitemap.loc = content.path` in `content:file:afterParse`, and under
+        // the locale-prefixed tree that path is already the public URL.
+        sitemap: createSitemapSchema(),
         navigation: createHiddenNavigation()
       })
     }),
     menuPage: defineCollection({
       type: 'page',
       source: [
-        { include: 'menu.yml', prefix: '' },
-        { include: 'menu.de.yml', prefix: '' }
+        { include: 'en/**/menu.yml', prefix: '' },
+        { include: 'de/**/menu.yml', prefix: '/de' }
       ],
       schema: z.object({
         locale: createLocaleSchema(),
-        sitemap: createSitemapSchema({
-          name: 'menuPage',
-          onUrl: (url, entry) => {
-            url.loc = entry.locale === 'de' ? '/de/menu' : '/menu'
-          }
-        }),
+        sitemap: createSitemapSchema(),
         navigation: createHiddenNavigation(),
         hero: createBaseSchema().extend({
           headline: z.string(),
@@ -208,7 +212,10 @@ export default defineContentConfig({
     }),
     menuCategories: defineCollection({
       type: 'data',
-      source: 'menu-categories/*.yml',
+      source: [
+        { include: 'en/menu-categories/*.yml', prefix: '/menu-categories' },
+        { include: 'de/menu-categories/*.yml', prefix: '/de/menu-categories' }
+      ],
       schema: z.object({
         locale: createLocaleSchema(),
         slug: createMenuCategorySchema(),
@@ -221,7 +228,12 @@ export default defineContentConfig({
     }),
     menuItems: defineCollection({
       type: 'data',
-      source: 'menu/*.yml',
+      // Variant C: no `cwd` at all. The locale folder is inside the glob's
+      // fixed part, and `prefix` is written out to cancel it.
+      source: [
+        { include: 'en/menu/*.yml', prefix: '/menu' },
+        { include: 'de/menu/*.yml', prefix: '/de/menu' }
+      ],
       schema: z.object({
         locale: createLocaleSchema(),
         title: z.string().nonempty(),
@@ -237,17 +249,12 @@ export default defineContentConfig({
     eventsPage: defineCollection({
       type: 'page',
       source: [
-        { include: 'events.yml', prefix: '' },
-        { include: 'events.de.yml', prefix: '' }
+        { include: 'en/**/events.yml', prefix: '' },
+        { include: 'de/**/events.yml', prefix: '/de' }
       ],
       schema: z.object({
         locale: createLocaleSchema(),
-        sitemap: createSitemapSchema({
-          name: 'eventsPage',
-          onUrl: (url, entry) => {
-            url.loc = entry.locale === 'de' ? '/de/events' : '/events'
-          }
-        }),
+        sitemap: createSitemapSchema(),
         navigation: createHiddenNavigation(),
         hero: createBaseSchema().extend({
           headline: z.string(),
@@ -273,20 +280,15 @@ export default defineContentConfig({
     }),
     events: defineCollection({
       type: 'page',
-      source: 'events/*.md',
+      source: [
+        { include: 'en/events/*.md', prefix: '/events' },
+        { include: 'de/events/*.md', prefix: '/de/events' }
+      ],
       schema: z.object({
         locale: createLocaleSchema(),
         // Hidden in Studio: the URL is derived from the file name, SEO is
         // derived from the fields below, and the sitemap uses fixed defaults.
-        sitemap: createSitemapSchema({
-          name: 'events',
-          onUrl: (url, entry) => {
-            // Inlined (this runs in Nitro, so no external helper references):
-            // derive the slug from the file stem, e.g. `events/spring-brunch.de` -> `spring-brunch`.
-            const slug = String(entry.stem ?? '').replace(/^events\//, '').replace(/\.de$/, '')
-            url.loc = entry.locale === 'de' ? `/de/events/${slug}` : `/events/${slug}`
-          }
-        }),
+        sitemap: createSitemapSchema(),
         navigation: createHiddenNavigation(),
         title: z.string().nonempty(),
         description: z.string().nonempty(),
