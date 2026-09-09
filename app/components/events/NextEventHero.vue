@@ -90,8 +90,9 @@ const showPrice = computed(() => props.event.paid && typeof props.event.price ==
             after a date rollover still resolves under `ipxStatic`.
           -->
           <NuxtImg
+            v-if="event.image?.src"
             :src="event.image.src"
-            :alt="event.image.alt"
+            :alt="event.image.alt || ''"
             format="webp"
             sizes="sm:100vw lg:768px"
             class="aspect-[16/10] w-full object-cover lg:absolute lg:inset-0 lg:aspect-auto lg:h-full"
