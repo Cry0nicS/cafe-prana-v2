@@ -18,6 +18,24 @@ That's it — one address and your Google account.
 > bottom-left. Local edits change files directly and are **not** published — commit them
 > the usual way.
 
+## Choosing or uploading a photo
+
+Click the browse button beside an image's **Src** field to open **Select Image**.
+Use the folder tree, search, or page buttons to find a photo, then click its thumbnail.
+**Use external source** lets you enter an image URL instead.
+
+For a new photo, **Upload** opens Studio's **Media** section. Open `images` and the
+appropriate subfolder (`events`, `menu`, or `home`) and upload there. Return to the
+document and select the new photo. Add a short **Alt** description before publishing.
+
+Developer note: in Studio 1.7, ordinary string fields named `src` or `ogImage` get
+the full dialog. Explicit `.editor({ input: 'media' })` selects a different control
+limited to eight thumbnails. The shared image schema intentionally omits that
+annotation. After upgrading Studio, check an event's **Image → Src** field: the
+dialog should offer folders, pagination, **Upload**, and **Use external source**;
+selecting a photo from a later page should update the field. See
+[the upstream report](https://github.com/nuxt-content/nuxt-studio/issues/557).
+
 ## Who can log in (access control)
 
 With Google sign-in, access is an **explicit email allowlist**:
