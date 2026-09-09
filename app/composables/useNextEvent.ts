@@ -8,13 +8,18 @@ import { nextUpcomingEvent } from '~/utils/events'
 export const useNextEvent = async () => {
   const { locale } = useI18n()
 
+  // A reactive key rather than `watch: [locale]`: a locale switch then lands
+  // in its own cache entry instead of overwriting the previous locale's.
   const { data: events, ...rest } = await useAsyncData(
-    `next-event-${locale.value}`,
-    () => queryCollection('events').where('locale', '=', locale.value).order('date', 'ASC').all(),
-    {
-      watch: [locale],
-      default: () => []
-    }
+    () => `next-event-${locale.value}`,
+    () => queryCollection('events')
+      .where('locale', '=', locale.value)
+      .order('date', 'ASC')
+      // Only what the poster reads. Without this every event's rendered body
+      // would travel in the homepage payload.
+      .select('stem', 'title', 'description', 'date', 'time', 'image', 'paid', 'price')
+      .all(),
+    { default: () => [] }
   )
 
   return {

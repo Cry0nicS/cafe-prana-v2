@@ -51,7 +51,9 @@ const showPrice = computed(() => props.event.paid && typeof props.event.price ==
           <!--
             The welcome title stays the page's single top-level heading even
             though the event's name is the display line: the outline should
-            name the cafe, not whichever event happens to be next.
+            name the cafe, not whichever event happens to be next. Should the
+            owner clear that title, the event's name takes the h1 so the page
+            never goes without one.
           -->
           <h1
             v-if="title"
@@ -59,9 +61,12 @@ const showPrice = computed(() => props.event.paid && typeof props.event.price ==
           >
             {{ title }}
           </h1>
-          <h2 class="mt-3 max-w-2xl font-serif text-4xl font-medium leading-[1.05] tracking-tight text-highlighted sm:text-5xl xl:text-6xl">
+          <component
+            :is="title ? 'h2' : 'h1'"
+            class="mt-3 max-w-2xl font-serif text-4xl font-medium leading-[1.05] tracking-tight text-highlighted sm:text-5xl xl:text-6xl"
+          >
             {{ event.title }}
-          </h2>
+          </component>
           <p class="mt-5 line-clamp-4 max-w-xl text-lg leading-8 text-muted">
             {{ event.description }}
           </p>
