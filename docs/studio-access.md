@@ -79,3 +79,41 @@ staleness: something in the build is storing that document differently from the 
 reads the file, and no amount of redeploying will clear it. That is a developer fix, not an
 editing mistake. `npm run check:studio` (after a build) reports exactly which documents and
 fields disagree, and CI runs it on every push so it should not reach production again.
+
+## Adding a photo, and why the picker only shows eight
+
+Clicking an image field — an event's photo, a dish, the homepage hero — opens a small box with a
+search field and eight thumbnails, and a line underneath reading something like `8 of 40 images`.
+There is no upload button there, and there is no way to page through to the ninth image.
+
+**Nothing is missing and nothing is broken.** That is how Nuxt Studio's image fields behave; it
+is not a setting anyone here turned on, and not something you did. It has been reported to the
+people who build Studio, and this page will be simplified if they change it.
+
+**To use a photo that is already in the site:** type part of its file name into the search box.
+The search looks at *all* your images, not just the eight on show, so anything in the library can
+be found this way. The eight thumbnails are only a preview — the rest of your photos are still
+there.
+
+**To add a new photo:**
+
+1. Open the **Media** section in Studio (the left-hand sidebar).
+2. Open the **`images`** folder and then the sub-folder the photo belongs in — `events`, `menu`,
+   or `home`. Uploading into one of these matters: photos outside the `images` folder are not
+   shrunk for the web, so the page they are on loads slowly.
+3. Upload the photo there.
+4. Go back to the page or event you were editing, click the image field, and type part of the
+   file name you just uploaded to select it.
+5. Add a short **alt text** (a sentence describing the photo) and **Publish**.
+
+A photo uploaded into the `images` folder is shrunk and converted for the web automatically when
+the site rebuilds, so you can upload a large photo straight off your phone or camera without
+worrying about its size.
+
+Photos you add *inside* an event's or a page's text — as opposed to one of the fields at the top
+— work differently: those open Studio's full picker, with folders and an upload button of their
+own. That upload button takes you to the same **Media** section as above.
+
+> Developers: the diagnosis, the versions involved and what to re-check after a Studio upgrade
+> are in `docs/studio-media-picker.md`. Reported upstream as
+> [nuxt-content/nuxt-studio#557](https://github.com/nuxt-content/nuxt-studio/issues/557).

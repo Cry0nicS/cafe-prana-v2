@@ -23,7 +23,9 @@ groups them under the right category automatically.
    - **ingredients** — shown in the "Ingredients" expander on the card
    - **price** — just the number, e.g. `4,60`, or a range like `2,5 / 3,3`. The `€` sign is
      added automatically, so don't type it.
-   - **image** — choose or upload a photo via the media picker; add a short **alt** text
+   - **image** — pick a photo by typing part of its file name in the picker's search box;
+     add a short **alt** text. New photos are uploaded in Studio's **Media** section first —
+     see `docs/studio-access.md`.
    - **labels** — optional tags, chosen from the fixed list
      (gluten-free, vegan, vegetarian, spicy, seasonal, organic)
    - **order** — a number controlling the position *within its category* (lower shows first)

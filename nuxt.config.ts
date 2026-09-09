@@ -162,6 +162,13 @@ export default defineNuxtConfig({
     // something that lands in git history permanently: video and audio have no
     // place in this project, and the size cap bounds how large a single upload
     // can be before `scripts/optimize-images.mjs` gets a chance to shrink it.
+    //
+    // There is no option here for the eight-image cap on schema image
+    // fields. The dependency is a caret range, so a newer Studio arrives on a
+    // plain `npm install` with nothing in the diff to notice: check
+    // `npm ls nuxt-studio` against the 1.7.0 recorded in
+    // `docs/studio-media-picker.md` and re-run the manual steps there when it
+    // has moved.
     media: {
       maxFileSize: 5 * 1024 * 1024,
       allowedTypes: ['image/*']

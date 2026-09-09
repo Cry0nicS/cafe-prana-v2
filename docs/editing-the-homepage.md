@@ -79,7 +79,9 @@ there too; see `docs/reservation-availability.md`.
 
 ## Adding a photo
 
-When a block has an image field, click it and use the **media library** to upload a new photo or pick an existing one. Always add a short **alt text** (a description of the photo) — it helps accessibility and SEO.
+When a block has an image field, click it and type part of a file name to find the photo you want. The picker shows only eight thumbnails, but its search covers every image in the site.
+
+To use a photo that isn't in the site yet, upload it in Studio's **Media** section first — `docs/studio-access.md` walks through it. Always add a short **alt text** (a description of the photo) — it helps accessibility and SEO.
 
 ## Choosing an icon (optional)
 

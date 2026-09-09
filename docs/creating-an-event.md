@@ -29,7 +29,7 @@ note, and the search-engine info are all handled for you.
    | `description` | One or two sentences, shown on the card and at the top of the page. |
    | `date` | The day it happens. |
    | `time` | Free text — e.g. `18:00` or `11:00–13:00`. |
-   | `image` | The header photo, from the media library. Also used for the listing card. |
+   | `image` | The header photo. Search by file name to pick it. Also used for the listing card. |
    | `paid` | Turn **on** if the event costs money. |
    | `price` | The amount in **euros** (just the number, e.g. `30`). Only used when `paid` is on. |
    | `reservation` | `required`, `recommended`, or `walkin` (no booking needed). |
@@ -58,7 +58,8 @@ The button always links to the reservations page — you don't set a link.
 ## What you can put in the page content
 
 - **Text** — headings and paragraphs, written normally.
-- **Photos** — add them inline from the media library (always add a short alt text).
+- **Photos** — add them inline from the media library, which here opens Studio's full picker
+  with folders and an upload button (always add a short alt text).
 - **A note box** — insert a **Callout** for things like menu notes or dietary info.
 - **Other blocks** from the homepage (feature cards, a gallery, …) are available via the `/`
   menu if you want a richer page.

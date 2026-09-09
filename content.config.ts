@@ -19,6 +19,11 @@ const createButtonSchema = () => z.object({
   target: z.enum(['_blank', '_self']).optional()
 })
 
+// `input: 'media'` is the only image-appropriate editor input `@nuxt/content`
+// offers, and it is correct here. It is also why Studio opens a capped
+// eight-thumbnail popover on this field rather than its full media dialog - a
+// Studio limitation, not a schema mistake. Do not "fix" it by dropping the
+// annotation; the reasoning is in `docs/studio-media-picker.md`.
 const createImageSchema = () => z.object({
   src: z.string().editor({ input: 'media' }),
   alt: z.string()

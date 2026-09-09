@@ -43,6 +43,11 @@ The most important concepts in this project, in plain terms.
 - **Visual editor vs form editor** — the Markdown **body** opens in a notion-like visual
   editor (add/reorder blocks); **frontmatter and data files** open as auto-generated forms.
 
+- **Media section vs image field** — two different places photos live in Studio. The **Media
+  section** is the sidebar view of everything under `public/`; it is the only place that
+  uploads. An **image field** is a form row (an event's photo, a dish's) whose picker only
+  selects — it shows eight thumbnails and searches the rest. See `docs/studio-access.md`.
+
 - **Auth (Google)** — the owner signs in with Google/Gmail. Access is restricted to the emails
   in `STUDIO_GOOGLE_MODERATORS`. Because Google login doesn't grant repo access, Studio commits
   with a service token, `STUDIO_GITHUB_TOKEN`. See `docs/studio-access.md`.
