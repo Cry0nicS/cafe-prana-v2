@@ -24,7 +24,9 @@ const createButtonSchema = () => z.object({
 })
 
 const createImageSchema = () => z.object({
-  src: z.string().editor({ input: 'media' }),
+  // Studio 1.7 recognizes `src` as an image and opens its full media dialog.
+  // Explicit input: 'media' selects the compact, eight-thumbnail picker instead.
+  src: z.string(),
   alt: z.string()
 })
 
@@ -33,7 +35,7 @@ const createImageSchema = () => z.object({
 const createSeoSchema = () => z.object({
   title: z.string(),
   description: z.string(),
-  ogImage: z.string().editor({ input: 'media' }).optional()
+  ogImage: z.string().optional()
 }).editor({ hidden: true })
 
 // Standard hidden navigation field shared by the page collections.

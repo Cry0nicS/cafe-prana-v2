@@ -32,3 +32,5 @@ logs
 # Worktrees created by Claude Code. Each one is a separate checkout of this
 # repository; without this they would show up as untracked files here.
 .claude/worktrees/
+
+screenshots
