@@ -104,6 +104,19 @@ describe('the studio insert palette', () => {
 
   // Studio's own `CommandKey` union types this list, so a typo is a typecheck
   // failure rather than a command that quietly stays in the toolbar.
+  // Studio serves the palette and flips `hasNuxtUI` on if any entry resolves
+  // inside `@nuxt/ui`. That flag decides whether `::callout` is parsed into
+  // Studio's own `u-callout` tiptap node rather than a plain component block -
+  // so a Nuxt UI component in this list would quietly take `::callout`,
+  // `::note`, `::tip`, `::warning` and `::caution` away from this project's
+  // components. Everything offered resolving to a file in
+  // `app/components/content/` is what keeps the flag off.
+  it('offers nothing that would hand studio the callout tags', () => {
+    const fromNuxtUi = offered.filter(name => !contentComponents.includes(name))
+
+    expect(fromNuxtUi, 'a @nuxt/ui component in the palette flips hasNuxtUI on').toEqual([])
+  })
+
   it('drops the commands that have no use on a cafe site', () => {
     expect([...(STUDIO_EDITOR.commands?.exclude ?? [])].sort())
       .toEqual(['code', 'codeBlock', 'heading1', 'video'])
