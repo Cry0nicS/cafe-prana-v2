@@ -1,17 +1,19 @@
 ---
 title: "Deep Talk Aperitivo: Couples & Friends Edition"
-description: Ein entspannter Abend mit gutem Essen, alkoholfreiem Wein und Gesprächen, die über Small Talk hinausgehen.
 date: 2026-09-14
-time: 18:00
-paid: true
-price: 25
-reservation: required
+description: Ein entspannter Abend mit gutem Essen, alkoholfreiem Wein und Gesprächen, die über Small Talk hinausgehen.
 image:
   src: /images/events/posts/deep-talk.webp
   alt: Deep Talks
+paid: true
+price: 25
+reservation: required
+time: 18:00
 ---
 
 Ein entspannter Abend mit gutem Essen, alkoholfreiem Wein und Gesprächen, die über den üblichen Small Talk hinausgehen. Komm mit deinem Partner, deiner Partnerin oder bring einen Freund oder eine Freundin mit und genießt gemeinsam einen etwas anderen Aperitivo im Café Prana.
+
+RESERVIERUNG BIS SAMSTAG 17 UHR
 
 ## Was dich erwartet
 
