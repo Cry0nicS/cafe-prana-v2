@@ -67,7 +67,8 @@ export default defineI18nConfig(() => ({
       },
       menu: {
         itemCount: '{count} item | {count} items',
-        ingredients: 'Ingredients'
+        ingredients: 'Ingredients',
+        unavailable: 'Currently unavailable'
       },
       event: {
         upcoming: 'Upcoming',
@@ -341,7 +342,8 @@ export default defineI18nConfig(() => ({
       },
       menu: {
         itemCount: '{count} Gericht | {count} Gerichte',
-        ingredients: 'Zutaten'
+        ingredients: 'Zutaten',
+        unavailable: 'Gerade nicht verfügbar'
       },
       event: {
         upcoming: 'Bevorstehend',

@@ -189,7 +189,25 @@ const createMenuItemsCollection = (locale: Locale) => defineCollection({
     price: z.string().nonempty(),
     image: createImageSchema(),
     labels: z.array(createMenuLabelSchema()).optional(),
-    order: z.number()
+    order: z.number(),
+    // Off the menu for now - sold out, out of season, supplier gone. The item
+    // keeps its place on the page and is drawn as unavailable rather than
+    // hidden, so a regular can see it is off rather than wonder where it went.
+    //
+    // Unlike the weekday `closed` flag above, this one does NOT have to be
+    // written into every content file, and deliberately is not. The difference
+    // is nesting, not luck: @nuxt/content materialises a top-level default into
+    // the stored row, so an item whose file omits `available` still reaches
+    // Studio as `available: true` and the switch renders on. Flipping it off is
+    // then a change to a key that is already there, which Studio's one-way
+    // dirty-check can see - and the file gains `available: false` on that first
+    // save. `closed` gets none of that because it lives inside the `hours`
+    // array, and array rows are stored as opaque JSON that defaults never
+    // reach. So: a top-level flag is safe to leave implicit, a nested one is
+    // not. `app/components/menu/ItemCard.vue` treats a missing value as
+    // available, so a hand edit that drops the key cannot take an item off the
+    // menu by accident.
+    available: z.boolean().default(true)
   })
 })
 
