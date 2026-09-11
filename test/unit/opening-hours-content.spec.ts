@@ -53,18 +53,26 @@ describe('content/opening-hours.yml', () => {
   // ADDS is therefore never compared, the document stays `Pristine`, and the
   // owner gets no commit to make. Ticking `closed` on a day written without
   // the key was exactly that: the change could only be saved by editing a
-  // second field alongside it. Writing every flag out, including the `false`
-  // ones the schema default would supply anyway, turns the toggle into a value
-  // change - which Studio does see. This reads the parsed file rather than
-  // `openingHours`, because `toOpeningHours` fills the flag in and would hide
-  // precisely what is being checked.
-  it('writes every closed flag explicitly, so Studio can commit a toggle', () => {
+  // second field alongside it. Written out - the `false` ones included - the
+  // same tick is a value change, which Studio does see.
+  //
+  // Weekdays only, and deliberately. The schema pins `hours` to seven rows, so
+  // only a developer editing this file can break it. `reservationExceptions`
+  // is the owner's to extend, and Studio builds a new row as `{}` - its array
+  // input adds a bare object and applies no schema defaults - so gating those
+  // the same way would redden the owner's own push the first time they add a
+  // date, and they could not repair it from Studio, because adding the key is
+  // the very edit Studio cannot see. The four shipped rows carry the flag
+  // anyway, and an owner-added row that later needs it can be deleted and
+  // re-added ticked: that changes the array length, which Studio does see.
+  //
+  // Asserted against the parsed file rather than `toOpeningHours`'s output.
+  // For weekdays the two agree - `toOpeningHours` passes `hours` rows through
+  // untouched - but the claim here is about what the file contains, which is
+  // the only thing Studio reads.
+  it('writes every weekday closed flag explicitly, so Studio can commit a toggle', () => {
     for (const entry of data.hours ?? []) {
       expect(entry?.closed, `${entry?.day} has no explicit closed:`).toBeTypeOf('boolean')
-    }
-
-    for (const exception of data.reservationExceptions ?? []) {
-      expect(exception?.closed, `${exception?.date} has no explicit closed:`).toBeTypeOf('boolean')
     }
   })
 

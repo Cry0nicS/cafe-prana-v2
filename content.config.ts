@@ -259,11 +259,13 @@ export default defineContentConfig({
       schema: z.object({
         hours: z.array(z.object({
           day: createWeekdaySchema(),
-          // The default is the reader's fallback, not the file's: @nuxt/content
-          // applies defaults to top-level columns only, so nothing fills this
-          // in for a row inside an array. Every row in
-          // `content/opening-hours.yml` therefore writes the flag out by hand,
-          // `closed: false` included, and a test enforces it.
+          // The default is Studio's guard rail, not the file's and not the
+          // site's: @nuxt/content applies defaults to top-level columns only,
+          // so nothing writes this into a row inside an array, and the readers
+          // in `shared/utils/opening-hours.ts` take a missing flag for `false`
+          // on their own. Every row in `content/opening-hours.yml` therefore
+          // writes it out by hand, `closed: false` included, and a test holds
+          // the seven weekdays to that.
           //
           // Not tidiness. Studio decides a file has unsaved changes by walking
           // the keys of the FILE and looking each one up in the edit

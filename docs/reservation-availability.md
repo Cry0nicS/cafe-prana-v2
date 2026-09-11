@@ -95,8 +95,13 @@ date does not remove the day from the displayed week.
   never compared: on a row that omitted the flag, ticking **closed** left Studio seeing no
   change at all and the owner unable to commit it without editing a time alongside. Defaults do
   not save it - @nuxt/content applies those to top-level columns only, never to a row inside an
-  array. `content.config.ts` has the detail; `test/unit/opening-hours-content.spec.ts` fails if
-  a row loses the flag again.
+  array. `content.config.ts` has the detail, and
+  `test/unit/opening-hours-content.spec.ts` fails if one of the seven weekdays loses the flag.
+- **Exception rows are not held to that, on purpose.** Studio adds a new array row as an empty
+  object and fills in only what the owner touches, so a test would fail on the owner's own push
+  and leave them no way to fix it from Studio. If an exception row that already exists needs
+  **closed** ticked and the change will not save, delete the row and add it back with the box
+  ticked - a row appearing or disappearing is a change Studio does see.
 - **Consumers**: the form (`app/components/reservations/Form.vue`) reads the document through
   `useOpeningHours` and distinguishes a failed load from a closed day, because "no slots" for
   every date is our problem and not an answer about the cafe; the route
