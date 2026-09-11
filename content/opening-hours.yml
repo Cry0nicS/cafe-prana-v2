@@ -2,39 +2,48 @@ hours:
   - day: monday
     closed: true
   - day: tuesday
+    closed: false
     opens: 08:00
     closes: 16:00
   - day: wednesday
+    closed: false
     opens: 08:00
     closes: 16:00
   - day: thursday
+    closed: false
     opens: 08:00
     closes: 16:00
   - day: friday
+    closed: true
     opens: 07:30
     closes: 15:00
-    closed: true
   - day: saturday
+    closed: false
     opens: 09:00
     closes: 17:00
   - day: sunday
+    closed: false
     opens: 09:00
     closes: 17:00
 lastReservationBeforeClosing: 60
 reservationExceptions:
   - date: 2025-12-24
+    closed: false
     bookableFrom: 17:00
     bookableUntil: 19:00
     note: Community Xmas Dinner, 18:00
   - date: 2026-01-05
+    closed: false
     bookableFrom: 17:30
     bookableUntil: 19:30
     note: Winter Celebration Dinner, 18:30
   - date: 2026-02-22
+    closed: false
     bookableFrom: 16:00
     bookableUntil: 18:00
     note: The Cacao Journey kick-off workshop, 17:00
   - date: 2026-09-14
+    closed: false
     bookableFrom: 17:00
     bookableUntil: 19:00
     note: Deep Talk Aperitivo, 18:00

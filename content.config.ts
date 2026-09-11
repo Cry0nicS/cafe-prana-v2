@@ -259,6 +259,21 @@ export default defineContentConfig({
       schema: z.object({
         hours: z.array(z.object({
           day: createWeekdaySchema(),
+          // The default is the reader's fallback, not the file's: @nuxt/content
+          // applies defaults to top-level columns only, so nothing fills this
+          // in for a row inside an array. Every row in
+          // `content/opening-hours.yml` therefore writes the flag out by hand,
+          // `closed: false` included, and a test enforces it.
+          //
+          // Not tidiness. Studio decides a file has unsaved changes by walking
+          // the keys of the FILE and looking each one up in the edit
+          // (`doObjectsMatch`, `nuxt-studio/.../runtime/utils/object.js`), so a
+          // key the edit ADDS is never compared. On a day written without the
+          // flag, ticking `closed` left the document `Pristine` and the owner
+          // with nothing to commit unless they changed a time alongside it.
+          // Present in the file, the same tick is a value change, which Studio
+          // does see. The comparison is Studio's, so this holds for any
+          // optional field the owner is expected to fill in later.
           closed: z.boolean().default(false),
           opens: createTimeSchema().optional(),
           closes: createTimeSchema().optional()
@@ -287,6 +302,8 @@ export default defineContentConfig({
         // times reuse the weekday dropdown so an off-grid time cannot be typed.
         reservationExceptions: z.array(z.object({
           date: z.string().date(),
+          // Written out on every row, `false` included, for the reason spelled
+          // out on the weekday flag above.
           closed: z.boolean().default(false),
           // A bookable range, not opening times: the last slot offered is
           // `bookableUntil` itself, with no margin taken off.

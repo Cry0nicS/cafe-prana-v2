@@ -90,6 +90,13 @@ date does not remove the day from the displayed week.
   `test/unit/opening-hours.spec.ts` covers it, and `test/unit/opening-hours-content.spec.ts`
   holds the shipped file itself to the grid, to unique real dates, and to slots the reservation
   schema accepts.
+- **Every row writes `closed:` out, `false` included.** Studio looks for unsaved changes by
+  walking the keys of the *file* and finding each one in the edit, so a key the edit adds is
+  never compared: on a row that omitted the flag, ticking **closed** left Studio seeing no
+  change at all and the owner unable to commit it without editing a time alongside. Defaults do
+  not save it - @nuxt/content applies those to top-level columns only, never to a row inside an
+  array. `content.config.ts` has the detail; `test/unit/opening-hours-content.spec.ts` fails if
+  a row loses the flag again.
 - **Consumers**: the form (`app/components/reservations/Form.vue`) reads the document through
   `useOpeningHours` and distinguishes a failed load from a closed day, because "no slots" for
   every date is our problem and not an answer about the cafe; the route
