@@ -6,7 +6,7 @@ time: "Thursdays at 17:00 (kick-off workshop on 22 Feb; closing ceremony on 29 M
 image:
   src: /images/events/posts/cacao-journey-series-hero.png
   alt: "Ceremonial cacao workshop at Café Prana"
-paid: true
+paid: false
 reservation: recommended
 ---
 
