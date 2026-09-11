@@ -29,6 +29,8 @@ groups them under the right category automatically.
    - **labels** — optional tags, chosen from the fixed list
      (gluten-free, vegan, vegetarian, spicy, seasonal, organic)
    - **order** — a number controlling the position *within its category* (lower shows first)
+   - **available** — a switch, **on** by default. Leave it on. Turning it off is how you take a
+     dish off temporarily — see below.
 4. Save.
 
 ## Two languages
@@ -50,9 +52,27 @@ text, keeping `category`, `order` and the image the same.
 > Duplicating copies **within** the folder you're in, so duplicate from inside `content/de/menu`
 > to get a German file. You can't duplicate an English item and move the copy across.
 
+## Taking a dish off temporarily
+
+When something is sold out, out of season or you just can't get the ingredients, **don't delete
+it**. Open the item and switch **available** off.
+
+The dish stays on the menu, greyed out, with a badge reading *Currently unavailable* (in German,
+*Gerade nicht verfügbar*). Regulars can see it's off rather than wonder where it went, and when
+it comes back you switch it on again — nothing to retype.
+
+> Do it in **both** language folders. The switch belongs to the file, so turning it off in
+> `content/de/menu` only takes it off the German menu; the English page will happily keep
+> selling it. This is the same "two files, same name" rule as everywhere else on this page, and
+> it's the easiest one to forget because you're usually in a hurry when you reach for it.
+
+Note the **Menu Highlights** on the homepage are written separately by hand and know nothing
+about this switch. If you take off a dish that's featured there, edit the homepage too.
+
 ## Removing or reordering
 
-- **Remove** a dish by deleting its item (both language files).
+- **Remove** a dish for good by deleting its item (both language files). If it's coming back,
+  use the **available** switch above instead.
 - **Reorder** within a category by changing the **order** numbers.
 
 ## Publishing
