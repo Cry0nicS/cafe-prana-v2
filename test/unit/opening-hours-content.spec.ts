@@ -47,6 +47,27 @@ describe('content/opening-hours.yml', () => {
     expect(openingHours.hours.map(entry => entry.day)).toEqual([...WEEKDAYS])
   })
 
+  // Studio compares the edited document against the file one way round: it
+  // walks the keys of the FILE and looks each one up in the edit
+  // (`doObjectsMatch` in `nuxt-studio/.../utils/object.js`). A key the edit
+  // ADDS is therefore never compared, the document stays `Pristine`, and the
+  // owner gets no commit to make. Ticking `closed` on a day written without
+  // the key was exactly that: the change could only be saved by editing a
+  // second field alongside it. Writing every flag out, including the `false`
+  // ones the schema default would supply anyway, turns the toggle into a value
+  // change - which Studio does see. This reads the parsed file rather than
+  // `openingHours`, because `toOpeningHours` fills the flag in and would hide
+  // precisely what is being checked.
+  it('writes every closed flag explicitly, so Studio can commit a toggle', () => {
+    for (const entry of data.hours ?? []) {
+      expect(entry?.closed, `${entry?.day} has no explicit closed:`).toBeTypeOf('boolean')
+    }
+
+    for (const exception of data.reservationExceptions ?? []) {
+      expect(exception?.closed, `${exception?.date} has no explicit closed:`).toBeTypeOf('boolean')
+    }
+  })
+
   it('keeps every opening and closing time on the slot grid, the right way round', () => {
     for (const entry of openingHours.hours) {
       if (!isOpen(entry)) {
