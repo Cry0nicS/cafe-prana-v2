@@ -56,14 +56,7 @@ title: Menu Highlights
   ---
   :::
 
-  :::menu-highlight
-  ---
-  image: /images/menu-pics/1000003101.webp
-  description: Yes, I believe in mindfulness and the power of pure, raw cacao to
-    uplift your spirit.
-  title: Ceremonial Cacao
-  ---
-  :::
+:menu-highlight{description="Yes, I believe in mindfulness and the power of pure, raw cacao to uplift your spirit." image="/images/menu-pics/1000002959.webp" title="Ceremonial Cacao"}
 
   :::menu-highlight
   ---
@@ -79,12 +72,12 @@ title: Menu Highlights
 
 ::events-intro
 ---
-image: /images/home/gallery/gallery-1.webp
 description: At Prana, I bring people together around nourishing food, shared
   tables, and mindful moments. From regular community meals to special
   occasions, my space is designed for connection, celebration, and ease.
 headline: Celebratory Events
 icon: i-lucide-party-popper
+image: /images/home/gallery/gallery-1.webp
 title: Community gatherings
 ---
 :feature{description="Regular gatherings like breakfast, brunch, and dinner, created to enjoy nourishing food and relaxed moments together." icon="i-lucide-utensils" title="Regular community events"}
