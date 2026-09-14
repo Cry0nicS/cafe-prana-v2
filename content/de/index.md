@@ -57,15 +57,7 @@ title: Menü-Highlights
   ---
   :::
 
-  :::menu-highlight
-  ---
-  image:
-    src: /images/menu/cacao.webp
-    alt: Zeremonieller Kakao
-  description: Reiner, roher Kakao für achtsame Momente und ein warmes Herz.
-  title: Zeremonieller Kakao
-  ---
-  :::
+:menu-highlight{description="Reiner, roher Kakao für achtsame Momente und ein warmes Herz." image="/images/menu-pics/1000002959.webp" title="Zeremonieller Kakao"}
 
   :::menu-highlight
   ---
@@ -151,4 +143,4 @@ title: Häufige Fragen
   :::
 ::
 
-:directions{description="Besuche Cafe Prana und entdecke deinen neuen Lieblingsort. Ich bin Dienstag bis Sonntag für Kaffee, Frühstück, Brunch und Lunch da." hoursHeading="Öffnungszeiten" title="Komm vorbei und probiere den Unterschied"}
+:directions{description="Besuche Cafe Prana und entdecke deinen neuen Lieblingsort. Ich bin Dienstag bis Sonntag für Kaffee, Frühstück, Brunch und Lunch da." hours-heading="Öffnungszeiten" title="Komm vorbei und probiere den Unterschied"}
