@@ -57,7 +57,7 @@ title: Menü-Highlights
   ---
   :::
 
-:menu-highlight{description="Reiner, roher Kakao für achtsame Momente und ein warmes Herz." image="/images/menu-pics/1000002959.webp" title="Zeremonieller Kakao"}
+:menu-highlight{description="Reiner, roher Kakao für achtsame Momente und ein warmes Herz." image="/images/menu/cacao.webp" title="Zeremonieller Kakao"}
 
   :::menu-highlight
   ---
