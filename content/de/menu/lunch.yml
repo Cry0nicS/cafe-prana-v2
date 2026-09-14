@@ -1,8 +1,9 @@
 title: Pranas Lunch
+available: true
 category: food
 description: Ausgewogener, nährender Lunch für deinen Nachmittag.
 image:
-  src: /images/menu/lunch.webp
+  src: /images/menu-pics/1000003219.webp
   alt: Ausgewogener und nährender Pranas Lunch
 ingredients: Meine Lunch-Optionen richten sich nach Saison und Verfügbarkeit frischer Zutaten.
 labels:
