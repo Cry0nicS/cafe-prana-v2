@@ -1,8 +1,9 @@
 title: Latte
+available: true
 category: drinksCoffee
 description: Doppelter Espresso mit viiiiel Mylch
 image:
-  src: /images/menu/latte.webp
+  src: /images/menu-pics/1000003189.webp
   alt: Milchkaffee mit geschäumter Pflanzenmilch
 ingredients: Doppelter Espresso mit Mylch, 300ml
 labels:
