@@ -58,9 +58,7 @@ title: Menu Highlights
 
   :::menu-highlight
   ---
-  image:
-    src: /images/menu/cacao.webp
-    alt: Ceremonial cacao drink
+  image: /images/menu-pics/1000003101.webp
   description: Yes, I believe in mindfulness and the power of pure, raw cacao to
     uplift your spirit.
   title: Ceremonial Cacao
@@ -81,9 +79,7 @@ title: Menu Highlights
 
 ::events-intro
 ---
-image:
-  src: /images/events/index.webp
-  alt: Community event at Café Prana
+image: /images/home/gallery/gallery-1.webp
 description: At Prana, I bring people together around nourishing food, shared
   tables, and mindful moments. From regular community meals to special
   occasions, my space is designed for connection, celebration, and ease.
@@ -111,6 +107,10 @@ images:
     alt: Café Prana interior and food detail 4
   - src: /images/home/gallery/gallery-5.webp
     alt: Café Prana interior and food detail 5
+  - src: /images/menu-pics/1000003100.webp
+  - src: /images/menu-pics/1000003102.webp
+  - src: /images/menu-pics/1000003257.webp
+  - src: /images/menu-pics/1000003250.webp
 description: Get a glimpse of the ambience, dishes and drinks that convey Café
   Prana's philosophy.
 icon: i-lucide-camera
