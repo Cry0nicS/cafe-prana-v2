@@ -1,10 +1,10 @@
 de:
   title: Neues Event!
-  message: Liebe Pranamenschen, schaut euch die nächsten Events an!
+  message: Banana Prancake Breakfast diesen Sonntag 3. Oktober um 10 Uhr. Reserviere dein Plätzchen am Gemeinschaftstisch für 15€ und kreiere deinen Pancake Teller mit allerlei Toppings!
 en:
   title: New Event!
-  message: Hi Prana People, check out what's coming up :)
+  message: "Hi Prana People, this Sunday 3rd October we have a Banana Pancake Community Breakfast: make your own pancake plate with various toppings and sit together around the front table. Book your seat, we start at 10am! 15€ pp. on site."
 schedule:
-  from: 2026-09-08 00:00:00
-  until: 2026-09-09 00:00:00
-tone: warning
+  from: 2026-10-03 00:00:00
+  until: 2026-10-04 00:00:00
+tone: info
