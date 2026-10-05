@@ -1,12 +1,13 @@
-title: "Dirty Earl"
-category: "drinksCoffee"
-description: "Finest blend of black tea and coffee."
-ingredients: "Earl Grey tea, single espresso shot, steamed mylk of choice"
-price: "5.2"
+title: Dirty Earl
+available: true
+category: drinksCoffee
+description: Finest blend of black tea and coffee.
 image:
-  src: "/images/menu/dirty-earl.webp"
-  alt: "Dirty Earl drink with tea and coffee"
+  src: /images/menu/dirty-earl.webp
+  alt: Dirty Earl drink with tea and coffee
+ingredients: Earl Grey tea, single espresso shot, steamed mylk of choice
 labels:
-  - "gluten-free"
-  - "vegan"
+  - gluten-free
+  - vegan
 order: 10
+price: "5.6"
