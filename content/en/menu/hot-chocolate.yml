@@ -1,12 +1,13 @@
-title: "Melted Hot Chocolate"
-category: "drinksHot"
-description: "Melted date-sweetened chocolate with mylk."
-ingredients: "Date chocolate, mylk of choice"
-price: "4,9"
+title: Melted Hot Chocolate
+available: true
+category: drinksHot
+description: Melted date-sweetened chocolate with mylk.
 image:
-  src: "/images/menu/hot-chocolate.webp"
-  alt: "Melted hot chocolate with plant milk"
+  src: /images/menu/hot-chocolate.webp
+  alt: Melted hot chocolate with plant milk
+ingredients: Date chocolate, mylk of choice
 labels:
-  - "gluten-free"
-  - "vegan"
+  - gluten-free
+  - vegan
 order: 150
+price: 5,9

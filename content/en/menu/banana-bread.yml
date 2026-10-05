@@ -1,10 +1,11 @@
 title: Banana Bread
+available: true
 category: food
 description: Toasted and served with toppings of the day.
 image:
   src: /images/menu/banana-bread.webp
   alt: Toasted banana bread with toppings of the day
-ingredients: Gluten-free homemade flour blend, banana, almonds
+ingredients: Gluten-free homemade flour blend, banana, almonds, cinnamon
 labels:
   - gluten-free
   - vegan

@@ -1,12 +1,13 @@
-title: "Ceremonial Cacao"
-category: "drinksHot"
-description: "Yes, I believe in mindfulness and the power of pure, raw cacao to uplift your spirit."
-ingredients: "Raw cacao, hot water or mylk"
-price: "6"
+title: Ceremonial Cacao
+available: true
+category: drinksHot
+description: Yes, I believe in mindfulness and the power of pure, raw cacao to uplift your spirit.
 image:
-  src: "/images/menu/cacao.webp"
-  alt: "Ceremonial cacao drink"
+  src: /images/menu/cacao.webp
+  alt: Ceremonial cacao drink
+ingredients: Raw cacao, hot water or mylk
 labels:
-  - "gluten-free"
-  - "vegan"
+  - gluten-free
+  - vegan
 order: 110
+price: 6-7

@@ -1,4 +1,5 @@
 title: Waffles
+available: true
 category: food
 description: À la carte and daily offer, sweet or savory.
 image:
@@ -10,4 +11,4 @@ labels:
   - vegan
   - seasonal
 order: 230
-price: 10-15
+price: 11,5-16
