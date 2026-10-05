@@ -1,12 +1,12 @@
 title: Menu
 description: Discover Café Prana's gluten-free and vegan menu, featuring nourishing brunches, wholesome lunches, and heartwarming drinks made from organic, plant-based ingredients.
 hero:
-  headline: Fresh, nourishing, plant based
+  headline: Fresh, nourishing, plant-based
   title: Menu
-  description: Gluten-free coffee, brunch, lunch, and warming drinks prepared with care in Berlin.
+  description: Coffee, Mama Kakao, Hotties, savoury foods, weekend brunch, waffles and sweets prepared with care in Berlin.
   image:
-    src: /images/menu/brunch.webp
-    alt: Plant-based brunch plate at Café Prana
+    src: /images/menu-pics/1000003102.webp
+    alt: schokowaffel
 labels:
   - id: gluten-free
     label: Gluten-free
