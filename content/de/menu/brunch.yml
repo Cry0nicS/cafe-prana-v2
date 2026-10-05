@@ -1,12 +1,13 @@
-title: "Pranas Brunch"
-category: "food"
-description: "Nährender Brunch mit Gourmet-Touch."
-ingredients: "Tofu-basierter \"Ei\"-Salat, Dips, Karotten-Facon, hausgemachtes glutenfreies Brot und Suppe oder Dessert"
-price: "18"
+title: Pranas Brunch
+available: true
+category: food
+description: Nährender Brunch mit Gourmet-Touch.
 image:
-  src: "/images/menu/brunch.webp"
-  alt: "Pranas Brunch-Teller mit Dips und hausgemachtem glutenfreiem Brot"
+  src: /images/menu/brunch.webp
+  alt: Pranas Brunch-Teller mit Dips und hausgemachtem glutenfreiem Brot
+ingredients: Tofu-Scromlette, Dips, Karotten-Facon, hausgemachtes glutenfreies Brot und Suppe oder Dessert
 labels:
-  - "gluten-free"
-  - "vegan"
+  - gluten-free
+  - vegan
 order: 240
+price: "20"

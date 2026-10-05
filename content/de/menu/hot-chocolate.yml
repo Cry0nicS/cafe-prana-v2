@@ -1,12 +1,13 @@
-title: "Geschmolzene heiße Schokolade"
-category: "drinksHot"
-description: "Geschmolzene, dattelgesüßte Schokolade mit Mylk."
-ingredients: "Dattelschokolade, Mylk deiner Wahl"
-price: "4,9"
+title: Melted Hot Chocolate
+available: true
+category: drinksHot
+description: Geschmolzene, dattelgesüßte Schokolade mit Mylch.
 image:
-  src: "/images/menu/hot-chocolate.webp"
-  alt: "Geschmolzene heiße Schokolade mit Pflanzenmilch"
+  src: /images/menu/hot-chocolate.webp
+  alt: Geschmolzene heiße Schokolade mit Pflanzenmilch
+ingredients: "Dattelschokolade, Mylch deiner Wahl (empfohlen: Haselnuss)"
 labels:
-  - "gluten-free"
-  - "vegan"
+  - gluten-free
+  - vegan
 order: 150
+price: 5,9

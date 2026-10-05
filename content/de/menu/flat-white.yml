@@ -1,12 +1,13 @@
-title: "Flat White"
-category: "drinksCoffee"
-description: "Sanft und vollmundig mit Pflanzenmilch deiner Wahl."
-ingredients: "Espresso, samtiger Mikroschaum, Pflanzenmilch"
-price: "4,6"
+title: Flat White
+available: true
+category: drinksCoffee
+description: Sanft und vollmundig mit Pflanzenmilch deiner Wahl. Mein Lieblingsdrink, denn du schmeckts noch den Kaffee heraus.
 image:
-  src: "/images/menu/flat-white.webp"
-  alt: "Flat White mit Pflanzenmilch"
+  src: /images/menu/flat-white.webp
+  alt: Flat White mit Pflanzenmilch
+ingredients: Espresso, samtiger Mikroschaum, Pflanzenmilch
 labels:
-  - "gluten-free"
-  - "vegan"
+  - gluten-free
+  - vegan
 order: 30
+price: 4,9

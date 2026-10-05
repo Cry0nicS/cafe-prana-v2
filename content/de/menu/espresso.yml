@@ -1,12 +1,13 @@
-title: "Bio Fairtrade Espresso / Americano"
-category: "drinksCoffee"
-description: "Klassischer Espresso oder Lungo aus meiner besonderen Mischung."
-ingredients: "Säurearme Mischung, kurzer Bezug"
-price: "2,5 / 3,3"
+title: Fairtrade Espresso / Americano
+available: true
+category: drinksCoffee
+description: Klassischer Espresso oder Lungo aus Kaffa Wildkaffee Bohnen
 image:
-  src: "/images/menu/espresso.webp"
-  alt: "Bio Fairtrade Espresso oder Americano"
+  src: /images/menu/espresso.webp
+  alt: Fairtrade Espresso oder Americano
+ingredients: Säurearme Mischung
 labels:
-  - "gluten-free"
-  - "vegan"
+  - gluten-free
+  - vegan
 order: 20
+price: 2,5 / 3,3

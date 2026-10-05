@@ -1,12 +1,13 @@
-title: "Dirty Earl"
-category: "drinksCoffee"
-description: "Feine Verbindung aus schwarzem Tee und Kaffee."
-ingredients: "Earl-Grey-Tee, einfacher Espresso-Shot, aufgeschäumte Mylk deiner Wahl"
-price: "5.2"
+title: Dirty Earl
+available: true
+category: drinksCoffee
+description: Feine Verbindung aus schwarzem Tee und Kaffee.
 image:
-  src: "/images/menu/dirty-earl.webp"
-  alt: "Dirty Earl mit Tee und Kaffee"
+  src: /images/menu/dirty-earl.webp
+  alt: Dirty Earl mit Tee und Kaffee
+ingredients: Earl-Grey-Tee, einfacher Espresso-Shot, aufgeschäumte Mylch deiner Wahl
 labels:
-  - "gluten-free"
-  - "vegan"
+  - gluten-free
+  - vegan
 order: 10
+price: "5.2"
