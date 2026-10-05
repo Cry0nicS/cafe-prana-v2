@@ -1,10 +1,10 @@
 de:
-  title: Neues Event!
-  message: Prancake Breakfast diesen Sonntag 4. Oktober um 10 Uhr. Reserviere dein Plätzchen am Gemeinschaftstisch für 15€ und kreiere deinen Pancake Teller mit allerlei Toppings!
+  title: Neues Öffnungszeiten!
+  message: Liebe Gäste, die Winteröffnungszeiten gelten ab jetzt. Montag und Freitag wie immer geschlossen.
 en:
-  title: New Event!
-  message: "Hi Prana People, this Sunday 4th October we have a Pancake Community Breakfast: make your own pancake plate with various toppings and sit together around the front table. Book your seat, we start at 10am! 15€ pp. on site."
+  title: New Opening Hours!
+  message: Hi Prana People, please check the new opening hours. Mondays and Fridays are closed as usual.
 schedule:
-  from: 2026-10-03 00:00:00
-  until: 2026-10-04 00:00:00
+  from: 2026-10-05 00:00:00
+  until: 2026-10-10 00:00:00
 tone: info
