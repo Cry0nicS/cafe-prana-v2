@@ -1,0 +1,9 @@
+title: Open Sandwich
+category: food
+description: Homemade Buckwheat Hazelnut Bread with Savoury Toppings
+ingredients: Toppings can change on a daily basis
+price: "15"
+image:
+  src: /images/menu-pics/1000003776.webp
+  alt: Stulle
+available: true
