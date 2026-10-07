@@ -1,8 +1,9 @@
 ::home-hero
 ---
-image: /images/menu-pics/1000003798.webp
+class: front room
 description: Ein glutenfreies und veganes Café im Herzen von Berlin
-headline: Neu eröffnet!
+headline: Prana hat sein erstes Jahr überstanden!
+image: /images/menu-pics/1000003798.webp
 title: Willkommen im Cafe Prana
 ---
 ::
