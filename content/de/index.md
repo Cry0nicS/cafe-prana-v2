@@ -1,8 +1,6 @@
 ::home-hero
 ---
-image:
-  src: /images/hero.webp
-  alt: Cafe-Prana-Tisch mit nährendem glutenfreiem und veganem Essen
+image: /images/menu-pics/1000003798.webp
 description: Ein glutenfreies und veganes Café im Herzen von Berlin
 headline: Neu eröffnet!
 title: Willkommen im Cafe Prana
@@ -117,7 +115,7 @@ image:
 icon: i-lucide-book-open
 title: Meine Geschichte
 ---
-Gegründet von einer Yogini, Ernährungsberaterin, Foodie, Naturliebhaberin, Fitnesstrainerin, Gesundheitsköchin und Barista (...du verstehst die Richtung...), bringt Cafe Prana ganzheitliche Gesundheit und Energie unter ein Dach. Es ist eine One-Woman-Show, die warme Gastlichkeit mit hochwertiger, bewusster Auswahl verbindet. Regionale und saisonale Gemüse treffen auf nährende Pseudogetreide und natürliche Superfoods. Ob Specialty Coffee zum Mitnehmen oder ein gemütlicher Brunch auf den Kissen: Hier erwartet dich ein offener, sicherer Ort. Langfristig möchte Prana noch nachhaltiger werden und Community, Bewusstsein und Respekt weiter stärken.
+Gegründet von einer Yogini, Ernährungsberaterin, Foodie, Naturliebhaberin, Fitnesstrainerin, Gesundheitsköchin und Barista (...du verstehst die Richtung...), bringt Café Prana ganzheitliche Gesundheit und Energie unter einen Dach. Es ist eine One-Woman-Show, die Gastfreundlichkeit mit einem hochwertigen, bewussten Angebot verbindet. Regionales und saisonales Gemüse treffen auf nährende Pseudogetreide und natürliche Superfoods. Ob Specialty Coffee zum Mitnehmen oder ein gemütlicher Brunch auf der Hinterbank: Hier erwartet dich ein offener, sicherer Ort. Langfristig möchte Prana noch nachhaltiger werden und Community, Bewusstsein und Respekt weiter stärken.
 ::
 
 ::faq
