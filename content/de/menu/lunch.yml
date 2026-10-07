@@ -1,14 +1,14 @@
-title: Pranas Lunch
+title: Suppe/Eintopf
 available: false
 category: food
-description: Ausgewogener, nährender Lunch für deinen Nachmittag.
+description: "Ausgewogene, nährende Suppe "
 image:
-  src: /images/menu-pics/1000003219.webp
-  alt: Ausgewogener und nährender Pranas Lunch
-ingredients: Meine Lunch-Optionen richten sich nach Saison und Verfügbarkeit frischer Zutaten.
+  src: /images/menu-pics/1000003799.webp
+  alt: suppe
+ingredients: Gemüse, Linsen oder Bohnen (hausgemachtes Brot ist extra)
 labels:
   - gluten-free
   - vegan
   - seasonal
 order: 250
-price: "15"
+price: 5/9
