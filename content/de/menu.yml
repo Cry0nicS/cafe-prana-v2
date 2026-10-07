@@ -5,8 +5,8 @@ hero:
   title: Menü
   description: Kaffee, Mama Kakao, Hotties, herzhafte und süße Speisen, liebevoll und glutenfrei vor Ort zubereitet.
   image:
-    src: /images/menu/brunch.webp
-    alt: Pflanzlicher Brunch-Teller im Cafe Prana
+    src: /images/menu-pics/1000003219.webp
+    alt: Pflanzlicher Lunch-Teller im Cafe Prana
 labels:
   - id: gluten-free
     label: Glutenfrei
