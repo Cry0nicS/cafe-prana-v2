@@ -1,14 +1,14 @@
-title: Pranas Lunch
-available: false
+title: Hearty Soup
+available: true
 category: food
-description: Balanced and nourishing lunch to fuel your afternoon.
+description: Balanced and nourishing one-pot/soup to fuel your afternoon.
 image:
-  src: /images/menu/lunch.webp
-  alt: Balanced and nourishing Pranas lunch
-ingredients: My lunch options depend on the season and availability of fresh ingredients.
+  src: ""
+  alt: ""
+ingredients: Veggies, Lentils/beans, spices/herbs (homemade bread is extra)
 labels:
   - gluten-free
   - vegan
   - seasonal
 order: 250
-price: "15"
+price: "5/9 "

@@ -1,9 +1,9 @@
 title: Waffles
 available: true
 category: food
-description: À la carte and daily offer, sweet or savory.
+description: "À la carte and daily offer, sweet or savory. Our Fall Specials: Pear & Hazelnut butter; Date Chocolate, Almond Butter and Orange."
 image:
-  src: /images/menu/waffle.webp
+  src: /images/menu-pics/1000003037.webp
   alt: Gluten-free waffle with toppings of the day
 ingredients: Gluten-free oat flour, sweet potato and almonds, toppings of the day
 labels:
