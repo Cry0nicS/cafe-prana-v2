@@ -3,8 +3,8 @@ available: true
 category: food
 description: Balanced and nourishing one-pot/soup to fuel your afternoon.
 image:
-  src: ""
-  alt: ""
+  src: /images/menu-pics/1000003800.webp
+  alt: suppe
 ingredients: Veggies, Lentils/beans, spices/herbs (homemade bread is extra)
 labels:
   - gluten-free
