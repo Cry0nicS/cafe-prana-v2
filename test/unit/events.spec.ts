@@ -63,15 +63,15 @@ describe('nextUpcomingEvent', () => {
   })
 
   it('breaks a same-day tie on the slug, so both locales pick the same event', () => {
-    const dinner = { ...event('Abendessen', '2026-09-14', '18:30'), stem: 'events/dinner.de' }
-    const brunch = { ...event('Zwei-Gänge-Brunch', '2026-09-14', '11:00'), stem: 'events/brunch.de' }
+    const dinner = { ...event('Abendessen', '2026-09-14', '18:30'), path: '/de/events/dinner' }
+    const brunch = { ...event('Zwei-Gänge-Brunch', '2026-09-14', '11:00'), path: '/de/events/brunch' }
 
     // The German titles would order dinner first; the shared slug orders brunch first.
     expect(nextUpcomingEvent([dinner, brunch], now)).toBe(brunch)
     expect(nextUpcomingEvent([brunch, dinner], now)).toBe(brunch)
   })
 
-  it('falls back to the title for a same-day tie without stems', () => {
+  it('falls back to the title for a same-day tie without paths', () => {
     const b = event('Bread workshop', '2026-09-14')
     const a = event('Aperitivo', '2026-09-14')
 

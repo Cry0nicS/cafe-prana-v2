@@ -9,7 +9,9 @@ period.** `content/opening-hours.yml` (one set of hours for both languages) and 
 schedule, with `en:`/`de:` text inside) already worked that way; this makes them the second half of a stated
 rule instead of exceptions. The public slug is the filename with the locale segment stripped, so
 `content/de/events/deep-talk-aperitivo.md` serves `/de/events/deep-talk-aperitivo` and its English
-counterpart serves `/events/deep-talk-aperitivo`.
+counterpart serves `/events/deep-talk-aperitivo`. An ordering prefix is stripped too, as Nuxt Content does
+for its `path`: Studio names new files `1.deep-talk-aperitivo.md`, which serves the same URL. Links are
+therefore built from the content `path`, which drops the prefix, and never from the `stem`, which keeps it.
 
 This replaces a convention where the language was a filename suffix (`my-event.md` / `my-event.de.md`) *and*
 a `locale` dropdown in the Studio form — two independent sources of truth for one fact, which could disagree.
@@ -29,7 +31,8 @@ build, and `sitemap.autoI18n` submitted the 404ing URL to search engines. Nothin
 `check-content-parity.mjs` only covered the homepage pair.
 
 Under the folder layout that entire failure class is gone: locale comes from the folder and the slug is just
-the filename, so a clumsily-named German file is a working page at a clumsy URL rather than a broken one.
+the filename (less any ordering prefix), so a clumsily-named German file is a working page at a clumsy URL
+rather than a broken one.
 
 ## Why `en`/`de` and not `english`/`german`
 

@@ -16,7 +16,7 @@ export const useNextEvent = async () => {
       .order('date', 'ASC')
       // Only what the poster reads. Without this every event's rendered body
       // would travel in the homepage payload.
-      .select('stem', 'title', 'description', 'date', 'time', 'image', 'paid', 'price')
+      .select('path', 'title', 'description', 'date', 'time', 'image', 'paid', 'price')
       .all(),
     { default: () => [] }
   )

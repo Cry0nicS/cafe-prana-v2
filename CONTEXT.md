@@ -35,7 +35,9 @@ _Avoid_: missing translation, orphan, incomplete pair
 
 **Slug**:
 The last segment of a page's public address, taken from the content file's name with its locale folder
-stripped. Never typed by the owner and never stored in a field.
+and any ordering prefix stripped: `content/de/events/1.foo.md` has the slug `foo`. Studio writes that
+prefix on files it creates, so code reads the slug from the content `path`, never the `stem`, which keeps
+it. Never typed by the owner and never stored in a field.
 _Avoid_: permalink, URL key, path segment
 
 ### Editing

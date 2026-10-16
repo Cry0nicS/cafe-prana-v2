@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { eventSlug } from '~/utils/events'
-
 defineProps<{
   headline?: string
   title?: string
@@ -9,20 +7,11 @@ defineProps<{
 }>()
 
 const { t } = useI18n()
-const localePath = useLocalePath()
 
 // While an event is coming up the homepage leads with it instead of the
 // welcome hero. Only `title` carries over into the poster; `headline`,
 // `description` and `image` belong to the welcome hero alone.
 const { data: nextEvent } = await useNextEvent()
-
-const poster = computed(() => nextEvent.value
-  ? {
-      ...nextEvent.value,
-      path: localePath(`/events/${eventSlug(nextEvent.value.stem)}`)
-    }
-  : null
-)
 
 const links = computed(() => [
   {
@@ -45,9 +34,9 @@ const links = computed(() => [
 
 <template>
   <EventsNextEventHero
-    v-if="poster"
+    v-if="nextEvent"
     :title="title"
-    :event="poster"
+    :event="nextEvent"
   />
   <UPageHero
     v-else

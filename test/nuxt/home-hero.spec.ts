@@ -4,7 +4,9 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import HomeHero from '~/components/content/HomeHero.vue'
 
 type NextEvent = {
-  stem: string
+  // Only the ordering-prefix test sets it: the hero must ignore it.
+  stem?: string
+  path: string
   title: string
   description: string
   date: string
@@ -30,7 +32,7 @@ const welcome = {
 }
 
 const aperitivo = (overrides: Partial<NextEvent> = {}): NextEvent => ({
-  stem: 'events/deep-talk-aperitivo',
+  path: '/events/deep-talk-aperitivo',
   title: 'Deep Talk Aperitivo',
   description: 'An evening of small plates and big questions.',
   date: '2026-09-14',
@@ -92,6 +94,15 @@ describe('HomeHero', () => {
     expect(link.text()).toContain('View event')
   })
 
+  // Studio names files with an ordering prefix (`1.foo.md`). Nuxt Content
+  // strips it from `path` but not from `stem`, and a link built from the stem
+  // pointed at a page that does not exist - the prerender failed on its 404.
+  it('links to the content path, not the stem, when the file name has an ordering prefix', async () => {
+    const wrapper = await mountHero(aperitivo({ stem: 'events/1.deep-talk-aperitivo' }))
+
+    expect(wrapper.get('a[href="/events/deep-talk-aperitivo"]').text()).toContain('View event')
+  })
+
   it('shows the event photo with its own alt text', async () => {
     const wrapper = await mountHero(aperitivo())
     const image = wrapper.get('img')
@@ -126,7 +137,7 @@ describe('HomeHero', () => {
   it('renders the German labels, date and link in the German locale', async () => {
     await setLocale('de')
 
-    const wrapper = await mountHero(aperitivo())
+    const wrapper = await mountHero(aperitivo({ path: '/de/events/deep-talk-aperitivo' }))
     const text = wrapper.text()
 
     expect(text).toContain('Unser nächstes Event')

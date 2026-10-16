@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { CAFE_CONTACT_MAILTO } from '#shared/utils/constants'
-import { compareEventsAsc, compareEventsDesc, eventSlug, isUpcomingEvent } from '~/utils/events'
+import { compareEventsAsc, compareEventsDesc, isUpcomingEvent } from '~/utils/events'
 
 const { locale, t } = useI18n()
 const localePath = useLocalePath()
@@ -15,7 +15,7 @@ const [{ data: page }, { data: events }] = await Promise.all([
   useAsyncData(
     `events-list-${locale.value}`,
     () => queryCollection(locale.value === 'de' ? 'eventsDe' : 'eventsEn').order('date', 'ASC').all(),
-    { watch: [locale] }
+    { watch: [locale], default: () => [] }
   )
 ])
 
@@ -27,14 +27,8 @@ if (!page.value) {
   })
 }
 
-const allEvents = computed(() =>
-  (events.value || []).map(event => ({
-    ...event,
-    path: localePath(`/events/${eventSlug(event.stem)}`)
-  }))
-)
-const upcomingEvents = computed(() => allEvents.value.filter(event => isUpcomingEvent(event)).sort(compareEventsAsc))
-const pastEvents = computed(() => allEvents.value.filter(event => !isUpcomingEvent(event)).sort(compareEventsDesc))
+const upcomingEvents = computed(() => events.value.filter(event => isUpcomingEvent(event)).sort(compareEventsAsc))
+const pastEvents = computed(() => events.value.filter(event => !isUpcomingEvent(event)).sort(compareEventsDesc))
 
 const heroLinks = computed(() => localizeLinks(page.value?.hero.links))
 
