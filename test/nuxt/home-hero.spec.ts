@@ -4,7 +4,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import HomeHero from '~/components/content/HomeHero.vue'
 
 type NextEvent = {
-  stem: string
+  // Only the ordering-prefix test sets it: the hero must ignore it.
+  stem?: string
   path: string
   title: string
   description: string
@@ -31,7 +32,6 @@ const welcome = {
 }
 
 const aperitivo = (overrides: Partial<NextEvent> = {}): NextEvent => ({
-  stem: 'events/deep-talk-aperitivo',
   path: '/events/deep-talk-aperitivo',
   title: 'Deep Talk Aperitivo',
   description: 'An evening of small plates and big questions.',
@@ -137,7 +137,7 @@ describe('HomeHero', () => {
   it('renders the German labels, date and link in the German locale', async () => {
     await setLocale('de')
 
-    const wrapper = await mountHero(aperitivo({ stem: 'de/events/deep-talk-aperitivo', path: '/de/events/deep-talk-aperitivo' }))
+    const wrapper = await mountHero(aperitivo({ path: '/de/events/deep-talk-aperitivo' }))
     const text = wrapper.text()
 
     expect(text).toContain('Unser nächstes Event')

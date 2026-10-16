@@ -11,7 +11,6 @@ const { t } = useI18n()
 // While an event is coming up the homepage leads with it instead of the
 // welcome hero. Only `title` carries over into the poster; `headline`,
 // `description` and `image` belong to the welcome hero alone.
-// Its content `path` is already the localized public URL the poster links to.
 const { data: nextEvent } = await useNextEvent()
 
 const links = computed(() => [

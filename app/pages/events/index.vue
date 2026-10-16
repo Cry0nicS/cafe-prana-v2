@@ -15,7 +15,7 @@ const [{ data: page }, { data: events }] = await Promise.all([
   useAsyncData(
     `events-list-${locale.value}`,
     () => queryCollection(locale.value === 'de' ? 'eventsDe' : 'eventsEn').order('date', 'ASC').all(),
-    { watch: [locale] }
+    { watch: [locale], default: () => [] }
   )
 ])
 
@@ -27,10 +27,8 @@ if (!page.value) {
   })
 }
 
-// The content `path` is already the localized public URL.
-const allEvents = computed(() => events.value || [])
-const upcomingEvents = computed(() => allEvents.value.filter(event => isUpcomingEvent(event)).sort(compareEventsAsc))
-const pastEvents = computed(() => allEvents.value.filter(event => !isUpcomingEvent(event)).sort(compareEventsDesc))
+const upcomingEvents = computed(() => events.value.filter(event => isUpcomingEvent(event)).sort(compareEventsAsc))
+const pastEvents = computed(() => events.value.filter(event => !isUpcomingEvent(event)).sort(compareEventsDesc))
 
 const heroLinks = computed(() => localizeLinks(page.value?.hero.links))
 

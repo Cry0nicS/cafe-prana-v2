@@ -7,7 +7,6 @@ import {
 } from '#shared/utils/constants'
 import {
   compareEventsDesc,
-  eventSlug,
   formatEventDate,
   formatEventPrice,
   getEventDateIso,
@@ -20,11 +19,11 @@ const { global } = useAppConfig()
 const { locale, t } = useI18n()
 const localePath = useLocalePath()
 const slug = computed(() => String(route.params.slug))
-// RESEARCH (#35): the hand-rolled stem is gone. Under the locale-prefixed
-// tree the content `path` equals the public route, so query by path.
+// Under the locale-prefixed tree a content `path` is the public route, so the
+// page is looked up by its own route path rather than rebuilt from the slug.
 const contentPath = computed(() => route.path.replace(/\/$/, '') || '/')
 
-const [{ data: rawEvent }, { data: events }] = await Promise.all([
+const [{ data: event }, { data: events }] = await Promise.all([
   useAsyncData(
     `event-${locale.value}-${slug.value}`,
     () => queryCollection(locale.value === 'de' ? 'eventsDe' : 'eventsEn')
@@ -39,21 +38,13 @@ const [{ data: rawEvent }, { data: events }] = await Promise.all([
   )
 ])
 
-if (!rawEvent.value) {
+if (!event.value) {
   throw createError({
     statusCode: 404,
     statusMessage: 'Event not found',
     fatal: true
   })
 }
-
-const event = computed(() => rawEvent.value
-  ? {
-      ...rawEvent.value,
-      path: localePath(`/events/${slug.value}`)
-    }
-  : null
-)
 
 const reservationPath = computed(() => localePath('/reservations'))
 const eventsPath = computed(() => localePath('/events'))
@@ -83,7 +74,7 @@ const relatedEvents = computed(() => {
   }
 
   return (events.value || [])
-    .filter(item => eventSlug(item.path) !== slug.value)
+    .filter(item => item.path !== contentPath.value)
     .sort(compareEventsDesc)
     .slice(0, 3)
 })
