@@ -20,7 +20,6 @@
 // TypeScript, because the verdict comes from the same modules the form and
 // the API use, and the source of truth should not be re-implemented for a
 // check. Run through `jiti` (`npm run check:events`).
-import { appendFileSync } from 'node:fs'
 import { readFile, readdir } from 'node:fs/promises'
 import { join, relative, resolve } from 'node:path'
 import process from 'node:process'
@@ -28,6 +27,7 @@ import { parseFrontMatter } from 'remark-mdc'
 import { toOpeningHours } from '../shared/utils/opening-hours'
 import type { OpeningHours, OpeningHoursDocument } from '../shared/utils/opening-hours'
 import { checkEventBookability } from './event-bookability'
+import { summarise } from './step-summary'
 import type { EventCheck, EventFrontmatter } from './event-bookability'
 
 const ROOT = resolve(import.meta.dirname, '..')
@@ -111,16 +111,6 @@ console.log(tally)
 
 if (unchecked.length > 0) {
   console.warn('⚠ nothing can be said about the unchecked events above; read their time field yourself.')
-}
-
-// A CI log is not where this is read: the owner publishes from Studio and sees
-// GitHub's run summary at best, so the failure has to explain itself there.
-const summarise = (markdown: string) => {
-  const path = process.env.GITHUB_STEP_SUMMARY
-
-  if (path) {
-    appendFileSync(path, `${markdown}\n`)
-  }
 }
 
 const list = (checks: EventCheck[]) =>

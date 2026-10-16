@@ -20,6 +20,9 @@ on:
       - scripts/ping-supabase.ts
       - scripts/supabase-keepalive.ts
       - shared/utils/supabase-key.ts
+      - scripts/step-summary.ts
+      - package.json
+      - package-lock.json
 
 # Keep in sync with `.nvmrc`, which is what nvm and the local toolchain read.
 env:
@@ -31,6 +34,8 @@ permissions:
 jobs:
   ping:
     name: Ping Supabase
+    # A PR from a fork gets no secrets, so the ping could only fail there.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

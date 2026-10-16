@@ -1,19 +1,12 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { setTestRuntimeConfig } from '../utils/runtime-config'
+import { jwtWithRole } from '../utils/supabase-keys'
 
 const { createClient } = vi.hoisted(() => ({ createClient: vi.fn(() => ({ from: () => {} })) }))
 
 vi.mock('@supabase/supabase-js', () => ({ createClient }))
 
 const { useServerSupabaseClient } = await import('~~/server/utils/supabase')
-
-// A structurally valid JWT whose payload carries the given role. The signature
-// is irrelevant: the guard only reads the claims.
-const jwtWithRole = (role: string) => [
-  Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url'),
-  Buffer.from(JSON.stringify({ iss: 'supabase', role })).toString('base64url'),
-  'signature'
-].join('.')
 
 describe('useServerSupabaseClient', () => {
   afterEach(() => {
@@ -42,6 +35,13 @@ describe('useServerSupabaseClient', () => {
 
   it('refuses the anon key', () => {
     setTestRuntimeConfig({ supabaseServiceRoleKey: jwtWithRole('anon') })
+
+    expect(() => useServerSupabaseClient()).toThrowError(/service-role/)
+    expect(createClient).not.toHaveBeenCalled()
+  })
+
+  it('refuses the publishable key, which is as public as the anon key', () => {
+    setTestRuntimeConfig({ supabaseServiceRoleKey: 'sb_publishable_abc123' })
 
     expect(() => useServerSupabaseClient()).toThrowError(/service-role/)
     expect(createClient).not.toHaveBeenCalled()

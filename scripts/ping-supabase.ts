@@ -9,23 +9,14 @@
 // It also proves the two repository secrets are right. GitHub never shows a
 // secret's value, so a run is the only way to check them: a wrong one fails
 // here with a message naming it. Run through `jiti` (`npm run ping:supabase`).
-import { appendFileSync } from 'node:fs'
 import process from 'node:process'
 import { createClient } from '@supabase/supabase-js'
 import type { Database } from '../shared/utils/types'
+import { summarise } from './step-summary'
 import { checkKeepAliveConfig, describeKeepAliveResponse } from './supabase-keepalive'
 
 const url = process.env.SUPABASE_URL?.trim() ?? ''
 const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() ?? ''
-
-// The run summary is where a failure is read, so it has to explain itself there.
-const summarise = (markdown: string) => {
-  const path = process.env.GITHUB_STEP_SUMMARY
-
-  if (path) {
-    appendFileSync(path, `${markdown}\n`)
-  }
-}
 
 const fail = (problems: string[]) => {
   problems.forEach(problem => console.error(`✖ ${problem}`))
