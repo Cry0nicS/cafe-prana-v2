@@ -6,7 +6,7 @@
 // The wording names the secret to fix, because the person reading a failed run
 // can see the secret names in GitHub but never their values. No message ever
 // includes the key itself.
-import { isServiceRoleKey } from '../shared/utils/supabase-key'
+import { supabaseKeyKind } from '../shared/utils/supabase-key'
 
 export type KeepAliveConfig = {
   url: string
@@ -55,13 +55,14 @@ const checkKey = (key: string) => {
     return 'SUPABASE_SERVICE_ROLE_KEY is empty.'
   }
 
-  // `isServiceRoleKey` takes any opaque key on trust, which would let the new
-  // publishable key through; the reservations table grants it nothing either.
-  if (key.startsWith('sb_publishable_') || !isServiceRoleKey(key)) {
-    return 'SUPABASE_SERVICE_ROLE_KEY holds the anon or publishable key. Use the service_role (or sb_secret_...) key from the project\'s API settings.'
+  switch (supabaseKeyKind(key)) {
+    case 'public':
+      return 'SUPABASE_SERVICE_ROLE_KEY holds the anon or publishable key. Use the service_role (or sb_secret_...) key from the project\'s API settings.'
+    case 'malformed':
+      return 'SUPABASE_SERVICE_ROLE_KEY is not a complete key; it was probably cut short while copying. Paste the whole service_role key again.'
+    default:
+      return null
   }
-
-  return null
 }
 
 // Every problem at once, so one failed run is enough to fix both secrets.

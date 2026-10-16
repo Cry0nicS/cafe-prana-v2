@@ -1,13 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { checkKeepAliveConfig, describeKeepAliveResponse } from '../../scripts/supabase-keepalive'
-
-// A structurally valid JWT whose payload carries the given role. The signature
-// is irrelevant: the guard only reads the claims.
-const jwtWithRole = (role: string) => [
-  Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url'),
-  Buffer.from(JSON.stringify({ iss: 'supabase', role })).toString('base64url'),
-  'signature'
-].join('.')
+import { jwtWithRole } from '../utils/supabase-keys'
 
 const url = 'https://abcdefghijklmnop.supabase.co'
 
@@ -43,6 +36,14 @@ describe('checkKeepAliveConfig', () => {
   it('refuses the anon key and the publishable key, which the reservations table does not grant', () => {
     expect(checkKeepAliveConfig({ url, key: jwtWithRole('anon') })[0]).toMatch(/anon or publishable/)
     expect(checkKeepAliveConfig({ url, key: 'sb_publishable_abc123' })[0]).toMatch(/anon or publishable/)
+  })
+
+  // A key cut short while copying is a different mistake from the wrong key.
+  it('calls a broken JWT broken rather than the anon key', () => {
+    const [problem] = checkKeepAliveConfig({ url, key: 'eyJ.not-base64!.sig' })
+
+    expect(problem).toMatch(/not a complete key/)
+    expect(problem).not.toMatch(/anon or publishable/)
   })
 
   it('never echoes the key back', () => {

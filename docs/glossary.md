@@ -110,6 +110,11 @@ The most important concepts in this project, in plain terms.
   event that asks for a reservation starts at a time nobody can book on its date; the fix is a
   reservation exception the owner adds in Studio.
 
+- **Supabase keep-alive** — `npm run ping:supabase`, run every third day by
+  `.github/workflows/supabase-keepalive.yml`. Free-plan projects pause after 7 days without a
+  database request, and the site makes one only when a guest books, so the ping reads one
+  reservation id to keep the booking form up. A failed run names the secret to fix.
+
 - **Site notice** — `content/notice.yml`, one file for both languages. A dismissible card shown
   in the middle of the screen for short-notice news (a closure, a late opening). Shown while the
   visitor's clock is inside the `from` / `until` schedule (Berlin time); `until` doubles as the
