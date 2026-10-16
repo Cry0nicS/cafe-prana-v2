@@ -1,5 +1,6 @@
 ---
 title: ATMEN & LOSLASSEN Tagesretreat für Frauen
+description: "Das Café Prana schließt an dem Sonntag seine Türen, um dich und weitere tolle Frauen zu empfangen - ein intimes Grüppchen, das eine Tagesreise zusammen verbringen wird. Sarah, Tatiana und Annette laden dich ein, alles für einen Tag beiseite zu legen und einmal richtig durchzuatmen. Stichwort? Loslassen. Durch Breathwork (für Frauen, jawohl!), gesunde Speisen und ätherische Öle (ja, immer noch alles für Frauen), wirst du deine Sinne neu entdecken und Wohlfühl-Vibes genießen. Für Tee und Mama Kakao wird gesorgt, yes, it's all included.  Wir freuen uns auf dich! PRE-RESERVIERUNG über cafeprana.berlin@gmail.com "
 date: 2026-11-01
 time: 10-17 Uhr
 paid: true
