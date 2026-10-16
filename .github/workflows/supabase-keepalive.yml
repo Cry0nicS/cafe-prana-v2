@@ -1,0 +1,49 @@
+name: Supabase keep-alive
+
+# Free-plan Supabase projects pause after 7 days without a database request,
+# and the site only makes one when a guest books a table. Every third day
+# leaves margin for a late or skipped scheduled run; `*/3` restarts on the 1st,
+# so the gap across a month end is shorter, never longer.
+#
+# GitHub disables schedules in a repository with no commits for 60 days. Studio
+# edits are commits, and GitHub emails before it switches this off.
+on:
+  schedule:
+    - cron: '17 6 */3 * *'
+  workflow_dispatch:
+  # A change to the ping itself runs on its PR, which is also how the two
+  # secrets get checked before the schedule depends on them.
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/supabase-keepalive.yml
+      - scripts/ping-supabase.ts
+      - scripts/supabase-keepalive.ts
+      - shared/utils/supabase-key.ts
+
+# Keep in sync with `.nvmrc`, which is what nvm and the local toolchain read.
+env:
+  NODE_VERSION: 24
+
+permissions:
+  contents: read
+
+jobs:
+  ping:
+    name: Ping Supabase
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Install node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Ping Supabase
+        run: npm run ping:supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}

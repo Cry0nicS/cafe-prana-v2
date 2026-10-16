@@ -19,6 +19,7 @@
     "check:content": "node scripts/check-content-parity.mjs",
     "check:studio": "node scripts/check-studio-parity.mjs",
     "check:events": "jiti scripts/check-event-bookability.ts",
+    "ping:supabase": "jiti scripts/ping-supabase.ts",
     "optimize:images": "node scripts/optimize-images.mjs"
   },
   "dependencies": {
