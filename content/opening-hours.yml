@@ -28,5 +28,7 @@ hours:
 lastReservationBeforeClosing: 60
 reservationExceptions:
   - date: 2026-11-01
-    closed: true
-    note: Day Retreat für Frauen - kein Betrieb
+    closed: false
+    bookableFrom: 10:00
+    bookableUntil: 16:00
+    note: Day Retreat für Frauen
