@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { CAFE_CONTACT_MAILTO } from '#shared/utils/constants'
-import { compareEventsAsc, compareEventsDesc, eventSlug, isUpcomingEvent } from '~/utils/events'
+import { compareEventsAsc, compareEventsDesc, isUpcomingEvent } from '~/utils/events'
 
 const { locale, t } = useI18n()
 const localePath = useLocalePath()
@@ -27,12 +27,8 @@ if (!page.value) {
   })
 }
 
-const allEvents = computed(() =>
-  (events.value || []).map(event => ({
-    ...event,
-    path: localePath(`/events/${eventSlug(event.stem)}`)
-  }))
-)
+// The content `path` is already the localized public URL.
+const allEvents = computed(() => events.value || [])
 const upcomingEvents = computed(() => allEvents.value.filter(event => isUpcomingEvent(event)).sort(compareEventsAsc))
 const pastEvents = computed(() => allEvents.value.filter(event => !isUpcomingEvent(event)).sort(compareEventsDesc))
 

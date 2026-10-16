@@ -83,11 +83,7 @@ const relatedEvents = computed(() => {
   }
 
   return (events.value || [])
-    .filter(item => eventSlug(item.stem) !== slug.value)
-    .map(item => ({
-      ...item,
-      path: localePath(`/events/${eventSlug(item.stem)}`)
-    }))
+    .filter(item => eventSlug(item.path) !== slug.value)
     .sort(compareEventsDesc)
     .slice(0, 3)
 })

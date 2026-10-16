@@ -48,7 +48,7 @@ export const compareEventsDesc = (a: EventLike, b: EventLike) => {
   return toEventDate(b.date).getTime() - toEventDate(a.date).getTime()
 }
 
-type IdentifiedEvent = EventLike & { stem?: string, title?: string }
+type IdentifiedEvent = EventLike & { path?: string, title?: string }
 
 // Same-day events are ordered by slug, falling back to title, so the pick does
 // not depend on the order the query returned and both locales agree on it.
@@ -56,7 +56,7 @@ type IdentifiedEvent = EventLike & { stem?: string, title?: string }
 // at 17:00 ..."), so comparing it would be alphabetical, not chronological.
 const compareNextEvent = (a: IdentifiedEvent, b: IdentifiedEvent) => {
   return compareEventsAsc(a, b)
-    || (eventSlug(a.stem) || a.title || '').localeCompare(eventSlug(b.stem) || b.title || '')
+    || (eventSlug(a.path) || a.title || '').localeCompare(eventSlug(b.path) || b.title || '')
 }
 
 // The soonest event that is still to come, or `null`. "Upcoming" is decided by
@@ -72,8 +72,11 @@ export const getEventDateIso = (value: EventDateValue) => {
   return toEventDate(value).toISOString().slice(0, 10)
 }
 
-// RESEARCH (#35): under the locale-prefixed tree the stem is
-// `events/<slug>` (en) or `de/events/<slug>` (de).
-export const eventSlug = (stem?: string) => {
-  return String(stem ?? '').replace(/^(?:de\/)?events\//, '')
+// The last segment of an event's content `path`, which under the
+// locale-prefixed tree is already its public URL (`/events/<slug>` or
+// `/de/events/<slug>`). Not the `stem`: Studio names files with an ordering
+// prefix (`1.foo.md`), which Nuxt Content strips from `path` and keeps in
+// `stem`, so a stem-built link 404s.
+export const eventSlug = (path?: string) => {
+  return String(path ?? '').split('/').filter(Boolean).pop() ?? ''
 }
