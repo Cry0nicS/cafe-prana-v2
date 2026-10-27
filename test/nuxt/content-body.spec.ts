@@ -150,10 +150,10 @@ describe('the video block', () => {
 
   it('shows the owner\'s still before play', async () => {
     const wrapper = await render(
-      `::video\n---\nurl: ${youtube}\ntitle: An evening at Prana\nposter:\n  src: /images/hero.webp\n  alt: A table at Prana\n---\n::`
+      `::video{url="${youtube}" title="An evening at Prana" poster="/images/hero.webp"}\n::`
     )
 
-    expect(wrapper.get('img').attributes('alt')).toBe('A table at Prana')
+    expect(wrapper.get('img').attributes('src')).toContain('hero.webp')
     expect(wrapper.find('iframe').exists()).toBe(false)
   })
 
