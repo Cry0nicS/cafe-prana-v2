@@ -14,4 +14,4 @@ Sarah, Tatiana und Annette laden dich ein, alles für einen Tag beiseite zu lege
 
 Durch Breathwork (für Frauen, jawohl!), gesunde Speisen und ätherische Öle (ja, immer noch alles für Frauen) wirst du deine Sinne neu entdecken und Wohlfühl-Vibes genießen. Für Tee und Mama Kakao wird gesorgt, ja, alles ist inklusive. Wir freuen uns auf dich!
 
-:video{url="/videos/prana.mp4" title="Atme einmal richtig tief durch"}
+:video{url="/videos/frauenretreat.mp4" title="Atme einmal richtig tief durch" :poster='{"src":"/images/events/posts/frauenretreat-video-poster.webp","alt":"Atme einmal richtig tief durch. Ausatmen."}'}

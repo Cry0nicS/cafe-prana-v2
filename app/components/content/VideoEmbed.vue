@@ -6,7 +6,7 @@ import { parseVideoSource } from '~/utils/video'
 // being absent, because a markdown body can always omit a prop and a published
 // page must degrade rather than break.
 const props = defineProps<{
-  /** A video from the media library (`/videos/prana.mp4`), or a YouTube or Vimeo link exactly as the share sheet hands it over. */
+  /** A video from the media library (`/videos/frauenretreat.mp4`), or a YouTube or Vimeo link exactly as the share sheet hands it over. */
   url: string
   /** What the video shows. Read aloud, and printed under the frame. */
   title: string

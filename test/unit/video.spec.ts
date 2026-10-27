@@ -89,12 +89,12 @@ describe('classifying what the owner put in the video field', () => {
   // self-hosted video arrives in. The type is what lets the browser skip a
   // format it cannot play without downloading it first.
   it.each([
-    ['/videos/prana.mp4', 'video/mp4'],
+    ['/videos/frauenretreat.mp4', 'video/mp4'],
     ['/videos/prana.MP4', 'video/mp4'],
     ['/videos/prana.m4v', 'video/mp4'],
     ['/videos/prana.webm', 'video/webm'],
     ['  /videos/a%20b.mp4  ', 'video/mp4'],
-    ['/videos/prana.mp4?v=2', 'video/mp4']
+    ['/videos/frauenretreat.mp4?v=2', 'video/mp4']
   ])('plays %s from the site itself', (value, type) => {
     expect(parseVideoSource(value)).toEqual({ kind: 'file', src: value.trim(), type })
   })
@@ -123,8 +123,8 @@ describe('classifying what the owner put in the video field', () => {
     ['a path to something that is not a video', '/images/hero.webp'],
     ['a format browsers disagree on', '/videos/prana.mov'],
     ['a path with no extension', '/videos/prana'],
-    ['a protocol-relative url to another host', '//cdn.example.com/prana.mp4'],
-    ['a video file on another host', 'https://example.com/prana.mp4'],
+    ['a protocol-relative url to another host', '//cdn.example.com/frauenretreat.mp4'],
+    ['a video file on another host', 'https://example.com/frauenretreat.mp4'],
     ['a javascript url', 'javascript:alert(1)'],
     ['a data url', 'data:video/mp4;base64,AAAA'],
     ['a bare word', 'my video']

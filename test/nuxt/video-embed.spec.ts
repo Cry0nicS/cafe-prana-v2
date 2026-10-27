@@ -9,7 +9,7 @@ const mount = (props: Partial<Props>) => mountSuspended(VideoEmbed, { props: pro
 
 describe('VideoEmbed', () => {
   describe('with a video from the media library', () => {
-    const props = { url: '/videos/prana.mp4', title: 'A morning at the cafe' }
+    const props = { url: '/videos/frauenretreat.mp4', title: 'A morning at the cafe' }
 
     // The page stays light for guests who never press play: no player element,
     // so no request for the file, until the button is pressed.
@@ -32,7 +32,7 @@ describe('VideoEmbed', () => {
       expect(video.exists()).toBe(true)
       expect(video.attributes('controls')).toBeDefined()
       expect(video.attributes('playsinline')).toBeDefined()
-      expect(video.find('source').attributes()).toMatchObject({ src: '/videos/prana.mp4', type: 'video/mp4' })
+      expect(video.find('source').attributes()).toMatchObject({ src: '/videos/frauenretreat.mp4', type: 'video/mp4' })
       expect(wrapper.find('iframe').exists()).toBe(false)
     })
 
@@ -46,7 +46,7 @@ describe('VideoEmbed', () => {
 
       expect(wrapper.find('video').exists()).toBe(false)
       expect(wrapper.find('button').exists()).toBe(false)
-      expect(wrapper.find('a').attributes('href')).toBe('/videos/prana.mp4')
+      expect(wrapper.find('a').attributes('href')).toBe('/videos/frauenretreat.mp4')
     })
 
     it('goes back to the still when the url is changed', async () => {
@@ -82,11 +82,11 @@ describe('VideoEmbed', () => {
 
   describe('with a value that is not a video', () => {
     it('falls back to the unavailable frame with a link, and no player', async () => {
-      const wrapper = await mount({ url: 'https://example.com/prana.mp4', title: 'Tour' })
+      const wrapper = await mount({ url: 'https://example.com/frauenretreat.mp4', title: 'Tour' })
 
       expect(wrapper.find('button').exists()).toBe(false)
       expect(wrapper.find('video').exists()).toBe(false)
-      expect(wrapper.find('a').attributes('href')).toBe('https://example.com/prana.mp4')
+      expect(wrapper.find('a').attributes('href')).toBe('https://example.com/frauenretreat.mp4')
     })
 
     it('renders without a title or a url instead of breaking the page', async () => {

@@ -14,4 +14,4 @@ Sarah, Tatiana and Annette invite you to set everything aside for one day and ta
 
 Through breathwork (for women, yes indeed!), healthy food and essential oils (yes, still all for women), you will rediscover your senses and enjoy feel-good vibes. Tea and Mama Cacao are taken care of, yes, it's all included. We look forward to seeing you!
 
-:video{url="/videos/prana.mp4" title="Take a really deep breath"}
+:video{url="/videos/frauenretreat.mp4" title="Take a really deep breath" :poster='{"src":"/images/events/posts/frauenretreat-video-poster.webp","alt":"Take a really deep breath. Exhale."}'}
