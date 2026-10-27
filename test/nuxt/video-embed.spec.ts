@@ -1,5 +1,5 @@
 import { mountSuspended } from '@nuxt/test-utils/runtime'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it } from 'vitest'
 import VideoEmbed from '~/components/content/VideoEmbed.vue'
 
 type Props = InstanceType<typeof VideoEmbed>['$props']
@@ -77,6 +77,54 @@ describe('VideoEmbed', () => {
 
       expect(wrapper.find('iframe').attributes('src')).toContain('https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ')
       expect(wrapper.find('video').exists()).toBe(false)
+    })
+  })
+
+  // The build fetches thumbnails for the youtube videos in the content and
+  // lists the ones it got in runtime config. The block only ever points at one
+  // of those, and at the site's own copy, so the page load never contacts
+  // YouTube.
+  describe('before pressing play on a YouTube link', () => {
+    const youtube = { url: 'https://youtu.be/dQw4w9WgXcQ', title: 'Tour' }
+    const stills = (ids: string[]) => {
+      useRuntimeConfig().public.videoThumbnails = ids
+    }
+
+    afterEach(() => stills([]))
+
+    it('shows the thumbnail the build saved, from this site', async () => {
+      stills(['dQw4w9WgXcQ'])
+
+      const wrapper = await mount(youtube)
+
+      expect(wrapper.find('img').attributes('src')).toBe('/video-thumbnails/dQw4w9WgXcQ.jpg')
+    })
+
+    it('prefers a poster the owner picked', async () => {
+      stills(['dQw4w9WgXcQ'])
+
+      const wrapper = await mount({ ...youtube, poster: { src: '/images/events/retreat.webp', alt: 'Circle' } })
+
+      expect(wrapper.findAll('img')).toHaveLength(1)
+      expect(wrapper.find('img').attributes('src')).not.toContain('video-thumbnails')
+    })
+
+    // No fetch succeeded: the drawn frame, not a request for a file that is
+    // not there.
+    it('draws its own frame when the build could not get one', async () => {
+      stills(['someOtherId1'])
+
+      const wrapper = await mount(youtube)
+
+      expect(wrapper.find('img').exists()).toBe(false)
+      expect(wrapper.find('button').exists()).toBe(true)
+    })
+
+    it('never looks for a thumbnail of a file or a Vimeo link', async () => {
+      stills(['dQw4w9WgXcQ'])
+
+      expect((await mount({ url: '/videos/frauenretreat.mp4', title: 'Tour' })).find('img').exists()).toBe(false)
+      expect((await mount({ url: 'https://vimeo.com/123456789', title: 'Tour' })).find('img').exists()).toBe(false)
     })
   })
 

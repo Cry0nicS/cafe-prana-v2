@@ -15,6 +15,7 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
+const { public: { videoThumbnails } } = useRuntimeConfig()
 
 const source = computed(() => parseVideoSource(props.url))
 const playing = ref(false)
@@ -22,6 +23,17 @@ const playing = ref(false)
 // browser cannot play. Treated like a link that did not parse.
 const failed = ref(false)
 const video = computed(() => (failed.value ? null : source.value))
+
+// A YouTube video's own still, saved by the build and served from this site so
+// the page load never contacts YouTube (see `modules/video-thumbnails.ts`).
+// The owner's poster comes first; with neither, the frame is drawn.
+const thumbnail = computed(() => {
+  const embed = source.value
+
+  return !props.poster?.src && embed?.kind === 'embed' && embed.provider === 'youtube' && videoThumbnails.includes(embed.id)
+    ? `/video-thumbnails/${embed.id}.jpg`
+    : null
+})
 
 // A file's shape is only known once the browser has read it, and the browser
 // only reads it after the visitor presses play. So the frame is 16:9 until
@@ -119,6 +131,15 @@ const play = () => {
           placeholder
         />
 
+        <img
+          v-else-if="thumbnail"
+          :src="thumbnail"
+          alt=""
+          loading="lazy"
+          decoding="async"
+          class="absolute inset-0 size-full object-cover transition duration-500 group-hover:scale-[1.02]"
+        >
+
         <!-- No still: the hero's breathing aura stands in, so an empty frame is
              still the cafe rather than a grey box. -->
         <template v-else>
@@ -128,7 +149,7 @@ const play = () => {
 
         <!-- A scrim only where there is a photo to sit on. -->
         <div
-          v-if="poster?.src"
+          v-if="poster?.src || thumbnail"
           class="absolute inset-0 bg-gradient-to-t from-paper-950/45 via-paper-950/10 to-transparent"
         />
 

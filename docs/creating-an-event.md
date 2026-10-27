@@ -105,7 +105,10 @@ like the café.
 - **A video** — insert **Video Embed**, paste a YouTube or Vimeo link, and give it a short title. (A video file kept on the site itself, `/videos/….mp4`, works in the same field, but videos belong on YouTube: the site is not set up to host them.)
   The page shows a still with a play button and only loads the video once somebody presses play,
   so it stays fast and nothing is sent to YouTube for guests who never watch. You can pick a cover
-  image from the media library; without one, the café's own frame is used.
+  image from the media library. Without one, a YouTube video shows its own thumbnail, and anything
+  else shows the café's own green frame. The thumbnail is saved when the site is next published, so
+  a link you have just pasted shows the green frame until then, and keeps it if YouTube had no
+  thumbnail to give.
 - **A note box** — insert a **Callout** for things like menu notes or dietary info. It has a
   **colour**: leave it `neutral`, or use `positive` for good news and `caution` for something
   people need to be careful about.
