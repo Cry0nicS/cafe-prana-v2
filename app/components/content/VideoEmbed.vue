@@ -10,8 +10,8 @@ const props = defineProps<{
   url: string
   /** What the video shows. Read aloud, and printed under the frame. */
   title: string
-  /** Optional still from the media library. Without one, the frame is drawn. */
-  poster?: { src?: string, alt?: string }
+  /** Optional still, as the path of an image in the media library (what Studio's picker writes). Without one, the frame is drawn. */
+  poster?: string
 }>()
 
 const { t } = useI18n()
@@ -30,7 +30,7 @@ const video = computed(() => (failed.value ? null : source.value))
 const thumbnail = computed(() => {
   const embed = source.value
 
-  return !props.poster?.src && embed?.kind === 'embed' && embed.provider === 'youtube' && videoThumbnails.includes(embed.id)
+  return !props.poster && embed?.kind === 'embed' && embed.provider === 'youtube' && videoThumbnails.includes(embed.id)
     ? `/video-thumbnails/${embed.id}.jpg`
     : null
 })
@@ -96,7 +96,7 @@ const play = () => {
           autoplay
           playsinline
           preload="metadata"
-          :poster="poster?.src"
+          :poster="poster"
           :aria-label="caption || t('content.video.play')"
           @loadedmetadata="onMetadata"
           @error="onError"
@@ -123,9 +123,9 @@ const play = () => {
 
       <template v-else>
         <NuxtImg
-          v-if="poster?.src"
-          :src="poster.src"
-          :alt="poster.alt || ''"
+          v-if="poster"
+          :src="poster"
+          alt=""
           class="absolute inset-0 size-full object-cover transition duration-500 group-hover:scale-[1.02]"
           sizes="sm:100vw lg:768px"
           format="webp"
@@ -150,7 +150,7 @@ const play = () => {
 
         <!-- A scrim only where there is a photo to sit on. -->
         <div
-          v-if="poster?.src || thumbnail"
+          v-if="poster || thumbnail"
           class="absolute inset-0 bg-gradient-to-t from-paper-950/45 via-paper-950/10 to-transparent"
         />
 

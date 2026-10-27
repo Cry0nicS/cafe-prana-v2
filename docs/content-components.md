@@ -37,7 +37,7 @@ Everything the owner writes as plain Markdown — headings, lists, links, quotes
 | `::faq-item` | `FaqItem` | `label` | default slot = answer prose | ✅ reusable |
 | `::directions` | `Directions` | `title, description, hoursHeading` | — (hours from `content/opening-hours.yml`; map + CTAs from code) | no |
 | `::callout` | `Callout` | `icon, title, color` (`neutral` \| `positive` \| `caution`) | default slot = note text | ✅ reusable |
-| `::video` | `VideoEmbed` | `url, title, poster{src,alt}` | — (click-to-load frame: YouTube / Vimeo link, or a `/videos/*.mp4` file from the media library; `url` takes either; a YouTube video's still is saved at build by `modules/video-thumbnails.ts` and listed in `runtimeConfig.public.videoThumbnails`, a picked `poster` wins) | ✅ reusable |
+| `::video` | `VideoEmbed` | `url, title, poster` | — (click-to-load frame: YouTube / Vimeo link, or a `/videos/*.mp4` file from the media library; `url` takes either; a YouTube video's still is saved at build by `modules/video-thumbnails.ts` and listed in `runtimeConfig.public.videoThumbnails`, a picked `poster` wins) | ✅ reusable |
 
 Note `Feature` is shared by both `FeatureGrid` (Philosophy) and `EventsIntro` (Events) — reuse it wherever a feature card is needed.
 

@@ -72,10 +72,26 @@ describe('VideoEmbed', () => {
       expect(wrapper.find('button').exists()).toBe(true)
     })
 
-    it('uses the poster as the still when there is one', async () => {
-      const wrapper = await mount({ ...props, poster: { src: '/images/events/retreat.webp', alt: 'Breathwork circle' } })
+    // Studio's form writes the picked image as a plain path, so that is the
+    // shape a poster arrives in.
+    it('uses the poster path as the still when there is one', async () => {
+      const wrapper = await mount({ ...props, poster: '/images/events/retreat.webp' })
 
       expect(wrapper.find('img').exists()).toBe(true)
+      expect(wrapper.find('img').attributes('src')).toContain('retreat.webp')
+    })
+
+    // What Studio saves when the owner only picks a thumbnail: no title. The
+    // frame must still be a working, labelled player.
+    it('still plays, with a label, when the owner gave no title', async () => {
+      const wrapper = await mount({ url: '/videos/frauenretreat.mp4', poster: '/images/events/retreat.webp' })
+
+      expect(wrapper.find('figcaption').exists()).toBe(false)
+      expect(wrapper.find('button').attributes('aria-label')).toBeTruthy()
+
+      await wrapper.find('button').trigger('click')
+
+      expect(wrapper.find('video').attributes('aria-label')).toBeTruthy()
     })
   })
 
@@ -115,7 +131,7 @@ describe('VideoEmbed', () => {
     it('prefers a poster the owner picked', async () => {
       stills(['dQw4w9WgXcQ'])
 
-      const wrapper = await mount({ ...youtube, poster: { src: '/images/events/retreat.webp', alt: 'Circle' } })
+      const wrapper = await mount({ ...youtube, poster: '/images/events/retreat.webp' })
 
       expect(wrapper.findAll('img')).toHaveLength(1)
       expect(wrapper.find('img').attributes('src')).not.toContain('video-thumbnails')
