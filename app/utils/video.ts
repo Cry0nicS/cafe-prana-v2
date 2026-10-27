@@ -116,7 +116,12 @@ export const parseVideoUrl = (url?: string): ParsedVideo | null => {
 export type VideoFile = {
   /** Root-relative path, exactly as the media library wrote it. */
   src: string
-  /** Lets the browser skip a format it cannot play without fetching it. */
+  /**
+   * Lets the browser skip a format it cannot play without fetching it. Only
+   * formats every current browser reports as playable: `.mov` is left out
+   * because Chrome and Firefox answer "no" to `video/quicktime` and would skip
+   * a file they can in fact decode.
+   */
   type: string
 }
 
@@ -125,8 +130,7 @@ export type VideoSource = ({ kind: 'embed' } & ParsedVideo) | ({ kind: 'file' } 
 const VIDEO_FILE_TYPES: Record<string, string> = {
   mp4: 'video/mp4',
   m4v: 'video/mp4',
-  webm: 'video/webm',
-  mov: 'video/quicktime'
+  webm: 'video/webm'
 }
 
 /**

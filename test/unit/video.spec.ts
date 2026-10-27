@@ -93,7 +93,6 @@ describe('classifying what the owner put in the video field', () => {
     ['/videos/prana.MP4', 'video/mp4'],
     ['/videos/prana.m4v', 'video/mp4'],
     ['/videos/prana.webm', 'video/webm'],
-    ['/videos/prana.mov', 'video/quicktime'],
     ['  /videos/a%20b.mp4  ', 'video/mp4'],
     ['/videos/prana.mp4?v=2', 'video/mp4']
   ])('plays %s from the site itself', (value, type) => {
@@ -122,6 +121,7 @@ describe('classifying what the owner put in the video field', () => {
     ['nothing at all', undefined],
     ['an empty string', ''],
     ['a path to something that is not a video', '/images/hero.webp'],
+    ['a format browsers disagree on', '/videos/prana.mov'],
     ['a path with no extension', '/videos/prana'],
     ['a protocol-relative url to another host', '//cdn.example.com/prana.mp4'],
     ['a video file on another host', 'https://example.com/prana.mp4'],

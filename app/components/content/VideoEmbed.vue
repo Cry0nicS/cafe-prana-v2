@@ -16,14 +16,31 @@ const props = defineProps<{
 
 const { t } = useI18n()
 
-const video = computed(() => parseVideoSource(props.url))
+const source = computed(() => parseVideoSource(props.url))
 const playing = ref(false)
+// A file that parsed but would not load: deleted, renamed, or a format this
+// browser cannot play. Treated like a link that did not parse.
+const failed = ref(false)
+const video = computed(() => (failed.value ? null : source.value))
 
 // A file's shape is only known once the browser has read it, and the browser
 // only reads it after the visitor presses play. So the frame is 16:9 until
 // then and takes the file's own shape when it arrives: a portrait phone video
 // is shown whole at a sensible height instead of cropped or as a thin strip.
 const ratio = ref<number | null>(null)
+
+// Studio's live preview edits `url` on a mounted component; the next value
+// starts from the still, not from the previous video's shape.
+watch(() => props.url, () => {
+  playing.value = false
+  failed.value = false
+  ratio.value = null
+})
+
+const onError = () => {
+  failed.value = true
+  playing.value = false
+}
 
 const onMetadata = (event: Event) => {
   const { videoWidth, videoHeight } = event.target as HTMLVideoElement
@@ -66,13 +83,15 @@ const play = () => {
           controls
           autoplay
           playsinline
-          preload="auto"
+          preload="metadata"
+          :poster="poster?.src"
           :aria-label="caption || t('content.video.play')"
           @loadedmetadata="onMetadata"
         >
           <source
             :src="video.src"
             :type="video.type"
+            @error="onError"
           >
         </video>
       </template>

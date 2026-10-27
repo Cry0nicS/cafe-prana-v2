@@ -36,6 +36,30 @@ describe('VideoEmbed', () => {
       expect(wrapper.find('iframe').exists()).toBe(false)
     })
 
+    // Deleted, renamed, or a format this browser cannot decode: the guest gets
+    // the same way out as for a link that did not parse, not a black box.
+    it('falls back to the unavailable frame when the file will not load', async () => {
+      const wrapper = await mount(props)
+
+      await wrapper.find('button').trigger('click')
+      await wrapper.find('source').trigger('error')
+
+      expect(wrapper.find('video').exists()).toBe(false)
+      expect(wrapper.find('button').exists()).toBe(false)
+      expect(wrapper.find('a').attributes('href')).toBe('/videos/prana.mp4')
+    })
+
+    it('goes back to the still when the url is changed', async () => {
+      const wrapper = await mount(props)
+
+      await wrapper.find('button').trigger('click')
+      await wrapper.setProps({ url: 'https://youtu.be/dQw4w9WgXcQ' })
+
+      expect(wrapper.find('video').exists()).toBe(false)
+      expect(wrapper.find('iframe').exists()).toBe(false)
+      expect(wrapper.find('button').exists()).toBe(true)
+    })
+
     it('uses the poster as the still when there is one', async () => {
       const wrapper = await mount({ ...props, poster: { src: '/images/events/retreat.webp', alt: 'Breathwork circle' } })
 
