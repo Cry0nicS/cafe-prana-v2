@@ -102,7 +102,7 @@ like the café.
   column on their own.
 - **Photos** — add them inline from the media library (always add a short alt text). Guests can
   click one to see it full size.
-- **A video** — insert **Video Embed**, paste a YouTube or Vimeo link, and give it a short title.
+- **A video** — insert **Video Embed**, then either paste a YouTube or Vimeo link or pick a video you uploaded to the media library (it looks like `/videos/….mp4`), and give it a short title.
   The page shows a still with a play button and only loads the video once somebody presses play,
   so it stays fast and nothing is sent to YouTube for guests who never watch. You can pick a cover
   image from the media library; without one, the café's own frame is used.
