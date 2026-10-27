@@ -4,14 +4,16 @@ import { parseVideoUrl } from '../app/utils/video'
 // content mentions, and how to get a still for one. The network is passed in
 // so the failure cases can be tested without it.
 
-const LINK = /https?:\/\/[^\s"'<>)\]}]+/g
+// Only a link in a `url` attribute: that is what the video block reads. A link
+// in a sentence is embedded by nothing, so nothing is fetched for it.
+const VIDEO_URL = /\burl=["']?(https?:\/\/[^\s"'<>)\]}]+)/g
 
 /** Every YouTube video the text links to, once each, in order of appearance. */
 export const youtubeIdsIn = (text: string): string[] => {
   const ids = new Set<string>()
 
-  for (const link of text.match(LINK) ?? []) {
-    const video = parseVideoUrl(link)
+  for (const [, link] of text.matchAll(VIDEO_URL)) {
+    const video = parseVideoUrl(link!)
 
     if (video?.provider === 'youtube') {
       ids.add(video.id)

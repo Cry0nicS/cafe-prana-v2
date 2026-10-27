@@ -133,6 +133,8 @@ const VIDEO_FILE_TYPES: Record<string, string> = {
   webm: 'video/webm'
 }
 
+const isSlashLookalike = (character: string) => character === '\\' || character.charCodeAt(0) < 0x20
+
 /**
  * A path on this site that names a video file, or `null`.
  *
@@ -141,7 +143,9 @@ const VIDEO_FILE_TYPES: Record<string, string> = {
  * the site.
  */
 const videoFile = (value: string): VideoFile | null => {
-  if (!value.startsWith('/') || value.startsWith('//')) {
+  // A backslash reads as a slash and a tab or newline is dropped, so `/\host/`
+  // and `/<tab>/host/` both leave the site while starting with a single slash.
+  if (!value.startsWith('/') || value.startsWith('//') || [...value].some(isSlashLookalike)) {
     return null
   }
 

@@ -13,7 +13,7 @@ describe('finding the youtube videos a page mentions', () => {
   })
 
   it('lists a video once however often it appears', () => {
-    const body = 'https://youtu.be/dQw4w9WgXcQ and again https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+    const body = 'url="https://youtu.be/dQw4w9WgXcQ" and again url="https://www.youtube.com/watch?v=dQw4w9WgXcQ"'
 
     expect(youtubeIdsIn(body)).toEqual(['dQw4w9WgXcQ'])
   })
@@ -27,6 +27,17 @@ describe('finding the youtube videos a page mentions', () => {
     ['no link at all', 'Just a paragraph about breathing.']
   ])('ignores %s', (_label, body) => {
     expect(youtubeIdsIn(body)).toEqual([])
+  })
+
+  // A link in a sentence is not a block: nothing embeds it, so nothing should
+  // be fetched or published for it.
+  it('ignores a youtube link that is only mentioned in text', () => {
+    expect(youtubeIdsIn('See [our playlist](https://youtu.be/dQw4w9WgXcQ) or https://youtu.be/aaaaaaaaaaa')).toEqual([])
+  })
+
+  it('reads a single-quoted or unquoted url too', () => {
+    expect(youtubeIdsIn(`:video{url='https://youtu.be/dQw4w9WgXcQ'}`)).toEqual(['dQw4w9WgXcQ'])
+    expect(youtubeIdsIn('<video-embed url=https://youtu.be/aaaaaaaaaaa />')).toEqual(['aaaaaaaaaaa'])
   })
 
   it('stops at the end of the link, not at the end of the attribute', () => {

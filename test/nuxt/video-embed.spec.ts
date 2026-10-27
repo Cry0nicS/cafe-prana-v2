@@ -49,6 +49,18 @@ describe('VideoEmbed', () => {
       expect(wrapper.find('a').attributes('href')).toBe('/videos/frauenretreat.mp4')
     })
 
+    // A truncated file or an unsupported codec passes source selection and
+    // fails later, as an error on the player itself.
+    it('falls back to the unavailable frame when the player fails while playing', async () => {
+      const wrapper = await mount(props)
+
+      await wrapper.find('button').trigger('click')
+      await wrapper.find('video').trigger('error')
+
+      expect(wrapper.find('video').exists()).toBe(false)
+      expect(wrapper.find('a').attributes('href')).toBe('/videos/frauenretreat.mp4')
+    })
+
     it('goes back to the still when the url is changed', async () => {
       const wrapper = await mount(props)
 

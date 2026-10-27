@@ -125,6 +125,11 @@ describe('classifying what the owner put in the video field', () => {
     ['a path with no extension', '/videos/prana'],
     ['a protocol-relative url to another host', '//cdn.example.com/frauenretreat.mp4'],
     ['a video file on another host', 'https://example.com/frauenretreat.mp4'],
+    // Browsers read a backslash as a slash, and drop tabs and newlines, so each
+    // of these resolves to another host while still starting with a single `/`.
+    ['a backslash that browsers read as protocol-relative', '/\\evil.example/prana.mp4'],
+    ['a slash then backslash then host', '/\\/evil.example/prana.mp4'],
+    ['a tab that browsers drop', '/\t/evil.example/prana.mp4'],
     ['a javascript url', 'javascript:alert(1)'],
     ['a data url', 'data:video/mp4;base64,AAAA'],
     ['a bare word', 'my video']

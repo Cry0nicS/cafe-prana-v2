@@ -1,5 +1,5 @@
 import { existsSync } from 'node:fs'
-import { mkdir, readdir, readFile, rm, stat, writeFile } from 'node:fs/promises'
+import { mkdir, readdir, readFile, rename, rm, stat, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { defineNuxtModule } from 'nuxt/kit'
 import { fetchYoutubeThumbnail, youtubeIdsIn } from '../scripts/video-thumbnails'
@@ -49,7 +49,7 @@ export default defineNuxtModule({
     // The cache outlives the content that filled it, and everything in it is
     // published. Drop what no page links to any more.
     for (const file of await readdir(dir)) {
-      if (!ids.has(file.replace(/\.jpg$/, ''))) {
+      if (!file.endsWith('.jpg') || !ids.has(file.slice(0, -'.jpg'.length))) {
         await rm(join(dir, file), { force: true })
       }
     }
@@ -68,7 +68,11 @@ export default defineNuxtModule({
           return
         }
 
-        await writeFile(path, bytes)
+        // Written under another name and renamed, so a build that dies half
+        // way never leaves a truncated `<id>.jpg` for every later build to
+        // trust.
+        await writeFile(`${path}.part`, bytes)
+        await rename(`${path}.part`, path)
       }
 
       available.push(id)

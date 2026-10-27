@@ -99,6 +99,7 @@ const play = () => {
           :poster="poster?.src"
           :aria-label="caption || t('content.video.play')"
           @loadedmetadata="onMetadata"
+          @error="onError"
         >
           <source
             :src="video.src"
