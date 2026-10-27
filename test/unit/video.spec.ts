@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { parseVideoUrl } from '~/utils/video'
+import { parseVideoSource, parseVideoUrl } from '~/utils/video'
 
 describe('reading a pasted video link', () => {
   it.each([
@@ -81,5 +81,59 @@ describe('reading a pasted video link', () => {
     ['a youtube watch link with no id', 'https://www.youtube.com/watch?list=PL123']
   ])('refuses %s', (_label, url) => {
     expect(parseVideoUrl(url)).toBeNull()
+  })
+})
+
+describe('classifying what the owner put in the video field', () => {
+  // The media library hands back a root-relative path, so that is the shape a
+  // self-hosted video arrives in. The type is what lets the browser skip a
+  // format it cannot play without downloading it first.
+  it.each([
+    ['/videos/frauenretreat.mp4', 'video/mp4'],
+    ['/videos/prana.MP4', 'video/mp4'],
+    ['/videos/prana.m4v', 'video/mp4'],
+    ['/videos/prana.webm', 'video/webm'],
+    ['  /videos/a%20b.mp4  ', 'video/mp4'],
+    ['/videos/frauenretreat.mp4?v=2', 'video/mp4']
+  ])('plays %s from the site itself', (value, type) => {
+    expect(parseVideoSource(value)).toEqual({ kind: 'file', src: value.trim(), type })
+  })
+
+  it('still reads a youtube link as an embed', () => {
+    expect(parseVideoSource('https://youtu.be/dQw4w9WgXcQ')).toMatchObject({
+      kind: 'embed',
+      provider: 'youtube',
+      id: 'dQw4w9WgXcQ'
+    })
+  })
+
+  it('still reads a vimeo link as an embed', () => {
+    expect(parseVideoSource('https://vimeo.com/123456789')).toMatchObject({
+      kind: 'embed',
+      provider: 'vimeo',
+      id: '123456789'
+    })
+  })
+
+  // Same rule as for links: a value that is neither has to fall back to the
+  // plain-link frame, not guess its way into a broken player.
+  it.each([
+    ['nothing at all', undefined],
+    ['an empty string', ''],
+    ['a path to something that is not a video', '/images/hero.webp'],
+    ['a format browsers disagree on', '/videos/prana.mov'],
+    ['a path with no extension', '/videos/prana'],
+    ['a protocol-relative url to another host', '//cdn.example.com/frauenretreat.mp4'],
+    ['a video file on another host', 'https://example.com/frauenretreat.mp4'],
+    // Browsers read a backslash as a slash, and drop tabs and newlines, so each
+    // of these resolves to another host while still starting with a single `/`.
+    ['a backslash that browsers read as protocol-relative', '/\\evil.example/prana.mp4'],
+    ['a slash then backslash then host', '/\\/evil.example/prana.mp4'],
+    ['a tab that browsers drop', '/\t/evil.example/prana.mp4'],
+    ['a javascript url', 'javascript:alert(1)'],
+    ['a data url', 'data:video/mp4;base64,AAAA'],
+    ['a bare word', 'my video']
+  ])('refuses %s', (_label, value) => {
+    expect(parseVideoSource(value)).toBeNull()
   })
 })

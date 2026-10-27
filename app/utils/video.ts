@@ -111,3 +111,71 @@ export const parseVideoUrl = (url?: string): ParsedVideo | null => {
 
   return null
 }
+
+/** A video file the site serves itself, from the media library. */
+export type VideoFile = {
+  /** Root-relative path, exactly as the media library wrote it. */
+  src: string
+  /**
+   * Lets the browser skip a format it cannot play without fetching it. Only
+   * formats every current browser reports as playable: `.mov` is left out
+   * because Chrome and Firefox answer "no" to `video/quicktime` and would skip
+   * a file they can in fact decode.
+   */
+  type: string
+}
+
+export type VideoSource = ({ kind: 'embed' } & ParsedVideo) | ({ kind: 'file' } & VideoFile)
+
+const VIDEO_FILE_TYPES: Record<string, string> = {
+  mp4: 'video/mp4',
+  m4v: 'video/mp4',
+  webm: 'video/webm'
+}
+
+const isSlashLookalike = (character: string) => character === '\\' || character.charCodeAt(0) < 0x20
+
+/**
+ * A path on this site that names a video file, or `null`.
+ *
+ * Root-relative only: a file on another host is not something the cafe serves
+ * or can vouch for, and `//host/...` would read as root-relative while leaving
+ * the site.
+ */
+const videoFile = (value: string): VideoFile | null => {
+  // A backslash reads as a slash and a tab or newline is dropped, so `/\host/`
+  // and `/<tab>/host/` both leave the site while starting with a single slash.
+  if (!value.startsWith('/') || value.startsWith('//') || [...value].some(isSlashLookalike)) {
+    return null
+  }
+
+  const extension = /\.(\w+)$/.exec(value.split(/[?#]/, 1)[0] ?? '')?.[1]?.toLowerCase()
+  const type = extension ? VIDEO_FILE_TYPES[extension] : undefined
+
+  return type ? { src: value, type } : null
+}
+
+/**
+ * What the owner put in the video field: a file from the media library, or a
+ * YouTube / Vimeo link. One field takes both, so she never has to know which
+ * of the two she is holding.
+ *
+ * Returns `null` for anything else, for the same reason `parseVideoUrl` does.
+ */
+export const parseVideoSource = (value?: string): VideoSource | null => {
+  const trimmed = value?.trim()
+
+  if (!trimmed) {
+    return null
+  }
+
+  const file = videoFile(trimmed)
+
+  if (file) {
+    return { kind: 'file', ...file }
+  }
+
+  const embed = parseVideoUrl(trimmed)
+
+  return embed ? { kind: 'embed', ...embed } : null
+}

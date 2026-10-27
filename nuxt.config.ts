@@ -106,7 +106,12 @@ export default defineNuxtConfig({
     reservationEmailTo: process.env.NUXT_RESERVATION_EMAIL_TO || process.env.RESERVATION_EMAIL_TO || 'cafeprana.berlin@gmail.com',
     reservationEmailBcc: process.env.NUXT_RESERVATION_EMAIL_BCC || process.env.RESERVATION_EMAIL_BCC || CAFE_CONTACT_EMAIL,
     contactEmailFrom: process.env.NUXT_CONTACT_EMAIL_FROM || process.env.CONTACT_EMAIL_FROM || 'Cafe Prana <hello@mail.cafeprana.de>',
-    contactEmailTo: process.env.NUXT_CONTACT_EMAIL_TO || process.env.CONTACT_EMAIL_TO || CAFE_CONTACT_EMAIL
+    contactEmailTo: process.env.NUXT_CONTACT_EMAIL_TO || process.env.CONTACT_EMAIL_TO || CAFE_CONTACT_EMAIL,
+    public: {
+      // YouTube ids that have a thumbnail served from this site. Filled in at
+      // build by `modules/video-thumbnails.ts`; empty until then.
+      videoThumbnails: [] as string[]
+    }
   },
 
   compatibilityDate: '2024-11-01',
