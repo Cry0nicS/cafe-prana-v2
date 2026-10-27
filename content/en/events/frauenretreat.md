@@ -13,8 +13,3 @@ Sarah, Tatiana and Annette invite you to set everything aside for one day and ta
 ## The keyword? Letting go.
 
 Through breathwork (for women, yes indeed!), healthy food and essential oils (yes, still all for women), you will rediscover your senses and enjoy feel-good vibes. Tea and Mama Cacao are taken care of, yes, it's all included. We look forward to seeing you!
-
-:video-embed{url="/videos/prana.mp4"}
-
-:video[:video[
-]]{src="/videos/prana.mp4"}
