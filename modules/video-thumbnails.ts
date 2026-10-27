@@ -1,5 +1,5 @@
 import { existsSync } from 'node:fs'
-import { mkdir, readdir, readFile, stat, writeFile } from 'node:fs/promises'
+import { mkdir, readdir, readFile, rm, stat, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { defineNuxtModule } from 'nuxt/kit'
 import { fetchYoutubeThumbnail, youtubeIdsIn } from '../scripts/video-thumbnails'
@@ -43,6 +43,14 @@ export default defineNuxtModule({
     for (const file of await markdownFiles(join(nuxt.options.rootDir, 'content'))) {
       for (const id of youtubeIdsIn(await readFile(file, 'utf8'))) {
         ids.add(id)
+      }
+    }
+
+    // The cache outlives the content that filled it, and everything in it is
+    // published. Drop what no page links to any more.
+    for (const file of await readdir(dir)) {
+      if (!ids.has(file.replace(/\.jpg$/, ''))) {
+        await rm(join(dir, file), { force: true })
       }
     }
 
