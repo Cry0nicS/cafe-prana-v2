@@ -1,9 +1,8 @@
 import formData from 'form-data'
 import Mailgun from 'mailgun.js'
+import { toLabel } from '#shared/utils/calendar'
 import { CAFE_CONTACT_EMAIL } from '#shared/utils/constants'
-import type { ContactMessage, ContactSubject, Database } from '#shared/utils/types'
-
-type ReservationRow = Database['public']['Tables']['reservations']['Row']
+import type { ContactMessage, ContactSubject, Reservation } from '#shared/utils/types'
 
 const getMailgunClient = () => {
   const config = useRuntimeConfig()
@@ -54,19 +53,22 @@ const getContactConfirmationText = (message: ContactMessage) => {
   return [greeting, body, reference, closing].join('\n\n')
 }
 
-export const sendReservationEmail = async (reservation: ReservationRow) => {
+// Reservations are not stored anywhere else, so this email is the record of
+// the booking, including when the guest gave privacy consent.
+export const sendReservationEmail = async (reservation: Reservation, consentedAt: string) => {
   const { config, mg } = getMailgunClient()
 
   const textBody = `
 New reservation received:
 
-First name: ${reservation.first_name}
-Last name: ${reservation.last_name}
+First name: ${reservation.firstName}
+Last name: ${reservation.lastName}
 Email: ${reservation.email}
 Phone: ${reservation.phone || '-'}
 Guests: ${reservation.guests}
-Date: ${reservation.date}
-Time: ${reservation.time}
+Date: ${reservation.date.toString()}
+Time: ${toLabel(reservation.time.hour * 60 + reservation.time.minute)}
+Privacy consent: ${consentedAt}
 Message:
 ${reservation.message || '-'}
 `.trim()
@@ -76,7 +78,7 @@ ${reservation.message || '-'}
       'from': config.reservationEmailFrom,
       'to': config.reservationEmailTo,
       'bcc': config.reservationEmailBcc,
-      'subject': `Reservation from ${reservation.first_name} ${reservation.last_name}`,
+      'subject': `Reservation from ${reservation.firstName} ${reservation.lastName}`,
       'text': textBody,
       'h:Reply-To': reservation.email
     })

@@ -230,7 +230,7 @@ describe('reservation form', () => {
 
   it('reports a failing request without clearing what the guest typed', async () => {
     respond = () => {
-      throw createError({ statusCode: 500, statusMessage: 'Supabase is not configured' })
+      throw createError({ statusCode: 500, statusMessage: 'Error while sending reservation' })
     }
 
     const wrapper = await mountSuspended(ReservationForm)
