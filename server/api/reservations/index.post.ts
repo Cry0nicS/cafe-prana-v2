@@ -57,7 +57,7 @@ export default defineEventHandler(async (event) => {
     await sendReservationEmail(result.data, consentedAt)
 
     return {
-      message: 'Reservation created successfully'
+      message: 'Reservation sent successfully'
     }
   } catch (error) {
     throw emailFailure('Error while sending reservation', error)

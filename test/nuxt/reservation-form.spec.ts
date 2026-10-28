@@ -26,7 +26,7 @@ mockNuxtImport('useOpeningHours', () => async () => ({
 type ApiCall = { body: any }
 
 const calls: ApiCall[] = []
-let respond: () => unknown = () => ({ message: 'Reservation created successfully' })
+let respond: () => unknown = () => ({ message: 'Reservation sent successfully' })
 
 registerEndpoint('/api/reservations', {
   method: 'POST',
@@ -92,7 +92,7 @@ describe('reservation form', () => {
     hours.error = null
     calls.length = 0
     toastAdd.mockReset()
-    respond = () => ({ message: 'Reservation created successfully' })
+    respond = () => ({ message: 'Reservation sent successfully' })
   })
 
   afterEach(() => {

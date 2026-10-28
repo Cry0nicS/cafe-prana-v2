@@ -113,7 +113,7 @@ describe('POST /api/reservations', () => {
     const response = await postJson(handler, validPayload())
 
     expect(response.status).toBe(200)
-    expect(response.body).toEqual({ message: 'Reservation created successfully' })
+    expect(response.body).toEqual({ message: 'Reservation sent successfully' })
     expect(sendReservationEmail).toHaveBeenCalledTimes(1)
     expect(sendReservationEmail).toHaveBeenCalledWith(
       {
