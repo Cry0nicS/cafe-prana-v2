@@ -1,3 +1,4 @@
+import { CalendarDate, Time } from '@internationalized/date'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { setTestRuntimeConfig } from '../utils/runtime-config'
 
@@ -13,19 +14,21 @@ vi.mock('mailgun.js', () => ({
 
 const { sendContactEmail, sendReservationEmail } = await import('~~/server/services/email')
 
+// The reservation as the route hands it over: the schema's output, with the
+// date and time already parsed.
 const reservation = {
-  id: 1,
-  created_at: '2026-08-06T09:00:00.000Z',
-  date: '2026-08-08',
+  firstName: 'Ada',
+  lastName: 'Lovelace',
   email: 'ada@example.com',
-  first_name: 'Ada',
-  guests: 4,
-  last_name: 'Lovelace',
-  message: 'Window seat if possible.',
   phone: '+49 152 3684 8480',
-  privacy_consent: '2026-08-06T09:00:00.000Z',
-  time: '12:30:00'
+  message: 'Window seat if possible.',
+  guests: 4,
+  date: new CalendarDate(2026, 8, 8),
+  time: new Time(12, 30),
+  privacyConsent: true
 }
+
+const consentedAt = '2026-08-06T09:00:00.000Z'
 
 const contactMessage = {
   firstName: 'Ada',
@@ -51,7 +54,7 @@ describe('email service', () => {
 
   describe('sendReservationEmail', () => {
     it('notifies the cafe with the booking details and the guest as reply-to', async () => {
-      await sendReservationEmail(reservation)
+      await sendReservationEmail(reservation, consentedAt)
 
       expect(messagesCreate).toHaveBeenCalledTimes(1)
 
@@ -65,22 +68,36 @@ describe('email service', () => {
         'subject': 'Reservation from Ada Lovelace',
         'h:Reply-To': 'ada@example.com'
       })
+      expect(payload.text).toContain('First name: Ada')
+      expect(payload.text).toContain('Last name: Lovelace')
+      expect(payload.text).toContain('Email: ada@example.com')
+      expect(payload.text).toContain('Phone: +49 152 3684 8480')
       expect(payload.text).toContain('Guests: 4')
       expect(payload.text).toContain('Date: 2026-08-08')
-      expect(payload.text).toContain('Time: 12:30:00')
+      expect(payload.text).toContain('Time: 12:30\n')
       expect(payload.text).toContain('Window seat if possible.')
     })
 
-    it('falls back to a dash for the optional fields', async () => {
-      await sendReservationEmail({ ...reservation, message: null, phone: null })
+    it('records when the guest gave privacy consent', async () => {
+      // With nothing stored, this line is the only record of the consent.
+      await sendReservationEmail(reservation, consentedAt)
 
-      expect(messagesCreate.mock.calls[0]![1].text).toContain('Phone: -')
+      expect(messagesCreate.mock.calls[0]![1].text).toContain('Privacy consent: 2026-08-06T09:00:00.000Z')
+    })
+
+    it('falls back to a dash for the optional fields', async () => {
+      await sendReservationEmail({ ...reservation, message: null, phone: null }, consentedAt)
+
+      const { text } = messagesCreate.mock.calls[0]![1]
+
+      expect(text).toContain('Phone: -')
+      expect(text).toContain('Message:\n-')
     })
 
     it('rejects when Mailgun is not configured', async () => {
       setTestRuntimeConfig({ mailgunKey: '' })
 
-      await expect(sendReservationEmail(reservation)).rejects.toMatchObject({
+      await expect(sendReservationEmail(reservation, consentedAt)).rejects.toMatchObject({
         statusCode: 500,
         statusMessage: 'Mailgun is not configured'
       })
@@ -90,7 +107,7 @@ describe('email service', () => {
     it('propagates a Mailgun failure so the route can report it', async () => {
       messagesCreate.mockRejectedValue(new Error('Mailgun is down'))
 
-      await expect(sendReservationEmail(reservation)).rejects.toThrow('Mailgun is down')
+      await expect(sendReservationEmail(reservation, consentedAt)).rejects.toThrow('Mailgun is down')
     })
   })
 

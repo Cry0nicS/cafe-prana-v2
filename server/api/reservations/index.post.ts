@@ -1,13 +1,8 @@
 import * as z from 'zod'
 import { validateReservationSlot } from '#shared/utils/reservations'
 import { ReservationSchema, getReservationValidationMessage } from '#shared/utils/schemas'
-import type { Database } from '#shared/utils/types'
-import { insertReservation } from '~~/server/repositories/reservations'
 import { sendReservationEmail } from '~~/server/services/email'
 import { getOpeningHours } from '~~/server/utils/opening-hours'
-import { useServerSupabaseClient } from '~~/server/utils/supabase'
-
-type ReservationInsert = Database['public']['Tables']['reservations']['Insert']
 
 export default defineEventHandler(async (event) => {
   let body: unknown
@@ -49,40 +44,24 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const client = useServerSupabaseClient()
+  // Record proof + time of consent (schema guarantees it was given).
+  const consentedAt = new Date().toISOString()
 
-  const reservationData: ReservationInsert = {
-    date: result.data.date.toString(),
-    email: result.data.email,
-    first_name: result.data.firstName,
-    guests: result.data.guests,
-    last_name: result.data.lastName,
-    message: result.data.message ?? null,
-    phone: result.data.phone,
-    // Record proof + time of consent (schema guarantees it was given).
-    privacy_consent: new Date().toISOString(),
-    time: result.data.time.toString()
-  }
-
-  // Store the reservation first. insertReservation throws a 500 on failure,
-  // so if this rejects nothing was saved and the guest sees a genuine error.
-  const reservation = await insertReservation(client, reservationData)
-
-  // The reservation is safely stored at this point. A failed notification
-  // email must NOT fail the request, or the guest would resubmit and create a
-  // duplicate. Report it via `emailSent` and log it instead.
-  let emailSent = true
-
+  // The email is the only record of the booking: nothing is stored, so a
+  // failed send must fail the request. The guest sees an error and can safely
+  // submit again without creating a duplicate.
   try {
-    await sendReservationEmail(reservation)
-  } catch (error) {
-    emailSent = false
-    console.error('Reservation stored but notification email failed', error)
-  }
+    await sendReservationEmail(result.data, consentedAt)
 
-  return {
-    message: 'Reservation created successfully',
-    emailSent,
-    reservation
+    return {
+      message: 'Reservation created successfully'
+    }
+  } catch (error) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Error while sending reservation',
+      message: error instanceof Error ? error.message : String(error),
+      data: error
+    })
   }
 })

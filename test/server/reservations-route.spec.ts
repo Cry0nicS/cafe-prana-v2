@@ -1,17 +1,12 @@
+import { CalendarDate, Time } from '@internationalized/date'
 import { createError } from 'h3'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { postJson } from '../utils/h3'
 import { openingHoursDocument, testOpeningHours } from '../utils/opening-hours'
 
-const { insertReservation, sendReservationEmail, supabaseClient } = vi.hoisted(() => ({
-  insertReservation: vi.fn(),
-  sendReservationEmail: vi.fn(),
-  supabaseClient: { from: () => {} }
-}))
+const { sendReservationEmail } = vi.hoisted(() => ({ sendReservationEmail: vi.fn() }))
 
-vi.mock('~~/server/repositories/reservations', () => ({ insertReservation }))
 vi.mock('~~/server/services/email', () => ({ sendReservationEmail }))
-vi.mock('~~/server/utils/supabase', () => ({ useServerSupabaseClient: () => supabaseClient }))
 // The route reads the opening hours from the content database; serve the
 // fixture instead. Only that one collection is expected server-side.
 vi.mock('@nuxt/content/server', async () => {
@@ -47,25 +42,10 @@ const validPayload = () => ({
   privacyConsent: true
 })
 
-const storedReservation = {
-  id: 1,
-  created_at: NOW.toISOString(),
-  date: '2026-08-08',
-  email: 'ada@example.com',
-  first_name: 'Ada',
-  guests: 4,
-  last_name: 'Lovelace',
-  message: 'Window seat if possible.',
-  phone: '+49 152 3684 8480',
-  privacy_consent: NOW.toISOString(),
-  time: '12:30:00'
-}
-
 describe('POST /api/reservations', () => {
   beforeEach(() => {
     vi.useFakeTimers()
     vi.setSystemTime(NOW)
-    insertReservation.mockReset().mockResolvedValue(storedReservation)
     sendReservationEmail.mockReset().mockResolvedValue({ id: 'mailgun-id' })
   })
 
@@ -81,14 +61,14 @@ describe('POST /api/reservations', () => {
 
     expect(response.status).toBe(422)
     expect(JSON.stringify(response.body)).toContain('reservations.form.errors.time.unavailable')
-    expect(insertReservation).not.toHaveBeenCalled()
+    expect(sendReservationEmail).not.toHaveBeenCalled()
   })
 
   it('rejects the last hour before closing', async () => {
     const response = await postJson(handler, { ...validPayload(), time: '16:15' })
 
     expect(response.status).toBe(422)
-    expect(insertReservation).not.toHaveBeenCalled()
+    expect(sendReservationEmail).not.toHaveBeenCalled()
   })
 
   // 2026-08-10 is a Monday, which is closed.
@@ -97,7 +77,7 @@ describe('POST /api/reservations', () => {
 
     expect(response.status).toBe(422)
     expect(JSON.stringify(response.body)).toContain('reservations.form.errors.date.closed')
-    expect(insertReservation).not.toHaveBeenCalled()
+    expect(sendReservationEmail).not.toHaveBeenCalled()
   })
 
   // 2026-08-17 is a Monday the fixture opens for a dinner, 17:00 to 20:00.
@@ -105,9 +85,9 @@ describe('POST /api/reservations', () => {
     const response = await postJson(handler, { ...validPayload(), date: '2026-08-17', time: '18:30' })
 
     expect(response.status).toBe(200)
-    expect(insertReservation).toHaveBeenCalledWith(
-      supabaseClient,
-      expect.objectContaining({ date: '2026-08-17', time: '18:30:00' })
+    expect(sendReservationEmail).toHaveBeenCalledWith(
+      expect.objectContaining({ date: new CalendarDate(2026, 8, 17), time: new Time(18, 30) }),
+      NOW.toISOString()
     )
   })
 
@@ -117,7 +97,7 @@ describe('POST /api/reservations', () => {
 
     expect(response.status).toBe(422)
     expect(JSON.stringify(response.body)).toContain('reservations.form.errors.date.closed')
-    expect(insertReservation).not.toHaveBeenCalled()
+    expect(sendReservationEmail).not.toHaveBeenCalled()
   })
 
   it('fails loudly when the opening hours are missing from content', async () => {
@@ -126,50 +106,33 @@ describe('POST /api/reservations', () => {
     const response = await postJson(handler, validPayload())
 
     expect(response.status).toBe(500)
-    expect(insertReservation).not.toHaveBeenCalled()
+    expect(sendReservationEmail).not.toHaveBeenCalled()
   })
 
-  it('stores the reservation and notifies the cafe', async () => {
+  it('emails the validated reservation to the cafe', async () => {
     const response = await postJson(handler, validPayload())
 
     expect(response.status).toBe(200)
-    expect(response.body).toMatchObject({
-      message: 'Reservation created successfully',
-      emailSent: true,
-      reservation: storedReservation
-    })
-    expect(sendReservationEmail).toHaveBeenCalledWith(storedReservation)
-  })
-
-  it('maps the payload onto the database columns', async () => {
-    await postJson(handler, validPayload())
-
-    expect(insertReservation).toHaveBeenCalledWith(supabaseClient, {
-      date: '2026-08-08',
-      email: 'ada@example.com',
-      first_name: 'Ada',
-      guests: 4,
-      last_name: 'Lovelace',
-      message: 'Window seat if possible.',
-      phone: '+49 152 3684 8480',
+    expect(response.body).toEqual({ message: 'Reservation created successfully' })
+    expect(sendReservationEmail).toHaveBeenCalledTimes(1)
+    expect(sendReservationEmail).toHaveBeenCalledWith(
+      {
+        firstName: 'Ada',
+        lastName: 'Lovelace',
+        email: 'ada@example.com',
+        phone: '+49 152 3684 8480',
+        message: 'Window seat if possible.',
+        guests: 4,
+        date: new CalendarDate(2026, 8, 8),
+        time: new Time(12, 30),
+        privacyConsent: true
+      },
       // Proof of consent is stamped server side, not taken from the client.
-      privacy_consent: NOW.toISOString(),
-      time: '12:30:00'
-    })
-  })
-
-  it('stores a missing phone and message as null', async () => {
-    const { message: _message, phone: _phone, ...payload } = validPayload()
-
-    await postJson(handler, payload)
-
-    expect(insertReservation).toHaveBeenCalledWith(
-      supabaseClient,
-      expect.objectContaining({ message: null, phone: null })
+      NOW.toISOString()
     )
   })
 
-  it('rejects an invalid reservation with 422 and never touches the database', async () => {
+  it('rejects an invalid reservation with 422 and never sends an email', async () => {
     const response = await postJson(handler, { ...validPayload(), email: 'nope', guests: 99 })
 
     expect(response.status).toBe(422)
@@ -179,7 +142,6 @@ describe('POST /api/reservations', () => {
         'reservations.form.errors.guests.max'
       ])
     )
-    expect(insertReservation).not.toHaveBeenCalled()
     expect(sendReservationEmail).not.toHaveBeenCalled()
   })
 
@@ -187,44 +149,40 @@ describe('POST /api/reservations', () => {
     const response = await postJson(handler, { ...validPayload(), privacyConsent: false })
 
     expect(response.status).toBe(422)
-    expect(insertReservation).not.toHaveBeenCalled()
+    expect(sendReservationEmail).not.toHaveBeenCalled()
   })
 
   it('rejects a reservation in the past', async () => {
     const response = await postJson(handler, { ...validPayload(), date: '2026-08-05' })
 
     expect(response.status).toBe(422)
-    expect(insertReservation).not.toHaveBeenCalled()
+    expect(sendReservationEmail).not.toHaveBeenCalled()
   })
 
-  it('still confirms the reservation when the notification email fails', async () => {
-    // The guest must not be told to try again after the row was written, or
-    // they would create a duplicate booking.
-    vi.spyOn(console, 'error').mockImplementation(() => {})
+  it('fails the request when the email cannot be sent', async () => {
+    // Nothing was stored, so the guest can safely submit again.
     sendReservationEmail.mockRejectedValue(new Error('Mailgun is down'))
 
     const response = await postJson(handler, validPayload())
 
-    expect(response.status).toBe(200)
-    expect(response.body).toMatchObject({ emailSent: false, reservation: storedReservation })
+    expect(response.status).toBe(500)
   })
 
-  it('fails the request when the reservation cannot be stored', async () => {
-    insertReservation.mockRejectedValue(createError({
+  it('fails the request when Mailgun is not configured', async () => {
+    sendReservationEmail.mockRejectedValue(createError({
       statusCode: 500,
-      statusMessage: 'insert failed'
+      statusMessage: 'Mailgun is not configured'
     }))
 
     const response = await postJson(handler, validPayload())
 
     expect(response.status).toBe(500)
-    expect(sendReservationEmail).not.toHaveBeenCalled()
   })
 
   it('rejects a malformed request body with 400', async () => {
     const response = await postJson(handler, '{ not json')
 
     expect(response.status).toBe(400)
-    expect(insertReservation).not.toHaveBeenCalled()
+    expect(sendReservationEmail).not.toHaveBeenCalled()
   })
 })
