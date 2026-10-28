@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { postJson } from '../utils/h3'
 
 const { sendContactEmail } = vi.hoisted(() => ({ sendContactEmail: vi.fn() }))
@@ -21,6 +21,10 @@ const validPayload = () => ({
 describe('POST /api/contact', () => {
   beforeEach(() => {
     sendContactEmail.mockReset().mockResolvedValue({ ownerEmail: {}, confirmationSent: true })
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
   })
 
   it('sends the validated message and reports the confirmation status', async () => {
@@ -73,11 +77,17 @@ describe('POST /api/contact', () => {
   })
 
   it('returns 500 when the message could not be sent', async () => {
-    sendContactEmail.mockRejectedValue(new Error('Mailgun is down'))
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const failure = new Error('Mailgun is down')
+    sendContactEmail.mockRejectedValue(failure)
 
     const response = await postJson(handler, validPayload())
 
     expect(response.status).toBe(500)
+    // The provider's message stays in the server log, never in the response.
+    expect(JSON.stringify(response.body)).not.toContain('Mailgun is down')
+    expect(response.body.data).toBeUndefined()
+    expect(consoleError).toHaveBeenCalledWith(expect.any(String), failure)
   })
 
   it('rejects a malformed request body with 400', async () => {
