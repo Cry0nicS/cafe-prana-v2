@@ -23,6 +23,7 @@ type ServerError = {
     statusMessage?: string
   }
   message?: string
+  statusCode?: number
   statusMessage?: string
 }
 
@@ -157,6 +158,13 @@ const validateReservation = (state: ReservationFormState) => {
 
 const getErrorDescription = (error: unknown) => {
   const serverError = error as ServerError
+
+  // A failure on the server or the network says nothing the visitor can act
+  // on, so it falls through to the friendly copy instead.
+  if (!serverError.statusCode || serverError.statusCode >= 500) {
+    return undefined
+  }
+
   const issueMessage = serverError.data?.data?.[0]?.message
   const fallbackMessage = serverError.data?.message || serverError.data?.statusMessage || serverError.statusMessage || serverError.message
 
@@ -186,7 +194,7 @@ const sendReservation = async () => {
   } catch (error) {
     toast.add({
       title: t('reservations.form.errorTitle'),
-      description: getErrorDescription(error) || t('reservations.form.errorDescription'),
+      description: getErrorDescription(error) || t('reservations.form.errorDescription', { email: CAFE_CONTACT_EMAIL }),
       color: 'error',
       icon: 'i-lucide-shield-alert'
     })

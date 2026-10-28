@@ -3,6 +3,7 @@ import type { VueWrapper } from '@vue/test-utils'
 import { defineEventHandler, readBody } from 'h3'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import ContactForm from '~/components/contact/Form.vue'
+import { CAFE_CONTACT_EMAIL } from '#shared/utils/constants'
 
 const { toastAdd } = vi.hoisted(() => ({ toastAdd: vi.fn() }))
 
@@ -132,7 +133,7 @@ describe('contact form', () => {
 
   it('reports a failing request without clearing what the visitor typed', async () => {
     respond = () => {
-      throw createError({ statusCode: 500, statusMessage: 'Mailgun is not configured' })
+      throw createError({ statusCode: 500, statusMessage: 'Error while sending contact message' })
     }
 
     const wrapper = await mountSuspended(ContactForm)
@@ -144,6 +145,7 @@ describe('contact form', () => {
 
     expect(toastAdd).toHaveBeenCalledWith(expect.objectContaining({
       title: 'Could not send message',
+      description: `Please try again later or email ${CAFE_CONTACT_EMAIL}.`,
       color: 'error'
     }))
     expect((wrapper.get('[name="message"]').element as HTMLTextAreaElement).value).toBe(MESSAGE)

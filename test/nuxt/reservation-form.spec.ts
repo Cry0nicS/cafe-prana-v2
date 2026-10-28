@@ -26,7 +26,7 @@ mockNuxtImport('useOpeningHours', () => async () => ({
 type ApiCall = { body: any }
 
 const calls: ApiCall[] = []
-let respond: () => unknown = () => ({ message: 'Reservation created successfully', emailSent: true })
+let respond: () => unknown = () => ({ message: 'Reservation created successfully' })
 
 registerEndpoint('/api/reservations', {
   method: 'POST',
@@ -92,7 +92,7 @@ describe('reservation form', () => {
     hours.error = null
     calls.length = 0
     toastAdd.mockReset()
-    respond = () => ({ message: 'Reservation created successfully', emailSent: true })
+    respond = () => ({ message: 'Reservation created successfully' })
   })
 
   afterEach(() => {
@@ -239,8 +239,11 @@ describe('reservation form', () => {
     await acceptPrivacy(wrapper)
     await submit(wrapper)
 
+    // The server's own status text means nothing to the guest; the friendly
+    // copy offers another way to book instead.
     expect(toastAdd).toHaveBeenCalledWith(expect.objectContaining({
       title: 'Error sending request',
+      description: `Please try again later or email ${CAFE_CONTACT_EMAIL} and I will reserve your table.`,
       color: 'error'
     }))
     expect((wrapper.get('[name="firstName"]').element as HTMLInputElement).value).toBe('Ada')
