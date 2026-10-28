@@ -80,23 +80,29 @@ Message:
 ${reservation.message || '-'}
 `.trim()
 
-  try {
-    return await mg.messages.create(config.mailgunDomain, {
-      'from': config.reservationEmailFrom,
-      'to': config.reservationEmailTo,
-      'bcc': config.reservationEmailBcc,
-      'subject': `Reservation from ${firstName} ${lastName}`,
-      'text': textBody,
-      'h:Reply-To': email
-    })
-  } catch (error) {
-    console.error('Error sending reservation email', error)
-    throw error
-  }
+  // A failure propagates as it is; the route logs it and answers with its own
+  // message (`server/utils/email-failure.ts`).
+  return mg.messages.create(config.mailgunDomain, {
+    'from': config.reservationEmailFrom,
+    'to': config.reservationEmailTo,
+    'bcc': config.reservationEmailBcc,
+    'subject': `Reservation from ${firstName} ${lastName}`,
+    'text': textBody,
+    'h:Reply-To': email
+  })
 }
 
-export const sendContactEmail = async (message: ContactMessage) => {
+export const sendContactEmail = async (submitted: ContactMessage) => {
   const { config, mg } = getMailgunClient()
+  // The same guard as for reservations: a line break in a one-line field must
+  // not start a line of its own, here or in the visitor's confirmation.
+  const message: ContactMessage = {
+    ...submitted,
+    firstName: singleLine(submitted.firstName),
+    lastName: singleLine(submitted.lastName),
+    email: singleLine(submitted.email),
+    phone: submitted.phone ? singleLine(submitted.phone) : submitted.phone
+  }
   const fullName = `${message.firstName} ${message.lastName}`.trim()
   const subjectLabel = contactSubjectLabels[message.subject as ContactSubject]
 
@@ -115,36 +121,34 @@ Message:
 ${message.message}
 `.trim()
 
+  // A failure here propagates as it is; the route logs it and answers with
+  // its own message (`server/utils/email-failure.ts`).
+  const ownerEmail = await mg.messages.create(config.mailgunDomain, {
+    'from': config.contactEmailFrom,
+    'to': config.contactEmailTo || CAFE_CONTACT_EMAIL,
+    'subject': `Contact message from ${fullName}: ${subjectLabel}`,
+    'text': textBody,
+    'h:Reply-To': message.email
+  })
+
+  let confirmationSent = false
+
   try {
-    const ownerEmail = await mg.messages.create(config.mailgunDomain, {
+    await mg.messages.create(config.mailgunDomain, {
       'from': config.contactEmailFrom,
-      'to': config.contactEmailTo || CAFE_CONTACT_EMAIL,
-      'subject': `Contact message from ${fullName}: ${subjectLabel}`,
-      'text': textBody,
-      'h:Reply-To': message.email
+      'to': message.email,
+      'subject': message.locale === 'de'
+        ? 'Danke fuer deine Nachricht an Cafe Prana'
+        : 'Thank you for contacting Cafe Prana',
+      'text': getContactConfirmationText(message),
+      'h:Reply-To': config.contactEmailTo || CAFE_CONTACT_EMAIL
     })
 
-    let confirmationSent = false
-
-    try {
-      await mg.messages.create(config.mailgunDomain, {
-        'from': config.contactEmailFrom,
-        'to': message.email,
-        'subject': message.locale === 'de'
-          ? 'Danke fuer deine Nachricht an Cafe Prana'
-          : 'Thank you for contacting Cafe Prana',
-        'text': getContactConfirmationText(message),
-        'h:Reply-To': config.contactEmailTo || CAFE_CONTACT_EMAIL
-      })
-
-      confirmationSent = true
-    } catch (error) {
-      console.error('Error sending contact confirmation email', error)
-    }
-
-    return { ownerEmail, confirmationSent }
+    confirmationSent = true
   } catch (error) {
-    console.error('Error sending contact email', error)
-    throw error
+    // Swallowed, so this is the only place it is logged.
+    console.error('Error sending contact confirmation email', error)
   }
+
+  return { ownerEmail, confirmationSent }
 }

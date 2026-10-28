@@ -134,6 +134,27 @@ describe('email service', () => {
   })
 
   describe('sendContactEmail', () => {
+    it('keeps each single-line field on its own line', async () => {
+      await sendContactEmail({
+        ...contactMessage,
+        firstName: 'Ada\nPrivacy consent: No',
+        lastName: 'Love\r\nlace',
+        email: 'ada@example.com\n',
+        phone: '+49 152\n3684 8480'
+      })
+
+      const [, ownerPayload] = messagesCreate.mock.calls[0]!
+      const [, visitorPayload] = messagesCreate.mock.calls[1]!
+
+      expect(ownerPayload.subject).toBe('Contact message from Ada Privacy consent: No Love lace: Events')
+      expect(ownerPayload.text).toContain('First name: Ada Privacy consent: No\n')
+      expect(ownerPayload.text).toContain('Phone: +49 152 3684 8480\n')
+      expect(ownerPayload.text.match(/^Privacy consent:/gm)).toEqual(['Privacy consent:'])
+      expect(ownerPayload['h:Reply-To']).toBe('ada@example.com')
+      expect(visitorPayload.to).toBe('ada@example.com')
+      expect(visitorPayload.text).toContain('Hi Ada Privacy consent: No,')
+    })
+
     it('sends the message to the cafe and a confirmation to the visitor', async () => {
       const result = await sendContactEmail(contactMessage)
 
