@@ -90,7 +90,7 @@ reservations and contact messages.
   derived from the opening hours document (closed days, the closing margin,
   reservation exceptions, guest limits, consent, ...) and the event bookability check.
 - `test/server` — the Nitro routes and the Mailgun service, running in plain
-  Node with Supabase and Mailgun mocked. Nitro auto-imports come from
+  Node with Mailgun mocked. Nitro auto-imports come from
   `test/setup/nitro-globals.ts`.
 - `test/nuxt` — the reservation and contact form components, mounted in the Nuxt
   environment with the API endpoints stubbed.
