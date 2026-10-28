@@ -1,6 +1,5 @@
 import formData from 'form-data'
 import Mailgun from 'mailgun.js'
-import { toLabel } from '#shared/utils/calendar'
 import { CAFE_CONTACT_EMAIL } from '#shared/utils/constants'
 import type { ContactMessage, ContactSubject, Reservation } from '#shared/utils/types'
 
@@ -53,21 +52,29 @@ const getContactConfirmationText = (message: ContactMessage) => {
   return [greeting, body, reference, closing].join('\n\n')
 }
 
+// Collapses line breaks a guest typed into a one-line field, so it cannot
+// start a line of its own in the email body or spill out of the subject.
+const singleLine = (value: string) => value.replace(/\s+/g, ' ').trim()
+
 // Reservations are not stored anywhere else, so this email is the record of
 // the booking, including when the guest gave privacy consent.
 export const sendReservationEmail = async (reservation: Reservation, consentedAt: string) => {
   const { config, mg } = getMailgunClient()
+  const firstName = singleLine(reservation.firstName)
+  const lastName = singleLine(reservation.lastName)
+  const email = singleLine(reservation.email)
 
+  // `Time` prints as `HH:MM:SS`; slots are on the minute.
   const textBody = `
 New reservation received:
 
-First name: ${reservation.firstName}
-Last name: ${reservation.lastName}
-Email: ${reservation.email}
-Phone: ${reservation.phone || '-'}
+First name: ${firstName}
+Last name: ${lastName}
+Email: ${email}
+Phone: ${reservation.phone ? singleLine(reservation.phone) : '-'}
 Guests: ${reservation.guests}
 Date: ${reservation.date.toString()}
-Time: ${toLabel(reservation.time.hour * 60 + reservation.time.minute)}
+Time: ${reservation.time.toString().slice(0, 5)}
 Privacy consent: ${consentedAt}
 Message:
 ${reservation.message || '-'}
@@ -78,9 +85,9 @@ ${reservation.message || '-'}
       'from': config.reservationEmailFrom,
       'to': config.reservationEmailTo,
       'bcc': config.reservationEmailBcc,
-      'subject': `Reservation from ${reservation.firstName} ${reservation.lastName}`,
+      'subject': `Reservation from ${firstName} ${lastName}`,
       'text': textBody,
-      'h:Reply-To': reservation.email
+      'h:Reply-To': email
     })
   } catch (error) {
     console.error('Error sending reservation email', error)

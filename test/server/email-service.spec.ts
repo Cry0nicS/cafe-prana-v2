@@ -94,6 +94,28 @@ describe('email service', () => {
       expect(text).toContain('Message:\n-')
     })
 
+    it('keeps each single-line field on its own line', async () => {
+      // A newline in a name must not forge a line such as the consent record.
+      await sendReservationEmail({
+        ...reservation,
+        firstName: 'Ada\nPrivacy consent: never',
+        lastName: 'Love\r\nlace',
+        email: 'ada@example.com\n',
+        phone: '+49 152\n3684 8480',
+        message: 'Window seat\nif possible.'
+      }, consentedAt)
+
+      const [, payload] = messagesCreate.mock.calls[0]!
+
+      expect(payload.subject).toBe('Reservation from Ada Privacy consent: never Love lace')
+      expect(payload.text).toContain('First name: Ada Privacy consent: never\n')
+      expect(payload.text).toContain('Last name: Love lace\n')
+      expect(payload.text).toContain('Phone: +49 152 3684 8480\n')
+      expect(payload.text.match(/^Privacy consent:/gm)).toEqual(['Privacy consent:'])
+      // The message is last in the body, so it keeps its line breaks.
+      expect(payload.text).toContain('Message:\nWindow seat\nif possible.')
+    })
+
     it('rejects when Mailgun is not configured', async () => {
       setTestRuntimeConfig({ mailgunKey: '' })
 
