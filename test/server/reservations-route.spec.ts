@@ -161,22 +161,32 @@ describe('POST /api/reservations', () => {
 
   it('fails the request when the email cannot be sent', async () => {
     // Nothing was stored, so the guest can safely submit again.
-    sendReservationEmail.mockRejectedValue(new Error('Mailgun is down'))
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const failure = new Error('Mailgun is down')
+    sendReservationEmail.mockRejectedValue(failure)
 
     const response = await postJson(handler, validPayload())
 
     expect(response.status).toBe(500)
+    // The provider's message stays in the server log, never in the response.
+    expect(JSON.stringify(response.body)).not.toContain('Mailgun is down')
+    expect(response.body.data).toBeUndefined()
+    expect(consoleError).toHaveBeenCalledWith(expect.any(String), failure)
   })
 
   it('fails the request when Mailgun is not configured', async () => {
-    sendReservationEmail.mockRejectedValue(createError({
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const failure = createError({
       statusCode: 500,
       statusMessage: 'Mailgun is not configured'
-    }))
+    })
+    sendReservationEmail.mockRejectedValue(failure)
 
     const response = await postJson(handler, validPayload())
 
     expect(response.status).toBe(500)
+    expect(JSON.stringify(response.body)).not.toContain('Mailgun is not configured')
+    expect(consoleError).toHaveBeenCalledWith(expect.any(String), failure)
   })
 
   it('rejects a malformed request body with 400', async () => {

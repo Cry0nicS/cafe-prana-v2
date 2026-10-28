@@ -2,6 +2,7 @@ import * as z from 'zod'
 import { validateReservationSlot } from '#shared/utils/reservations'
 import { ReservationSchema, getReservationValidationMessage } from '#shared/utils/schemas'
 import { sendReservationEmail } from '~~/server/services/email'
+import { emailFailure } from '~~/server/utils/email-failure'
 import { getOpeningHours } from '~~/server/utils/opening-hours'
 
 export default defineEventHandler(async (event) => {
@@ -48,8 +49,10 @@ export default defineEventHandler(async (event) => {
   const consentedAt = new Date().toISOString()
 
   // The email is the only record of the booking: nothing is stored, so a
-  // failed send must fail the request. The guest sees an error and can safely
-  // submit again without creating a duplicate.
+  // failed send must fail the request. The guest sees an error and can submit
+  // again without leaving a duplicate behind in any database. A send Mailgun
+  // accepted but whose response was lost could still arrive twice, which the
+  // cafe can live with.
   try {
     await sendReservationEmail(result.data, consentedAt)
 
@@ -57,11 +60,6 @@ export default defineEventHandler(async (event) => {
       message: 'Reservation created successfully'
     }
   } catch (error) {
-    throw createError({
-      statusCode: 500,
-      statusMessage: 'Error while sending reservation',
-      message: error instanceof Error ? error.message : String(error),
-      data: error
-    })
+    throw emailFailure('Error while sending reservation', error)
   }
 })
