@@ -6,7 +6,7 @@
 # project genuinely cannot run without.
 
 # Secrets and local configuration. Without this the dev server boots but every
-# route that talks to Supabase, Mailgun or Studio fails, and `.env.example` is
+# route that talks to Mailgun or Studio fails, and `.env.example` is
 # tracked so it is no substitute.
 .env
 
