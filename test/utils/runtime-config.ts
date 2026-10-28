@@ -1,12 +1,9 @@
 // Values returned by the `useRuntimeConfig()` stub installed in
 // `test/setup/nitro-globals.ts`. Tests that exercise code reading the runtime
-// config (the Mailgun service, the Supabase client) mutate this via
-// `setTestRuntimeConfig`.
+// config (the Mailgun service) mutate this via `setTestRuntimeConfig`.
 export const testRuntimeConfig: Record<string, string> = {}
 
 export const defaultTestRuntimeConfig = {
-  supabaseUrl: 'https://supabase.test',
-  supabaseServiceRoleKey: 'sb_secret_test',
   mailgunBaseUrl: 'https://api.eu.mailgun.net',
   mailgunKey: 'test-mailgun-key',
   mailgunDomain: 'mail.test',

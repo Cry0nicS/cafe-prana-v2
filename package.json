@@ -19,7 +19,6 @@
     "check:content": "node scripts/check-content-parity.mjs",
     "check:studio": "node scripts/check-studio-parity.mjs",
     "check:events": "jiti scripts/check-event-bookability.ts",
-    "ping:supabase": "jiti scripts/ping-supabase.ts",
     "optimize:images": "node scripts/optimize-images.mjs"
   },
   "dependencies": {
@@ -31,7 +30,6 @@
     "@nuxt/ui": "^4.10.0",
     "@nuxtjs/i18n": "^10.5.0",
     "@nuxtjs/sitemap": "^8.3.1",
-    "@supabase/supabase-js": "^2.111.0",
     "@vercel/analytics": "^2.0.1",
     "@vueuse/nuxt": "^14.4.0",
     "better-sqlite3": "^13.0.2",
