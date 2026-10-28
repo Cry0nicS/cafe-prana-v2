@@ -11,7 +11,7 @@ const cookiesPath = computed(() => localePath('/cookies'))
 const en = {
   title: 'Privacy Policy',
   intro: 'I take your privacy seriously. This page explains what personal data is processed on cafeprana.de, why, on what legal basis, and what rights you have under the GDPR.',
-  updated: 'Last updated: 2 September 2026',
+  updated: 'Last updated: 28 October 2026',
   contact: {
     heading: 'Data controller',
     lines: [OWNER_NAME_EN, 'Pasteurstraße 2', '10407 Berlin', 'Germany'],
@@ -29,8 +29,7 @@ const en = {
       title: 'Reservation and contact forms',
       paragraphs: [
         'When you send a reservation request or a contact message, I process the details you enter: your first and last name, email address, optionally your phone number, and — for reservations — party size, preferred date and time and any message; for contact messages, the chosen subject and your message. The time at which you gave your consent is recorded together with your request.',
-        'This data is used solely to handle your request and to reply to you. Legal basis: Art. 6 (1)(b) GDPR (steps prior to a contract / answering your enquiry). Both forms are processed by two service providers acting on my behalf (Art. 28 GDPR). Each provider’s data processing addendum, including the EU Standard Contractual Clauses, forms part of its terms of service:',
-        'Database — reservation requests are stored with Supabase Pte. Ltd. (65 Chulia Street #38-02/03, OCBC Centre, Singapore 049513). The database itself is hosted in a data centre in the EU and is only accessible to me.',
+        'This data is used solely to handle your request and to reply to you. Legal basis: Art. 6 (1)(b) GDPR (steps prior to a contract / answering your enquiry). Besides the hosting provider named above, both forms are processed by one further service provider acting on my behalf (Art. 28 GDPR). Its data processing addendum, including the EU Standard Contractual Clauses, forms part of its terms of service:',
         'Email delivery — your request is delivered to my mailbox through Mailgun (Sinch Email / Mailgun Technologies, Inc., 112 E. Pecan Street #1135, San Antonio, TX 78205, USA), using its EU region (servers in the EU). If you use the contact form, Mailgun also sends you a short confirmation email at the address you entered. Where a transfer to the USA occurs, it is covered by the EU Standard Contractual Clauses contained in the addendum.',
         'The data is kept only as long as needed to handle your request and to meet any legal retention obligations, then deleted.'
       ]
@@ -101,7 +100,7 @@ const en = {
 const de = {
   title: 'Datenschutzerklärung',
   intro: 'Dein Datenschutz ist mir wichtig. Hier erfährst du, welche personenbezogenen Daten auf cafeprana.de verarbeitet werden, warum, auf welcher Rechtsgrundlage und welche Rechte du nach der DSGVO hast.',
-  updated: 'Zuletzt aktualisiert: 2. September 2026',
+  updated: 'Zuletzt aktualisiert: 28. Oktober 2026',
   contact: {
     heading: 'Verantwortliche Stelle',
     lines: [OWNER_NAME_DE, 'Pasteurstraße 2', '10407 Berlin', 'Deutschland'],
@@ -119,8 +118,7 @@ const de = {
       title: 'Reservierungs- und Kontaktformular',
       paragraphs: [
         'Wenn du eine Reservierungsanfrage oder eine Kontaktnachricht sendest, verarbeite ich die von dir eingegebenen Angaben: Vor- und Nachname, E-Mail-Adresse, optional deine Telefonnummer sowie bei Reservierungen Personenzahl, Wunschdatum und -uhrzeit und deine Nachricht; bei Kontaktnachrichten das gewählte Thema und deine Nachricht. Der Zeitpunkt deiner Einwilligung wird zusammen mit der Anfrage gespeichert.',
-        'Diese Daten werden ausschließlich zur Bearbeitung und Beantwortung deiner Anfrage verwendet. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (vorvertragliche Maßnahmen / Beantwortung deiner Anfrage). Beide Formulare werden von zwei Dienstleistern in meinem Auftrag verarbeitet (Art. 28 DSGVO). Der Auftragsverarbeitungszusatz des jeweiligen Anbieters, einschließlich der EU-Standardvertragsklauseln, ist Bestandteil seiner Nutzungsbedingungen:',
-        'Datenbank — Reservierungsanfragen werden bei Supabase Pte. Ltd. (65 Chulia Street #38-02/03, OCBC Centre, Singapur 049513) gespeichert. Die Datenbank selbst wird in einem Rechenzentrum in der EU betrieben und ist nur für mich zugänglich.',
+        'Diese Daten werden ausschließlich zur Bearbeitung und Beantwortung deiner Anfrage verwendet. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (vorvertragliche Maßnahmen / Beantwortung deiner Anfrage). Neben dem oben genannten Hosting-Anbieter werden beide Formulare von einem weiteren Dienstleister in meinem Auftrag verarbeitet (Art. 28 DSGVO). Dessen Auftragsverarbeitungszusatz, einschließlich der EU-Standardvertragsklauseln, ist Bestandteil seiner Nutzungsbedingungen:',
         'E-Mail-Zustellung — deine Anfrage wird mir über Mailgun (Sinch Email / Mailgun Technologies, Inc., 112 E. Pecan Street #1135, San Antonio, TX 78205, USA) per E-Mail zugestellt, und zwar über die EU-Region des Dienstes (Server in der EU). Beim Kontaktformular sendet Mailgun außerdem eine kurze Bestätigungs-E-Mail an die von dir angegebene Adresse. Soweit dabei eine Übermittlung in die USA stattfindet, ist sie durch die im Zusatz enthaltenen EU-Standardvertragsklauseln abgesichert.',
         'Die Daten werden nur so lange gespeichert, wie es zur Bearbeitung deiner Anfrage und zur Erfüllung gesetzlicher Aufbewahrungspflichten erforderlich ist, und anschließend gelöscht.'
       ]
