@@ -1,10 +1,10 @@
 de:
-  title: Neues Öffnungszeiten!
-  message: Liebe Gäste, die Winteröffnungszeiten gelten ab jetzt. Montag und Freitag wie immer geschlossen.
+  title: GESCHLOSSEN
+  message: Liebe Gäste, das Café ist am Sonntag 1.11. geschlossen. Wir sehen uns am Dienstag!
 en:
-  title: New Opening Hours!
-  message: Hi Prana People, please check the new opening hours. Mondays and Fridays are closed as usual.
+  title: CLOSED
+  message: Hi Prana People, Café Prana is closed on Sunday 1.11. See you on Tuesday!
 schedule:
-  from: 2026-10-05 00:00:00
-  until: 2026-10-10 00:00:00
+  from: 2026-10-31 20:00:00
+  until: 2026-11-01 18:00:00
 tone: info
