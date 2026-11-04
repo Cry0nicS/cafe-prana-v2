@@ -1,10 +1,9 @@
 ::home-hero
 ---
-image:
-  src: /images/hero.webp
-  alt: Café Prana table with nourishing gluten-free and vegan food
+:image: /images/hero.webp
 description: A gluten-free and vegan haven in the heart of Berlin
 headline: Newly opened!
+image: /images/hero.webp
 title: Welcome to Café Prana
 ---
 ::
