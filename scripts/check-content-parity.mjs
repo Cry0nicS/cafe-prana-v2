@@ -23,12 +23,42 @@ const pairs = [
 // Studio serialises a block without children as an inline component with a single
 // colon (`:directions{...}`), so one colon counts too. Closing fences (`::`) have
 // no name and are ignored.
-const extractBlocks = src =>
-  src
-    .split(/\r?\n/)
-    .map(line => line.match(/^\s*:+([a-z][a-z0-9-]*)/))
-    .filter(Boolean)
-    .map(match => match[1])
+//
+// Only the block STRUCTURE is compared. Props (the YAML between `---` fences
+// after a block opener, or a page's own frontmatter) are skipped entirely:
+// they are independently editable per language - see
+// docs/adr/0001-bilingual-content-layout.md - and Studio can write YAML keys
+// that start with a colon (`:image: ...`), which would otherwise be misread as
+// a component.
+const extractBlocks = (src) => {
+  const lines = src.split(/\r?\n/)
+  const blocks = []
+  let inProps = false
+
+  lines.forEach((line, index) => {
+    const trimmed = line.trim()
+
+    if (inProps) {
+      if (trimmed === '---') inProps = false
+      return
+    }
+
+    // A props/frontmatter fence opens at the very top of the file or directly
+    // after a block opener (`::name` with no inline `{...}` content needed).
+    if (trimmed === '---') {
+      const previous = index === 0 ? '' : lines[index - 1].trim()
+      if (index === 0 || /^:{2,}[a-z][a-z0-9-]*/.test(previous)) {
+        inProps = true
+        return
+      }
+    }
+
+    const match = line.match(/^\s*:+([a-z][a-z0-9-]*)/)
+    if (match) blocks.push(match[1])
+  })
+
+  return blocks
+}
 
 let failed = false
 
