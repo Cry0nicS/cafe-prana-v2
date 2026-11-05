@@ -24,13 +24,9 @@ defineProps<{
 
 <template>
   <UPage>
-    <UPageHero
+    <PageHeading
       :title="title"
       :description="intro"
-      :ui="{
-        title: 'mx-0! text-left',
-        description: 'mx-0! text-left'
-      }"
     />
 
     <UPageSection :ui="{ container: 'pt-0!' }">
@@ -39,7 +35,7 @@ defineProps<{
           v-if="contact"
           class="lg:sticky lg:top-24"
         >
-          <div class="rounded-2xl border border-default bg-muted/40 p-6">
+          <div class="cafe-surface p-6">
             <h2 class="font-mono text-xs uppercase tracking-[0.2em] text-primary">
               {{ contact.heading }}
             </h2>

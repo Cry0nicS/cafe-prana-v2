@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { MotionConfig } from 'motion-v'
 import {
   CAFE_ADDRESS,
   CAFE_CONTACT_EMAIL,
@@ -79,11 +80,15 @@ useSeoMeta({
 
 <template>
   <UApp>
-    <NuxtLayout>
-      <UMain class="relative">
-        <NuxtPage />
-      </UMain>
-    </NuxtLayout>
+    <!-- Every <Motion> on the site skips its movement for visitors who ask
+         their system for reduced motion. -->
+    <MotionConfig reduced-motion="user">
+      <NuxtLayout>
+        <UMain class="relative">
+          <NuxtPage />
+        </UMain>
+      </NuxtLayout>
+    </MotionConfig>
     <SiteNotice />
     <CookieAnalytics />
     <CookieConsentBanner />

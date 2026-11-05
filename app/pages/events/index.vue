@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { CAFE_CONTACT_MAILTO } from '#shared/utils/constants'
 import { compareEventsAsc, compareEventsDesc, isUpcomingEvent } from '~/utils/events'
+import { riseInView } from '~/utils/motion'
 import type { EventTimeTab } from '~/components/events/EventTimeTabs.vue'
 
 const { locale, t } = useI18n()
@@ -67,55 +68,30 @@ useCafeSeo({
     v-if="page"
     class="pb-28"
   >
-    <!-- Heading -->
-    <section class="relative isolate grid items-center gap-14 px-2 pt-16 pb-20 sm:px-6 lg:grid-cols-2 lg:pt-24">
-      <div
-        aria-hidden="true"
-        class="cafe-glow"
-      />
-      <Motion
-        :initial="{ opacity: 0, x: -14 }"
-        :animate="{ opacity: 1, x: 0 }"
-        :transition="{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }"
-      >
-        <p
-          v-if="page.hero.headline"
-          class="cafe-eyebrow"
-        >
-          {{ page.hero.headline }}
-        </p>
-        <h1 class="mt-6 font-serif text-5xl leading-[1.03] font-medium tracking-tight text-highlighted sm:text-6xl">
-          {{ page.hero.title }}
-        </h1>
-        <p class="mt-6 max-w-md text-lg leading-8 text-muted">
-          {{ page.hero.description }}
-        </p>
-        <div class="mt-9 flex flex-wrap gap-3">
-          <UButton
-            v-for="link in heroLinks"
-            :key="link.label"
-            v-bind="link"
-            size="lg"
-            class="rounded-full px-5"
-          />
-        </div>
-        <p class="mt-10 inline-flex items-center gap-3 rounded-full bg-primary/8 px-4 py-2 text-sm text-toned ring-1 ring-primary/15">
-          <UIcon
-            name="i-lucide-leaf"
-            class="size-4 text-primary"
-          />
-          {{ t('event.dietary') }}
-        </p>
-      </Motion>
+    <PageHeading
+      :headline="page.hero.headline"
+      :title="page.hero.title"
+      :description="page.hero.description"
+      :links="heroLinks"
+    >
+      <p class="mt-10 inline-flex items-center gap-3 rounded-full bg-primary/8 px-4 py-2 text-sm text-toned ring-1 ring-primary/15">
+        <UIcon
+          name="i-lucide-leaf"
+          class="size-4 text-primary"
+        />
+        {{ t('event.dietary') }}
+      </p>
 
-      <EventsEventPosterFan
+      <template
         v-if="fanPosters.length"
-        :posters="fanPosters"
-      />
-    </section>
+        #aside
+      >
+        <EventsEventPosterFan :posters="fanPosters" />
+      </template>
+    </PageHeading>
 
     <!-- The list -->
-    <div class="flex flex-col gap-5 border-t border-default px-2 pt-14 sm:flex-row sm:items-end sm:justify-between sm:px-6">
+    <div class="mt-6 flex flex-col gap-5 border-t border-default px-2 pt-14 sm:flex-row sm:items-end sm:justify-between sm:px-6">
       <div>
         <h2 class="font-serif text-3xl font-medium text-highlighted sm:text-4xl">
           {{ tab === 'past' ? page.sections.pastTitle : page.sections.upcomingTitle }}
@@ -198,10 +174,7 @@ useCafeSeo({
             v-for="(event, index) in shownEvents"
             :key="event.path"
             as="li"
-            :initial="{ opacity: 0, y: 14 }"
-            :while-in-view="{ opacity: 1, y: 0 }"
-            :in-view-options="{ once: true }"
-            :transition="{ duration: 0.5, delay: Math.min(index, 4) * 0.06, ease: [0.22, 1, 0.36, 1] }"
+            v-bind="riseInView(Math.min(index, 4) * 0.06)"
           >
             <EventsEventRow :event="event" />
           </Motion>

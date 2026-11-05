@@ -40,7 +40,7 @@ const isUnavailable = computed(() => props.item.available === false)
 <template>
   <article
     :data-availability="isUnavailable ? 'unavailable' : undefined"
-    class="group min-w-0 overflow-hidden rounded-lg border border-default shadow-sm transition duration-200"
+    class="group min-w-0 overflow-hidden rounded-[1.75rem] border border-default shadow-sm transition duration-200"
     :class="isUnavailable
       ? 'bg-muted/40'
       : 'bg-elevated/80 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md'"

@@ -13,7 +13,7 @@ useCafeSeo({
 
 <template>
   <UPage>
-    <UPageHero
+    <PageHeading
       :title="t('cookies.title')"
       :description="t('cookies.description')"
       :headline="t('cookies.headline')"
@@ -24,11 +24,6 @@ useCafeSeo({
         color: 'neutral',
         variant: 'outline'
       }]"
-      :ui="{
-        title: 'mx-0! text-left',
-        description: 'mx-0! text-left',
-        links: 'justify-start'
-      }"
     />
 
     <UPageSection
@@ -42,7 +37,6 @@ useCafeSeo({
             :title="t('cookies.summaryTitle')"
             icon="i-lucide-shield-check"
             variant="subtle"
-            :ui="{ root: 'rounded-lg' }"
           >
             <div class="space-y-4 text-sm leading-7 text-muted">
               <p>{{ t('cookies.summaryP1') }}</p>
@@ -55,11 +49,11 @@ useCafeSeo({
             :title="t('cookies.storageTitle')"
             icon="i-lucide-lock"
             variant="naked"
-            :ui="{ root: 'rounded-lg border border-default bg-default p-6' }"
+            :ui="{ root: 'cafe-surface p-6' }"
           >
             <div class="space-y-4 text-sm leading-7 text-muted">
               <p>{{ t('cookies.storageP1') }}</p>
-              <div class="overflow-hidden rounded-lg border border-default">
+              <div class="overflow-hidden rounded-2xl border border-default">
                 <table class="w-full text-left text-sm">
                   <thead class="bg-muted/50 text-highlighted">
                     <tr>
@@ -107,7 +101,7 @@ useCafeSeo({
             :title="t('cookies.analyticsTitle')"
             icon="i-lucide-chart-no-axes-column"
             variant="naked"
-            :ui="{ root: 'rounded-lg border border-default bg-default p-6' }"
+            :ui="{ root: 'cafe-surface p-6' }"
           >
             <div class="space-y-4 text-sm leading-7 text-muted">
               <p>{{ t('cookies.analyticsP1') }}</p>
@@ -120,7 +114,7 @@ useCafeSeo({
             :title="t('cookies.resetTitle')"
             icon="i-lucide-refresh-cw"
             variant="naked"
-            :ui="{ root: 'rounded-lg border border-default bg-default p-6' }"
+            :ui="{ root: 'cafe-surface p-6' }"
           >
             <div class="space-y-4 text-sm leading-7 text-muted">
               <p>{{ t('cookies.resetP1') }}</p>

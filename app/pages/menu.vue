@@ -63,27 +63,22 @@ function scrollToCategory(id: string) {
 
 <template>
   <UPage v-if="page">
-    <UPageHero
+    <PageHeading
       :headline="page.hero.headline"
       :title="page.hero.title"
       :description="page.hero.description"
       :links="heroLinks"
-      orientation="horizontal"
-      :ui="{
-        container: 'max-w-6xl! py-12 sm:py-16 lg:py-20',
-        title: 'max-w-2xl text-left text-4xl font-semibold tracking-normal sm:text-5xl',
-        description: 'max-w-xl text-left text-lg text-muted',
-        links: 'justify-start'
-      }"
     >
-      <NuxtImg
-        v-bind="page.hero.image"
-        format="webp"
-        sizes="sm:100vw md:50vw lg:560px"
-        class="aspect-[16/11] w-full rounded-lg object-cover shadow-xl ring-1 ring-default"
-        placeholder
-      />
-    </UPageHero>
+      <template #aside>
+        <NuxtImg
+          v-bind="page.hero.image"
+          format="webp"
+          sizes="sm:100vw md:50vw lg:560px"
+          class="aspect-[4/3] w-full rounded-[2rem] object-cover shadow-2xl shadow-black/15 ring-1 ring-default"
+          placeholder
+        />
+      </template>
+    </PageHeading>
 
     <nav class="sticky top-[73px] z-10 -mx-4 border-y border-default bg-default/90 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6 lg:hidden">
       <div class="flex gap-2 overflow-x-auto">
@@ -108,7 +103,7 @@ function scrollToCategory(id: string) {
       }"
     >
       <aside class="hidden lg:block">
-        <div class="sticky top-24 rounded-lg border border-default bg-elevated/70 p-4">
+        <div class="cafe-surface sticky top-24 p-4">
           <p class="text-xs font-medium uppercase tracking-wide text-muted">
             {{ t('menu.itemCount', totalItems) }}
           </p>
@@ -145,7 +140,7 @@ function scrollToCategory(id: string) {
                 :name="category.icon"
                 class="size-6 text-primary"
               />
-              <h2 class="text-2xl font-semibold text-highlighted sm:text-3xl">
+              <h2 class="font-serif text-2xl font-medium text-highlighted sm:text-3xl">
                 {{ category.title }}
               </h2>
             </div>
