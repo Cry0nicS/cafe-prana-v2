@@ -35,7 +35,7 @@ const active = ref<GalleryImg | null>(null)
     >
       <button
         type="button"
-        class="block w-full overflow-hidden rounded-xl ring-1 ring-default transition duration-300 hover:ring-primary/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cafe-spark)]"
+        class="block w-full overflow-hidden rounded-[1.75rem] ring-1 ring-default transition duration-300 hover:ring-primary/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cafe-spark)]"
         :aria-label="`${item.alt} — view larger`"
         @click="active = item"
       >
@@ -70,7 +70,7 @@ const active = ref<GalleryImg | null>(null)
           :alt="active.alt"
           loading="lazy"
           decoding="async"
-          class="mx-auto max-h-[80vh] w-full rounded-lg object-contain"
+          class="mx-auto max-h-[80vh] w-full rounded-2xl object-contain"
         >
       </template>
     </UModal>

@@ -60,16 +60,15 @@ const links = computed(() => [
           <li
             v-for="item in hours"
             :key="item.day"
-            class="flex items-center justify-between gap-4 border-b border-default pb-2"
+            class="flex items-baseline justify-between gap-4 border-b border-default pb-2"
           >
             <span>{{ item.label }}</span>
-            <UBadge
-              variant="soft"
-              :color="item.closed ? 'neutral' : 'success'"
-              class="font-mono tabular-nums"
+            <span
+              class="font-mono text-sm tabular-nums"
+              :class="item.closed ? 'text-dimmed' : 'text-toned'"
             >
               {{ item.time }}
-            </UBadge>
+            </span>
           </li>
         </ul>
       </div>
@@ -78,7 +77,7 @@ const links = computed(() => [
     <iframe
       :src="CAFE_MAP_EMBED_URL"
       width="100%"
-      class="h-[420px] w-full rounded-2xl border-0 shadow-lg ring-1 ring-default lg:h-full"
+      class="h-[420px] w-full rounded-[2rem] border-0 shadow-2xl shadow-black/10 ring-1 ring-default lg:h-full"
       loading="lazy"
       referrerpolicy="no-referrer-when-downgrade"
       title="Café Prana map"

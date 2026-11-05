@@ -45,22 +45,19 @@ describe('an event with no photo yet', () => {
     expect(wrapper.find('[data-photo="pending"]').exists()).toBe(true)
   })
 
-  // The homepage poster is the opposite case: the photo is a whole grid column,
-  // so leaving the wrapper behind reserves an empty 42% of the card with a 24rem
-  // floor under it. The card has to collapse to one column instead.
+  // On the homepage the poster is a column of its own, so leaving its wrapper
+  // behind would reserve an empty half of the hero. It has to collapse to one
+  // column instead.
   it('collapses the homepage poster to a single column', async () => {
     const wrapper = await mountSuspended(NextEventHero, {
       props: { title: 'Welcome to Cafe Prana', event: draft }
     })
 
-    const card = wrapper.get('article')
+    const hero = wrapper.get('section')
 
     expect(wrapper.text()).toContain('My event')
     expect(wrapper.find('img').exists()).toBe(false)
-    expect(card.classes()).toContain('lg:grid-cols-1')
-    expect(card.classes().join(' ')).not.toContain('42%')
-    // `col-span-2` in a one-column grid would conjure a second column back.
-    expect(wrapper.get('footer').classes()).not.toContain('lg:col-span-2')
+    expect(hero.classes()).toContain('xl:grid-cols-1')
   })
 })
 
@@ -91,13 +88,18 @@ describe('an event with a photo', () => {
     expect(image!.classes()).toContain('object-contain')
   })
 
-  it('gives the homepage poster its two-column card back', async () => {
+  it('gives the homepage poster its column back, uncropped', async () => {
     const wrapper = await mountSuspended(NextEventHero, {
       props: { title: 'Welcome to Cafe Prana', event: published }
     })
 
-    expect(wrapper.get('img').attributes('alt')).toBe('A table at Prana')
-    expect(wrapper.get('article').classes().join(' ')).toContain('42%')
-    expect(wrapper.get('footer').classes()).toContain('lg:col-span-2')
+    const image = wrapper.get('img')
+
+    expect(image.attributes('alt')).toBe('A table at Prana')
+    // Posters carry their own printed title and date: shown whole, at their own
+    // shape, never cropped into a frame.
+    expect(image.classes()).toContain('h-auto')
+    expect(image.classes()).not.toContain('object-cover')
+    expect(wrapper.get('section').classes().join(' ')).not.toContain('xl:grid-cols-1')
   })
 })

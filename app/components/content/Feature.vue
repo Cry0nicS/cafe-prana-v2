@@ -7,8 +7,8 @@ defineProps<{
 </script>
 
 <template>
-  <div class="group flex h-full gap-4 rounded-xl border border-default bg-elevated/50 p-5 transition duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md">
-    <span class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-inset ring-[var(--cafe-spark)]/35 transition group-hover:bg-primary/15">
+  <div class="group cafe-surface flex h-full gap-4 p-6 transition duration-300 ease-out hover:bg-elevated/70">
+    <span class="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary transition duration-300 group-hover:bg-primary group-hover:text-inverted">
       <UIcon
         v-if="icon"
         :name="icon"
@@ -16,7 +16,7 @@ defineProps<{
       />
     </span>
     <div class="min-w-0 space-y-1">
-      <h3 class="font-medium leading-tight text-highlighted">
+      <h3 class="font-serif text-lg leading-snug font-medium text-highlighted">
         {{ title }}
       </h3>
       <p class="text-sm leading-6 text-muted">

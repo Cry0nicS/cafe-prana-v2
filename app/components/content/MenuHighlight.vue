@@ -17,8 +17,9 @@ const img = computed(() => resolveContentImage(props.image, props.altText))
     :description="description"
     orientation="horizontal"
     reverse
-    class="bg-elevated/60 transition duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md"
-    :ui="{ root: 'overflow-hidden', body: 'flex flex-col justify-center' }"
+    variant="naked"
+    class="transition duration-300 ease-out hover:bg-elevated/70"
+    :ui="{ root: 'cafe-surface overflow-hidden p-3 sm:p-4', body: 'flex flex-col justify-center' }"
   >
     <NuxtImg
       v-if="img"
@@ -26,7 +27,7 @@ const img = computed(() => resolveContentImage(props.image, props.altText))
       :alt="img.alt"
       format="webp"
       sizes="sm:100vw md:360px lg:260px"
-      class="aspect-[4/3] w-full rounded-lg object-cover"
+      class="aspect-[4/3] w-full rounded-[1.25rem] object-cover"
       placeholder
     />
   </UPageCard>

@@ -33,7 +33,8 @@ export default defineConfig(async () => ({
         test: {
           name: 'nuxt',
           environment: 'nuxt',
-          include: ['test/nuxt/**/*.spec.ts']
+          include: ['test/nuxt/**/*.spec.ts'],
+          setupFiles: ['./test/setup/motion.ts']
         }
       })
     ]
