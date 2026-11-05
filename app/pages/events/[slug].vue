@@ -7,7 +7,7 @@ import {
 } from '#shared/utils/constants'
 import {
   compareEventsDesc,
-  formatEventDate,
+  formatEventDateLong,
   formatEventPrice,
   getEventDateIso,
   getEventTime,
@@ -51,16 +51,6 @@ const eventsPath = computed(() => localePath('/events'))
 const upcoming = computed(() => (event.value ? isUpcomingEvent(event.value) : false))
 const showPrice = computed(() => event.value?.paid && typeof event.value.price === 'number')
 const needsBooking = computed(() => event.value?.reservation !== 'walkin')
-const reservationNote = computed(() => {
-  switch (event.value?.reservation) {
-    case 'required':
-      return t('event.reservationRequired')
-    case 'walkin':
-      return t('event.noBookingNeeded')
-    default:
-      return t('event.reservationRecommended')
-  }
-})
 
 const locationLabel = computed(() => `${global.name}, ${CAFE_ADDRESS.city}`)
 
@@ -158,176 +148,135 @@ useHead(() => ({
 </script>
 
 <template>
-  <UContainer
+  <div
     v-if="event"
-    class="pb-24 pt-8"
+    class="pb-28"
   >
-    <ULink
-      :to="eventsPath"
-      class="inline-flex items-center gap-1 text-sm text-muted transition hover:text-highlighted"
-    >
-      <UIcon
-        name="i-lucide-chevron-left"
-        class="size-4"
+    <header class="relative isolate px-4 pt-12 pb-14 text-center sm:pt-16">
+      <div
+        aria-hidden="true"
+        class="cafe-glow opacity-70"
       />
-      {{ t('event.backToEvents') }}
-    </ULink>
+      <ULink
+        :to="eventsPath"
+        class="inline-flex items-center gap-1.5 text-sm text-muted transition hover:text-highlighted"
+      >
+        <UIcon
+          name="i-lucide-arrow-left"
+          class="size-4"
+        />
+        {{ t('event.backToEvents') }}
+      </ULink>
 
-    <article class="mx-auto mt-8 max-w-3xl">
-      <header class="space-y-5">
-        <div class="flex flex-wrap items-center gap-3">
-          <p class="cafe-eyebrow">
-            {{ formatEventDate(event, locale) }}
-          </p>
-          <UBadge
-            :label="upcoming ? t('event.upcoming') : t('event.pastEvent')"
-            :color="upcoming ? 'primary' : 'neutral'"
-            variant="soft"
-            size="sm"
-          />
-        </div>
-
-        <h1 class="font-serif text-4xl font-medium tracking-tight text-highlighted sm:text-5xl">
+      <Motion
+        :initial="{ opacity: 0, y: 12 }"
+        :animate="{ opacity: 1, y: 0 }"
+        :transition="{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }"
+      >
+        <p class="mt-12 font-mono text-xs tracking-[0.22em] text-primary uppercase">
+          <time :datetime="getEventDateIso(event.date)">{{ formatEventDateLong(event, locale) }}</time>
+        </p>
+        <h1 class="mx-auto mt-5 max-w-3xl font-serif text-4xl leading-[1.08] font-medium tracking-tight text-balance text-highlighted sm:text-6xl">
           {{ event.title }}
         </h1>
-        <p class="text-lg leading-8 text-muted">
+        <p
+          v-if="event.description"
+          class="mx-auto mt-6 max-w-xl text-lg leading-8 text-pretty text-muted"
+        >
           {{ event.description }}
         </p>
-      </header>
 
-      <!-- Omitted rather than filled in when the photo has not been chosen yet:
-           a lone hero closes up cleanly, where a card in a grid cannot. -->
-      <NuxtImg
-        v-if="event.image?.src"
-        :src="event.image.src"
-        :alt="event.image.alt || ''"
-        class="mt-8 aspect-[16/9] w-full rounded-2xl object-cover shadow-xl ring-1 ring-default"
-        sizes="sm:100vw lg:768px"
-        format="webp"
-        placeholder
+        <!-- The practical details, as one line of type -->
+        <dl class="mx-auto mt-8 flex max-w-2xl flex-wrap items-baseline justify-center gap-x-2 gap-y-1 text-sm text-toned [&>div+div]:before:mr-2 [&>div+div]:before:text-dimmed [&>div+div]:before:content-['·']">
+          <div>
+            <dt class="sr-only">
+              {{ t('event.time') }}
+            </dt>
+            <dd class="inline">
+              {{ getEventTime(event, t('event.noTime')) }}
+            </dd>
+          </div>
+          <div v-if="showPrice">
+            <dt class="sr-only">
+              {{ t('event.price') }}
+            </dt>
+            <dd class="inline">
+              {{ formatEventPrice(event.price!, locale) }}
+            </dd>
+          </div>
+          <div>
+            <dt class="sr-only">
+              {{ t('event.location') }}
+            </dt>
+            <dd class="inline">
+              <ULink
+                :to="CAFE_MAPS_URL"
+                target="_blank"
+                class="underline decoration-default underline-offset-4 transition hover:decoration-primary"
+              >
+                {{ locationLabel }}
+              </ULink>
+            </dd>
+          </div>
+        </dl>
+
+        <UButton
+          v-if="upcoming && needsBooking"
+          :to="reservationPath"
+          :label="t('event.reserve')"
+          size="lg"
+          class="mt-8 rounded-full px-6"
+        />
+        <p
+          v-else-if="!upcoming"
+          class="mt-6 text-sm text-dimmed"
+        >
+          {{ t('event.passed') }}
+        </p>
+      </Motion>
+    </header>
+
+    <div class="mx-auto max-w-3xl px-2 sm:px-6">
+      <span
+        aria-hidden="true"
+        class="block h-px w-full bg-gradient-to-r from-transparent via-[var(--ui-border-accented)] to-transparent"
       />
 
-      <!-- Details bar -->
-      <dl class="mt-8 flex flex-wrap items-center gap-x-7 gap-y-3 rounded-2xl border border-default bg-muted/40 px-5 py-4 font-mono text-sm tabular-nums text-toned">
-        <div class="flex items-center gap-2">
-          <UIcon
-            name="i-lucide-calendar-days"
-            class="size-4 shrink-0 text-primary"
-          />
-          <dt class="sr-only">
-            {{ t('event.date') }}
-          </dt>
-          <dd>{{ formatEventDate(event, locale) }}</dd>
-        </div>
-        <div class="flex items-center gap-2">
-          <UIcon
-            name="i-lucide-clock"
-            class="size-4 shrink-0 text-primary"
-          />
-          <dt class="sr-only">
-            {{ t('event.time') }}
-          </dt>
-          <dd>{{ getEventTime(event, t('event.noTime')) }}</dd>
-        </div>
-        <div
-          v-if="showPrice"
-          class="flex items-center gap-2"
+      <article class="cafe-prose mt-14">
+        <!-- The poster at its own shape, tucked into the story like a printed
+             card. Left out, not filled in, when no photo has been chosen yet:
+             the text simply runs the full column. -->
+        <figure
+          v-if="event.image?.src"
+          class="mx-auto mb-10 w-60 rotate-[1.5deg] sm:float-right sm:mt-2 sm:mb-6 sm:ml-10 sm:w-64"
         >
-          <UIcon
-            name="i-lucide-ticket"
-            class="size-4 shrink-0 text-primary"
+          <NuxtImg
+            :src="event.image.src"
+            :alt="event.image.alt || ''"
+            class="h-auto w-full rounded-lg shadow-[0_24px_50px_-12px_rgba(0,0,0,0.35)] ring-1 ring-black/5 dark:ring-white/10"
+            sizes="sm:240px md:256px"
+            format="webp"
+            placeholder
           />
-          <dt class="sr-only">
-            {{ t('event.price') }}
-          </dt>
-          <dd>{{ formatEventPrice(event.price!, locale) }}</dd>
-        </div>
-        <div class="flex items-center gap-2">
-          <UIcon
-            name="i-lucide-map-pin"
-            class="size-4 shrink-0 text-primary"
-          />
-          <dt class="sr-only">
-            {{ t('event.location') }}
-          </dt>
-          <dd>
-            <ULink
-              :to="CAFE_MAPS_URL"
-              target="_blank"
-              class="hover:text-highlighted"
-            >
-              {{ locationLabel }}
-            </ULink>
-          </dd>
-        </div>
-      </dl>
-
-      <!-- Reservation -->
-      <div class="mt-6">
-        <template v-if="upcoming">
-          <div class="flex flex-wrap items-center gap-4">
-            <UButton
-              v-if="needsBooking"
-              :to="reservationPath"
-              :label="t('event.reserve')"
-              icon="i-lucide-calendar-check"
-              color="primary"
-              size="lg"
-            />
-            <span class="text-sm text-muted">{{ reservationNote }}</span>
-          </div>
-        </template>
-        <div
-          v-else
-          class="flex flex-wrap items-center gap-4 rounded-xl border border-default bg-muted/30 px-4 py-3"
-        >
-          <span class="text-sm text-muted">{{ t('event.passed') }}</span>
-          <UButton
-            :to="eventsPath"
-            :label="t('event.more')"
-            icon="i-lucide-arrow-right"
-            trailing
-            color="neutral"
-            variant="outline"
-            size="sm"
-          />
-        </div>
-      </div>
-
-      <p class="cafe-eyebrow mt-6">
-        {{ t('event.dietary') }}
-      </p>
-
-      <!-- Body -->
-      <div class="cafe-prose mt-10">
+        </figure>
         <ContentRenderer
           v-if="event.body"
           :value="event"
         />
-      </div>
-    </article>
+      </article>
 
-    <section
-      v-if="relatedEvents.length"
-      class="mx-auto mt-20 max-w-6xl"
-    >
-      <div class="mb-8 flex items-end justify-between gap-4">
-        <div>
-          <p class="cafe-eyebrow">
-            {{ t('event.more') }}
-          </p>
-          <h2 class="mt-2 font-serif text-2xl font-medium tracking-tight text-highlighted sm:text-3xl">
-            {{ t('event.moreDescription') }}
-          </h2>
-        </div>
-      </div>
-      <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        <EventsEventCard
-          v-for="relatedEvent in relatedEvents"
-          :key="relatedEvent.path"
-          :event="relatedEvent"
-        />
-      </div>
-    </section>
-  </UContainer>
+      <EventsEventInvitation
+        :upcoming="upcoming"
+        :reservation="event.reservation"
+        :reservation-path="reservationPath"
+        :events-path="eventsPath"
+        class="clear-both pt-24"
+      />
+
+      <EventsEventMoreList
+        :events="relatedEvents"
+        class="mt-24"
+      />
+    </div>
+  </div>
 </template>

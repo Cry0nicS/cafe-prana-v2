@@ -178,15 +178,24 @@ html {
 /* Text sets to a reading measure; media breaks it. Prose at the full 48rem of
    the article runs to ~95 characters a line, well past the point where the eye
    loses its place returning to the left edge. Photos, tables and video keep the
-   whole column, which is the contrast the page is built on. */
-.cafe-prose > p,
-.cafe-prose > ul,
-.cafe-prose > ol,
-.cafe-prose > h2,
-.cafe-prose > h3,
-.cafe-prose > h4,
-.cafe-prose > blockquote {
+   whole column, which is the contrast the page is built on.
+
+   `ContentRenderer` wraps the body in a `<div data-content-id>`, so the blocks
+   are grandchildren of `.cafe-prose`, not children. Matching only `> p` meant
+   this measure never applied; both depths are matched so it holds whether or
+   not a renderer adds the wrapper. */
+.cafe-prose > :is(p, ul, ol, h2, h3, h4, blockquote),
+.cafe-prose > div > :is(p, ul, ol, h2, h3, h4, blockquote) {
   max-width: 65ch;
+}
+
+/* The story opens a size up, like the standfirst of a magazine piece, so the
+   eye has somewhere to land after the title. */
+.cafe-prose > p:first-of-type,
+.cafe-prose > div > p:first-of-type {
+  font-size: 1.25rem;
+  line-height: 1.8;
+  color: var(--ui-text-toned);
 }
 
 /* A struck price or a cancelled date. Dimmed, not faded out of reach: this is
@@ -320,10 +329,12 @@ html {
 /* Page glow — the same breath, spread wide behind a page heading: a lighter
    green focus that lifts the top of the page out of the ground, strongest on
    the dark theme. Place it inside a `relative isolate` parent; it clips itself
-   so it never adds a horizontal scrollbar. */
+   so it never adds a horizontal scrollbar. It may rise above its parent, but
+   never reaches past its sides: on a phone the parent is the full width of the
+   screen, and anything wider scrolls the page sideways. */
 .cafe-glow {
   position: absolute;
-  inset: -2rem -2rem 0;
+  inset: -2rem 0 0;
   z-index: -1;
   overflow: hidden;
   pointer-events: none;
