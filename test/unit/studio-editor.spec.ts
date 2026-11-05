@@ -87,7 +87,10 @@ describe('the studio insert palette', () => {
     // These take a whole event or dish as a prop, fetched by a query. There is
     // no way to supply one from a markdown body.
     'EventsEventCard',
-    'EventsEventFeature',
+    'EventsEventRow',
+    'EventsEventPoster',
+    'EventsEventPosterFan',
+    'EventsEventTimeTabs',
     'MenuItemCard',
     // Nuxt UI's own internals, which reach the meta list through content usage.
     'UAccordion',

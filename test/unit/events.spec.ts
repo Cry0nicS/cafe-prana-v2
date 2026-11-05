@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { nextUpcomingEvent } from '~/utils/events'
+import { eventDateParts, eventReservationKey, nextUpcomingEvent } from '~/utils/events'
 
 // "Now" is a Tuesday morning. `isUpcomingEvent` compares against the start of
 // that day, so an event dated today still counts.
@@ -82,5 +82,33 @@ describe('nextUpcomingEvent', () => {
   it('returns null for an empty list and for an all-past list', () => {
     expect(nextUpcomingEvent([], now)).toBeNull()
     expect(nextUpcomingEvent([event('Gone', '2026-01-05'), event('Also gone', '2026-09-07')], now)).toBeNull()
+  })
+})
+
+describe('eventDateParts', () => {
+  it('splits a date into the pieces the listing sets apart', () => {
+    expect(eventDateParts({ date: '2026-02-22' }, 'en')).toEqual({ day: 22, weekday: 'Sun', month: 'Feb', year: '26' })
+  })
+
+  it('speaks German on the German page, without the abbreviation dots', () => {
+    expect(eventDateParts({ date: '2026-02-22' }, 'de')).toEqual({ day: 22, weekday: 'So', month: 'Feb', year: '26' })
+  })
+
+  // A date-only value is UTC midnight. Reading it in local time would show the
+  // 21st anywhere west of Greenwich.
+  it('keeps the calendar day whatever the clock\'s time zone', () => {
+    expect(eventDateParts({ date: '2026-03-01' }).day).toBe(1)
+    expect(eventDateParts({ date: '2026-03-01' }).month).toBe('Mar')
+  })
+})
+
+describe('eventReservationKey', () => {
+  it.each([
+    ['required', 'event.reservationRequired'],
+    ['walkin', 'event.noBookingNeeded'],
+    ['recommended', 'event.reservationRecommended'],
+    [undefined, 'event.reservationRecommended']
+  ] as const)('maps %s to %s', (reservation, key) => {
+    expect(eventReservationKey(reservation)).toBe(key)
   })
 })
