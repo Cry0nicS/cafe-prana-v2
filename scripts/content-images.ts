@@ -69,27 +69,40 @@ export const findImageProblems = (source: string, imageExists: (src: string) => 
           const problem = colonPropProblem(key, value)
 
           if (problem) report(problem)
+
+          // Both write the same prop, and MDCRenderer keeps whichever comes
+          // last in the block - so which one the page shows depends on key
+          // order. Studio also shows each as its own field.
+          if (key.slice(1) in props) {
+            report(`both \`${key.slice(1)}\` and \`${key}\` are set, and the page shows whichever comes last - keep one`)
+          }
         }
       }
 
       if (IMAGE_COMPONENTS.includes(node.name)) {
-        // What the renderer hands the component: `image`, else `:image` as JSON.
-        let raw = props.image
+        // Every value that can reach the component's `image` prop: the plain
+        // one, and the bound `:image` once decoded. Both are checked, since a
+        // duplicate is reported above and either may be the one rendered.
+        const candidates: unknown[] = []
 
-        if (raw === undefined && typeof props[':image'] === 'string') {
+        if (props.image !== undefined) candidates.push(props.image)
+
+        if (typeof props[':image'] === 'string') {
           try {
-            raw = JSON.parse(props[':image'])
+            candidates.push(JSON.parse(props[':image']))
           } catch {
             // already reported above
           }
         }
 
-        const image = resolveContentImage(raw)
+        for (const raw of candidates) {
+          const image = resolveContentImage(raw)
 
-        if (raw !== undefined && !image) {
-          report(`image ${JSON.stringify(raw)} has no usable path`)
-        } else if (image && !imageExists(image.src)) {
-          report(`image ${image.src} is not in public/`)
+          if (!image) {
+            report(`image ${JSON.stringify(raw)} has no usable path`)
+          } else if (!imageExists(image.src)) {
+            report(`image ${image.src} is not in public/`)
+          }
         }
       }
     }

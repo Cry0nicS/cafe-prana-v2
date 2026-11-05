@@ -27,9 +27,20 @@ describe('findImageProblems', () => {
 
   it('reports the leftover colon prop Studio writes, and a YAML object under a colon key', () => {
     expect(check(hero(':image: /images/hero.webp\nimage: /images/hero.webp'))).toEqual([
-      '`:image` holds "/images/hero.webp", which is not JSON - drop the colon or the line'
+      '`:image` holds "/images/hero.webp", which is not JSON - drop the colon or the line',
+      'both `image` and `:image` are set, and the page shows whichever comes last - keep one'
     ])
     expect(check(hero(':image:\n  src: /images/hero.webp'))[0]).toContain('holds a YAML object')
+  })
+
+  // MDCRenderer keeps whichever of the two comes last, so a missing path on
+  // either side can be the one the visitor gets.
+  it('reports a plain and a bound image together, and checks both paths, in either order', () => {
+    const duplicate = 'both `image` and `:image` are set, and the page shows whichever comes last - keep one'
+    const missing = 'image /images/missing.webp is not in public/'
+
+    expect(check(hero('image: /images/hero.webp\n:image: \'"/images/missing.webp"\''))).toEqual([duplicate, missing])
+    expect(check(hero(':image: \'"/images/missing.webp"\'\nimage: /images/hero.webp'))).toEqual([duplicate, missing])
   })
 
   it('reports an image value with no usable path', () => {
