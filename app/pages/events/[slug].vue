@@ -152,89 +152,75 @@ useHead(() => ({
     v-if="event"
     class="pb-28"
   >
-    <header class="relative isolate px-4 pt-12 pb-14 text-center sm:pt-16">
-      <div
-        aria-hidden="true"
-        class="cafe-glow opacity-70"
+    <PageHeading
+      :title="event.title"
+      :description="event.description"
+      align="center"
+    >
+      <template #before>
+        <ULink
+          :to="eventsPath"
+          class="inline-flex items-center gap-1.5 text-sm text-muted transition hover:text-highlighted"
+        >
+          <UIcon
+            name="i-lucide-arrow-left"
+            class="size-4"
+          />
+          {{ t('event.backToEvents') }}
+        </ULink>
+      </template>
+      <template #headline>
+        <time :datetime="getEventDateIso(event.date)">{{ formatEventDateLong(event, locale) }}</time>
+      </template>
+
+      <!-- The practical details, as one line of type -->
+      <dl class="mx-auto mt-8 flex max-w-2xl flex-wrap items-baseline justify-center gap-x-2 gap-y-1 text-sm text-toned [&>div+div]:before:mr-2 [&>div+div]:before:text-dimmed [&>div+div]:before:content-['·']">
+        <div>
+          <dt class="sr-only">
+            {{ t('event.time') }}
+          </dt>
+          <dd class="inline">
+            {{ getEventTime(event, t('event.noTime')) }}
+          </dd>
+        </div>
+        <div v-if="showPrice">
+          <dt class="sr-only">
+            {{ t('event.price') }}
+          </dt>
+          <dd class="inline">
+            {{ formatEventPrice(event.price!, locale) }}
+          </dd>
+        </div>
+        <div>
+          <dt class="sr-only">
+            {{ t('event.location') }}
+          </dt>
+          <dd class="inline">
+            <ULink
+              :to="CAFE_MAPS_URL"
+              target="_blank"
+              class="underline decoration-default underline-offset-4 transition hover:decoration-primary"
+            >
+              {{ locationLabel }}
+            </ULink>
+          </dd>
+        </div>
+      </dl>
+
+      <UButton
+        v-if="upcoming && needsBooking"
+        :to="reservationPath"
+        :label="t('event.reserve')"
+        size="lg"
+        class="mt-8 rounded-full px-6"
       />
-      <ULink
-        :to="eventsPath"
-        class="inline-flex items-center gap-1.5 text-sm text-muted transition hover:text-highlighted"
+      <p
+        v-else-if="!upcoming"
+        class="mt-6 text-sm text-dimmed"
       >
-        <UIcon
-          name="i-lucide-arrow-left"
-          class="size-4"
-        />
-        {{ t('event.backToEvents') }}
-      </ULink>
-
-      <Motion
-        :initial="{ opacity: 0, y: 12 }"
-        :animate="{ opacity: 1, y: 0 }"
-        :transition="{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }"
-      >
-        <p class="mt-12 font-mono text-xs tracking-[0.22em] text-primary uppercase">
-          <time :datetime="getEventDateIso(event.date)">{{ formatEventDateLong(event, locale) }}</time>
-        </p>
-        <h1 class="mx-auto mt-5 max-w-3xl font-serif text-4xl leading-[1.08] font-medium tracking-tight text-balance text-highlighted sm:text-6xl">
-          {{ event.title }}
-        </h1>
-        <p
-          v-if="event.description"
-          class="mx-auto mt-6 max-w-xl text-lg leading-8 text-pretty text-muted"
-        >
-          {{ event.description }}
-        </p>
-
-        <!-- The practical details, as one line of type -->
-        <dl class="mx-auto mt-8 flex max-w-2xl flex-wrap items-baseline justify-center gap-x-2 gap-y-1 text-sm text-toned [&>div+div]:before:mr-2 [&>div+div]:before:text-dimmed [&>div+div]:before:content-['·']">
-          <div>
-            <dt class="sr-only">
-              {{ t('event.time') }}
-            </dt>
-            <dd class="inline">
-              {{ getEventTime(event, t('event.noTime')) }}
-            </dd>
-          </div>
-          <div v-if="showPrice">
-            <dt class="sr-only">
-              {{ t('event.price') }}
-            </dt>
-            <dd class="inline">
-              {{ formatEventPrice(event.price!, locale) }}
-            </dd>
-          </div>
-          <div>
-            <dt class="sr-only">
-              {{ t('event.location') }}
-            </dt>
-            <dd class="inline">
-              <ULink
-                :to="CAFE_MAPS_URL"
-                target="_blank"
-                class="underline decoration-default underline-offset-4 transition hover:decoration-primary"
-              >
-                {{ locationLabel }}
-              </ULink>
-            </dd>
-          </div>
-        </dl>
-
-        <UButton
-          v-if="upcoming && needsBooking"
-          :to="reservationPath"
-          :label="t('event.reserve')"
-          size="lg"
-          class="mt-8 rounded-full px-6"
-        />
-        <p
-          v-else-if="!upcoming"
-          class="mt-6 text-sm text-dimmed"
-        >
-          {{ t('event.passed') }}
-        </p>
-      </Motion>
-    </header>
+        {{ t('event.passed') }}
+      </p>
+    </PageHeading>
 
     <div class="mx-auto max-w-3xl px-2 sm:px-6">
       <span

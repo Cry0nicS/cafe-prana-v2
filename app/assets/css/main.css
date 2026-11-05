@@ -326,6 +326,16 @@ html {
   50% { transform: scale(1.08); }
 }
 
+/* Soft surface — the site's one container: a very round panel lifted off the
+   page by a whisper of tint and a hairline, rather than a card with a border
+   and a shadow. Rows, side panels and forms all sit on it, so the site keeps
+   one shape. A utility, so `hover:` and `md:` variants work on it. */
+@utility cafe-surface {
+  border-radius: 1.75rem;
+  border: 1px solid var(--ui-border);
+  background-color: color-mix(in oklab, var(--ui-bg-elevated) 45%, transparent);
+}
+
 /* Page glow — the same breath, spread wide behind a page heading: a lighter
    green focus that lifts the top of the page out of the ground, strongest on
    the dark theme. Place it inside a `relative isolate` parent; it clips itself
@@ -338,6 +348,9 @@ html {
   z-index: -1;
   overflow: hidden;
   pointer-events: none;
+  /* The glow is taller than a short heading, so the clip would cut it off
+     in a hard line where the section ends. Fade it out instead. */
+  mask-image: linear-gradient(to bottom, black 55%, transparent);
 }
 .cafe-glow::before {
   content: "";

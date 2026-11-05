@@ -209,7 +209,7 @@ const sendReservation = async () => {
     :state="formState"
     :validate="validateReservation"
     :disabled="isSubmitting"
-    class="rounded-lg border border-default bg-elevated/80 p-4 shadow-sm sm:p-6"
+    class="cafe-surface p-4 sm:p-6"
     @submit="sendReservation"
   >
     <fieldset class="space-y-5 disabled:opacity-70">

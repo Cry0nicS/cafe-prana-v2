@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { riseIn } from '~/utils/motion'
+
 // Up to three event posters fanned like cards on a table, beside the events
 // page heading. The first one sits on top in the middle; the next two tuck in
 // behind, left and right, and spread apart on hover.
@@ -36,9 +38,7 @@ const pose = [
       :key="poster.src + i"
       class="absolute w-[46%] sm:w-[50%]"
       :class="layer[i]"
-      :initial="{ opacity: 0, y: 30 }"
-      :animate="{ opacity: 1, y: 0 }"
-      :transition="{ duration: 0.8, delay: 0.15 + i * 0.12, ease: [0.22, 1, 0.36, 1] }"
+      v-bind="riseIn(0.15 + i * 0.12, 30)"
     >
       <component
         :is="poster.to ? NuxtLink : 'div'"

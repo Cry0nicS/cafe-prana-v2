@@ -148,11 +148,11 @@ const sendContactMessage = async () => {
     :state="formState"
     :validate="validateContact"
     :disabled="isSubmitting"
-    class="rounded-lg border border-default bg-elevated/80 shadow-sm"
+    class="cafe-surface"
     @submit="sendContactMessage"
   >
     <div class="border-b border-default p-5 sm:p-6">
-      <h2 class="text-2xl font-semibold tracking-normal text-highlighted">
+      <h2 class="font-serif text-2xl font-medium text-highlighted">
         {{ t('contact.formTitle') }}
       </h2>
       <p class="mt-2 text-sm leading-6 text-muted">
@@ -249,7 +249,7 @@ const sendContactMessage = async () => {
       </UFormField>
 
       <UFormField name="privacyConsent">
-        <label class="flex items-start gap-3 rounded-lg bg-muted/50 p-3 text-sm leading-6 text-toned">
+        <label class="flex items-start gap-3 rounded-2xl bg-muted/50 p-3 text-sm leading-6 text-toned">
           <UCheckbox
             v-model="formState.privacyConsent"
             class="mt-0.5"

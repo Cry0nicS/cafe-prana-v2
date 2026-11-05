@@ -35,7 +35,7 @@ useCafeSeo({
 
 <template>
   <UPage>
-    <UPageHero
+    <PageHeading
       :headline="t('reservations.headline')"
       :title="t('reservations.title')"
       :description="t('reservations.description')"
@@ -50,26 +50,20 @@ useCafeSeo({
         to: localePath('/'),
         icon: 'i-lucide-arrow-left',
         color: 'neutral',
-        variant: 'outline'
+        variant: 'ghost'
       }]"
-      :ui="{
-        container: 'max-w-5xl! py-12 sm:py-16 lg:py-20',
-        title: 'max-w-3xl text-left',
-        description: 'max-w-3xl text-left',
-        links: 'justify-start'
-      }"
     />
 
     <UPageSection
       :ui="{
-        container: 'max-w-5xl! pt-0! lg:grid lg:grid-cols-[minmax(0,0.9fr)_minmax(480px,1.1fr)] lg:items-start lg:gap-12'
+        container: 'pt-0! lg:grid lg:grid-cols-[minmax(0,0.9fr)_minmax(480px,1.1fr)] lg:items-start lg:gap-12'
       }"
     >
       <div class="mb-8 space-y-4 lg:sticky lg:top-28 lg:mb-0">
         <div
           v-for="feature in features"
           :key="feature.title"
-          class="rounded-lg border border-default bg-muted/40 p-4"
+          class="cafe-surface p-5"
         >
           <div class="flex items-start gap-3">
             <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
@@ -79,7 +73,7 @@ useCafeSeo({
               />
             </span>
             <div>
-              <h2 class="font-semibold text-highlighted">
+              <h2 class="font-serif text-lg font-medium text-highlighted">
                 {{ feature.title }}
               </h2>
               <p class="mt-1 text-sm leading-6 text-muted">

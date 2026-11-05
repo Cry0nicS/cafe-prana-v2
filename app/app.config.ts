@@ -94,6 +94,20 @@ export default defineAppConfig({
       primary: 'chlorophyll',
       neutral: 'paper'
     },
+    // Pills, everywhere: the events pages set the shape and every other button
+    // on the site follows, so a form's submit matches a page's call to action.
+    button: {
+      slots: {
+        base: 'rounded-full'
+      }
+    },
+    // Cards share the soft surface's radius. Pages should not hand cards a
+    // smaller `rounded-*` of their own; that is how the shapes drifted apart.
+    card: {
+      slots: {
+        root: 'rounded-[1.75rem]'
+      }
+    },
     pageHero: {
       slots: {
         container: 'py-16 sm:py-20 lg:py-28',
@@ -111,6 +125,7 @@ export default defineAppConfig({
     },
     pageCard: {
       slots: {
+        root: 'rounded-[1.75rem]',
         title: 'font-serif font-medium'
       }
     },
