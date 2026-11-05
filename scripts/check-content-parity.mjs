@@ -1,12 +1,16 @@
-// Two content checks over the locale folders. Zero dependencies; safe to run in
-// CI, and needs no build.
+// Three content checks over the locale folders. Zero dependencies; safe to run
+// in CI, and needs no build.
 //
 //   1. FAILS when the localized homepage MDC files do not use the same set and
 //      order of component blocks - a section added or removed in one language
 //      but not the other.
-//   2. REPORTS content that exists in only one language, without failing. That
+//   2. FAILS when a homepage image points at a file that is not in `public/`,
+//      or a block carries a colon-prefixed prop (`:image: /images/x.webp`)
+//      whose value is not JSON. Both mean an image the visitor never sees -
+//      see docs/research/studio-image-swap.md.
+//   3. REPORTS content that exists in only one language, without failing. That
 //      is a legitimate state, not a defect; see the bottom of this file.
-import { readFile, readdir } from 'node:fs/promises'
+import { access, readFile, readdir } from 'node:fs/promises'
 import { dirname, join, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -82,6 +86,72 @@ for (const { label, a, b } of pairs) {
     console.error(`✖ ${label}: ${a} and ${b} are out of sync`)
     console.error(`  ${a}: ${blocksA.join(', ')}`)
     console.error(`  ${b}: ${blocksB.join(', ')}`)
+  }
+}
+
+// --- homepage images ----------------------------------------------------------
+//
+// The components take `image` as a media-library path. A colon-prefixed key is
+// MDC's marker for a JSON value; Studio leaves one behind holding a bare path,
+// and its form then shows a second, duplicate image field.
+
+// `modules/optimize-images.ts` turns a committed .jpg/.jpeg/.png into the .webp
+// the content points at, during the build, so the source file counts too.
+const imageExists = async (src) => {
+  const base = join(root, 'public', src.replace(/^\//, ''))
+  const candidates = [base, ...['.jpg', '.jpeg', '.png'].map(ext => base.replace(/\.webp$/, ext))]
+
+  for (const file of candidates) {
+    try {
+      await access(file)
+      return true
+    } catch {
+      // try the next candidate
+    }
+  }
+
+  return false
+}
+
+const imageProblems = async (file, src) => {
+  const problems = []
+  const lines = src.split(/\r?\n/)
+
+  for (const [index, line] of lines.entries()) {
+    const where = `${file}:${index + 1}`
+    const colonKey = line.match(/^\s*:([a-zA-Z][\w-]*):\s*(.+)$/)
+
+    if (colonKey) {
+      try {
+        JSON.parse(colonKey[2])
+      } catch {
+        problems.push(`${where}: \`:${colonKey[1]}\` holds "${colonKey[2]}", which is not JSON - drop the colon or the line`)
+      }
+    }
+
+    // `image: /path` in a YAML props block, or `image="/path"` inline.
+    for (const match of line.matchAll(/(?:^\s*image:\s*|\bimage=")(\/[^"\s]+)/g)) {
+      if (!(await imageExists(match[1]))) {
+        problems.push(`${where}: image ${match[1]} is not in public/`)
+      }
+    }
+  }
+
+  return problems
+}
+
+for (const { a, b } of pairs) {
+  for (const file of [a, b]) {
+    const problems = await imageProblems(file, await readFile(join(root, file), 'utf8'))
+
+    if (problems.length === 0) {
+      console.log(`✔ images: ${file}`)
+    } else {
+      failed = true
+      for (const problem of problems) {
+        console.error(`✖ images: ${problem}`)
+      }
+    }
   }
 }
 

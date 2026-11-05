@@ -1,9 +1,9 @@
 ::home-hero
 ---
-class: front room
 description: Ein glutenfreies und veganes Café im Herzen von Berlin
 headline: Prana hat sein erstes Jahr überstanden!
 image: /images/menu-pics/1000003798.webp
+altText: Der vordere Raum im Café Prana, mit mintfarbenen Stühlen und einem gemalten Baum an der Wand
 title: Willkommen im Cafe Prana
 ---
 ::
@@ -37,9 +37,8 @@ title: Menü-Highlights
 ---
   :::menu-highlight
   ---
-  image:
-    src: /images/menu/herzhafte-waffel.webp
-    alt: Herzhafte Waffel mit bunten pflanzlichen Toppings
+  image: /images/menu/herzhafte-waffel.webp
+  altText: Herzhafte Waffel mit bunten pflanzlichen Toppings
   description: Süßkartoffel-Waffel mit Pranas herzhaften Toppings des Tages.
   title: Herzhafte Waffel
   ---
@@ -47,22 +46,20 @@ title: Menü-Highlights
 
   :::menu-highlight
   ---
-  image:
-    src: /images/menu/chai-latte.webp
-    alt: Chai Latte in einer Keramiktasse
+  image: /images/menu/chai-latte.webp
+  altText: Chai Latte in einer Keramiktasse
   description: Hausgemachte Chai-Gewürzmischung, liebevoll zubereitet und mit
     Pflanzenmilch deiner Wahl serviert.
   title: Chai Latte
   ---
   :::
 
-:menu-highlight{description="Reiner, roher Kakao für achtsame Momente und ein warmes Herz." image="/images/menu/cacao.webp" title="Zeremonieller Kakao"}
+:menu-highlight{description="Reiner, roher Kakao für achtsame Momente und ein warmes Herz." image="/images/menu/cacao.webp" altText="Zeremonieller Kakao" title="Zeremonieller Kakao"}
 
   :::menu-highlight
   ---
-  image:
-    src: /images/menu/banana-bread.webp
-    alt: Scheibe Prana Banana Bread mit Toppings
+  image: /images/menu/banana-bread.webp
+  altText: Scheibe Prana Banana Bread mit Toppings
   description: Nährendes, natürlich gesüßtes Banana Bread mit saisonalen Toppings
     wie Nussmus oder Kompott.
   title: Pranas Banana Bread
@@ -72,9 +69,8 @@ title: Menü-Highlights
 
 ::events-intro
 ---
-image:
-  src: /images/events/index.webp
-  alt: Community-Event im Cafe Prana
+image: /images/events/index.webp
+altText: Community-Event im Cafe Prana
 description: "Bei Prana bringe ich Menschen an gemeinsamen Tischen zusammen: mit
   nährendem Essen, achtsamen Momenten und Raum für Verbindung."
 headline: Besondere Events
@@ -110,9 +106,8 @@ title: Galerie
 
 ::story-section
 ---
-image:
-  src: /images/home/my-story.webp
-  alt: Gründerinnengeschichte von Cafe Prana
+image: /images/home/my-story.webp
+altText: Gründerinnengeschichte von Cafe Prana
 icon: i-lucide-book-open
 title: Meine Geschichte
 ---

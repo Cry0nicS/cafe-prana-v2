@@ -1,10 +1,15 @@
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   headline?: string
   title?: string
   description?: string
-  image?: { src?: string, alt?: string }
+  /** Photo from the media library, as its path (what Studio's picker writes). */
+  image?: string
+  /** Short description of the photo, for screen readers and search engines. */
+  altText?: string
 }>()
+
+const img = computed(() => resolveContentImage(props.image, props.altText))
 
 const { t } = useI18n()
 
@@ -54,7 +59,7 @@ const links = computed(() => [
     }"
   >
     <div
-      v-if="image?.src"
+      v-if="img"
       class="relative p-6 sm:p-8"
     >
       <div
@@ -73,8 +78,8 @@ const links = computed(() => [
         attributes: those feed IPX modifiers and would crop the source.
       -->
       <NuxtImg
-        :src="image.src"
-        :alt="image.alt"
+        :src="img.src"
+        :alt="img.alt"
         format="webp"
         sizes="sm:100vw md:50vw lg:560px"
         class="relative z-10 aspect-[16/11] w-full rounded-2xl object-cover shadow-xl ring-1 ring-default"

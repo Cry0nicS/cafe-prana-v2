@@ -28,7 +28,8 @@ const welcome = {
   headline: 'Newly opened!',
   title: 'Welcome to Café Prana',
   description: 'A gluten-free and vegan haven in the heart of Berlin',
-  image: { src: '/images/hero.webp', alt: 'Café Prana table' }
+  image: '/images/hero.webp',
+  altText: 'Café Prana table'
 }
 
 const aperitivo = (overrides: Partial<NextEvent> = {}): NextEvent => ({
@@ -45,10 +46,10 @@ const aperitivo = (overrides: Partial<NextEvent> = {}): NextEvent => ({
 
 let mounted: VueWrapper[] = []
 
-const mountHero = async (event: NextEvent | null) => {
+const mountHero = async (event: NextEvent | null, props: Record<string, unknown> = welcome) => {
   current.value = event
 
-  const wrapper = await mountSuspended(HomeHero, { props: welcome })
+  const wrapper = await mountSuspended(HomeHero, { props })
 
   mounted.push(wrapper)
 
@@ -132,6 +133,26 @@ describe('HomeHero', () => {
     expect(text).toContain('Get Directions')
     expect(text).not.toContain('Our next event')
     expect(wrapper.get('img').attributes('alt')).toBe('Café Prana table')
+  })
+
+  // Studio 1.7 saves a picked photo as a bare path. The hero once read
+  // `image.src` from it and silently drew no image at all.
+  it('shows the welcome photo from the path Studio writes', async () => {
+    const wrapper = await mountHero(null)
+    const image = wrapper.get('img')
+
+    expect(image.attributes('src')).toContain('hero')
+    expect(image.attributes('alt')).toBe('Café Prana table')
+  })
+
+  it('still shows a photo saved in the older { src, alt } form', async () => {
+    const wrapper = await mountHero(null, {
+      ...welcome,
+      image: { src: '/images/hero.webp', alt: 'Older alt' },
+      altText: undefined
+    })
+
+    expect(wrapper.get('img').attributes('alt')).toBe('Older alt')
   })
 
   it('renders the German labels, date and link in the German locale', async () => {
