@@ -43,6 +43,10 @@ const links = computed(() => [
     :title="title"
     :event="nextEvent"
   />
+  <!--
+    `horizontal` sets the side-by-side grid at `lg`; the container classes
+    undo that at `lg` and apply it at `xl`, so smaller screens stack.
+  -->
   <UPageHero
     v-else
     :headline="headline"
@@ -51,7 +55,7 @@ const links = computed(() => [
     :links="links"
     orientation="horizontal"
     :ui="{
-      container: 'py-12 sm:py-16 lg:py-24',
+      container: 'py-12 sm:py-16 lg:py-24 lg:flex lg:items-stretch xl:grid xl:grid-cols-2 xl:items-center',
       headline: 'font-mono text-xs uppercase tracking-[0.24em] text-primary',
       title: 'max-w-2xl text-left font-serif text-5xl font-medium tracking-tight sm:text-6xl',
       description: 'max-w-xl text-left text-lg text-muted',
@@ -60,7 +64,7 @@ const links = computed(() => [
   >
     <div
       v-if="img"
-      class="relative p-6 sm:p-8"
+      class="relative xl:p-8"
     >
       <div
         class="cafe-aura"
@@ -81,7 +85,7 @@ const links = computed(() => [
         :src="img.src"
         :alt="img.alt"
         format="webp"
-        sizes="sm:100vw md:50vw lg:560px"
+        sizes="100vw xl:560px"
         class="relative z-10 aspect-[16/11] w-full rounded-2xl object-cover shadow-xl ring-1 ring-default"
         fetchpriority="high"
         :preload="{ fetchPriority: 'high' }"
