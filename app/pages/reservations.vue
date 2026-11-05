@@ -39,6 +39,7 @@ useCafeSeo({
       :headline="t('reservations.headline')"
       :title="t('reservations.title')"
       :description="t('reservations.description')"
+      align="center"
       :links="[{
         label: t('reservations.email'),
         to: CAFE_CONTACT_MAILTO,
