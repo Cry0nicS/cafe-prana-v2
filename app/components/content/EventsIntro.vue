@@ -21,7 +21,7 @@ const links = computed(() => [
     to: localePath('/events'),
     icon: 'i-lucide-party-popper',
     color: 'primary' as const,
-    size: 'xl' as const
+    size: 'lg' as const
   },
   {
     label: t('home.events.reserve'),
@@ -29,7 +29,7 @@ const links = computed(() => [
     icon: 'i-lucide-calendar-check',
     color: 'neutral' as const,
     variant: 'outline' as const,
-    size: 'xl' as const
+    size: 'lg' as const
   }
 ])
 </script>
@@ -56,7 +56,7 @@ const links = computed(() => [
         </div>
         <p
           v-if="description"
-          class="mt-4 text-muted"
+          class="mt-5 text-lg leading-8 text-pretty text-muted"
         >
           {{ description }}
         </p>
@@ -70,7 +70,7 @@ const links = computed(() => [
             v-for="link in links"
             :key="link.label"
             v-bind="link"
-            class="justify-center"
+            class="justify-center px-5"
           />
         </div>
       </div>
@@ -81,7 +81,7 @@ const links = computed(() => [
         :alt="img.alt"
         format="webp"
         sizes="sm:100vw md:50vw lg:540px"
-        class="aspect-[4/3] w-full rounded-lg object-cover shadow-lg ring-1 ring-default"
+        class="aspect-[4/3] w-full rounded-[2rem] object-cover shadow-2xl shadow-black/15 ring-1 ring-default"
         placeholder
       />
     </div>

@@ -6,6 +6,7 @@ import {
   CAFE_SITE_URL
 } from '#shared/utils/constants'
 import {
+  EVENT_POSTER_SIZES,
   compareEventsDesc,
   formatEventDateLong,
   formatEventPrice,
@@ -240,7 +241,7 @@ useHead(() => ({
             :src="event.image.src"
             :alt="event.image.alt || ''"
             class="h-auto w-full rounded-lg shadow-[0_24px_50px_-12px_rgba(0,0,0,0.35)] ring-1 ring-black/5 dark:ring-white/10"
-            sizes="sm:240px md:256px"
+            :sizes="EVENT_POSTER_SIZES"
             format="webp"
             placeholder
           />

@@ -18,11 +18,15 @@ withDefaults(defineProps<{
   description?: string
   links?: ButtonProps[]
   align?: 'start' | 'center'
+  // Where the `aside` moves beside the heading. The homepage waits until `xl`,
+  // so its photo does not squeeze the title on a laptop.
+  split?: 'lg' | 'xl'
 }>(), {
   headline: undefined,
   description: undefined,
   links: () => [],
-  align: 'start'
+  align: 'start',
+  split: 'lg'
 })
 
 const slots = useSlots()
@@ -31,7 +35,7 @@ const slots = useSlots()
 <template>
   <section
     class="relative isolate px-2 pt-12 pb-14 sm:px-6 sm:pt-16 lg:pt-20"
-    :class="slots.aside ? 'grid items-center gap-14 lg:grid-cols-2' : ''"
+    :class="slots.aside ? ['grid items-center gap-14', split === 'xl' ? 'xl:grid-cols-2' : 'lg:grid-cols-2'] : ''"
   >
     <div
       aria-hidden="true"

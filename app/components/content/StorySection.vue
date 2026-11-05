@@ -19,7 +19,7 @@ const img = computed(() => resolveContentImage(props.image, props.altText))
     reverse
   >
     <template #description>
-      <div class="cafe-dropcap space-y-4 text-left leading-7 text-muted">
+      <div class="cafe-dropcap space-y-4 text-left text-lg leading-8 text-pretty text-muted">
         <slot />
       </div>
     </template>
@@ -30,7 +30,7 @@ const img = computed(() => resolveContentImage(props.image, props.altText))
       :alt="img.alt"
       format="webp"
       sizes="sm:100vw md:50vw lg:460px"
-      class="aspect-[2/3] w-full rounded-2xl object-cover shadow-lg ring-1 ring-default"
+      class="aspect-[2/3] w-full rounded-[2rem] object-cover shadow-2xl shadow-black/15 ring-1 ring-default"
       placeholder
     />
   </UPageSection>

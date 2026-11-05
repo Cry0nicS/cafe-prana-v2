@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import {
-  formatEventDate,
+  EVENT_POSTER_SIZES,
+  formatEventDateLong,
   formatEventPrice,
+  getEventDateIso,
   getEventTime,
   type EventLike
 } from '~/utils/events'
+import { riseIn } from '~/utils/motion'
 
 type NextEvent = EventLike & {
   path: string
@@ -32,133 +35,117 @@ const props = defineProps<{
 const { locale, t } = useI18n()
 
 const showPrice = computed(() => props.event.paid && typeof props.event.price === 'number')
-// The photo is a whole grid column, so an event without one has to collapse the
-// card to a single column rather than reserve an empty 42% and a 24rem floor.
+// The poster is a column of its own, so an event without one has to collapse
+// to a single column rather than reserve an empty half of the hero.
 const hasPhoto = computed(() => Boolean(props.event.image?.src))
 </script>
 
 <template>
-  <section>
-    <UContainer class="py-12 sm:py-16 lg:py-24">
-      <article
-        class="relative grid overflow-hidden rounded-xl border border-default bg-muted/40"
-        :class="hasPhoto ? 'lg:grid-cols-[minmax(0,1fr)_minmax(0,42%)]' : 'lg:grid-cols-1'"
+  <!-- The same shape as every page's `PageHeading`, with the event's poster
+       beside it - shown whole, as a card, never cropped: posters carry their
+       own printed title and date. -->
+  <section
+    class="relative isolate grid items-center gap-14 px-2 pt-12 pb-14 sm:px-6 sm:pt-16 lg:pt-20"
+    :class="hasPhoto ? 'xl:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]' : 'xl:grid-cols-1'"
+  >
+    <div
+      aria-hidden="true"
+      class="cafe-glow"
+    />
+
+    <Motion v-bind="riseIn()">
+      <p class="cafe-eyebrow">
+        {{ t('home.hero.nextEvent') }}
+      </p>
+      <!--
+        The welcome title stays the page's single top-level heading even
+        though the event's name is the display line: the outline should
+        name the cafe, not whichever event happens to be next. Should the
+        owner clear that title, the event's name takes the h1 so the page
+        never goes without one.
+      -->
+      <h1
+        v-if="title"
+        class="mt-5 font-serif text-lg font-medium tracking-tight text-toned sm:text-xl"
       >
-        <!-- The spark hairline, brought up from the events listing's stat cards. -->
-        <span
-          class="absolute inset-x-0 top-0 z-10 h-0.5 bg-[var(--cafe-spark)]"
-          aria-hidden="true"
-        />
+        {{ title }}
+      </h1>
+      <component
+        :is="title ? 'h2' : 'h1'"
+        class="mt-3 max-w-2xl font-serif text-4xl leading-[1.05] font-medium tracking-tight text-balance text-highlighted sm:text-5xl lg:text-6xl"
+      >
+        {{ event.title }}
+      </component>
+      <p class="mt-6 line-clamp-4 max-w-xl text-lg leading-8 text-pretty text-muted">
+        {{ event.description }}
+      </p>
 
-        <div class="flex flex-col justify-center p-6 sm:p-8 lg:p-12">
-          <p class="cafe-eyebrow">
-            {{ t('home.hero.nextEvent') }}
-          </p>
-          <!--
-            The welcome title stays the page's single top-level heading even
-            though the event's name is the display line: the outline should
-            name the cafe, not whichever event happens to be next. Should the
-            owner clear that title, the event's name takes the h1 so the page
-            never goes without one.
-          -->
-          <h1
-            v-if="title"
-            class="mt-5 font-serif text-lg font-medium tracking-tight text-toned sm:text-xl"
-          >
-            {{ title }}
-          </h1>
-          <component
-            :is="title ? 'h2' : 'h1'"
-            class="mt-3 max-w-2xl font-serif text-4xl font-medium leading-[1.05] tracking-tight text-highlighted sm:text-5xl xl:text-6xl"
-          >
-            {{ event.title }}
-          </component>
-          <p class="mt-5 line-clamp-4 max-w-xl text-lg leading-8 text-muted">
-            {{ event.description }}
-          </p>
+      <!-- The practical details, as one line of type, like the event page -->
+      <dl class="mt-8 flex max-w-xl flex-wrap items-baseline gap-x-2 gap-y-1 text-sm text-toned [&>div+div]:before:mr-2 [&>div+div]:before:text-dimmed [&>div+div]:before:content-['·']">
+        <div>
+          <dt class="sr-only">
+            {{ t('event.date') }}
+          </dt>
+          <dd class="inline">
+            <time :datetime="getEventDateIso(event.date)">{{ formatEventDateLong(event, locale) }}</time>
+          </dd>
         </div>
-
-        <!--
-          The photo bleeds to the card's edge: no inset, no rounding of its own
-          (the card clips it) and no aura, which stays the welcome hero's
-          signature. A fixed aspect ratio while the columns are stacked; once
-          side by side it is taken out of flow so the text column sets the
-          card's height and the photo fills it.
-        -->
-        <div
-          v-if="hasPhoto"
-          class="relative lg:min-h-96"
-        >
-          <!--
-            LCP element while the poster shows, so it follows the welcome
-            hero's image handling: no `placeholder` (it strips `srcset` from
-            the server-rendered markup until hydration), plus `preload` and a
-            high fetch priority. `sizes` and `format` are the event detail
-            page's for this same photo on purpose - those variants are baked
-            for every event at build time, so whichever event becomes next
-            after a date rollover still resolves under `ipxStatic`.
-          -->
-          <NuxtImg
-            :src="event.image.src"
-            :alt="event.image.alt || ''"
-            format="webp"
-            sizes="sm:100vw lg:768px"
-            class="aspect-[16/10] w-full object-cover lg:absolute lg:inset-0 lg:aspect-auto lg:h-full"
-            fetchpriority="high"
-            :preload="{ fetchPriority: 'high' }"
-          />
+        <div>
+          <dt class="sr-only">
+            {{ t('event.time') }}
+          </dt>
+          <dd class="inline">
+            {{ getEventTime(event, t('event.noTime')) }}
+          </dd>
         </div>
+        <div v-if="showPrice">
+          <dt class="sr-only">
+            {{ t('event.price') }}
+          </dt>
+          <dd class="inline">
+            {{ formatEventPrice(event.price!, locale) }}
+          </dd>
+        </div>
+      </dl>
 
-        <footer
-          class="flex flex-wrap items-center gap-x-7 gap-y-3 border-t border-default px-6 py-4 sm:px-8 lg:px-12"
-          :class="{ 'lg:col-span-2': hasPhoto }"
-        >
-          <dl class="flex flex-wrap items-center gap-x-7 gap-y-3 font-mono text-sm tabular-nums text-toned">
-            <div class="flex items-center gap-2">
-              <UIcon
-                name="i-lucide-calendar-days"
-                class="size-4 shrink-0 text-primary"
-              />
-              <dt class="sr-only">
-                {{ t('event.date') }}
-              </dt>
-              <dd>{{ formatEventDate(event, locale) }}</dd>
-            </div>
-            <div class="flex items-center gap-2">
-              <UIcon
-                name="i-lucide-clock"
-                class="size-4 shrink-0 text-primary"
-              />
-              <dt class="sr-only">
-                {{ t('event.time') }}
-              </dt>
-              <dd>{{ getEventTime(event, t('event.noTime')) }}</dd>
-            </div>
-            <div
-              v-if="showPrice"
-              class="flex items-center gap-2"
-            >
-              <UIcon
-                name="i-lucide-ticket"
-                class="size-4 shrink-0 text-primary"
-              />
-              <dt class="sr-only">
-                {{ t('event.price') }}
-              </dt>
-              <dd>{{ formatEventPrice(event.price!, locale) }}</dd>
-            </div>
-          </dl>
-          <UButton
-            :to="event.path"
-            :label="t('home.hero.viewEvent')"
-            icon="i-lucide-arrow-right"
-            trailing
-            color="primary"
-            size="lg"
-            class="basis-full justify-center sm:ml-auto sm:basis-auto"
-          />
-        </footer>
-      </article>
-    </UContainer>
+      <UButton
+        :to="event.path"
+        :label="t('home.hero.viewEvent')"
+        icon="i-lucide-arrow-right"
+        trailing
+        size="lg"
+        class="mt-9 px-5"
+      />
+    </Motion>
+
+    <NuxtLink
+      v-if="hasPhoto"
+      :to="event.path"
+      :aria-label="event.title"
+      class="group relative mx-auto grid w-full max-w-md place-items-center rounded-2xl py-6 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+    >
+      <div
+        class="cafe-aura"
+        aria-hidden="true"
+      />
+      <!--
+        LCP element while the poster shows, so it follows the welcome
+        hero's image handling: no `placeholder` (it strips `srcset` from
+        the server-rendered markup until hydration), plus `preload` and a
+        high fetch priority. `sizes` is `EVENT_POSTER_SIZES`, shared with
+        the event page, whose variants are baked for every event at build
+        time - so whichever event becomes next after a date rollover still
+        resolves under `ipxStatic`.
+      -->
+      <NuxtImg
+        :src="event.image.src"
+        :alt="event.image.alt || ''"
+        format="webp"
+        :sizes="EVENT_POSTER_SIZES"
+        class="relative z-10 h-auto w-60 rotate-[1.5deg] rounded-lg shadow-[0_30px_60px_-18px_rgba(0,0,0,0.4)] ring-1 ring-black/5 transition duration-500 ease-out group-hover:rotate-0 group-hover:-translate-y-1 sm:w-72 dark:ring-white/10"
+        fetchpriority="high"
+        :preload="{ fetchPriority: 'high' }"
+      />
+    </NuxtLink>
   </section>
 </template>

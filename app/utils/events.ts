@@ -125,3 +125,10 @@ export const formatEventDateLong = (event: EventLike, locale = 'en') => {
     year: 'numeric'
   }).format(toEventDate(event.date))
 }
+
+// The `sizes` for an event's poster where it is shown on its own: the event
+// page's figure and the homepage's next-event hero. They must stay identical.
+// `ipxStatic` only bakes the image variants that were rendered during
+// prerender, and every event page renders this one - so whichever event
+// becomes "next" after a date rollover still has its homepage variants.
+export const EVENT_POSTER_SIZES = 'sm:256px md:320px'
