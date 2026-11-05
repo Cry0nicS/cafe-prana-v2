@@ -16,7 +16,7 @@
     "typecheck": "nuxt typecheck",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check:content": "node scripts/check-content-parity.mjs",
+    "check:content": "node scripts/check-content-parity.mjs && jiti scripts/check-content-images.ts",
     "check:studio": "node scripts/check-studio-parity.mjs",
     "check:events": "jiti scripts/check-event-bookability.ts",
     "optimize:images": "node scripts/optimize-images.mjs"
