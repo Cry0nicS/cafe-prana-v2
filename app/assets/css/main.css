@@ -317,7 +317,38 @@ html {
   50% { transform: scale(1.08); }
 }
 
+/* Page glow — the same breath, spread wide behind a page heading: a lighter
+   green focus that lifts the top of the page out of the ground, strongest on
+   the dark theme. Place it inside a `relative isolate` parent; it clips itself
+   so it never adds a horizontal scrollbar. */
+.cafe-glow {
+  position: absolute;
+  inset: -2rem -2rem 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.cafe-glow::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(64rem, 170%);
+  height: 36rem;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in oklab, var(--ui-primary) 24%, transparent) 0%,
+    color-mix(in oklab, var(--cafe-spark) 10%, transparent) 40%,
+    transparent 70%
+  );
+  filter: blur(40px);
+  animation: cafe-breathe 9s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .cafe-aura::before { animation: none; }
+  .cafe-aura::before,
+  .cafe-glow::before { animation: none; }
 }

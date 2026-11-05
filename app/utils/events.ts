@@ -80,3 +80,36 @@ export const getEventDateIso = (value: EventDateValue) => {
 export const eventSlug = (path?: string) => {
   return String(path ?? '').split('/').filter(Boolean).pop() ?? ''
 }
+
+export type EventReservation = 'required' | 'recommended' | 'walkin'
+
+// The i18n key for an event's booking note. An event that says nothing is
+// treated as "recommended", the owner's default in Studio.
+export const eventReservationKey = (reservation?: EventReservation) => {
+  switch (reservation) {
+    case 'required':
+      return 'event.reservationRequired'
+    case 'walkin':
+      return 'event.noBookingNeeded'
+    default:
+      return 'event.reservationRecommended'
+  }
+}
+
+// The pieces of an event's date that the listing sets separately: a large day
+// numeral with the weekday above and the month and short year below. Read in
+// UTC because an event's `date` is a calendar day (`2026-02-22`), which parses
+// to UTC midnight - local time would move it to the 21st west of Greenwich.
+export const eventDateParts = (event: EventLike, locale = 'en') => {
+  const date = toEventDate(event.date)
+  const tag = locale === 'de' ? 'de-DE' : 'en-GB'
+  const part = (options: Intl.DateTimeFormatOptions) =>
+    new Intl.DateTimeFormat(tag, { timeZone: 'UTC', ...options }).format(date).replace('.', '')
+
+  return {
+    day: date.getUTCDate(),
+    weekday: part({ weekday: 'short' }),
+    month: part({ month: 'short' }),
+    year: String(date.getUTCFullYear()).slice(2)
+  }
+}

@@ -1,7 +1,8 @@
 import { mountSuspended } from '@nuxt/test-utils/runtime'
 import { describe, expect, it } from 'vitest'
 import EventCard from '~/components/events/EventCard.vue'
-import EventFeature from '~/components/events/EventFeature.vue'
+import EventPoster from '~/components/events/EventPoster.vue'
+import EventRow from '~/components/events/EventRow.vue'
 import NextEventHero from '~/components/events/NextEventHero.vue'
 
 // An event the owner has started but not finished. `image` is required by the
@@ -36,11 +37,12 @@ describe('an event with no photo yet', () => {
     expect(wrapper.find('img').exists()).toBe(false)
   })
 
-  it('still renders as a feature', async () => {
-    const wrapper = await mountSuspended(EventFeature, { props: { event: draft } })
+  it('still renders its row in the events list', async () => {
+    const wrapper = await mountSuspended(EventRow, { props: { event: draft } })
 
     expect(wrapper.text()).toContain('My event')
     expect(wrapper.find('img').exists()).toBe(false)
+    expect(wrapper.find('[data-photo="pending"]').exists()).toBe(true)
   })
 
   // The frame has to stay, or one missing photo leaves a ragged hole in the grid
@@ -79,6 +81,21 @@ describe('an event with a photo', () => {
     expect(image.attributes('alt')).toBe('A table at Prana')
     expect(image.attributes('src')).toContain('hero')
     expect(wrapper.find('[data-photo="pending"]').exists()).toBe(false)
+  })
+
+  // Posters carry printed text, so the list shows them whole over a blurred
+  // copy of themselves rather than cropping them to the frame.
+  it('shows the whole image over a blurred, unlabelled copy of it', async () => {
+    const wrapper = await mountSuspended(EventPoster, {
+      props: { src: '/images/hero.webp', alt: 'A table at Prana' }
+    })
+
+    const [backdrop, image] = wrapper.findAll('img')
+
+    expect(backdrop!.attributes('alt')).toBe('')
+    expect(backdrop!.attributes('aria-hidden')).toBe('true')
+    expect(image!.attributes('alt')).toBe('A table at Prana')
+    expect(image!.classes()).toContain('object-contain')
   })
 
   it('gives the homepage poster its two-column card back', async () => {
