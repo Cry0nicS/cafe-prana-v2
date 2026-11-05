@@ -113,3 +113,15 @@ export const eventDateParts = (event: EventLike, locale = 'en') => {
     year: String(date.getUTCFullYear()).slice(2)
   }
 }
+
+// The date as the event page's heading sets it: "Sunday, 22 February 2026".
+// In UTC for the same reason as `eventDateParts`.
+export const formatEventDateLong = (event: EventLike, locale = 'en') => {
+  return new Intl.DateTimeFormat(locale === 'de' ? 'de-DE' : 'en-GB', {
+    timeZone: 'UTC',
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  }).format(toEventDate(event.date))
+}

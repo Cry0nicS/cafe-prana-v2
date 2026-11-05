@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { eventDateParts, eventReservationKey, nextUpcomingEvent } from '~/utils/events'
+import { eventDateParts, eventReservationKey, formatEventDateLong, nextUpcomingEvent } from '~/utils/events'
 
 // "Now" is a Tuesday morning. `isUpcomingEvent` compares against the start of
 // that day, so an event dated today still counts.
@@ -110,5 +110,12 @@ describe('eventReservationKey', () => {
     [undefined, 'event.reservationRecommended']
   ] as const)('maps %s to %s', (reservation, key) => {
     expect(eventReservationKey(reservation)).toBe(key)
+  })
+})
+
+describe('formatEventDateLong', () => {
+  it('names the weekday, in each language', () => {
+    expect(formatEventDateLong({ date: '2026-02-22' }, 'en')).toBe('Sunday, 22 February 2026')
+    expect(formatEventDateLong({ date: '2026-02-22' }, 'de')).toBe('Sonntag, 22. Februar 2026')
   })
 })

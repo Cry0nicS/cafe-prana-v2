@@ -86,7 +86,8 @@ describe('the studio insert palette', () => {
     'Caution',
     // These take a whole event or dish as a prop, fetched by a query. There is
     // no way to supply one from a markdown body.
-    'EventsEventCard',
+    'EventsEventInvitation',
+    'EventsEventMoreList',
     'EventsEventRow',
     'EventsEventPoster',
     'EventsEventPosterFan',
