@@ -1,9 +1,9 @@
 ::home-hero
 ---
-:image: /images/hero.webp
 description: A gluten-free and vegan haven in the heart of Berlin
 headline: Newly opened!
-image: /images/hero.webp
+image: /images/menu-pics/1000003798.webp
+altText: Café Prana's front room, with mint chairs and a painted tree on the wall
 title: Welcome to Café Prana
 ---
 ::
@@ -36,9 +36,8 @@ title: Menu Highlights
 ---
   :::menu-highlight
   ---
-  image:
-    src: /images/menu/herzhafte-waffel.webp
-    alt: Savoury waffle with colourful plant-based toppings
+  image: /images/menu/herzhafte-waffel.webp
+  altText: Savoury waffle with colourful plant-based toppings
   description: Sweet potato waffle with Prana's savoury toppings of the day.
   title: Savoury Waffle
   ---
@@ -46,22 +45,20 @@ title: Menu Highlights
 
   :::menu-highlight
   ---
-  image:
-    src: /images/menu/chai-latte.webp
-    alt: Chai latte in a ceramic cup
+  image: /images/menu/chai-latte.webp
+  altText: Chai latte in a ceramic cup
   description: A warming, homemade chai spice blend crafted with care and served
     with your choice of plant-based milk.
   title: Chai Latte
   ---
   :::
 
-:menu-highlight{description="Yes, I believe in mindfulness and the power of pure, raw cacao to uplift your spirit." image="/images/menu-pics/1000002959.webp" title="Ceremonial Cacao"}
+:menu-highlight{description="Yes, I believe in mindfulness and the power of pure, raw cacao to uplift your spirit." image="/images/menu-pics/1000002959.webp" altText="Ceremonial cacao drink" title="Ceremonial Cacao"}
 
   :::menu-highlight
   ---
-  image:
-    src: /images/menu/banana-bread.webp
-    alt: Slice of Prana banana bread with toppings
+  image: /images/menu/banana-bread.webp
+  altText: Slice of Prana banana bread with toppings
   description: Very nourishing and sweetened banana bread, served with seasonal
     toppings like nut butter or compote.
   title: Prana's Banana Bread
@@ -77,6 +74,7 @@ description: At Prana, I bring people together around nourishing food, shared
 headline: Celebratory Events
 icon: i-lucide-party-popper
 image: /images/home/gallery/gallery-1.webp
+altText: Community event at Café Prana
 title: Community gatherings
 ---
 :feature{description="Regular gatherings like breakfast, brunch, and dinner, created to enjoy nourishing food and relaxed moments together." icon="i-lucide-utensils" title="Regular community events"}
@@ -112,9 +110,8 @@ title: Gallery
 
 ::story-section
 ---
-image:
-  src: /images/home/my-story.webp
-  alt: Founder story image for Café Prana
+image: /images/home/my-story.webp
+altText: Founder story image for Café Prana
 icon: i-lucide-book-open
 title: My Story
 ---

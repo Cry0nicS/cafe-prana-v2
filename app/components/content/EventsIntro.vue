@@ -1,11 +1,16 @@
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   icon?: string
   headline?: string
   title?: string
   description?: string
-  image?: { src?: string, alt?: string }
+  /** Photo from the media library, as its path (what Studio's picker writes). */
+  image?: string
+  /** Short description of the photo, for screen readers and search engines. */
+  altText?: string
 }>()
+
+const img = computed(() => resolveContentImage(props.image, props.altText))
 
 const { t } = useI18n()
 const localePath = useLocalePath()
@@ -71,9 +76,9 @@ const links = computed(() => [
       </div>
 
       <NuxtImg
-        v-if="image?.src"
-        :src="image.src"
-        :alt="image.alt"
+        v-if="img"
+        :src="img.src"
+        :alt="img.alt"
         format="webp"
         sizes="sm:100vw md:50vw lg:540px"
         class="aspect-[4/3] w-full rounded-lg object-cover shadow-lg ring-1 ring-default"

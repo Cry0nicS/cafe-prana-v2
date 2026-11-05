@@ -25,19 +25,21 @@ Everything the owner writes as plain Markdown — headings, lists, links, quotes
 
 | MDC tag | Component | Props | Slot / children | Repeatable |
 |---------|-----------|-------|-----------------|------------|
-| `::home-hero` | `HomeHero` | `headline, title, description, image{src,alt}` | — (CTAs from i18n `home.hero.*`; see the next-event note below) | no |
+| `::home-hero` | `HomeHero` | `headline, title, description, image, altText` | — (CTAs from i18n `home.hero.*`; see the next-event note below) | no |
 | `::feature-grid` | `FeatureGrid` | `icon, headline, title, description` | `::feature` children | — |
 | `::feature` | `Feature` | `icon, title, description` | — | ✅ reusable |
 | `::menu-highlights` | `MenuHighlights` | `icon, title, description` | `::menu-highlight` children (CTAs from `home.menu.*`) | — |
-| `::menu-highlight` | `MenuHighlight` | `title, description, image{src,alt}` | — | ✅ reusable |
-| `::events-intro` | `EventsIntro` | `icon, headline, title, description, image{src,alt}` | `::feature` children (CTAs from `home.events.*`) | — |
+| `::menu-highlight` | `MenuHighlight` | `title, description, image, altText` | — | ✅ reusable |
+| `::events-intro` | `EventsIntro` | `icon, headline, title, description, image, altText` | `::feature` children (CTAs from `home.events.*`) | — |
 | `::gallery` | `Gallery` | `icon, headline, title, description, images[]{src,alt}` | — (renders a `UCarousel`; each image opens in a lightbox) | — |
-| `::story-section` | `StorySection` | `icon, title, image{src,alt}` | default slot = prose (rich text) | — |
+| `::story-section` | `StorySection` | `icon, title, image, altText` | default slot = prose (rich text) | — |
 | `::faq` | `Faq` | `icon, title, description` | `::faq-item` children | — |
 | `::faq-item` | `FaqItem` | `label` | default slot = answer prose | ✅ reusable |
 | `::directions` | `Directions` | `title, description, hoursHeading` | — (hours from `content/opening-hours.yml`; map + CTAs from code) | no |
 | `::callout` | `Callout` | `icon, title, color` (`neutral` \| `positive` \| `caution`) | default slot = note text | ✅ reusable |
 | `::video` | `VideoEmbed` | `url, title, poster` | — (click-to-load frame: YouTube / Vimeo link, or a `/videos/*.mp4` file from the media library; `url` takes either; a YouTube video's still is saved at build by `modules/video-thumbnails.ts` and listed in `runtimeConfig.public.videoThumbnails`, a picked `poster` wins) | ✅ reusable |
+
+Homepage images (`home-hero`, `menu-highlight`, `events-intro`, `story-section`) are a flat `image` path from the media library plus an `altText`. Studio 1.7 turns an inline object prop like `image?: { src, alt }` into a single text field and saves a bare path, which the component then could not read, so the image silently vanished. Keep image props flat, and keep `altText` free of the words Studio treats as an image field (`image`, `src`, `photo`, ...), or it gets a media picker too. `resolveContentImage()` in `shared/utils/content-image.ts` still reads the older `{ src, alt }` form. `npm run check:content` fails on a missing image file or a stray `:image:` line. See `docs/research/studio-image-swap.md`.
 
 Note `Feature` is shared by both `FeatureGrid` (Philosophy) and `EventsIntro` (Events) — reuse it wherever a feature card is needed.
 

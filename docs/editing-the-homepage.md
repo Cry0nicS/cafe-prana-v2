@@ -80,7 +80,9 @@ booking is taken. All of it is yours to edit; see `docs/reservation-availability
 
 ## Adding a photo
 
-When a block has an image field, click it and use the **media library** to upload a new photo or pick an existing one. Always add a short **alt text** (a description of the photo) — it helps accessibility and SEO.
+When a block has an image field, click it and use the **media library** to upload a new photo or pick an existing one. Then fill in **Alt Text** below it: a short description of the photo, which helps accessibility and SEO.
+
+Leave the **Class** field at the bottom of every block empty. Studio adds it to every block, but the site does not use it, and anything typed there is not shown.
 
 ## Choosing an icon (optional)
 
