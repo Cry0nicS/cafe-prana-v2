@@ -33,6 +33,7 @@ useCafeSeo({
       :headline="t('contact.headline')"
       :title="t('contact.title')"
       :description="t('contact.description')"
+      align="center"
     />
 
     <UPageSection

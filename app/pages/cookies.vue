@@ -15,6 +15,7 @@ useCafeSeo({
   <UPage>
     <PageHeading
       :title="t('cookies.title')"
+      align="center"
       :description="t('cookies.description')"
       :headline="t('cookies.headline')"
       :links="[{

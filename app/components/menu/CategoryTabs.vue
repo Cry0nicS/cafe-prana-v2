@@ -1,6 +1,8 @@
 <script setup lang="ts">
 // The switch between the menu's categories, each with its number of dishes.
-// One category shows at a time, so the page stays short on a phone.
+// One category shows at a time, so the page stays short on a phone. On a
+// phone the tabs wrap onto a second line rather than scroll sideways, so
+// every category is in sight.
 const model = defineModel<string>({ required: true })
 
 const props = defineProps<{
@@ -15,29 +17,13 @@ const step = (by: number) => {
   model.value = slugs[next]!
   tabRefs.value?.[next]?.focus()
 }
-
-// On a phone the switch is wider than the screen; keep the chosen tab in
-// sight, including when a `#<category>` link picks one off to the side.
-const list = useTemplateRef<HTMLElement>('list')
-const reveal = () => {
-  const tab = tabRefs.value?.[props.categories.findIndex(c => c.slug === model.value)]
-  if (!list.value || !tab) return
-  const { offsetLeft, offsetWidth } = tab
-  const { scrollLeft, clientWidth } = list.value
-  if (offsetLeft < scrollLeft || offsetLeft + offsetWidth > scrollLeft + clientWidth) {
-    list.value.scrollTo({ left: offsetLeft - (clientWidth - offsetWidth) / 2, behavior: 'smooth' })
-  }
-}
-watch(model, () => nextTick(reveal))
-onMounted(reveal)
 </script>
 
 <template>
   <div
-    ref="list"
     role="tablist"
     :aria-label="$t('nav.menu')"
-    class="relative mx-auto flex w-full max-w-full gap-1 overflow-x-auto rounded-full bg-elevated/80 p-1 ring-1 ring-default sm:w-fit"
+    class="mx-auto flex w-full flex-wrap justify-center gap-1 rounded-[1.5rem] bg-elevated/80 p-1 ring-1 ring-default sm:w-fit sm:flex-nowrap sm:rounded-full"
     @keydown.left.prevent="step(-1)"
     @keydown.right.prevent="step(1)"
   >

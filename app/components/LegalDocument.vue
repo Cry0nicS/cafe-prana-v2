@@ -27,6 +27,7 @@ defineProps<{
     <PageHeading
       :title="title"
       :description="intro"
+      align="center"
     />
 
     <UPageSection :ui="{ container: 'pt-0!' }">
