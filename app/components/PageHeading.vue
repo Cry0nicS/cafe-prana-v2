@@ -46,7 +46,11 @@ const slots = useSlots()
       v-bind="riseIn()"
       :class="align === 'center' ? 'mx-auto max-w-3xl text-center' : 'max-w-3xl'"
     >
-      <slot name="before" />
+      <!-- Its own line: the label below is inline-flex and would otherwise
+           sit beside a back link instead of under it. -->
+      <div v-if="slots.before">
+        <slot name="before" />
+      </div>
 
       <p
         v-if="headline || slots.headline"
