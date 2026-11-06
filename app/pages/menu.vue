@@ -44,132 +44,125 @@ const categoriesWithItems = computed(() =>
   })).filter(category => category.items.length)
 )
 
-const totalItems = computed(() => items.value?.length ?? 0)
-
-const heroLinks = computed(() =>
-  categoriesWithItems.value.map((category, index) => ({
-    label: category.title,
-    to: `#${category.slug}`,
-    icon: category.icon,
-    color: 'neutral' as const,
-    variant: index === 0 ? 'solid' as const : 'outline' as const
-  }))
+const tabs = computed(() =>
+  categoriesWithItems.value.map(({ slug, title, icon, items }) => ({ slug, title, icon, count: items.length }))
 )
 
-function scrollToCategory(id: string) {
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-}
+// One category at a time. The URL keeps `#<category>`, so a link from the
+// homepage or a shared link opens the right one, and switching updates it.
+const route = useRoute()
+const current = ref(categoriesWithItems.value[0]?.slug ?? '')
+const panels = useTemplateRef<HTMLElement>('panels')
+
+onMounted(() => {
+  const fromHash = route.hash.slice(1)
+  if (categoriesWithItems.value.some(c => c.slug === fromHash)) {
+    current.value = fromHash
+  }
+})
+
+watch(current, (slug) => {
+  history.replaceState(history.state, '', `#${slug}`)
+  // Down the list, a switch would leave the guest in the middle of the new
+  // category; bring them back to its top, just under the sticky switch.
+  if (panels.value && panels.value.getBoundingClientRect().top < 0) {
+    panels.value.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+})
 </script>
 
 <template>
-  <UPage v-if="page">
+  <div
+    v-if="page"
+    class="pb-28"
+  >
     <PageHeading
       :headline="page.hero.headline"
       :title="page.hero.title"
       :description="page.hero.description"
-      :links="heroLinks"
     >
-      <template #aside>
+      <p class="mt-8 inline-flex items-center gap-3 rounded-full bg-primary/8 px-4 py-2 text-sm text-toned ring-1 ring-primary/15">
+        <UIcon
+          name="i-lucide-leaf"
+          class="size-4 shrink-0 text-primary"
+        />
+        {{ t('event.dietary') }}
+      </p>
+      <template
+        v-if="page.hero.image?.src"
+        #aside
+      >
         <NuxtImg
           v-bind="page.hero.image"
           format="webp"
           sizes="sm:100vw md:50vw lg:560px"
           class="aspect-[4/3] w-full rounded-[2rem] object-cover shadow-2xl shadow-black/15 ring-1 ring-default"
-          placeholder
+          fetchpriority="high"
+          preload
         />
       </template>
     </PageHeading>
 
-    <nav class="sticky top-[73px] z-10 -mx-4 border-y border-default bg-default/90 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6 lg:hidden">
-      <div class="flex gap-2 overflow-x-auto">
-        <UButton
-          v-for="category in categoriesWithItems"
-          :key="category.slug"
-          :icon="category.icon"
-          color="neutral"
-          variant="soft"
-          size="sm"
-          class="shrink-0"
-          @click="scrollToCategory(category.slug)"
-        >
-          {{ category.title }}
-        </UButton>
-      </div>
-    </nav>
+    <div class="sticky top-[73px] z-10 -mx-4 mt-4 border-y border-default bg-default/85 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6">
+      <MenuCategoryTabs
+        v-model="current"
+        :categories="tabs"
+      />
+    </div>
 
-    <UPageSection
-      :ui="{
-        container: 'max-w-6xl! pt-8 sm:pt-10 lg:grid lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-12'
-      }"
+    <!-- Every category is in the page, so search engines and the image
+         prerender see the whole menu; only the chosen one is shown. -->
+    <div
+      ref="panels"
+      class="scroll-mt-36"
     >
-      <aside class="hidden lg:block">
-        <div class="cafe-surface sticky top-24 p-4">
-          <p class="text-xs font-medium uppercase tracking-wide text-muted">
-            {{ t('menu.itemCount', totalItems) }}
-          </p>
-          <ul class="mt-4 space-y-1">
-            <li
-              v-for="category in categoriesWithItems"
-              :key="category.slug"
-            >
-              <UButton
-                :icon="category.icon"
-                color="neutral"
-                variant="ghost"
-                class="w-full justify-start"
-                @click="scrollToCategory(category.slug)"
-              >
-                {{ category.title }}
-              </UButton>
-            </li>
-          </ul>
-        </div>
-      </aside>
-
-      <div class="min-w-0 space-y-14">
+      <Transition
+        v-for="category in categoriesWithItems"
+        :key="category.slug"
+        enter-active-class="transition duration-400 ease-out motion-reduce:transition-none"
+        enter-from-class="opacity-0 translate-y-3"
+      >
         <section
-          v-for="category in categoriesWithItems"
+          v-show="current === category.slug"
           :id="category.slug"
-          :key="category.slug"
-          class="scroll-mt-32"
+          role="tabpanel"
+          :aria-labelledby="`menu-tab-${category.slug}`"
+          class="px-2 pt-12 sm:px-6"
         >
-          <div class="mb-6">
-            <div class="flex items-center gap-3">
-              <UIcon
-                v-if="category.icon"
-                :name="category.icon"
-                class="size-6 text-primary"
-              />
-              <h2 class="font-serif text-2xl font-medium text-highlighted sm:text-3xl">
-                {{ category.title }}
-              </h2>
-            </div>
-            <p
-              v-if="category.description"
-              class="mt-3 max-w-2xl text-muted"
-            >
-              {{ category.description }}
-            </p>
-            <UAlert
-              v-if="category.options"
-              color="primary"
-              variant="soft"
-              icon="i-lucide-info"
-              class="mt-4"
-              :description="category.options"
-            />
-          </div>
+          <h2 class="font-serif text-3xl font-medium text-highlighted sm:text-4xl">
+            {{ category.title }}
+          </h2>
+          <p
+            v-if="category.description"
+            class="mt-2 max-w-xl text-muted"
+          >
+            {{ category.description }}
+          </p>
 
-          <div class="grid min-w-0 gap-5 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-            <MenuItemCard
+          <p
+            v-if="category.options"
+            class="cafe-surface mt-6 flex items-start gap-3 p-4 text-sm leading-6 text-toned"
+          >
+            <UIcon
+              name="i-lucide-info"
+              class="mt-0.5 size-4 shrink-0 text-primary"
+            />
+            {{ category.options }}
+          </p>
+
+          <ul class="mt-8 space-y-4">
+            <li
               v-for="item in category.items"
               :key="item.id"
-              :item="item"
-              :labels="labelLookup"
-            />
-          </div>
+            >
+              <MenuItemCard
+                :item="item"
+                :labels="labelLookup"
+              />
+            </li>
+          </ul>
         </section>
-      </div>
-    </UPageSection>
-  </UPage>
+      </Transition>
+    </div>
+  </div>
 </template>

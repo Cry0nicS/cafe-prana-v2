@@ -58,7 +58,26 @@ describe('menu item card', () => {
     // leave a regular wondering whether it is gone for good.
     expect(text).toContain(ITEM.title)
     expect(text).toContain(ITEM.description)
-    expect(text).toContain('10,5€')
+    expect(text).toContain('€10.50')
     expect(text).toContain(ITEM.ingredients)
+  })
+})
+
+describe('menu item card labels', () => {
+  const LABELS = {
+    'vegan': { id: 'vegan', label: 'Vegan' },
+    'gluten-free': { id: 'gluten-free', label: 'Gluten-free' },
+    'seasonal': { id: 'seasonal', label: 'Seasonal' }
+  }
+
+  // The page states once that everything is vegan and gluten-free; each dish
+  // only carries what sets it apart.
+  it('shows only the labels that set a dish apart', async () => {
+    const wrapper = await mountSuspended(MenuItemCard, {
+      props: { item: { ...ITEM, labels: ['vegan', 'gluten-free', 'seasonal'] }, labels: LABELS }
+    })
+
+    const pills = wrapper.findAll('span.rounded-full').map(pill => pill.text())
+    expect(pills).toEqual(['Seasonal'])
   })
 })
