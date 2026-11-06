@@ -1,9 +1,5 @@
 <script setup lang="ts">
-type MenuLabel = {
-  id: string
-  label: string
-  icon?: string
-}
+import { distinctLabels, formatMenuPrice, type MenuLabel } from '~/utils/menu'
 
 type MenuItem = {
   title: string
@@ -23,11 +19,10 @@ const props = defineProps<{
   labels: Record<string, MenuLabel>
 }>()
 
-const { t } = useI18n()
+const { locale, t } = useI18n()
 
-const visibleLabels = computed(() =>
-  props.item.labels?.map(label => props.labels[label]).filter((label): label is MenuLabel => Boolean(label)) ?? []
-)
+const price = computed(() => formatMenuPrice(props.item.price, locale.value))
+const shownLabels = computed(() => distinctLabels(props.item.labels, props.labels))
 
 // Only an explicit `false` takes an item off. A file written before the field
 // existed, or one a hand edit stripped it from, arrives as `undefined` and has
@@ -38,84 +33,66 @@ const isUnavailable = computed(() => props.item.available === false)
 </script>
 
 <template>
+  <!-- One dish as a soft row, like an event in the events list: the photo in
+       the same 16:10 frame, the name and story, the price set large. -->
   <article
     :data-availability="isUnavailable ? 'unavailable' : undefined"
-    class="group min-w-0 overflow-hidden rounded-[1.75rem] border border-default shadow-sm transition duration-200"
-    :class="isUnavailable
-      ? 'bg-muted/40'
-      : 'bg-elevated/80 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md'"
+    class="cafe-surface grid grid-cols-1 items-center gap-5 p-3 transition duration-300 ease-out sm:grid-cols-[11rem_minmax(0,1fr)_auto] sm:gap-6 sm:pr-6 lg:grid-cols-[13rem_minmax(0,1fr)_auto]"
+    :class="isUnavailable ? 'opacity-70' : 'hover:bg-elevated/70'"
   >
-    <div class="grid min-w-0 overflow-hidden sm:grid-cols-[160px_minmax(0,1fr)] md:grid-cols-1">
-      <NuxtImg
-        v-bind="item.image"
-        format="webp"
-        sizes="sm:100vw md:50vw lg:640px xl:420px"
-        class="aspect-[4/3] h-full w-full object-cover transition duration-500 sm:aspect-auto md:aspect-[3/2] md:h-auto"
-        :class="isUnavailable ? 'opacity-75 grayscale' : 'group-hover:scale-105'"
-        placeholder
-      />
+    <NuxtImg
+      v-bind="item.image"
+      format="webp"
+      sizes="sm:100vw md:208px"
+      class="aspect-[16/10] w-full rounded-2xl object-cover"
+      :class="isUnavailable ? 'grayscale' : ''"
+      loading="lazy"
+    />
 
-      <div class="flex min-w-0 flex-col gap-4 p-4 sm:p-5 md:gap-3">
-        <div class="flex min-w-0 items-start justify-between gap-4">
-          <div class="min-w-0">
-            <UBadge
-              v-if="isUnavailable"
-              color="neutral"
-              variant="solid"
-              size="sm"
-              class="mb-2"
-            >
-              {{ t('menu.unavailable') }}
-            </UBadge>
-            <h3 class="font-serif text-xl font-medium leading-tight text-highlighted">
-              {{ item.title }}
-            </h3>
-            <p class="mt-2 text-sm leading-6 text-muted">
-              {{ item.description }}
-            </p>
-          </div>
-          <UBadge
-            :color="isUnavailable ? 'neutral' : 'primary'"
-            variant="soft"
-            size="lg"
-            class="shrink-0 whitespace-nowrap font-mono font-bold tabular-nums"
-          >
-            {{ item.price }}€
-          </UBadge>
-        </div>
-
-        <div
-          v-if="visibleLabels.length"
-          class="flex flex-wrap gap-2"
+    <div class="min-w-0 px-2 pb-2 sm:px-0 sm:pb-0">
+      <div class="flex items-baseline justify-between gap-4 sm:block">
+        <h3 class="font-serif text-xl leading-snug font-medium text-highlighted sm:text-2xl">
+          {{ item.title }}
+        </h3>
+        <span class="shrink-0 font-mono text-lg whitespace-nowrap text-highlighted tabular-nums sm:hidden">
+          {{ price }}
+        </span>
+      </div>
+      <p class="mt-1.5 max-w-xl text-sm leading-6 text-muted">
+        {{ item.description }}
+      </p>
+      <p class="mt-1 max-w-xl text-xs leading-5 text-dimmed">
+        <span class="sr-only">{{ t('menu.ingredients') }}: </span>{{ item.ingredients }}
+      </p>
+      <div
+        v-if="isUnavailable || shownLabels.length"
+        class="mt-3 flex flex-wrap gap-2 text-xs"
+      >
+        <span
+          v-if="isUnavailable"
+          class="rounded-full bg-accented px-2.5 py-1 font-medium whitespace-nowrap text-toned"
+        >{{ t('menu.unavailable') }}</span>
+        <span
+          v-for="label in shownLabels"
+          :key="label.id"
+          class="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 whitespace-nowrap text-primary"
         >
-          <UBadge
-            v-for="label in visibleLabels"
-            :key="label.id"
-            color="neutral"
-            variant="subtle"
-          >
-            <UIcon
-              v-if="label.icon"
-              :name="label.icon"
-              class="mr-1 size-3.5"
-            />
-            {{ label.label }}
-          </UBadge>
-        </div>
-
-        <details class="group rounded-md bg-muted/60 px-3 py-2">
-          <summary class="flex cursor-pointer list-none items-center justify-between gap-3 text-sm font-medium text-highlighted">
-            {{ t('menu.ingredients') }}
-            <UIcon
-              name="i-lucide-chevron-down"
-              class="size-4 shrink-0 transition-transform group-open:rotate-180"
-            />
-          </summary>
-          <p class="mt-2 text-sm leading-6 text-muted">
-            {{ item.ingredients }}
-          </p>
-        </details>
+          <UIcon
+            v-if="label.icon"
+            :name="label.icon"
+            class="size-3.5"
+          />
+          {{ label.label }}
+        </span>
       </div>
     </div>
+
+    <!-- Shown here on a wide screen, beside the name on a phone. Only one of
+         the two is ever displayed, so a screen reader hears the price once. -->
+    <span
+      class="hidden font-serif text-3xl whitespace-nowrap text-highlighted tabular-nums sm:block"
+    >
+      {{ price }}
+    </span>
   </article>
 </template>
