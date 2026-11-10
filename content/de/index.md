@@ -72,13 +72,12 @@ title: Menü-Highlights
 
 ::events-intro
 ---
-image:
-  src: /images/events/index.webp
-  alt: Community-Event im Cafe Prana
+:image: /images/home/gallery/gallery-1.webp
 description: "Bei Prana bringe ich Menschen an gemeinsamen Tischen zusammen: mit
   nährendem Essen, achtsamen Momenten und Raum für Verbindung."
 headline: Besondere Events
 icon: i-lucide-party-popper
+image: /images/home/gallery/gallery-1.webp
 title: Community Gatherings
 ---
 :feature{description="Frühstücke, Brunches und Dinner, bei denen wir nährendes Essen und entspannte Momente teilen." icon="i-lucide-utensils" title="Regelmäßige Community-Events"}
