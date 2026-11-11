@@ -37,8 +37,9 @@ title: Menü-Highlights
 ---
   :::menu-highlight
   ---
-  image: /images/menu/herzhafte-waffel.webp
-  altText: Herzhafte Waffel mit bunten pflanzlichen Toppings
+  image:
+    src: /images/menu/herzhafte-waffel.webp
+    alt: Herzhafte Waffel mit bunten pflanzlichen Toppings
   description: Süßkartoffel-Waffel mit Pranas herzhaften Toppings des Tages.
   title: Herzhafte Waffel
   ---
@@ -46,8 +47,9 @@ title: Menü-Highlights
 
   :::menu-highlight
   ---
-  image: /images/menu/chai-latte.webp
-  altText: Chai Latte in einer Keramiktasse
+  image:
+    src: /images/menu/chai-latte.webp
+    alt: Chai Latte in einer Keramiktasse
   description: Hausgemachte Chai-Gewürzmischung, liebevoll zubereitet und mit
     Pflanzenmilch deiner Wahl serviert.
   title: Chai Latte
@@ -58,8 +60,9 @@ title: Menü-Highlights
 
   :::menu-highlight
   ---
-  image: /images/menu/banana-bread.webp
-  altText: Scheibe Prana Banana Bread mit Toppings
+  image:
+    src: /images/menu/banana-bread.webp
+    alt: Scheibe Prana Banana Bread mit Toppings
   description: Nährendes, natürlich gesüßtes Banana Bread mit saisonalen Toppings
     wie Nussmus oder Kompott.
   title: Pranas Banana Bread
@@ -69,12 +72,13 @@ title: Menü-Highlights
 
 ::events-intro
 ---
+image:
+  src: /images/events/index.webp
+  alt: Community-Event im Cafe Prana
 description: "Bei Prana bringe ich Menschen an gemeinsamen Tischen zusammen: mit
   nährendem Essen, achtsamen Momenten und Raum für Verbindung."
 headline: Besondere Events
 icon: i-lucide-party-popper
-image: /images/home/gallery/gallery-1.webp
-altText: Community-Event im Cafe Prana
 title: Community Gatherings
 ---
 :feature{description="Frühstücke, Brunches und Dinner, bei denen wir nährendes Essen und entspannte Momente teilen." icon="i-lucide-utensils" title="Regelmäßige Community-Events"}
@@ -106,8 +110,9 @@ title: Galerie
 
 ::story-section
 ---
-image: /images/home/my-story.webp
-altText: Gründerinnengeschichte von Cafe Prana
+image:
+  src: /images/home/my-story.webp
+  alt: Gründerinnengeschichte von Cafe Prana
 icon: i-lucide-book-open
 title: Meine Geschichte
 ---
