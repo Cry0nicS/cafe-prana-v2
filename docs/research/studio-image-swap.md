@@ -1,5 +1,9 @@
 # Why the Studio homepage image swap doesn't show
 
+> **Superseded on the homepage.** Homepage pictures are now markdown images in each section's
+> slot, not `image` props, so none of the prop shapes below can occur there any more. Kept as
+> the record of why. See `docs/content-components.md`.
+
 Investigated 2026-11-05. Installed versions: `nuxt-studio` 1.7.0, `@nuxt/content` 3.16.2,
 `@nuxtjs/mdc` 0.23.2, `remark-mdc` 3.11.1, `@nuxt/image` 2.2.0, `nuxt-component-meta` 0.18.0.
 

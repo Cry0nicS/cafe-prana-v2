@@ -260,21 +260,6 @@ html {
   );
 }
 
-/* Editorial drop-cap for the founder story's opening paragraph. Matched on the
-   container, not on a child `p`: MDC's `autoUnwrap` (on, so the build and Studio
-   agree - see `nuxt.config.ts`) drops the wrapping paragraph when a block
-   component's slot holds a single one, and `::first-letter` on a block container
-   reaches the first letter either way. */
-.cafe-dropcap::first-letter {
-  float: left;
-  margin: 0.05em 0.1em 0 0;
-  font-family: var(--font-serif);
-  font-weight: 500;
-  font-size: 3.4em;
-  line-height: 0.72;
-  color: var(--ui-text-highlighted);
-}
-
 /* Eyebrow / kicker — a small mono label with a spark tick. */
 .cafe-eyebrow {
   display: inline-flex;
@@ -292,6 +277,48 @@ html {
   height: 2px;
   border-radius: 2px;
   background: var(--cafe-spark);
+}
+
+/* ------------------------------------------------------- Homepage copy ---
+   The homepage's sections take their text as plain markdown, so the owner
+   edits it inline in Studio. A section places each piece (`Nodes` in
+   `app/utils/slot-parts.ts`, which marks it `home-md`) inside a wrapper, and
+   sets the type on that wrapper with ordinary utilities.
+
+   So the markdown element itself has to carry no type of its own. It is
+   rendered by Nuxt UI's prose components, whose utility classes (sized for an
+   event page's body) live in a cascade layer; this rule is unlayered, so it
+   wins without `!important`. */
+:is(h1, h2, h3, p).home-md {
+  margin: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+}
+p.home-md + p.home-md {
+  margin-top: 1.25rem;
+}
+
+/* A section's title. */
+.home-title {
+  font-family: var(--font-serif);
+  font-optical-sizing: auto;
+  font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  color: var(--ui-text-highlighted);
+}
+
+/* The story opens in the display face, like the first line of a letter. */
+.home-story > p:first-child {
+  font-family: var(--font-serif);
+  font-optical-sizing: auto;
+  font-size: clamp(1.375rem, 1.2rem + 0.7vw, 1.75rem);
+  line-height: 1.4;
+  letter-spacing: -0.015em;
+  color: var(--ui-text-highlighted);
 }
 
 /* Breath aura — the hero signature. A soft radial glow that slowly inhales,

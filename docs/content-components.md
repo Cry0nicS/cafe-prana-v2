@@ -13,35 +13,65 @@ The page is rendered by `app/pages/index.vue` with `<ContentRenderer :value="pag
 
 ## Design principle
 
-**Content files hold only editorial content** (headings, body copy, images, hours). **Presentation lives in code** — button styling, section CTAs (via i18n keys under `home.*`), icons defaults, and the Google Maps embed (`CAFE_MAP_EMBED_URL` in `shared/utils/constants.ts`). This keeps the Studio editing surface clean for non-technical editors.
+**The owner writes plain markdown; the section decides what it means.** Every homepage section
+takes its text - headings, paragraphs, pictures - from its default slot, so Studio shows it as
+ordinary inline text rather than as YAML fields in a settings panel. A prop is kept only for a
+technical choice: today that is `Feature`'s `icon`, nothing else.
+
+**Presentation lives in code**: type sizes, layout, buttons (labels in `i18n/i18n.config.ts`
+under `home.*`), and the Google Maps embed (`CAFE_MAP_EMBED_URL` in
+`shared/utils/constants.ts`).
+
+Two things make that work:
+
+- **Structure** comes from `app/utils/slot-parts.ts`. `splitSlot()` sorts a slot's nodes into
+  `kicker` (what is written above the title), `title` (the first `#`/`##`, or a block's `###`),
+  `body`, `items` (each `###` under the title with what follows it), `media` (every picture on a
+  line of its own) and `blocks` (nested components of one tag). It reads the markdown tag
+  MDCRenderer stamps on what it renders. It is called during render, never from a `computed`:
+  Studio's live preview swaps the slot content, and a cached split would keep the old nodes.
+- **Type** is set on the wrapper a section puts each group in, with ordinary utilities. The
+  markdown element inside carries none of its own: `<Nodes>` marks what it places `home-md`,
+  and one unlayered rule in `app/assets/css/main.css` makes a `home-md` heading or paragraph
+  inherit everything (the prose components' own classes sit in a cascade layer, so it wins
+  without `!important`). Pictures get their frame, `sizes` and loading through `<Nodes :extra>`.
+
+**The homepage is full width.** `app/layouts/default.vue` takes the page out of the bordered
+container on `/` and `/de`, so a section can be a band from edge to edge; each one brings its
+own column with `<UContainer>`.
+
+Avoid `**bold**` and `*italic*` in content until the packages are bumped: with
+`mdast-util-to-markdown` 2.2.0 and `remark-mdc` 3.11.1, `stringifyMarkdown()` recurses forever
+on either one (`RangeError: Maximum call stack size exceeded`), which is the call Studio makes
+to write a document back.
 
 ## Markdown styling
 
-Everything the owner writes as plain Markdown — headings, lists, links, quotes, tables, rules, images — is rendered by Nuxt UI's prose components and themed in **one place**: `ui.prose.*` in `app/app.config.ts`. Those entries are *appended* to Nuxt UI's defaults and resolved by `tailwind-merge`, so a value that does not conflict has to be undone by name (`not-italic`, `border-0`, `rounded-none!`) rather than replaced.
+Everything the owner writes as plain Markdown on an **event page** — headings, lists, links, quotes, tables, rules, images — is rendered by Nuxt UI's prose components and themed in **one place**: `ui.prose.*` in `app/app.config.ts`. Those entries are *appended* to Nuxt UI's defaults and resolved by `tailwind-merge`, so a value that does not conflict has to be undone by name (`not-italic`, `border-0`, `rounded-none!`) rather than replaced.
 
 `.cafe-prose` in `app/assets/css/main.css` holds only what a utility class cannot express: the reading measure (text caps at 65ch while photos, tables and video keep the full column), the `.cafe-quote` pull quote, and the `.cafe-rule` section break.
 
 ## Components
 
-| MDC tag | Component | Props | Slot / children | Repeatable |
-|---------|-----------|-------|-----------------|------------|
-| `::home-hero` | `HomeHero` | `headline, title, description, image, altText` | — (CTAs from i18n `home.hero.*`; see the next-event note below) | no |
-| `::feature-grid` | `FeatureGrid` | `icon, headline, title, description` | `::feature` children | — |
-| `::feature` | `Feature` | `icon, title, description` | — | ✅ reusable |
-| `::menu-highlights` | `MenuHighlights` | `icon, title, description` | `::menu-highlight` children (CTAs from `home.menu.*`) | — |
-| `::menu-highlight` | `MenuHighlight` | `title, description, image, altText` | — | ✅ reusable |
-| `::events-intro` | `EventsIntro` | `icon, headline, title, description, image, altText` | `::feature` children (CTAs from `home.events.*`) | — |
-| `::gallery` | `Gallery` | `icon, headline, title, description, images[]{src,alt}` | — (renders a `UCarousel`; each image opens in a lightbox) | — |
-| `::story-section` | `StorySection` | `icon, title, image, altText` | default slot = prose (rich text) | — |
-| `::faq` | `Faq` | `icon, title, description` | `::faq-item` children | — |
-| `::faq-item` | `FaqItem` | `label` | default slot = answer prose | ✅ reusable |
-| `::directions` | `Directions` | `title, description, hoursHeading` | — (hours from `content/opening-hours.yml`; map + CTAs from code) | no |
-| `::callout` | `Callout` | `icon, title, color` (`neutral` \| `positive` \| `caution`) | default slot = note text | ✅ reusable |
-| `::video` | `VideoEmbed` | `url, title, poster` | — (click-to-load frame: YouTube / Vimeo link, or a `/videos/*.mp4` file from the media library; `url` takes either; a YouTube video's still is saved at build by `modules/video-thumbnails.ts` and listed in `runtimeConfig.public.videoThumbnails`, a picked `poster` wins) | ✅ reusable |
+| MDC tag | Component | Props | What the owner writes in it | Repeatable |
+|---------|-----------|-------|-----------------------------|------------|
+| `::home-hero` | `HomeHero` | — | optional line of news, `#` title, paragraph, picture (buttons from `home.hero.*`; two columns with the next event's poster when one is coming up, otherwise centred over the picture) | no |
+| `::feature-grid` | `FeatureGrid` | — | `##` title, paragraph, `::feature` children (two columns beside the title) | — |
+| `::feature` | `Feature` | `icon` | `###` title, paragraph | ✅ |
+| `::menu-highlights` | `MenuHighlights` | — | `##` title, paragraph, `::menu-highlight` children (button from `home.menu.*`) | — |
+| `::menu-highlight` | `MenuHighlight` | — | picture, `###` name, paragraph | ✅ |
+| `::story-section` | `StorySection` | — | picture (set as a print), `##` title, paragraphs (the first is set as a lead) | — |
+| `::events-intro` | `EventsIntro` | — | `##` title, paragraph, then `###` + paragraph per kind of gathering (button from `home.events.*`; shows `EventsNextEventCard` under the paragraph while an event is coming up) | — |
+| `::gallery` | `Gallery` | — | `##` title, paragraph, any number of pictures (an even grid; each opens whole on a click) | — |
+| `::faq` | `Faq` | — | `##` title, then `###` question + answer paragraphs (each question is a row that opens) | — |
+| `::directions` | `Directions` | — | `##` title, paragraph (hours from `content/opening-hours.yml`; map and buttons from code) | no |
+| `::callout` | `Callout` | `icon, title, color` (`neutral` \| `positive` \| `caution`) | default slot = note text | ✅ |
+| `::video` | `VideoEmbed` | `url, title, poster` | — (click-to-load frame: YouTube / Vimeo link, or a `/videos/*.mp4` file from the media library; `url` takes either; a YouTube video's still is saved at build by `modules/video-thumbnails.ts` and listed in `runtimeConfig.public.videoThumbnails`, a picked `poster` wins) | ✅ |
 
-Homepage images (`home-hero`, `menu-highlight`, `events-intro`, `story-section`) are a flat `image` path from the media library plus an `altText`. Studio 1.7 turns an inline object prop like `image?: { src, alt }` into a single text field and saves a bare path, which the component then could not read, so the image silently vanished. Keep image props flat, and keep `altText` free of the words Studio treats as an image field (`image`, `src`, `photo`, ...), or it gets a media picker too. `resolveContentImage()` in `shared/utils/content-image.ts` still reads the older `{ src, alt }` form. `npm run check:content` fails on a missing image file or a stray `:image:` line. See `docs/research/studio-image-swap.md`.
-
-Note `Feature` is shared by both `FeatureGrid` (Philosophy) and `EventsIntro` (Events) — reuse it wherever a feature card is needed.
+Homepage pictures are markdown images (`![alt](/images/...)`), not props. That retires the
+whole class of problem in `docs/research/studio-image-swap.md`, where Studio rewrote an
+`image` prop into a shape the component could not read. `npm run check:content` fails on a
+picture whose file is missing from `public/`, and still on a stray `:prop:` line.
 
 ### Two tags that are not what they look like
 
@@ -62,53 +92,53 @@ This replaces an earlier claim in this file that keeping a component outside `ap
 
 `STUDIO_EDITOR` also drops four editor commands: `heading1` (the page template already renders the document title as the `h1`), `codeBlock` and `code` (no source code on a café site), and `video` (it inserts a bare `<video>` element; `::video` replaces it).
 
-### The next-event hero
+### The next event
 
-`HomeHero` reads the soonest upcoming event through `useNextEvent` (a locale-aware query over
-the `events` collection plus `nextUpcomingEvent` from `app/utils/events.ts`, which reuses the
-listing page's `isUpcomingEvent`). When there is one it renders `NextEventHero`, an announcement
-poster built from the event document, and passes only its own `title` along; `headline`,
-`description` and `image` drive the welcome hero alone. When there is none, the welcome
-`UPageHero` renders unchanged.
+`useNextEvent` reads the soonest upcoming event (a locale-aware query over the events collection
+plus `nextUpcomingEvent` from `app/utils/events.ts`, which reuses the listing page's
+`isUpcomingEvent`). The homepage shows it twice: `HomeHero` puts a linked card with its poster,
+title and date beside the text (the hero's own photo then stays in the page hidden, so
+`ipxStatic` still bakes it for the day the event has passed), and `EventsIntro` renders `NextEventCard`, the invitation with the event's
+picture, date, time, price and description. With nothing coming up both are simply absent.
 
-`NextEventHero` lives in `app/components/events/` (used as `EventsNextEventHero`), not in
+`NextEventCard` lives in `app/components/events/` (used as `EventsNextEventCard`), not in
 `app/components/content/`, because it takes the event as a prop and cannot render from content.
 Keeping it out of that folder does *not* keep it out of Studio - see "What the owner can insert"
-above; the allowlist is what does that. So there is no `::next-event-hero` to place in
-`index.md`, and both locale homepages keep the same block set. The eyebrow and the button
-label are `home.hero.nextEvent` / `home.hero.viewEvent` in `i18n/i18n.config.ts`. Its photo
-deliberately uses the event detail page's `sizes`/`format`: `ipxStatic` only bakes variants that
-were rendered during prerender, and those exist for every event, so whichever event becomes next
-after a date rollover still resolves.
+above; the allowlist is what does that. Its picture is an `EventPoster` (shown whole, never
+cropped) and deliberately uses the event detail page's `sizes`/`format` (`EVENT_POSTER_SIZES`): `ipxStatic` only bakes variants that were rendered
+during prerender, and those exist for every event, so whichever event becomes next after a date
+rollover still resolves.
 
 **These components are global**, so they work in *any* MDC document — not just the homepage.
-Event pages (`content/{en,de}/events/*.md`) use `::callout` and can use `::feature-grid`, `::gallery`,
-etc. in their freeform body.
+Event pages (`content/{en,de}/events/*.md`) use `::callout` and `::video` in their freeform body.
 
 ## MDC nesting rule
 
-Container blocks use **more colons** than their children. Homepage uses 3 colons for containers and 2 for children:
+Children use **more colons** than the block they sit in, and are indented two spaces. This is
+the form Studio writes, and `content/*/index.md` round-trips through `parseMarkdown` /
+`stringifyMarkdown` byte for byte, so a save from Studio changes only what the owner changed:
 
 ```md
-:::feature-grid
----
-icon: i-lucide-leaf
-title: My Philosophy
----
-::feature{icon="i-lucide-wheat-off" title="100% Gluten-Free" description="…"}
+::feature-grid
+## What you can count on
+
+  :::feature{icon="i-lucide-wheat-off"}
+  ### 100% gluten-free
+
+  Everything on the menu.
+  :::
 ::
-:::
 ```
 
-Keep every fence at column 0 — indenting a block by 4 spaces turns it into a Markdown code block.
+Never indent a block by 4 spaces: that turns it into a Markdown code block.
 
 ## Adding a new section component
 
-1. Create `app/components/content/MySection.vue`. Take short text as props (defaults where sensible); expose a default `<slot />` for additive content / child blocks.
-2. Keep styling and any CTAs in code (add labels to `i18n/i18n.config.ts` under `home.*` if localized).
+1. Create `app/components/content/MySection.vue`. Take the text from the default slot through `SlotParts`, place each group with `<Nodes>` inside a wrapper, and set the type on the wrapper (`home-title` for the section's title). Add a prop only for a technical choice.
+2. Keep styling and any buttons in code (labels in `i18n/i18n.config.ts` under `home.*`).
 3. Decide whether the owner may insert it: add it to a group in `shared/utils/studio-editor.ts`, or to `STUDIO_NOT_OFFERED` with the reason. The suite fails until you do.
 4. Use it in `content/en/index.md` **and** `content/de/index.md` with `::my-section`.
-5. Run `npm run lint && npm run typecheck && npm run build` — the build prerenders `/` and `/de`, which is the fastest way to confirm the component resolves and renders.
+5. Run `npm run lint && npm run typecheck && npm run test && npm run build` — the build prerenders `/` and `/de`, and `test/nuxt/home-page.spec.ts` renders both homepage files.
 
 ## Locale parity
 

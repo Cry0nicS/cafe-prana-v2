@@ -1,78 +1,40 @@
 <script setup lang="ts">
-type GalleryImg = { src: string, alt: string }
+import { Nodes, SlotParts } from '~/utils/slot-parts'
 
-const props = defineProps<{
-  icon?: string
-  headline?: string
-  title?: string
-  description?: string
-  images?: GalleryImg[]
-}>()
-
-const items = computed(() => props.images ?? [])
-const active = ref<GalleryImg | null>(null)
+// A centred `##` title, then every picture in the block as an even grid. The
+// pictures are ordinary markdown images, so the owner adds one the way she
+// adds a photo anywhere else. A tile crops to the grid; a click opens the
+// whole picture, which is Nuxt UI's prose image doing its job.
+const photo = {
+  format: 'webp',
+  sizes: 'sm:50vw md:33vw lg:400px',
+  loading: 'lazy',
+  class: 'my-0 aspect-[4/5] w-full rounded-[1.75rem] object-cover shadow-none ring-0'
+}
 </script>
 
 <template>
-  <UPageSection
-    :icon="icon"
-    :headline="headline"
-    :title="title"
-    :description="description"
+  <SlotParts
+    v-slot="{ title, body, media }"
+    :nodes="$slots.default?.()"
   >
-    <UCarousel
-      v-slot="{ item }"
-      :items="items"
-      :arrows="items.length > 1"
-      :dots="items.length > 1"
-      loop
-      wheel-gestures
-      :ui="{
-        item: 'basis-4/5 sm:basis-1/2 lg:basis-1/3',
-        container: 'py-1',
-        dot: 'data-[state=active]:bg-primary'
-      }"
-    >
-      <button
-        type="button"
-        class="block w-full overflow-hidden rounded-[1.75rem] ring-1 ring-default transition duration-300 hover:ring-primary/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cafe-spark)]"
-        :aria-label="`${item.alt} — view larger`"
-        @click="active = item"
-      >
-        <NuxtImg
-          :src="item.src"
-          :alt="item.alt"
-          format="webp"
-          sizes="sm:80vw md:50vw lg:360px"
-          class="aspect-[4/5] w-full object-cover transition duration-500 hover:scale-105"
-          placeholder
-        />
-      </button>
-    </UCarousel>
-
-    <UModal
-      :open="!!active"
-      :title="active?.alt"
-      :ui="{ content: 'max-w-3xl', header: 'sr-only' }"
-      @update:open="(value) => { if (!value) active = null }"
-    >
-      <template #body>
-        <!--
-          Deliberately a plain <img> on the original file rather than <NuxtImg>.
-          The `ipxStatic` provider only bakes variants for images that render
-          during prerender, and this one sits behind `v-if="active"`, so its
-          IPX URLs would never be generated and would 404 on click.
-          The lightbox wants the full-resolution image anyway.
-        -->
-        <img
-          v-if="active"
-          :src="active.src"
-          :alt="active.alt"
-          loading="lazy"
-          decoding="async"
-          class="mx-auto max-h-[80vh] w-full rounded-2xl object-contain"
-        >
-      </template>
-    </UModal>
-  </UPageSection>
+    <section class="bg-elevated/60 py-20 sm:py-28">
+      <UContainer>
+        <div class="mx-auto max-w-2xl text-center">
+          <div class="home-title">
+            <Nodes :nodes="title" />
+          </div>
+          <div class="mt-4 text-lg text-muted">
+            <Nodes :nodes="body" />
+          </div>
+        </div>
+        <div class="mx-auto mt-12 grid max-w-5xl grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5">
+          <Nodes
+            :nodes="media"
+            :extra="photo"
+          />
+        </div>
+      </UContainer>
+    </section>
+  </SlotParts>
 </template>

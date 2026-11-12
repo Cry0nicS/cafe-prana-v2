@@ -2,7 +2,7 @@ import { mountSuspended } from '@nuxt/test-utils/runtime'
 import { describe, expect, it } from 'vitest'
 import EventPoster from '~/components/events/EventPoster.vue'
 import EventRow from '~/components/events/EventRow.vue'
-import NextEventHero from '~/components/events/NextEventHero.vue'
+import NextEventCard from '~/components/events/NextEventCard.vue'
 
 // An event the owner has started but not finished. `image` is required by the
 // events schema, but @nuxt/content stores a missing one as `null` rather than
@@ -45,19 +45,13 @@ describe('an event with no photo yet', () => {
     expect(wrapper.find('[data-photo="pending"]').exists()).toBe(true)
   })
 
-  // On the homepage the poster is a column of its own, so leaving its wrapper
-  // behind would reserve an empty half of the hero. It has to collapse to one
-  // column instead.
-  it('collapses the homepage poster to a single column', async () => {
-    const wrapper = await mountSuspended(NextEventHero, {
-      props: { title: 'Welcome to Cafe Prana', event: draft }
-    })
-
-    const hero = wrapper.get('section')
+  // The homepage's next-event card: the name and date still show, without a
+  // broken picture where the poster would be.
+  it('still shows on the homepage, without a picture', async () => {
+    const wrapper = await mountSuspended(NextEventCard, { props: { event: draft } })
 
     expect(wrapper.text()).toContain('My event')
     expect(wrapper.find('img').exists()).toBe(false)
-    expect(hero.classes()).toContain('xl:grid-cols-1')
   })
 })
 
@@ -88,18 +82,16 @@ describe('an event with a photo', () => {
     expect(image!.classes()).toContain('object-contain')
   })
 
-  it('gives the homepage poster its column back, uncropped', async () => {
-    const wrapper = await mountSuspended(NextEventHero, {
-      props: { title: 'Welcome to Cafe Prana', event: published }
-    })
+  it('shows the homepage poster whole, never cropped', async () => {
+    const wrapper = await mountSuspended(NextEventCard, { props: { event: published } })
 
-    const image = wrapper.get('img')
+    // The second image: the first is the blurred backdrop.
+    const image = wrapper.findAll('img')[1]!
 
     expect(image.attributes('alt')).toBe('A table at Prana')
-    // Posters carry their own printed title and date: shown whole, at their own
-    // shape, never cropped into a frame.
-    expect(image.classes()).toContain('h-auto')
+    // Posters carry their own printed title and date: shown whole, never
+    // cropped into the frame.
+    expect(image.classes()).toContain('object-contain')
     expect(image.classes()).not.toContain('object-cover')
-    expect(wrapper.get('section').classes().join(' ')).not.toContain('xl:grid-cols-1')
   })
 })

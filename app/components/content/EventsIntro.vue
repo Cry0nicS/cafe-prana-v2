@@ -1,89 +1,71 @@
 <script setup lang="ts">
-const props = defineProps<{
-  icon?: string
-  headline?: string
-  title?: string
-  description?: string
-  /** Photo from the media library, as its path (what Studio's picker writes). */
-  image?: string
-  /** Short description of the photo, for screen readers and search engines. */
-  altText?: string
-}>()
+import { Nodes, SlotParts } from '~/utils/slot-parts'
 
-const img = computed(() => resolveContentImage(props.image, props.altText))
-
+// What the gatherings are, as markdown: a `##` title, a paragraph, then each
+// kind of gathering as a `###` with a line under it. Between the two sits the
+// next event that is coming up, which fills itself in from the events the
+// owner publishes and is simply absent when there is none.
 const { t } = useI18n()
 const localePath = useLocalePath()
 
-const links = computed(() => [
-  {
-    label: t('home.events.explore'),
-    to: localePath('/events'),
-    icon: 'i-lucide-party-popper',
-    color: 'primary' as const,
-    size: 'lg' as const
-  },
-  {
-    label: t('home.events.reserve'),
-    to: localePath('/reservations'),
-    icon: 'i-lucide-calendar-check',
-    color: 'neutral' as const,
-    variant: 'outline' as const,
-    size: 'lg' as const
-  }
-])
+const { data: nextEvent } = await useNextEvent()
 </script>
 
 <template>
-  <UPageSection>
-    <div class="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
-      <div>
-        <p
-          v-if="headline"
-          class="cafe-eyebrow"
-        >
-          {{ headline }}
-        </p>
-        <div class="mt-3 flex items-center gap-2">
-          <UIcon
-            v-if="icon"
-            :name="icon"
-            class="size-6 text-primary"
-          />
-          <h2 class="font-serif text-3xl font-medium tracking-tight text-highlighted sm:text-4xl">
-            {{ title }}
-          </h2>
+  <SlotParts
+    v-slot="{ title, body, items }"
+    :nodes="$slots.default?.()"
+  >
+    <UContainer
+      as="section"
+      class="py-20 sm:py-28"
+    >
+      <div class="mx-auto max-w-2xl text-center">
+        <div class="home-title">
+          <Nodes :nodes="title" />
         </div>
-        <p
-          v-if="description"
-          class="mt-5 text-lg leading-8 text-pretty text-muted"
-        >
-          {{ description }}
-        </p>
-
-        <div class="mt-6 space-y-4">
-          <slot />
-        </div>
-
-        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-          <UButton
-            v-for="link in links"
-            :key="link.label"
-            v-bind="link"
-            class="justify-center px-5"
-          />
+        <div class="mt-5 text-lg leading-8 text-muted">
+          <Nodes :nodes="body" />
         </div>
       </div>
 
-      <NuxtImg
-        v-if="img"
-        :src="img.src"
-        :alt="img.alt"
-        format="webp"
-        sizes="sm:100vw md:50vw lg:540px"
-        class="aspect-[4/3] w-full rounded-[2rem] object-cover shadow-2xl shadow-black/15 ring-1 ring-default"
-        placeholder
+      <EventsNextEventCard
+        v-if="nextEvent"
+        :event="nextEvent"
+        class="mt-14"
       />
-    </div>
-  </UPageSection>
+
+      <div
+        v-if="items.length"
+        class="mx-auto mt-14 grid max-w-5xl gap-x-12 gap-y-10 text-center sm:grid-cols-3"
+      >
+        <div
+          v-for="(item, index) in items"
+          :key="index"
+        >
+          <span
+            aria-hidden="true"
+            class="mx-auto block h-0.5 w-6 rounded-full bg-[var(--cafe-spark)]"
+          />
+          <div class="mt-5 font-serif text-xl leading-tight text-highlighted">
+            <Nodes :nodes="item.title" />
+          </div>
+          <div class="mx-auto mt-2 max-w-xs leading-7 text-muted">
+            <Nodes :nodes="item.body" />
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-14 text-center">
+        <UButton
+          :to="localePath('/events')"
+          :label="t('home.events.explore')"
+          size="lg"
+          color="neutral"
+          variant="outline"
+          class="px-6"
+        />
+      </div>
+    </UContainer>
+  </SlotParts>
 </template>

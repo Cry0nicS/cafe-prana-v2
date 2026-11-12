@@ -1,27 +1,30 @@
 <script setup lang="ts">
+import { Nodes, SlotParts } from '~/utils/slot-parts'
+
+// One point of a `::feature-grid`: a `###` title and a sentence or two,
+// written as markdown. The icon is the only prop.
 defineProps<{
   icon?: string
-  title?: string
-  description?: string
 }>()
 </script>
 
 <template>
-  <div class="group cafe-surface flex h-full gap-4 p-6 transition duration-300 ease-out hover:bg-elevated/70">
-    <span class="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary transition duration-300 group-hover:bg-primary group-hover:text-inverted">
+  <SlotParts
+    v-slot="{ title, body }"
+    :nodes="$slots.default?.()"
+  >
+    <div>
       <UIcon
         v-if="icon"
         :name="icon"
-        class="size-5"
+        class="mb-4 size-6 text-primary"
       />
-    </span>
-    <div class="min-w-0 space-y-1">
-      <h3 class="font-serif text-lg leading-snug font-medium text-highlighted">
-        {{ title }}
-      </h3>
-      <p class="text-sm leading-6 text-muted">
-        {{ description }}
-      </p>
+      <div class="font-serif text-2xl leading-tight tracking-[-0.015em] text-highlighted">
+        <Nodes :nodes="title" />
+      </div>
+      <div class="mt-3 leading-7 text-muted">
+        <Nodes :nodes="body" />
+      </div>
     </div>
-  </div>
+  </SlotParts>
 </template>

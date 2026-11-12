@@ -23,7 +23,8 @@ useCafeSeo({
 </script>
 
 <template>
-  <UPage v-if="page">
-    <ContentRenderer :value="page" />
-  </UPage>
+  <ContentRenderer
+    v-if="page"
+    :value="page"
+  />
 </template>

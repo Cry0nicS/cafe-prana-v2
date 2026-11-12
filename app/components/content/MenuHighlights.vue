@@ -1,52 +1,46 @@
 <script setup lang="ts">
-defineProps<{
-  icon?: string
-  title?: string
-  description?: string
-}>()
+import { Nodes, SlotParts } from '~/utils/slot-parts'
 
+// A centred `##` title and a few words, the `::menu-highlight` blocks in a
+// row, and the way to the full menu.
 const { t } = useI18n()
 const localePath = useLocalePath()
-
-const links = computed(() => [
-  {
-    label: t('home.menu.explore'),
-    to: localePath('/menu'),
-    icon: 'i-lucide-utensils',
-    color: 'primary' as const,
-    size: 'lg' as const
-  },
-  {
-    label: t('home.menu.book'),
-    to: localePath('/reservations'),
-    icon: 'i-lucide-calendar-check',
-    color: 'neutral' as const,
-    variant: 'outline' as const,
-    size: 'lg' as const
-  }
-])
 </script>
 
 <template>
-  <div class="-mx-4 bg-gradient-to-b from-transparent via-elevated/50 to-transparent px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-    <UPageSection
-      id="menu"
-      :icon="icon"
-      :title="title"
-      :description="description"
+  <SlotParts
+    v-slot="{ title, body, blocks }"
+    :nodes="$slots.default?.()"
+    block="menu-highlight"
+  >
+    <UContainer
+      as="section"
+      class="py-20 sm:py-28"
     >
-      <UPageGrid class="gap-6 lg:grid-cols-2">
-        <slot />
-      </UPageGrid>
-
-      <div class="flex flex-col justify-center gap-3 sm:flex-row">
-        <UButton
-          v-for="link in links"
-          :key="link.label"
-          v-bind="link"
-          class="justify-center px-5"
+      <div class="mx-auto max-w-2xl text-center">
+        <div class="home-title">
+          <Nodes :nodes="title" />
+        </div>
+        <div class="mt-4 text-lg text-muted">
+          <Nodes :nodes="body" />
+        </div>
+      </div>
+      <div class="mt-14 grid grid-cols-2 gap-x-5 gap-y-10 lg:grid-cols-4 lg:gap-x-8">
+        <Nodes
+          :nodes="blocks"
+          :extra="{}"
         />
       </div>
-    </UPageSection>
-  </div>
+      <div class="mt-14 text-center">
+        <UButton
+          :to="localePath('/menu')"
+          :label="t('home.menu.explore')"
+          size="lg"
+          color="neutral"
+          variant="outline"
+          class="px-6"
+        />
+      </div>
+    </UContainer>
+  </SlotParts>
 </template>

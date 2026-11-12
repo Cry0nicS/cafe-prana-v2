@@ -1,20 +1,15 @@
 // Finds homepage images a visitor would never see. Pure: the caller reads the
 // files and says which image paths exist. Used by `check-content-images.ts`.
 //
-// Props are read the way MDC reads them, not line by line: a block's YAML is
-// decoded with remark-mdc's own front-matter parser, and an inline
-// component's attributes come from its parse tree. So YAML quoting and the
-// older `{ src, alt }` object are handled like the site handles them.
-// See docs/research/studio-image-swap.md.
+// Homepage pictures are ordinary markdown images (`![alt](/images/...)`), so
+// the check walks the same tree MDC builds and looks at every one of them,
+// wherever in a block it sits.
 import remarkMdc, { parseFrontMatter } from 'remark-mdc'
 import remarkParse from 'remark-parse'
 import { unified } from 'unified'
-import { resolveContentImage } from '../shared/utils/content-image'
-
-// The components whose `image` prop is drawn as a picture.
-export const IMAGE_COMPONENTS = ['home-hero', 'events-intro', 'menu-highlight', 'story-section']
 
 export type ImageProblem = {
+  /** The block the problem sits in, or `image` for a picture. */
   component: string
   line: number
   message: string
@@ -23,6 +18,7 @@ export type ImageProblem = {
 type MdcNode = {
   type: string
   name?: string
+  url?: string
   attributes?: Record<string, unknown>
   rawData?: string
   position?: { start: { line: number } }
@@ -39,9 +35,9 @@ const propsOf = (node: MdcNode): Record<string, unknown> => {
 }
 
 // A `:key` prop is MDC's marker for a JSON value, evaluated at render time. A
-// value that is not JSON text is a leftover - Studio leaves `:image: <path>`
-// behind, and its form then shows the field twice - and a YAML object under a
-// colon key reaches the component as "[object Object]".
+// value that is not JSON text is a leftover - Studio has left `:image: <path>`
+// behind before, and its form then shows the field twice - and a YAML object
+// under a colon key reaches the component as "[object Object]".
 const colonPropProblem = (key: string, value: unknown): string | null => {
   if (typeof value !== 'string') {
     return `\`${key}\` holds a YAML ${Array.isArray(value) ? 'list' : typeof value}, which MDC cannot read - drop the colon`
@@ -59,9 +55,19 @@ export const findImageProblems = (source: string, imageExists: (src: string) => 
   const problems: ImageProblem[] = []
 
   const visit = (node: MdcNode) => {
+    const line = node.position?.start.line ?? 0
+
+    if (node.type === 'image') {
+      // Only the site's own files can be checked; a full URL is left alone.
+      if (!node.url) {
+        problems.push({ component: 'image', line, message: 'image has no path' })
+      } else if (node.url.startsWith('/') && !imageExists(node.url)) {
+        problems.push({ component: 'image', line, message: `image ${node.url} is not in public/` })
+      }
+    }
+
     if (node.type.endsWith('Component') && node.name) {
       const props = propsOf(node)
-      const line = node.position?.start.line ?? 0
       const report = (message: string) => problems.push({ component: node.name!, line, message })
 
       for (const [key, value] of Object.entries(props)) {
@@ -75,33 +81,6 @@ export const findImageProblems = (source: string, imageExists: (src: string) => 
           // order. Studio also shows each as its own field.
           if (key.slice(1) in props) {
             report(`both \`${key.slice(1)}\` and \`${key}\` are set, and the page shows whichever comes last - keep one`)
-          }
-        }
-      }
-
-      if (IMAGE_COMPONENTS.includes(node.name)) {
-        // Every value that can reach the component's `image` prop: the plain
-        // one, and the bound `:image` once decoded. Both are checked, since a
-        // duplicate is reported above and either may be the one rendered.
-        const candidates: unknown[] = []
-
-        if (props.image !== undefined) candidates.push(props.image)
-
-        if (typeof props[':image'] === 'string') {
-          try {
-            candidates.push(JSON.parse(props[':image']))
-          } catch {
-            // already reported above
-          }
-        }
-
-        for (const raw of candidates) {
-          const image = resolveContentImage(raw)
-
-          if (!image) {
-            report(`image ${JSON.stringify(raw)} has no usable path`)
-          } else if (!imageExists(image.src)) {
-            report(`image ${image.src} is not in public/`)
           }
         }
       }
