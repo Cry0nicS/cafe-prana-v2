@@ -40,7 +40,6 @@ export const STUDIO_PAGE_SECTIONS = [
   'Gallery',
   'StorySection',
   'Faq',
-  'FaqItem',
   'Directions'
 ] as const
 

@@ -21,8 +21,8 @@ The most important concepts in this project, in plain terms.
   where you can freely add text, images, and components.
 
 - **MDC (Markdown Components)** — Markdown extended so you can drop Vue components into the
-  body, e.g. `::feature-grid`. Container blocks use more colons than their children
-  (`:::feature-grid` wraps `::feature`).
+  body, e.g. `::feature-grid`. A block's children use more colons than the block itself
+  (`::feature-grid` wraps `:::feature`), which is the form Studio writes.
 
 - **Content component** — a Vue component in `app/components/content/` that can be used in any
   MDC body (they're registered globally). Examples: `HomeHero`, `FeatureGrid`, `Feature`,

@@ -12,15 +12,10 @@ export default defineI18nConfig(() => ({
         contact: 'Contact'
       },
       home: {
-        hero: {
-          menu: 'Menu Highlights',
-          directions: 'Get Directions',
-          nextEvent: 'Our next event',
-          viewEvent: 'View event'
-        },
-        menu: { explore: 'Explore the full menu', book: 'Book a table' },
-        events: { explore: 'Explore all events', reserve: 'Reserve your seat' },
-        directions: { get: 'Get Directions', closed: 'Closed' }
+        hero: { reserve: 'Reserve a table', menu: 'See the menu' },
+        menu: { explore: 'See the full menu' },
+        events: { explore: 'See all events', next: 'Our next event', view: 'View event' },
+        directions: { get: 'Get directions', closed: 'Closed', hours: 'Opening hours' }
       },
       language: {
         label: 'Language',
@@ -287,15 +282,10 @@ export default defineI18nConfig(() => ({
         contact: 'Kontakt'
       },
       home: {
-        hero: {
-          menu: 'Menü-Highlights',
-          directions: 'Anfahrt',
-          nextEvent: 'Unser nächstes Event',
-          viewEvent: 'Zum Event'
-        },
-        menu: { explore: 'Vollständiges Menü entdecken', book: 'Tisch reservieren' },
-        events: { explore: 'Alle Events entdecken', reserve: 'Platz reservieren' },
-        directions: { get: 'Anfahrt', closed: 'Geschlossen' }
+        hero: { reserve: 'Tisch reservieren', menu: 'Zur Karte' },
+        menu: { explore: 'Ganze Karte ansehen' },
+        events: { explore: 'Alle Events ansehen', next: 'Unser nächstes Event', view: 'Zum Event' },
+        directions: { get: 'Route anzeigen', closed: 'Geschlossen', hours: 'Öffnungszeiten' }
       },
       language: {
         label: 'Sprache',

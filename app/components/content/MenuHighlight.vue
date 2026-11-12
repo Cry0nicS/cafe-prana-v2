@@ -1,34 +1,32 @@
 <script setup lang="ts">
-const props = defineProps<{
-  title?: string
-  description?: string
-  /** Photo from the media library, as its path (what Studio's picker writes). */
-  image?: string
-  /** Short description of the photo, for screen readers and search engines. */
-  altText?: string
-}>()
+import { Nodes, SlotParts } from '~/utils/slot-parts'
 
-const img = computed(() => resolveContentImage(props.image, props.altText))
+// One dish: a photo, a `###` name and a line about it, all markdown.
+const photo = {
+  zoom: false,
+  format: 'webp',
+  sizes: 'sm:50vw md:50vw lg:300px',
+  loading: 'lazy',
+  class: 'my-0 aspect-square w-full rounded-[2rem] object-cover shadow-none ring-0'
+}
 </script>
 
 <template>
-  <UPageCard
-    :title="title"
-    :description="description"
-    orientation="horizontal"
-    reverse
-    variant="naked"
-    class="transition duration-300 ease-out hover:bg-elevated/70"
-    :ui="{ root: 'cafe-surface overflow-hidden p-3 sm:p-4', body: 'flex flex-col justify-center' }"
+  <SlotParts
+    v-slot="{ title, body, media }"
+    :nodes="$slots.default?.()"
   >
-    <NuxtImg
-      v-if="img"
-      :src="img.src"
-      :alt="img.alt"
-      format="webp"
-      sizes="sm:100vw md:360px lg:260px"
-      class="aspect-[4/3] w-full rounded-[1.25rem] object-cover"
-      placeholder
-    />
-  </UPageCard>
+    <article class="text-center">
+      <Nodes
+        :nodes="media.slice(0, 1)"
+        :extra="photo"
+      />
+      <div class="mt-5 font-serif text-xl leading-tight text-highlighted">
+        <Nodes :nodes="title" />
+      </div>
+      <div class="mx-auto mt-2 max-w-[16rem] text-sm leading-6 text-muted">
+        <Nodes :nodes="body" />
+      </div>
+    </article>
+  </SlotParts>
 </template>

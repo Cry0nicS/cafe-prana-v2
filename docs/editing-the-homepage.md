@@ -2,64 +2,75 @@
 
 This guide is for the café owner. It explains how to change the homepage yourself — no developer needed. Everything you edit is saved to the website automatically.
 
-## What you can change
+## How the homepage is built
 
-On the homepage you can edit, add, remove, and reorder:
+The homepage is a stack of sections. Each section is a box in the editor, and **everything
+inside a box is ordinary text**: headings, paragraphs and pictures, edited the same way as an
+event page. There are no forms to fill in.
 
-- The **welcome (hero)** text and photo
-- The **“My Philosophy”** cards
-- The **Menu Highlights** cards
-- The **Community gatherings (events)** text, photo, and points
-- The **Gallery** photos
-- **My Story** text and photo
-- The **FAQ** questions and answers
-- The “Come taste the difference” text (the **opening hours** live in their own file, see below)
+| Section | What you write inside it |
+|---------|--------------------------|
+| **Home Hero** (the top) | An optional short line of news, the big title (a *Heading 1*), a paragraph, a photo |
+| **Feature Grid** | A *Heading 2*, a sentence, then one **Feature** box per point |
+| **Feature** | A *Heading 3* and a sentence or two |
+| **Menu Highlights** | A *Heading 2*, a sentence, then one **Menu Highlight** box per dish |
+| **Menu Highlight** | A photo, the dish's name as a *Heading 3*, one line about it |
+| **Story Section** | A photo, a *Heading 2*, your story |
+| **Events Intro** | A *Heading 2*, a sentence, then each kind of gathering as a *Heading 3* with a line under it |
+| **Gallery** | A *Heading 2*, a sentence, then as many photos as you like |
+| **Faq** | A *Heading 2*, then each question as a *Heading 3* with its answer under it |
+| **Directions** | A *Heading 2* and a sentence. The hours and the map appear on their own |
 
-You do **not** need to worry about colours, buttons, icons, or layout — those are handled for you and always look right.
+The site decides how each piece looks from what it is. A Heading 2 inside a section is always
+that section's title; a photo in the gallery always joins the grid. You never choose a size,
+a colour or a position.
 
-## The welcome block and your next event
+You do **not** need to worry about buttons or layout. The buttons ("Reserve a table", "See the
+menu", ...) are part of the site and always point at the right pages.
 
-While at least one event is still to come, the top of the homepage announces the **soonest
-upcoming event** instead of the ordinary welcome block: the event's name, description, photo,
-date, time and price, with a button to that event's page. The day after the last event has
-passed, the welcome block comes back on its own. Nothing to switch on or off — publishing an
-event is all it takes, and the events page decides "upcoming" the same way.
+## Your next event
 
-While an event is showing, only the welcome block's **title** ("Welcome to Café Prana") is
-visible, kept small above the event's name. Its **headline**, **description** and **photo** are
-hidden until no event is coming up. If you edit one of those three and the change does not appear
-on the live site, this is why — it is saved, and it shows again as soon as the welcome block
-returns.
+While at least one event is still to come, the homepage shows the **soonest upcoming event**
+in two places: at the top, beside your title and text, with its picture and date, and as an
+invitation in the gatherings section with the event's picture, date, time, price and
+description. Both link to the event's page, and both disappear on their own the day after the
+event. Nothing to switch on or off: publishing an event is all it takes.
+
+While an event is shown at the top it takes the place of the photo you put in the Home Hero.
+Your photo comes back, under the text, as soon as no event is coming up.
 
 ## Opening the editor
 
 1. Go to your Nuxt Studio project and open the site.
-2. Open the language folder you want — **content/en** for English, **content/de** for German — and open **Home** inside it. You edit each language separately.
-3. You’ll see the page the way visitors see it. Click any text to edit it.
+2. Open the language folder you want (**content/en** for English, **content/de** for German) and open **index** inside it. You edit each language separately.
+3. The text is on the left and the page on the right. Click into any text on the left and type; the page follows.
 
 ## Editing text
 
-Click into any heading or paragraph and type. Changes preview live.
+Click into a heading or a paragraph and type. To add a paragraph, press Enter. To turn a line
+into a heading, type `/` and pick **Heading 2** or **Heading 3**.
 
-## Adding a new element
+The big title at the top is the only *Heading 1* on the page. Edit its words freely, but do not
+delete the line itself: the editor has no button to bring a Heading 1 back.
 
-This is the part that was missing before. Each repeatable block is a reusable component you can add as many times as you like:
+## Adding a question, a kind of event, or a gallery photo
 
-1. Put your cursor where you want the new block.
-2. Press **`/`** (slash) or click the **＋** button.
-3. Choose the block you want:
-   - **Feature** — a card with an icon, title, and description (used in *My Philosophy* and *Community gatherings*)
-   - **Menu highlight** — a dish card with a photo, title, and description
-   - **FAQ item** — one question and answer
-4. Fill in the text. For the icon or photo fields, see below.
+These need no new box. Put the cursor at the end of the section and:
 
-To **reorder**, drag the block by its handle. To **delete**, select it and remove it.
+- **A question:** add a *Heading 3* with the question, then a paragraph with the answer.
+- **A kind of gathering:** the same, a *Heading 3* and a line under it.
+- **A gallery photo:** type `/`, pick **Image**, and choose or upload the photo. Give it a short description when asked.
 
-> Tip: because these are reusable, you can grow any section just by adding more of the same block — e.g. a fifth menu highlight or a sixth FAQ.
+## Adding a feature or a dish
 
-> The **Gallery** works differently: it's a single block with a **list of photos**. Click the
-> gallery and add, remove, or reorder photos in its image list (each needs a short alt text) —
-> you don't add gallery photos as separate blocks. Visitors swipe through them in a carousel.
+1. Put the cursor after the last **Feature** (or **Menu Highlight**) box.
+2. Type `/` and pick **Feature** (or **Menu Highlight**).
+3. Inside the new box, write the *Heading 3* and the text. For a dish, add its photo first with `/` and **Image**.
+
+To **reorder**, drag a box by its handle. To **delete**, select it and remove it.
+
+A Feature has one setting, its **icon**. Click the box's settings to pick another one, or leave
+it as it is.
 
 ## Changing the opening hours
 
@@ -78,19 +89,15 @@ form has a list of **reservation exceptions** for single dates — to open a Mon
 event, or to close a date for a holiday — and a field for how long before closing the last
 booking is taken. All of it is yours to edit; see `docs/reservation-availability.md`.
 
-## Adding a photo
+## Changing a photo
 
-When a block has an image field, click it and use the **media library** to upload a new photo or pick an existing one. Then fill in **Alt Text** below it: a short description of the photo, which helps accessibility and SEO.
-
-Leave the **Class** field at the bottom of every block empty. Studio adds it to every block, but the site does not use it, and anything typed there is not shown.
-
-## Choosing an icon (optional)
-
-Feature cards have an optional **icon** field. You can pick one from the icon picker, or leave it — the card still looks good without it.
+Click the photo in the editor and pick another one from the **media library**, or upload a new
+one. Keep the short description up to date: it is read aloud to visitors who cannot see the
+picture, and search engines read it too.
 
 ## The two languages
 
-English and German are edited separately — the **Home** page inside **content/en**, and the one inside **content/de**. The folder is the language; there is nothing to set on the page itself. When you add or change something in one language, remember to do the same in the other so both stay in sync.
+English and German are edited separately — the **index** page inside **content/en**, and the one inside **content/de**. The folder is the language; there is nothing to set on the page itself. When you add or change something in one language, remember to do the same in the other so both stay in sync.
 
 ## Publishing
 
