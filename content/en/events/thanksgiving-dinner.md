@@ -4,7 +4,8 @@ description: We welcome you to share a Thanksgiving Dinner at Café Prana around
 date: 2026-11-30
 time: 6PM
 image:
-  src: /images/menu-pics/1000003795.webp
+  src: /images/events/posts/thanksgiving-dinner-hero.webp
+  alt: "Poster for the Thanksgiving Dinner on 30 November: a shared table seen from above, with pecan pie, pumpkin soup and a pumpkin"
 paid: true
 price: 30
 reservation: required
